@@ -36,7 +36,7 @@ process.options = cms.untracked.PSet(
 	wantSummary = cms.untracked.bool(True)
 )
 
-# boost direction (2nd run pPb)
+# boost direction (2nd run pPb direction)
 process.VtxSmeared.Beta=cms.double(0.434)
 
 ##from Configuration.AlCa.GlobalTag import GlobalTag
