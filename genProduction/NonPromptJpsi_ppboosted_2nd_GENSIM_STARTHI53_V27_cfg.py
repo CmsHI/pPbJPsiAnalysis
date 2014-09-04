@@ -96,7 +96,7 @@ process.bfilter = cms.EDFilter("PythiaFilter",
 
 process.oniafilter = cms.EDFilter("MCSingleParticleFilter",
     Status = cms.untracked.vint32(     2,    2),
-    ParticleID = cms.untracked.vint32(443, 100443),
+    ParticleID = cms.untracked.vint32(443),
     MinPt = cms.untracked.vdouble(    0.0, 0.0),
     MaxEta = cms.untracked.vdouble(   1000.0, 1000.0),
     MinEta = cms.untracked.vdouble(   -1000.0, -1000.0),
@@ -112,7 +112,8 @@ process.mumugenfilter = cms.EDFilter("MCParticlePairFilter",
     ParticleID2 = cms.untracked.vint32(13)
 )
 
-process.ProductionFilterSequence = cms.Sequence(process.generator*process.VtxSmeared*process.bfilter*process.oniafilter*process.mumugenfilter)
+#process.ProductionFilterSequence = cms.Sequence(process.generator*process.VtxSmeared*process.bfilter*process.oniafilter*process.mumugenfilter)
+process.ProductionFilterSequence = cms.Sequence(process.generator*process.bfilter*process.oniafilter*process.VtxSmeared*process.mumugenfilter)
 
 # Output definition
 

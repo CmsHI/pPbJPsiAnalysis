@@ -128,7 +128,8 @@ process.mumugenfilter = cms.EDFilter("MCParticlePairFilter",
     ParticleID2 = cms.untracked.vint32(13)
 )
 
-process.ProductionFilterSequence = cms.Sequence(process.generator*process.VtxSmeared*process.oniafilter*process.mumugenfilter)
+#process.ProductionFilterSequence = cms.Sequence(process.generator*process.VtxSmeared*process.oniafilter*process.mumugenfilter)
+process.ProductionFilterSequence = cms.Sequence(process.generator*process.oniafilter*process.VtxSmeared*process.mumugenfilter)
 
 # Output definition
 process.RAWSIMoutput = cms.OutputModule("PoolOutputModule",
