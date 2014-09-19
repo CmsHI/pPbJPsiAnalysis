@@ -1360,7 +1360,11 @@ HiOniaAnalyzer::selTrackerMuon(const pat::Muon* aMuon) {
           p.pixelLayersWithMeasurement() > 0 &&
           fabs(iTrack->dxy(RefVtx)) < 0.3 &&
           fabs(iTrack->dz(RefVtx)) < 20.0 );
+
+	// No muId for test // KYO
+	//return (isMuonInAccept(aMuon));
 }
+
 
 
 
