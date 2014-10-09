@@ -24,7 +24,7 @@ bool dimuCut(int, int lv_dmom0_Id, int lv_dgmom0_Id, int lv_dkid0_ch, int lv_dki
 bool kineCut(bool, double muPt, double muEta, double muP);
 bool massCut(double lv_dimu_mass);
 
-void rootAna_acceptance(char *strBinnig = "cross76", bool isBoosted = true, int OniaCode=11, bool isPrompt=0){
+void rootAna_acceptance(char *strBinnig = "crossFiner", bool isBoosted = true, int OniaCode=11, bool isPrompt=0){
 	
 	gROOT->Macro("rootlogon.C+");
 	gStyle->SetCanvasDefW(800);
@@ -67,8 +67,8 @@ void rootAna_acceptance(char *strBinnig = "cross76", bool isBoosted = true, int 
 
 	// Definition of bin
 	// --- pt Bin
-	Double_t ptBinsArr[] = {0.0, 3.0, 6.5, 7.5, 8.5, 9.5, 11.0, 14.0, 30.0}; // cross76
-//	Double_t ptBinsArr[] = {0.0, 1.0, 2.0, 3.0, 4.0, 5.0, 6.5, 7.5, 8.5, 9.5, 11.0, 14.0, 30.0}; // crossFiner
+//	Double_t ptBinsArr[] = {0.0, 3.0, 6.5, 7.5, 8.5, 9.5, 11.0, 14.0, 30.0}; // cross76
+	Double_t ptBinsArr[] = {0.0, 1.0, 2.0, 3.0, 4.0, 5.0, 6.5, 7.5, 8.5, 9.5, 11.0, 14.0, 30.0}; // crossFiner
 //	Double_t ptBinsArr[] = {0.0, 3.0, 6.5, 10.0, 30.0}; // rfb53
 //	Double_t ptBinsArr[] = {0.0, 3.0, 4.0, 5.0, 6.5, 10.0, 30.0}; // rfbFiner
 //	Double_t ptBinsArr[] = {0.0, 3.0, 6.5, 10.0, 30.0}; // ethf33 & ntrk33
@@ -76,8 +76,8 @@ void rootAna_acceptance(char *strBinnig = "cross76", bool isBoosted = true, int 
 	cout << "nPtBins=" << nPtBins << endl;
 
 	// --- y Bin
-	Double_t yBinsArr[] = {-2.4, -1.97, -1.47, -0.47, 0.53, 1.03, 1.93, 2.4}; // cross76
-//	Double_t yBinsArr[] = {-2.4, -1.97, -1.67, -1.37, -0.97, -0.47, 0.03, 0.43, 0.73, 1.03, 1.46, 1.93}; //rfb53
+//	Double_t yBinsArr[] = {-2.4, -1.97, -1.47, -0.47, 0.53, 1.03, 1.93, 2.4}; // cross76
+	Double_t yBinsArr[] = {-2.4, -1.97, -1.67, -1.37, -0.97, -0.47, 0.03, 0.43, 0.73, 1.03, 1.46, 1.93, 2.4}; //rfb53
 //	Double_t yBinsArr[] = {-2.4, -1.97, -1.37, -0.47, 0.43, 1.03, 1.46, 1.93}; //ethf33 && ntrk33
 	const Int_t nYBins = sizeof(yBinsArr)/sizeof(double)-1;
 	cout << "nYBins=" << nYBins << endl;
@@ -322,7 +322,7 @@ bool kineCut(bool isBoosted, double muPt, double muEta, double muP) {
 //	else {return true;}
 		return ( TMath::Abs(muEta) < 2.4 &&
 						((TMath::Abs(muEta) < 1.3 && muPt >=3.3) ||
-						 (1.3 <= TMath::Abs(muEta) && TMath::Abs(muEta) < 2.2 && muPt >=2.9) ||
+						 (1.3 <= TMath::Abs(muEta) && TMath::Abs(muEta) < 2.2 && muP >=2.9) ||
 						 (2.2 <= TMath::Abs(muEta) && muPt >= 0.8)));
 }
 
