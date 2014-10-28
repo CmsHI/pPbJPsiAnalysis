@@ -66,7 +66,7 @@ TH1D* hEffCorr2nd3 = (TH1D*)fEffWeight2nd3->Get("hWF");
 TFile* fZvtx = new TFile("zVtxFit/zVtxFit_20141007.root");
 TF1* gRatio = (TF1*)fZvtx->Get("gRatio");
 
-int rootAna_efficiency_cross_mcOneWay_zVtxCut(char *strBinning = "cross76", bool isBoosted = true, bool isPrompt = 1, bool useCtErrRangeEff =false, bool useDataDrivenEff=false, bool useZvtxWeight=true){
+int rootAna_efficiency_cross_mcOneWay_zVtxCut(bool isBoosted = true, bool isPrompt = 1, bool useCtErrRangeEff =false, bool useDataDrivenEff=false, bool useZvtxWeight=false, float zVtxCut=10, float zVtxCutLowBound=-1) {
 
   using namespace std;
   
@@ -130,7 +130,7 @@ int rootAna_efficiency_cross_mcOneWay_zVtxCut(char *strBinning = "cross76", bool
 	if(!fctPbp.is_open()) { cout << "Warning : can NOT open the Pbp file!"<<endl; }
 	if(!fctpPb.is_open()) { cout << "Warning : can NOT open the pPb file!"<<endl; }
 
-	const char* strName = Form("%s_%s",strBinning,sampleName);
+	const char* strName = Form("%s",sampleName);
 	std::cout << "strName: " << strName << std::endl;
 
 	///////////////////////////////////////////////////
@@ -424,7 +424,9 @@ int rootAna_efficiency_cross_mcOneWay_zVtxCut(char *strBinning = "cross76", bool
 		theZvtx = zVtx; 
 		if (useZvtxWeight) { zWeight = gRatio -> Eval(theZvtx); }
 		// zVtxCut
-		if (TMath::Abs(theZvtx) > 10.) continue;
+		if (TMath::Abs(theZvtx) > zVtxCut ) continue;
+		if (TMath::Abs(theZvtx) < zVtxCutLowBound ) continue;  // by default zVtxCutLowBound is set as -1
+
 		h1D_zVtx->Fill(theZvtx, zWeight);
 		//cout << "" << endl;
 	
@@ -605,7 +607,7 @@ int rootAna_efficiency_cross_mcOneWay_zVtxCut(char *strBinning = "cross76", bool
 	
 	// --- save as a root file
 
-	TFile *outFile = new TFile(Form("EffAna_%s_useCtErrRange%d_useDataDriven%d_useZvtxWeight%d_mcOneWay_zVtxCut.root",strName, (int)useCtErrRangeEff ,(int)useDataDrivenEff, (int)useZvtxWeight),"RECREATE");
+	TFile *outFile = new TFile(Form("EffAna_%s_useCtErrRange%d_useDataDriven%d_useZvtxWeight%d_mcOneWay_zVtx_%d-%d.root",strName, (int)useCtErrRangeEff ,(int)useDataDrivenEff, (int)useZvtxWeight, (int)zVtxCut, (int)zVtxCutLowBound),"RECREATE");
 	std::cout << "strName: " << strName << std::endl;
 	outFile->cd();
 
