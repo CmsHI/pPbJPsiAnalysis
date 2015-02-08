@@ -40,7 +40,7 @@ void drawSingleMuEff() {
   //int nEntries = 50000;
   int nEntries = 1e9;
   // mc 
-  TFile *fMc = new TFile("oniaFiles/mc/merged_PromptJpsi_PYTHIAboosted_1st_STARTHI53_V27_noMuID_1Mevt.root");
+  TFile *fMc = new TFile("../oniaFiles/tot_PromptJpsi_PYTHIAboosted_1st_STARTHI53_V27_noMuID_sglTrig_genMatch_20150205.root");
   TTree* t = (TTree*)fMc->Get("myTree");
   setAliases(t);
 
@@ -53,6 +53,9 @@ void drawSingleMuEff() {
   TH1D* hTrMu2[nEta+1][var+1];
   TH1D* hQlfed2[nEta+1][var+1];
   TH1D* hEff2[nEta+1][var+1];
+  TH1D* hTrMu0[nEta+1][var+1]; // mupl & mumi
+  TH1D* hQlfed0[nEta+1][var+1];
+  TH1D* hEff0[nEta+1][var+1];
   
   
   
@@ -74,14 +77,14 @@ void drawSingleMuEff() {
   TCut theCut1 = "";
   TCut theCut2 = "";
 
-  TCut jPsiKineCut = "recoJpPt<3 && recoJpRap<-1.47";
+  TCut jPsiKineCut = "";
   //TCut jPsiKineCut = "";
   
   TCanvas* c1 = new TCanvas("c1","",1200,800);
   c1->Divide(3,2);
-  
+
+  int iv = 1;
   for ( int ieta = 1; ieta<=nEta ; ieta++) { 
-    int iv = 1;
 
     float etaBin[nEta+1] = {0, 1.2, 1.6, 2.4};
     etaCut1   = Form( "abs(recoEta1)>%.2f && abs(recoEta1)<=%.2f", etaBin[ieta-1], etaBin[ieta]);
@@ -92,8 +95,8 @@ void drawSingleMuEff() {
     
     
     if ( iv == 1) {  
-      theCut1 = "Reco_QQ_mupl_TrkMuArb && Reco_QQ_mupl_TMOneStaTight && Reco_QQ_mupl_isHighPurity && (Reco_QQ_mupl_nPixWMea>0) && (Reco_QQ_mupl_nTrkWMea>5) && (Reco_QQ_mupl_dxy<0.3) && (Reco_QQ_mupl_dz<20)";
-      theCut2 = "Reco_QQ_mumi_TrkMuArb && Reco_QQ_mumi_TMOneStaTight && Reco_QQ_mumi_isHighPurity && (Reco_QQ_mumi_nPixWMea>0) && (Reco_QQ_mumi_nTrkWMea>5) && (Reco_QQ_mumi_dxy<0.3) && (Reco_QQ_mumi_dz<20)";
+      theCut1 = "Reco_QQ_mupl_TrkMuArb && Reco_QQ_mupl_TMOneStaTight && Reco_QQ_mupl_isHighPurity && (Reco_QQ_mupl_nPixWMea>0) && (Reco_QQ_mupl_nTrkWMea>5) && (Reco_QQ_mupl_dxy<0.3) && (Reco_QQ_mupl_dz<20) &&(Reco_QQ_mupl_trig&1) ";
+      theCut2 = "Reco_QQ_mumi_TrkMuArb && Reco_QQ_mumi_TMOneStaTight && Reco_QQ_mumi_isHighPurity && (Reco_QQ_mumi_nPixWMea>0) && (Reco_QQ_mumi_nTrkWMea>5) && (Reco_QQ_mumi_dxy<0.3) && (Reco_QQ_mumi_dz<20) &&(Reco_QQ_mumi_trig&1)";
     }
     
     
@@ -103,6 +106,9 @@ void drawSingleMuEff() {
     hTrMu2[ieta][iv] = (TH1D*)hTrMu1[ieta][iv]->Clone(Form("hTrMu2_ieta%d_iv%d",ieta,iv));
     hQlfed2[ieta][iv] = (TH1D*)hTrMu1[ieta][iv]->Clone(Form("hQlfed2_ieta%d_iv%d",ieta,iv));
     hEff2[ieta][iv] = (TH1D*)hTrMu1[ieta][iv]->Clone(Form("hEff2_ieta%d_iv%d",ieta,iv));
+    hTrMu0[ieta][iv] = (TH1D*)hTrMu1[ieta][iv]->Clone(Form("hTrMu0_ieta%d_iv%d",ieta,iv));
+    hQlfed0[ieta][iv] = (TH1D*)hTrMu1[ieta][iv]->Clone(Form("hQlfed0_ieta%d_iv%d",ieta,iv));
+    hEff0[ieta][iv] = (TH1D*)hTrMu1[ieta][iv]->Clone(Form("hEff0_ieta%d_iv%d",ieta,iv));
     
     c1->cd(ieta);
     
@@ -119,22 +125,44 @@ void drawSingleMuEff() {
     hQlfed1[ieta][iv]->DrawCopy("same");
     
     handsomeTH1(hTrMu2[ieta][iv],4);
-  handsomeTH1(hQlfed2[ieta][iv],4);
-
-  hTrMu2[ieta][iv]->DrawCopy("hist same");
-  hQlfed2[ieta][iv]->DrawCopy("same");
-
-  c1->cd(ieta+nEta);
-  
-  hEff1[ieta][iv]->Divide( hQlfed1[ieta][iv], hTrMu1[ieta][iv], 1, 1, "B");
-  hEff2[ieta][iv]->Divide( hQlfed2[ieta][iv], hTrMu2[ieta][iv], 1, 1, "B");
-  handsomeTH1(hEff2[ieta][iv],4);
-  hEff1[ieta][iv]->Draw();
-  hEff2[ieta][iv]->Draw("same");
+    handsomeTH1(hQlfed2[ieta][iv],4);
+    
+    hTrMu2[ieta][iv]->DrawCopy("hist same");
+    hQlfed2[ieta][iv]->DrawCopy("same");
+    
+    c1->cd(ieta+nEta);
+    
+    hEff1[ieta][iv]->Divide( hQlfed1[ieta][iv], hTrMu1[ieta][iv], 1, 1, "B");
+    hEff2[ieta][iv]->Divide( hQlfed2[ieta][iv], hTrMu2[ieta][iv], 1, 1, "B");
+    
+    hQlfed0[ieta][iv]->Add(hQlfed1[ieta][iv]);
+    hQlfed0[ieta][iv]->Add(hQlfed2[ieta][iv]);
+    hTrMu0[ieta][iv]->Add(hTrMu1[ieta][iv]);
+    hTrMu0[ieta][iv]->Add(hTrMu2[ieta][iv]);
+    hEff0[ieta][iv]->Divide( hQlfed0[ieta][iv], hTrMu0[ieta][iv], 1, 1, "B");
+    
+    handsomeTH1(hEff2[ieta][iv],4);
+    hEff1[ieta][iv]->Draw();
+    hEff2[ieta][iv]->Draw("same");
+    
   }
   
+  TFile* fout = new TFile("mcSingleMuEff.root","create");
+  for ( int ieta = 1; ieta<=nEta ; ieta++) {
+    hEff0[ieta][iv]->Write();
+    hEff1[ieta][iv]->Write();
+    hEff2[ieta][iv]->Write();
+    hQlfed0[ieta][iv]->Write();
+    hQlfed1[ieta][iv]->Write();
+    hQlfed2[ieta][iv]->Write();
+    hTrMu0[ieta][iv]->Write();
+    hTrMu1[ieta][iv]->Write();
+    hTrMu2[ieta][iv]->Write();
+
+  }
+  fout->Close();
 }
- 
+
  
  
 void setAliases(TTree* t) {
