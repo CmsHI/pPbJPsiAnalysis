@@ -51,38 +51,38 @@ void drawTnPDataVsMc(int opt=4)  // 1 tracking,  2 muonId,  3 trigger
   TString label = "";
   int nEtaBin = 3;  
   if ( opt == 1 )  { 
-    f1 = new TFile("../FitRootFiles/tracking/outputTrackCuts_binned_data_allDirection_v7.root");
+    f1 = new TFile("FitRootFiles/tracking/outputTrackCuts_binned_data_allDirection_v8.root");
     for ( int ieta = 1; ieta<=nEtaBin ; ieta++)   
       daTrkPt1[ieta] = (RooDataSet*)f1->Get(Form("tpTreeSta/ptBin_eta%d/fit_eff",ieta));
-    f2 = new TFile("../FitRootFiles/tracking/outputTrackCuts_binned_mc_allDirection_v7.root");
+    f2 = new TFile("FitRootFiles/tracking/outputTrackCuts_binned_mc_allDirection_v8.root");
     for ( int ieta = 1; ieta<=nEtaBin ; ieta++)   
       daTrkPt2[ieta] = (RooDataSet*)f2->Get(Form("tpTreeSta/ptBin_eta%d/fit_eff",ieta));
     label = "tracking";
   }
   else if ( opt == 4 )  { 
-    f1 = new TFile("../FitRootFiles/muTriger/outputTriggerMuId_data_allDirection_v5.root");
+    f1 = new TFile("FitRootFiles/muTriger/outputTriggerMuId_data_allDirection_v5.root");
     for ( int ieta = 1; ieta<=nEtaBin ; ieta++)   
       daTrkPt1[ieta] = (RooDataSet*)f1->Get(Form("tpTree/ptBin_eta%d/fit_eff",ieta));
-    f2 = new TFile("../FitRootFiles/muTriger/outputTriggerMuId_mc_allDirection_v5.root");
+    f2 = new TFile("FitRootFiles/muTriger/outputTriggerMuId_mc_allDirection_v5.root");
     for ( int ieta = 1; ieta<=nEtaBin ; ieta++)   
       daTrkPt2[ieta] = (RooDataSet*)f2->Get(Form("tpTree/ptBin_eta%d/fit_eff",ieta));
     label = "MuIdAndTrig";
   }
   
   else if ( opt == 2 )  { 
-    f1 = new TFile("../FitRootFiles/muonId_v2/outputMuonId_data_allDirection_v2.root");
+    f1 = new TFile("FitRootFiles/muonId_v2/outputMuonId_data_allDirection_v2.root");
     for ( int ieta = 1; ieta<=nEtaBin ; ieta++)   
       daTrkPt1[ieta] = (RooDataSet*)f1->Get(Form("tpTree/ptBin_eta%d/fit_eff",ieta));
-    f2 = new TFile("../FitRootFiles/muonId_v2/outputMuonId_mc_allDirection_v2.root");
+    f2 = new TFile("FitRootFiles/muonId_v2/outputMuonId_mc_allDirection_v2.root");
     for ( int ieta = 1; ieta<=nEtaBin ; ieta++)   
       daTrkPt2[ieta] = (RooDataSet*)f2->Get(Form("tpTree/ptBin_eta%d/fit_eff",ieta));
     label = "muonId";
   }
   else if ( opt == 3 )  { 
-    f1 = new TFile("../FitRootFiles/trigger_v2/outputTrigger_data_allDirection_v2.root");
+    f1 = new TFile("FitRootFiles/trigger_v2/outputTrigger_data_allDirection_v2.root");
     for ( int ieta = 1; ieta<=nEtaBin ; ieta++)   
       daTrkPt1[ieta] = (RooDataSet*)f1->Get(Form("tpTree/ptBin_eta%d/fit_eff",ieta));
-    f2 = new TFile("../FitRootFiles/trigger_v2/outputTrigger_mc_allDirection_v2.root");
+    f2 = new TFile("FitRootFiles/trigger_v2/outputTrigger_mc_allDirection_v2.root");
     for ( int ieta = 1; ieta<=nEtaBin ; ieta++)   
       daTrkPt2[ieta] = (RooDataSet*)f2->Get(Form("tpTree/ptBin_eta%d/fit_eff",ieta));
     label = "trigger";
@@ -195,7 +195,7 @@ void drawTnPDataVsMc(int opt=4)  // 1 tracking,  2 muonId,  3 trigger
 
 
     
-  TFile* fout = new TFile("tnpRate.root","update");
+  TFile* fout = new TFile("tnpRate.root","recreate");
   for ( int ieta = 1; ieta<=nEtaBin ; ieta++) {
     eff_pt1[ieta]->Write();
     eff_pt2[ieta]->Write();
