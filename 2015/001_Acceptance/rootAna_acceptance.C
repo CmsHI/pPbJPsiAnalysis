@@ -26,7 +26,7 @@ bool dimuCut(int lv_dmom0_Id, int lv_dgmom0_Id, int lv_dkid0_ch, int lv_dkid1_ch
 bool kineCut(double muPt, double muEta, double muP);
 bool massCut(double lv_dimu_mass);
 
-void rootAna_acceptance(char *strBinnig = "8rap9pt", bool is1st = true, bool isPrompt=false){
+void rootAna_acceptance(char *strBinnig = "8rap9pt", bool isPrompt=true){
 	
 	gROOT->Macro("rootlogon.C+");
 	gStyle->SetCanvasDefW(800);
@@ -41,12 +41,16 @@ void rootAna_acceptance(char *strBinnig = "8rap9pt", bool is1st = true, bool isP
 	TChain * ana1 = new TChain("DiAna");
 	if (isPrompt){
 		sampleName="PRMC_boosted";
-		ana1->Add("/home/songkyo/kyo/pPbDataSample/AcceptanceSample/pythia6_PromptJpsi_boosted_wofilters_totevtin5M_new_MuonAna_20140210.root");
-		ana1->Add("/home/songkyo/kyo/pPbDataSample/AcceptanceSample/pythia6_PromptJpsi_boosted_wofilters_totevtin5M_new_MuonAna_20140211.root");
+//		ana1->Add("/home/songkyo/kyo/pPbDataSample/AcceptanceSampleKYOvtx/tot_GENonly_JPsiWithFSR_5TeV02_1st_KYOvtx_ntuple_20150126.root");
+//		ana1->Add("/home/songkyo/kyo/pPbDataSample/AcceptanceSampleKYOvtx/tot_GENonly_JPsiWithFSR_5TeV02_1st_KYOvtx_ntuple_20150126_p2.root");
+		ana1->Add("/home/songkyo/kyo/pPbDataSample/AcceptanceSample/pythia6_PromptJpsi_boosted_wofilters_totevtin5M_new_MuonAna_20140210.root"); //from Hyunchul
+		ana1->Add("/home/songkyo/kyo/pPbDataSample/AcceptanceSample/pythia6_PromptJpsi_boosted_wofilters_totevtin5M_new_MuonAna_20140211.root"); //from Hyunchul
 	}
 	else {
 		sampleName="NPMC_boosted";
-		ana1->Add("/home/songkyo/kyo/pPbDataSample/AcceptanceSample/pythia6_nonPromptJpsi_boosted_wofilters_totevt100M_MuonAna_20140407.root");
+//		ana1->Add("/home/songkyo/kyo/pPbDataSample/AcceptanceSampleKYOvtx/tot_GENonly_inclBtoJPsiMuMu_5TeV02_1st_KYOvtx_ntuple_20150127.root");
+//		ana1->Add("/home/songkyo/kyo/pPbDataSample/AcceptanceSampleKYOvtx/tot_GENonly_inclBtoJPsiMuMu_5TeV02_1st_KYOvtx_ntuple_20150127_p2.root");
+		ana1->Add("/home/songkyo/kyo/pPbDataSample/AcceptanceSample/pythia6_nonPromptJpsi_boosted_wofilters_totevt100M_MuonAna_20140407.root"); //from Hyunchul
 	}
 
 	const char* strName = Form("%s_%s",strBinnig,sampleName);
@@ -69,16 +73,14 @@ void rootAna_acceptance(char *strBinnig = "8rap9pt", bool is1st = true, bool isP
 
 	// Definition of bin
 	// --- pt Bin
-	//Double_t ptBinsArr[] = {0.0, 3.0, 6.5, 8.0, 10.0, 13.0, 30.0}; // mergePt
 	Double_t ptBinsArr[] = {0.0, 3.0, 4.0, 5.0, 6.5, 7.5, 8.5, 10.0, 14.0, 30.0}; // 8rap9pt
-//	Double_t ptBinsArr[] = {0.0, 3.0, 6.5, 10.0, 30.0}; // rfb53
-//	Double_t ptBinsArr[] = {0.0, 3.0, 6.5, 10.0, 30.0}; // ethf33 & ntrk33
+	//Double_t ptBinsArr[] = {5.0, 6.5, 10.0, 30.0}; // 6rap3pt
 	const Int_t nPtBins = sizeof(ptBinsArr)/sizeof(double)-1;
 	cout << "nPtBins=" << nPtBins << endl;
 
   // --- y Bin //set to 1st run (For 2nd run, will be automatically changed later)
-	//Double_t yBinsArr[] = {-2.4, -1.97, -1.67, -1.37, -0.97, -0.47, 0.03, 0.43, 0.73, 1.03, 1.46, 1.93, 2.4}; //crossFiner
-  Double_t yBinsArr[] = {-2.4, -1.97, -1.37, -0.47, 0.43, 1.03, 1.46, 1.93, 2.4}; // mergeRap
+  Double_t yBinsArr[] = {-2.4, -1.97, -1.37, -0.47, 0.43, 1.03, 1.46, 1.93, 2.4}; // 8rap9pt
+  //Double_t yBinsArr[] = {-2.4, -1.97, -1.37, -0.47, 0.43, 1.03, 1.46}; // 6rap3pt
 	const Int_t nYBins = sizeof(yBinsArr)/sizeof(double)-1;
 	cout << "nYBins=" << nYBins << endl;
 
@@ -163,9 +165,9 @@ void rootAna_acceptance(char *strBinnig = "8rap9pt", bool is1st = true, bool isP
 	///////////////////////////////////////////////////////////////////////////////////////////////
 	// define 2D hist
 	// with defined binning - double 1
-	TH2D *h2D_NoCut_pt_y = new TH2D("h2D_NoCut_pt_y","",nYBins,yBinsArr,nPtBins,ptBinsArr);
-	TH2D *h2D_Den_pt_y = new TH2D("h2D_Den_pt_y","",nYBins,yBinsArr,nPtBins,ptBinsArr);
-	TH2D *h2D_Num_pt_y = new TH2D("h2D_Num_pt_y","",nYBins,yBinsArr,nPtBins,ptBinsArr);
+	TH2D *h2D_NoCut_pt_y_Pbp = new TH2D("h2D_NoCut_pt_y_Pbp","",nYBins,yBinsArr,nPtBins,ptBinsArr);
+	TH2D *h2D_Den_pt_y_Pbp = new TH2D("h2D_Den_pt_y_Pbp","",nYBins,yBinsArr,nPtBins,ptBinsArr);
+	TH2D *h2D_Num_pt_y_Pbp = new TH2D("h2D_Num_pt_y_Pbp","",nYBins,yBinsArr,nPtBins,ptBinsArr);
 	TH2D *h2D_Acc_pt_y_Pbp = new TH2D("h2D_Acc_pt_y_Pbp","",nYBins,yBinsArr,nPtBins,ptBinsArr);
 
 	TH2D *h2D_NoCut_ptup_pt_y = new TH2D("h2D_NoCut_ptup_pt_y","",nYBins,yBinsArr,nPtBins,ptBinsArr);
@@ -193,9 +195,9 @@ void rootAna_acceptance(char *strBinnig = "8rap9pt", bool is1st = true, bool isP
 	////////////////////////////////////////////////////////////////////////////////////////////////
 	////////////////////////////////////////////////////////////////////////////////////////////////
 	//2D hist
-	h2D_NoCut_pt_y->Sumw2();
-	h2D_Den_pt_y->Sumw2();
-	h2D_Num_pt_y->Sumw2();
+	h2D_NoCut_pt_y_Pbp->Sumw2();
+	h2D_Den_pt_y_Pbp->Sumw2();
+	h2D_Num_pt_y_Pbp->Sumw2();
 	h2D_Acc_pt_y_Pbp->Sumw2();
 	h2D_NoCut_ptup_pt_y->Sumw2();
 	h2D_Den_ptup_pt_y->Sumw2();
@@ -239,7 +241,7 @@ void rootAna_acceptance(char *strBinnig = "8rap9pt", bool is1st = true, bool isP
 			 wf_ycdn=-0.145*TMath::Abs(dimu_y-shiftvar)+1.14;
 		}
 		////// --- cut01 : no cut
-		h2D_NoCut_pt_y->Fill(dimu_y,dimu_pt);
+		h2D_NoCut_pt_y_Pbp->Fill(dimu_y,dimu_pt);
 		h2D_NoCut_ptup_pt_y->Fill(dimu_y,dimu_pt,wf_ptup);
 		h2D_NoCut_ptdn_pt_y->Fill(dimu_y,dimu_pt,wf_ptdn);
 		h2D_NoCut_ycup_pt_y->Fill(dimu_y,dimu_pt,wf_ycup);
@@ -251,7 +253,7 @@ void rootAna_acceptance(char *strBinnig = "8rap9pt", bool is1st = true, bool isP
 		bool yn = false;
 		if (dimuCut(dmom0_Id,dgmom0_Id,dkid0_ch,dkid1_ch) && minpt<=dimu_pt && dimu_pt<maxpt && minylab<=dimu_y && dimu_y<maxylab) {yn = true;}
 		if ( yn == true  ) {
-			h2D_Den_pt_y->Fill(dimu_y,dimu_pt);
+			h2D_Den_pt_y_Pbp->Fill(dimu_y,dimu_pt);
 			h2D_Den_ptup_pt_y->Fill(dimu_y,dimu_pt,wf_ptup);
 			h2D_Den_ptdn_pt_y->Fill(dimu_y,dimu_pt,wf_ptdn);
 			h2D_Den_ycup_pt_y->Fill(dimu_y,dimu_pt,wf_ycup);
@@ -261,7 +263,7 @@ void rootAna_acceptance(char *strBinnig = "8rap9pt", bool is1st = true, bool isP
 			bool yn2 = false;
 			if (massCut(dimu_mass) && dimuCut(dmom0_Id,dgmom0_Id,dkid0_ch,dkid1_ch) && kineCut(dkid0_pt,dkid0_eta,dkid0_p) && kineCut(dkid1_pt,dkid1_eta,dkid1_p) && minpt<=dimu_pt && dimu_pt<maxpt && minylab<=dimu_y && dimu_y<maxylab) {yn2 = true;}
 			if (yn2 == true){
-				h2D_Num_pt_y->Fill(dimu_y,dimu_pt);
+				h2D_Num_pt_y_Pbp->Fill(dimu_y,dimu_pt);
 				h2D_Num_ptup_pt_y->Fill(dimu_y,dimu_pt,wf_ptup);
 				h2D_Num_ptdn_pt_y->Fill(dimu_y,dimu_pt,wf_ptdn);
 				h2D_Num_ycup_pt_y->Fill(dimu_y,dimu_pt,wf_ycup);
@@ -272,7 +274,7 @@ void rootAna_acceptance(char *strBinnig = "8rap9pt", bool is1st = true, bool isP
 	} //end of loop
 
 	// (Num/Den) to get acceptance (B : binomial error)
-	h2D_Acc_pt_y_Pbp->Divide(h2D_Num_pt_y,h2D_Den_pt_y,1,1,"B");
+	h2D_Acc_pt_y_Pbp->Divide(h2D_Num_pt_y_Pbp,h2D_Den_pt_y_Pbp,1,1,"B");
 	h2D_Acc_ptup_pt_y_Pbp->Divide(h2D_Num_ptup_pt_y,h2D_Den_ptup_pt_y,1,1,"B");
 	h2D_Acc_ptdn_pt_y_Pbp->Divide(h2D_Num_ptdn_pt_y,h2D_Den_ptdn_pt_y,1,1,"B");
 	h2D_Acc_ycup_pt_y_Pbp->Divide(h2D_Num_ycup_pt_y,h2D_Den_ycup_pt_y,1,1,"B");
@@ -280,25 +282,47 @@ void rootAna_acceptance(char *strBinnig = "8rap9pt", bool is1st = true, bool isP
 
 
 	////////////////////////////////////////////////////////////////////////////
-	// rapidity for 2nd run
+	// rapidity change, for 2nd run hist.
+	TH2D *h2D_Den_pt_y_pPb = new TH2D("h2D_Den_pt_y_pPb","",nYBins2nd,yBinsArr2nd,nPtBins,ptBinsArr);
+	TH2D *h2D_Num_pt_y_pPb = new TH2D("h2D_Num_pt_y_pPb","",nYBins2nd,yBinsArr2nd,nPtBins,ptBinsArr);
 	TH2D *h2D_Acc_pt_y_pPb = new TH2D("h2D_Acc_pt_y_pPb","",nYBins2nd,yBinsArr2nd,nPtBins,ptBinsArr);
+	h2D_Den_pt_y_pPb->Sumw2();
+	h2D_Num_pt_y_pPb->Sumw2();
 	h2D_Acc_pt_y_pPb->Sumw2();
 
-	int tmpbinPbp; 
-	int tmpbinpPb; 
-	float tmpval, tmperr;
+	int tmpbinDenPbp, tmpbinDenpPb; 
+	int tmpbinNumPbp, tmpbinNumpPb; 
+	int tmpbinAccPbp, tmpbinAccpPb; 
+	float tmpDenVal, tmpDenErr;
+	float tmpNumVal, tmpNumErr;
+	float tmpAccVal, tmpAccErr;
 	for (Int_t iy=0; iy<nYBins; iy++){
 		for (Int_t ipt=0; ipt<nPtBins; ipt++) {
-			tmpbinPbp = h2D_Acc_pt_y_Pbp->FindBin((yBinsArr[iy]+yBinsArr[iy+1])/2, (ptBinsArr[ipt]+ptBinsArr[ipt+1])/2);
-			tmpval = h2D_Acc_pt_y_Pbp->GetBinContent(tmpbinPbp);
-			tmperr = h2D_Acc_pt_y_Pbp->GetBinError(tmpbinPbp);
-			tmpbinpPb = h2D_Acc_pt_y_pPb->FindBin((yBinsArr2nd[nYBins-iy-1]+yBinsArr2nd[nYBins-iy])/2,(ptBinsArr[ipt]+ptBinsArr[ipt+1])/2);
-			h2D_Acc_pt_y_pPb->SetBinContent(tmpbinpPb,tmpval);
-			h2D_Acc_pt_y_pPb->SetBinError(tmpbinpPb,tmperr);
+			tmpbinDenPbp = h2D_Den_pt_y_Pbp->FindBin((yBinsArr[iy]+yBinsArr[iy+1])/2, (ptBinsArr[ipt]+ptBinsArr[ipt+1])/2);
+			tmpDenVal = h2D_Den_pt_y_Pbp->GetBinContent(tmpbinDenPbp);
+			tmpDenErr = h2D_Den_pt_y_Pbp->GetBinError(tmpbinDenPbp);
+			tmpbinDenpPb = h2D_Den_pt_y_pPb->FindBin((yBinsArr2nd[nYBins-iy-1]+yBinsArr2nd[nYBins-iy])/2,(ptBinsArr[ipt]+ptBinsArr[ipt+1])/2);
+			h2D_Den_pt_y_pPb->SetBinContent(tmpbinDenpPb,tmpDenVal);
+			h2D_Den_pt_y_pPb->SetBinError(tmpbinDenpPb,tmpDenErr);
+			
+			tmpbinNumPbp = h2D_Num_pt_y_Pbp->FindBin((yBinsArr[iy]+yBinsArr[iy+1])/2, (ptBinsArr[ipt]+ptBinsArr[ipt+1])/2);
+			tmpNumVal = h2D_Num_pt_y_Pbp->GetBinContent(tmpbinNumPbp);
+			tmpNumErr = h2D_Num_pt_y_Pbp->GetBinError(tmpbinNumPbp);
+			tmpbinNumpPb = h2D_Num_pt_y_pPb->FindBin((yBinsArr2nd[nYBins-iy-1]+yBinsArr2nd[nYBins-iy])/2,(ptBinsArr[ipt]+ptBinsArr[ipt+1])/2);
+			h2D_Num_pt_y_pPb->SetBinContent(tmpbinNumpPb,tmpNumVal);
+			h2D_Num_pt_y_pPb->SetBinError(tmpbinNumpPb,tmpNumErr);
+			
+			tmpbinAccPbp = h2D_Acc_pt_y_Pbp->FindBin((yBinsArr[iy]+yBinsArr[iy+1])/2, (ptBinsArr[ipt]+ptBinsArr[ipt+1])/2);
+			tmpAccVal = h2D_Acc_pt_y_Pbp->GetBinContent(tmpbinAccPbp);
+			tmpAccErr = h2D_Acc_pt_y_Pbp->GetBinError(tmpbinAccPbp);
+			tmpbinAccpPb = h2D_Acc_pt_y_pPb->FindBin((yBinsArr2nd[nYBins-iy-1]+yBinsArr2nd[nYBins-iy])/2,(ptBinsArr[ipt]+ptBinsArr[ipt+1])/2);
+			h2D_Acc_pt_y_pPb->SetBinContent(tmpbinAccpPb,tmpAccVal);
+			h2D_Acc_pt_y_pPb->SetBinError(tmpbinAccpPb,tmpAccErr);
+			
 			/*
 			cout << "*** "<<iy<<"th rap, "<<ipt<<"th pt ***" <<endl;
-			cout << "tmpbinPbp = " <<tmpbinPbp << ", tmpbinpPb = " << tmpbinpPb << endl;
-			cout << "tmpval = " <<tmpval << ", tmperr = " << tmperr << endl;
+			cout << "tmpbinAccPbp = " <<tmpbinAccPbp << ", tmpbinAccpPb = " << tmpbinAccpPb << endl;
+			cout << "tmpAccVal = " <<tmpAccVal << ", tmpAccErr = " << tmpAccErr << endl;
 			cout << "yBinsArr :" <<(yBinsArr[iy]+yBinsArr[iy+1])/2 << endl;
 			cout << "      from " <<yBinsArr[iy]<<" to "<<yBinsArr[iy+1] << endl;
 			cout << "yBinsArr2nd : " << (yBinsArr2nd[nYBins-iy-1]+yBinsArr2nd[nYBins-iy])/2 << endl;
@@ -315,10 +339,12 @@ void rootAna_acceptance(char *strBinnig = "8rap9pt", bool is1st = true, bool isP
 	std::cout << "strName: " << strName << std::endl;
 	outFile->cd();
 
-	h2D_NoCut_pt_y->Write();
-	h2D_Den_pt_y->Write();
-	h2D_Num_pt_y->Write();
+	//h2D_NoCut_pt_y_Pbp->Write();
+	h2D_Den_pt_y_Pbp->Write();
+	h2D_Num_pt_y_Pbp->Write();
 	h2D_Acc_pt_y_Pbp->Write();
+	h2D_Den_pt_y_pPb->Write();
+	h2D_Num_pt_y_pPb->Write();
 	h2D_Acc_pt_y_pPb->Write();
 	/*
 	h2D_NoCut_ptup_pt_y->Write();
