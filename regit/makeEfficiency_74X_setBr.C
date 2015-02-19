@@ -353,7 +353,7 @@ void makeEfficiency_74X_setBr(bool isPrompt=true, bool isPair=true, bool isEmbed
 				{ yngen=true; }
 			if ( (!isEmbedded) 
 			//TMath::Abs(etareco) < 2.4
-			&& TMath::Abs(eta) < 2.4 //temporary
+			&& TMath::Abs(eta) < 2.4
 			&& TMath::Abs(idparent)>442 
 			&& TMath::Abs(idparent)<550 
 			&& idCut(nvalidpixelhitsreco,nvalidmuonhitsreco)
@@ -361,7 +361,7 @@ void makeEfficiency_74X_setBr(bool isPrompt=true, bool isPair=true, bool isEmbed
 				{ ynreco=true;}
 			else if ( isEmbedded 
 			//TMath::Abs(etareco) < 2.4
-			&& TMath::Abs(eta) < 2.4 //temporary
+			&& TMath::Abs(eta) < 2.4
 			//&& TMath::Abs(idparent)>442 
 			//&& TMath::Abs(idparent)<550 
 			&& idCut(nvalidpixelhitsreco,nvalidmuonhitsreco)
@@ -369,7 +369,7 @@ void makeEfficiency_74X_setBr(bool isPrompt=true, bool isPair=true, bool isEmbed
 				{ ynreco=true;}
 		}
 
-		/// weight (is doWeight=true) && fill the histogram
+		/// weight if "doWeight" && fill the histogram
 		if (isPair){
 			if (doWeight) {weightF = getWeight(isPrompt, isPair, pt,y);}
 //				cout << "weightF = " <<weightF << endl;
@@ -442,11 +442,8 @@ void makeEfficiency_74X_setBr(bool isPrompt=true, bool isPair=true, bool isEmbed
 	pal->SetX2NDC(0.92);
 	c1->Modified();
 	c1->Update();
-	c1->SaveAs(Form("%s/EffPtY_isPtCut%d_doWeight%d_%s_%s_%s.pdf",strDir.c_str(),(int)isPtCut,(int)doWeight,strPrompt.c_str(),strEmbd.c_str(),strPair.c_str()));
-//	c1->SaveAs(Form("%s/EffPtY_isPtCut%d_doWeight%d_%s_%s_%s.png",strDir.c_str(),(int)isPtCut,(int)doWeight,strPrompt.c_str(),strEmbd.c_str(),strPair.c_str()));
+	c1->SaveAs(Form("%s/EffPtY_isPtCut%d_doWeight%d_isEmbedded%d_%s_%s_%s.pdf",strDir.c_str(),(int)isPtCut,(int)doWeight,(int)isEmbedded,strPrompt.c_str(),strEmbd.c_str(),strPair.c_str()));
 	c1->Clear();
-	//legUR->Clear();
-
 
 	//draw EffPt
 	SetHistStyle(hEffPt,3,0);
@@ -456,12 +453,8 @@ void makeEfficiency_74X_setBr(bool isPrompt=true, bool isPair=true, bool isEmbed
 	else hEffPt->GetXaxis()->SetTitle("Trk p_{T} (GeV)");
 	hEffPt->GetYaxis()->SetTitle("Efficiency");
 	hEffPt->Draw("pe");
-	//legUR->AddEntry(hEffPt,Form("73X_%s",strPrompt.c_str()),"lp");
-	//legUR->Draw();
-	c1->SaveAs(Form("%s/EffPt_isPtCut%d_doWeight%d_%s_%s_%s.pdf",strDir.c_str(),(int)isPtCut,(int)doWeight,strPrompt.c_str(),strEmbd.c_str(),strPair.c_str()));
-//	c1->SaveAs(Form("%s/EffPt_isPtCut%d_doWeight%d_%s_%s_%s.png",strDir.c_str(),(int)isPtCut,(int)doWeight,strPrompt.c_str(),strEmbd.c_str(),strPair.c_str()));
+	c1->SaveAs(Form("%s/EffPt_isPtCut%d_doWeight%d_isEmbedded%d_%s_%s_%s.pdf",strDir.c_str(),(int)isPtCut,(int)doWeight,(int)isEmbedded,strPrompt.c_str(),strEmbd.c_str(),strPair.c_str()));
 	c1->Clear();
-	//legUR->Clear();
 
 	//draw EffRap
 	SetHistStyle(hEffRap,3,0);
@@ -472,12 +465,8 @@ void makeEfficiency_74X_setBr(bool isPrompt=true, bool isPair=true, bool isEmbed
 	hEffRap->GetXaxis()->CenterTitle();
 	hEffRap->GetYaxis()->SetTitle("Efficiency");
 	hEffRap->Draw("pe");
-	//legUR->AddEntry(hEffRap,Form("73X_%s",strPrompt.c_str()),"lp");
-	//legUR->Draw();
-	c1->SaveAs(Form("%s/EffRap_isPtCut%d_doWeight%d_%s_%s_%s.pdf",strDir.c_str(),(int)isPtCut,(int)doWeight,strPrompt.c_str(),strEmbd.c_str(),strPair.c_str()));
-//	c1->SaveAs(Form("%s/EffRap_isPtCut%d_doWeight%d_%s_%s_%s.png",strDir.c_str(),(int)isPtCut,(int)doWeight,strPrompt.c_str(),strEmbd.c_str(),strPair.c_str()));
+	c1->SaveAs(Form("%s/EffRap_isPtCut%d_doWeight%d_isEmbedded%d_%s_%s_%s.pdf",strDir.c_str(),(int)isPtCut,(int)doWeight,(int)isEmbedded,strPrompt.c_str(),strEmbd.c_str(),strPair.c_str()));
 	c1->Clear();
-	//legUR->Clear();
 
 	//draw EffLxy
 	SetHistStyle(hEffLxy,3,0);
@@ -486,15 +475,11 @@ void makeEfficiency_74X_setBr(bool isPrompt=true, bool isPair=true, bool isEmbed
 	hEffLxy->GetXaxis()->SetTitle("Lxy");
 	hEffLxy->GetYaxis()->SetTitle("Efficiency");
 	hEffLxy->Draw("pe");
-	//legUR->AddEntry(hEffLxy,Form("73X_%s",strPrompt.c_str()),"lp");
-	//legUR->Draw();
-	c1->SaveAs(Form("%s/EffLxy_isPtCut%d_doWeight%d_%s_%s_%s.pdf",strDir.c_str(),(int)isPtCut,(int)doWeight,strPrompt.c_str(),strEmbd.c_str(),strPair.c_str()));
-//	c1->SaveAs(Form("%s/EffLxy_isPtCut%d_doWeight%d_%s_%s_%s.png",strDir.c_str(),(int)isPtCut,(int)doWeight,strPrompt.c_str(),strEmbd.c_str(),strPair.c_str()));
+	c1->SaveAs(Form("%s/EffLxy_isPtCut%d_doWeight%d_isEmbedded%d_%s_%s_%s.pdf",strDir.c_str(),(int)isPtCut,(int)doWeight,(int)isEmbedded,strPrompt.c_str(),strEmbd.c_str(),strPair.c_str()));
 	c1->Clear();
-	//legUR->Clear();
 
 	//save as a root file
-	TFile* outFile = new TFile(Form("%s/Eff73X_isPtCut%d_doWeight%d_%s_%s_%s.root",strDir.c_str(),(int)isPtCut,(int)doWeight,strPrompt.c_str(),strEmbd.c_str(),strPair.c_str()),"RECREATE");	
+	TFile* outFile = new TFile(Form("%s/Eff_isPtCut%d_doWeight%d_isEmbedded%d_%s_%s_%s.root",strDir.c_str(),(int)isPtCut,(int)doWeight,(int)isEmbedded,strPrompt.c_str(),strEmbd.c_str(),strPair.c_str()),"RECREATE");	
 	outFile->cd();
 	hGenPtY->Write();
 	hRecoPtY->Write();
