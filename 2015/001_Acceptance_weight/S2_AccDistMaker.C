@@ -43,8 +43,12 @@ void onSun(Double_t x1=0,Double_t y1=0,Double_t x2=1,Double_t y2=1,Int_t color=1
 void S2_AccDistMaker(bool isPrompt=true, bool isPbp=true){
 //void S2_AccDistMaker(char *strBinnig = "8rap9pt", bool isPrompt=true, bool isPbp=true){
     gRandom->SetSeed(time(0));
+    //gRandom->SetSeed(0);
+    cout << "time(0) : " << time(0) << endl;
     TStopwatch timer;
-    timer.Start();   
+    timer.Start();
+    float begin_rTime = timer.RealTime();   
+    cout << "begin time : " << begin_rTime << endl;
     TH1::SetDefaultSumw2();
 
     //gROOT->Macro("rootlogon.C+");
@@ -206,7 +210,7 @@ void S2_AccDistMaker(bool isPrompt=true, bool isPbp=true){
         hWeight[iy]=(TH1D*) toyFile->Get(Form("hWeight_%s_%d",runstring.c_str(),iy)); 
     }
 
-    TFile* outFileAcc = new TFile(Form("AccDist_isPrompt%d_%s.root",(int)isPrompt,runstring.c_str()),"recreate");
+    TFile* outFileAcc = new TFile(Form("isPrompt%disPbp%d/AccDist_isPrompt%d_%s_date%d.root",(int)isPrompt,(int)isPbp,(int)isPrompt,runstring.c_str(),time(0)),"recreate");
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
 	///////////////////////////////////////////////////////////////////////////////////////////////
@@ -246,26 +250,24 @@ void S2_AccDistMaker(bool isPrompt=true, bool isPbp=true){
 //        h1D_Acc_pt[iy]= new TH1D(Form("h1D_Acc_pt_y%d",iy),"h1D_Acc",nPtBins,ptBinsArr);
         for(int ipt=0;ipt<nPtBins;ipt++){
             AccCent[iy][ipt] = hAccCent->GetBinContent(iy+1,ipt+1);
-            //hAccCompBin[iy][ipt] = new TH1D(Form("hAccCompBin_y%d_pt%d",iy,ipt),Form("Acc. Dist. of %d ptbin for rapidity %dth bin;Acceptance;Entries",iy,ipt),100, AccCent[iy][ipt]-0.05, AccCent[iy][ipt]+0.05);
-            hAccCompBin[iy][ipt] = new TH1D(Form("hAccCompBin_y%d_pt%d",iy,ipt),Form("Acc. Dist. of %d ptbin for rapidity %dth bin;Acceptance;Entries",ipt,iy),100, 0.0, 1.0);
+            hAccCompBin[iy][ipt] = new TH1D(Form("hAccCompBin_y%d_pt%d",iy,ipt),Form("Acc. Dist. of %d ptbin for rapidity %dth bin;Acceptance;Entries",ipt,iy),2000, AccCent[iy][ipt]-0.1, AccCent[iy][ipt]+0.1);
+            //hAccCompBin[iy][ipt] = new TH1D(Form("hAccCompBin_y%d_pt%d",iy,ipt),Form("Acc. Dist. of %d ptbin for rapidity %dth bin;Acceptance;Entries",ipt,iy),100, 0.0, 1.0);
         }
     }
     ////////////////////////////////////////////////////////////////////////////////////////////////
 	////////////////////////////////////////////////////////////////////////////////////////////////
 
     //// Loop Start!
-    //int Ntoy = toyTree->GetEntries();
-    int Ntoy = 5;
-
-    TCanvas * ctemp= new TCanvas("ctemp","ctemp",800,500);
+/*  TCanvas * ctemp= new TCanvas("ctemp","ctemp",800,500);
     TCanvas * can[Ntoy];
     for(int itoy=0;itoy<Ntoy;itoy++){
         can[itoy] = new TCanvas(Form("can_%d",itoy),Form("can_%d",itoy),500,500);
     }
-
+*/
+    int Ntoy = 2000;
     for(int itoy=0; itoy<Ntoy; itoy++){
-        ctemp->cd();
-        if(itoy%10==0) cout << ">>>>> itoy " << itoy << " / " << Ntoy <<  endl;
+        //ctemp->cd();
+        if(itoy%100==0) cout << ">>>>> itoy " << itoy << " / " << Ntoy <<  endl;
             h2D_Num_pt_y-> Reset();
             h2D_Den_pt_y-> Reset();
             h2D_Acc_pt_y-> Reset();
@@ -306,10 +308,11 @@ void S2_AccDistMaker(bool isPrompt=true, bool isPbp=true){
             double sigma = hWeight[yflag]->GetBinError(hBin); 
             //cout << hBin << "   "  << mean <<"  " << sigma << endl;
             
-            if(i<100) cout <<"Before!!!!!! pt : " << dimu_pt << ", y : " << dimu_y << ", mean : " << mean << ", sigma : " << sigma << ", weighting : " << w_toy << ", " << st_AccRange << endl;
+          //  if(i<100) cout <<"Before!!!!!! pt : " << dimu_pt << ", y : " << dimu_y << ", mean : " << mean << ", sigma : " << sigma << ", weighting : " << w_toy << ", " << st_AccRange << endl;
             if(sigma==0.000) continue;
             w_toy = gRandom->Gaus(mean,sigma);
-            if(i<100) cout <<"After!!!!!!! pt : " << dimu_pt << ", y : " << dimu_y << ", mean : " << mean << ", sigma : " << sigma << ", weighting : " << w_toy << ", " << st_AccRange << endl;
+            if(i<2) cout << "weighting factor : " << w_toy << endl;
+          //  if(i<100) cout <<"After!!!!!!! pt : " << dimu_pt << ", y : " << dimu_y << ", mean : " << mean << ", sigma : " << sigma << ", weighting : " << w_toy << ", " << st_AccRange << endl;
 
             ////// --- cut01 : no cut
             if (!dimuCut(dmom0_Id,dgmom0_Id,dkid0_ch,dkid1_ch)) continue;
@@ -328,10 +331,10 @@ void S2_AccDistMaker(bool isPrompt=true, bool isPbp=true){
             } // end of yn
         } //end of loop
         
-        can[itoy]->cd();
         // (Num/Den) to get acceptance (B : binomial error)
         h2D_Acc_pt_y->Divide(h2D_Num_pt_y,h2D_Den_pt_y,1,1,"B");
-        h2D_Acc_pt_y->DrawCopy("text colz");
+        // can[itoy]->cd();
+        // h2D_Acc_pt_y->DrawCopy("text colz");
         for(int iy=0;iy<nYBins;iy++){
             for(int ipt=0;ipt<nPtBins;ipt++){
                 hAccCompBin[iy][ipt]->Fill(h2D_Acc_pt_y->GetBinContent(iy+1,ipt+1));
@@ -363,13 +366,13 @@ void S2_AccDistMaker(bool isPrompt=true, bool isPbp=true){
     }
     hAccCent->Write();
     for(int itoy=0;itoy<Ntoy;itoy++){
-        can[itoy]->Write();
+        //can[itoy]->Write();
     }
     outFileAcc->Close();
 
     timer.Stop();
-    double rTime = timer.RealTime();
-    cout << "real time : " << rTime << endl;
+    double final_rTime = timer.RealTime();
+    cout << "real time : " << final_rTime << endl;
 } // end of main func
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -389,7 +392,6 @@ bool kineCut(double muPt, double muEta, double muP) {
 bool massCut(double lv_dimu_mass) {
 	return ( 2.6 <= lv_dimu_mass && lv_dimu_mass < 3.5 );
 }
-#if 1
 void jumSun(Double_t x1,Double_t y1,Double_t x2,Double_t y2,Int_t color, Double_t width)
 {
     TLine* t1 = new TLine(x1,y1,x2,y2);
@@ -408,4 +410,3 @@ void onSun(Double_t x1,Double_t y1,Double_t x2,Double_t y2,Int_t color, Double_t
     t1->SetLineColor(color);
     t1->Draw();
 }
-#endif
