@@ -207,14 +207,14 @@ void rootAna_acceptance_weighting(bool isPrompt=false, bool isPbp=false){
         h2D_Den_weight_pt_y = new TH2D("h2D_Den_weight_pt_y","",nYBins,yBinsArr,nPtBins,ptBinsArr);
         h2D_Num_weight_pt_y = new TH2D("h2D_Num_weight_pt_y","",nYBins,yBinsArr,nPtBins,ptBinsArr);
         h2D_Acc_weight_pt_y = new TH2D("h2D_Acc_weight_pt_y","",nYBins,yBinsArr,nPtBins,ptBinsArr);
-        h2D_Acc_diff_pt_y= new TH2D("h2D_Acc_diff_pt_y","",nYBins,yBinsArr,nPtBins,ptBinsArr);
+        //h2D_Acc_diff_pt_y= new TH2D("h2D_Acc_diff_pt_y","",nYBins,yBinsArr,nPtBins,ptBinsArr);
         h2D_Acc_err_pt_y = new TH2D("h2D_Acc_err_pt_y","",nYBins,yBinsArr,nPtBins,ptBinsArr);
     } else if(isPbp==0) {
         h2D_NoCut_weight_pt_y = new TH2D("h2D_NoCut_weight_pt_y","",nYBins,yBinsArr_pPb,nPtBins,ptBinsArr);
         h2D_Den_weight_pt_y = new TH2D("h2D_Den_weight_pt_y","",nYBins,yBinsArr_pPb,nPtBins,ptBinsArr);
         h2D_Num_weight_pt_y = new TH2D("h2D_Num_weight_pt_y","",nYBins,yBinsArr_pPb,nPtBins,ptBinsArr);
         h2D_Acc_weight_pt_y = new TH2D("h2D_Acc_weight_pt_y","",nYBins,yBinsArr_pPb,nPtBins,ptBinsArr);
-        h2D_Acc_diff_pt_y = new TH2D("h2D_Acc_diff_pt_y","",nYBins,yBinsArr_pPb,nPtBins,ptBinsArr);
+        //h2D_Acc_diff_pt_y = new TH2D("h2D_Acc_diff_pt_y","",nYBins,yBinsArr_pPb,nPtBins,ptBinsArr);
         h2D_Acc_err_pt_y = new TH2D("h2D_Acc_err_pt_y","",nYBins,yBinsArr_pPb,nPtBins,ptBinsArr);
     }
     TH1D *h1D_Num_pt= new TH1D("h1D_Num_pt","",nPtBins,ptBinsArr);
@@ -251,7 +251,7 @@ void rootAna_acceptance_weighting(bool isPrompt=false, bool isPbp=false){
     h2D_Den_weight_pt_y->Sumw2();
     h2D_Num_weight_pt_y->Sumw2();
     h2D_Acc_weight_pt_y->Sumw2();
-    h2D_Acc_diff_pt_y->Sumw2();
+    //h2D_Acc_diff_pt_y->Sumw2();
     h2D_Acc_err_pt_y->Sumw2();
 
     h1D_Num_pt->Sumw2();
@@ -436,6 +436,21 @@ void rootAna_acceptance_weighting(bool isPrompt=false, bool isPbp=false){
                */
         }
     }
+
+    for(int ipt=0;ipt<nPtBins;ipt++){
+        for(int iy=0;iy<nYBins;iy++){
+            h2D_Acc_diff_pt_y = (TH2D*) h2D_Acc_weight_pt_y->Clone("h2D_Acc_diff_pt_y");
+            //h2D_Acc_diff_pt_y->Sumw2();
+            if(isPbp){
+                h2D_Acc_diff_pt_y->Add(h2D_Acc_pt_y_Pbp,-1); 
+                h2D_Acc_err_pt_y->Divide(h2D_Acc_diff_pt_y,h2D_Acc_pt_y_Pbp);
+            } else if(isPbp==0){
+                h2D_Acc_diff_pt_y->Add(h2D_Acc_pt_y_pPb,-1);
+                h2D_Acc_err_pt_y->Divide(h2D_Acc_diff_pt_y,h2D_Acc_pt_y_pPb); 
+            }
+        }
+    }
+/*
     for(int ipt=0;ipt<nPtBins;ipt++){
     //    cout << ipt << "th ptbin, Acc. = " << h1D_Acc_pt->GetBinContent(ipt+1) << endl;
         for(int iy=0;iy<nYBins;iy++){
@@ -448,6 +463,7 @@ void rootAna_acceptance_weighting(bool isPrompt=false, bool isPbp=false){
             h2D_Acc_err_pt_y->SetBinContent(iy+1, ipt+1,TMath::Abs(originalValue-weightedValue)/originalValue);
         }
     }
+*/
     ////////////////////////////////////////////////////////////////////////////
     // Save the data!
 
