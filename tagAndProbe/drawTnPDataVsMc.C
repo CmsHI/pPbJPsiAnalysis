@@ -34,7 +34,7 @@ using namespace RooFit;
 using namespace std;
 
 TGraphAsymmErrors *plotEffPt(RooDataSet *a, int aa);
-void drawTnPDataVsMc(int opt=4)  // 1 tracking,  2 muonId,  3 trigger
+void drawTnPDataVsMc(int opt=1)  // 1 tracking,  2 muonId,  3 trigger
 {
   // data
   TFile *f1; 
@@ -51,41 +51,22 @@ void drawTnPDataVsMc(int opt=4)  // 1 tracking,  2 muonId,  3 trigger
   TString label = "";
   int nEtaBin = 3;  
   if ( opt == 1 )  { 
-    f1 = new TFile("FitRootFiles/tracking/outputTrackCuts_binned_data_allDirection_v8.root");
+    f1 = new TFile("FitRootFiles/tracking/outputTrackCuts_binned_data_allDirection_v15.root");
     for ( int ieta = 1; ieta<=nEtaBin ; ieta++)   
       daTrkPt1[ieta] = (RooDataSet*)f1->Get(Form("tpTreeSta/ptBin_eta%d/fit_eff",ieta));
-    f2 = new TFile("FitRootFiles/tracking/outputTrackCuts_binned_mc_allDirection_v8.root");
+    f2 = new TFile("FitRootFiles/tracking/outputTrackCuts_binned_mc_allDirection_v15.root");
     for ( int ieta = 1; ieta<=nEtaBin ; ieta++)   
       daTrkPt2[ieta] = (RooDataSet*)f2->Get(Form("tpTreeSta/ptBin_eta%d/fit_eff",ieta));
     label = "tracking";
   }
   else if ( opt == 4 )  { 
-    f1 = new TFile("FitRootFiles/muTriger/outputTriggerMuId_data_allDirection_v5.root");
+    f1 = new TFile("FitRootFiles/muTrigger/outputTriggerMuId_data_allDirection_v14.root");
     for ( int ieta = 1; ieta<=nEtaBin ; ieta++)   
       daTrkPt1[ieta] = (RooDataSet*)f1->Get(Form("tpTree/ptBin_eta%d/fit_eff",ieta));
-    f2 = new TFile("FitRootFiles/muTriger/outputTriggerMuId_mc_allDirection_v5.root");
+    f2 = new TFile("FitRootFiles/muTrigger/outputTriggerMuId_mc_allDirection_v14.root");
     for ( int ieta = 1; ieta<=nEtaBin ; ieta++)   
       daTrkPt2[ieta] = (RooDataSet*)f2->Get(Form("tpTree/ptBin_eta%d/fit_eff",ieta));
     label = "MuIdAndTrig";
-  }
-  
-  else if ( opt == 2 )  { 
-    f1 = new TFile("FitRootFiles/muonId_v2/outputMuonId_data_allDirection_v2.root");
-    for ( int ieta = 1; ieta<=nEtaBin ; ieta++)   
-      daTrkPt1[ieta] = (RooDataSet*)f1->Get(Form("tpTree/ptBin_eta%d/fit_eff",ieta));
-    f2 = new TFile("FitRootFiles/muonId_v2/outputMuonId_mc_allDirection_v2.root");
-    for ( int ieta = 1; ieta<=nEtaBin ; ieta++)   
-      daTrkPt2[ieta] = (RooDataSet*)f2->Get(Form("tpTree/ptBin_eta%d/fit_eff",ieta));
-    label = "muonId";
-  }
-  else if ( opt == 3 )  { 
-    f1 = new TFile("FitRootFiles/trigger_v2/outputTrigger_data_allDirection_v2.root");
-    for ( int ieta = 1; ieta<=nEtaBin ; ieta++)   
-      daTrkPt1[ieta] = (RooDataSet*)f1->Get(Form("tpTree/ptBin_eta%d/fit_eff",ieta));
-    f2 = new TFile("FitRootFiles/trigger_v2/outputTrigger_mc_allDirection_v2.root");
-    for ( int ieta = 1; ieta<=nEtaBin ; ieta++)   
-      daTrkPt2[ieta] = (RooDataSet*)f2->Get(Form("tpTree/ptBin_eta%d/fit_eff",ieta));
-    label = "trigger";
   }
   
   for ( int ieta = 1; ieta<=nEtaBin ; ieta++) {
@@ -106,6 +87,10 @@ void drawTnPDataVsMc(int opt=4)  // 1 tracking,  2 muonId,  3 trigger
       
     }
   }
+  // Fitting function
+  TF1 *ferr1[5];
+  TF1 *ferr2[5];
+  TF1 *ferrScale[5];
   
   TH1F* tempTH1f = new TH1F("Graph_hxy_fit_eff1",";p_{T} (GeV/c);Efficiency",100,0,20);
   handsomeTH1(tempTH1f,1);
@@ -123,31 +108,36 @@ void drawTnPDataVsMc(int opt=4)  // 1 tracking,  2 muonId,  3 trigger
     eff_pt1[ieta]->Draw("p");
     eff_pt2[ieta]->Draw("p");
     // Fitting 
-    TF1 *ferr1 = new TF1(Form("ferr1_ieta%d",ieta),"[0]*TMath::Erf((x-[1])/[2])",0.0,30);
-    TF1 *ferr2 = new TF1(Form("ferr2_ieta%d",ieta),"[0]*TMath::Erf((x-[1])/[2])",0.0,30);
-    TF1 *ferrScale = new TF1(Form("ferrScale_ieta%d",ieta),"[0]*TMath::Erf((x-[1])/[2]) / ([3]*TMath::Erf((x-[4])/[5]))",0.0,30);
     //hsigmapt_staerr->Fit("fitft_opt1","M","",0.0,120.0);
-    ferr1->SetParameter(0,1);
-    ferr1->SetParameter(1,4);
-    ferr1->SetParameter(2,1);
-    ferr2->SetParameter(0,1);
-    ferr2->SetParameter(1,4);
-    ferr2->SetParameter(2,1);
+    ferr1[ieta]     = new TF1(Form("ferr1_ieta%d",ieta),"[0]*TMath::Erf((x-[1])/[2])",0.0,30);
+    ferr2[ieta]     = new TF1(Form("ferr2_ieta%d",ieta),"[0]*TMath::Erf((x-[1])/[2])",0.0,30);
+    ferrScale[ieta] = new TF1(Form("ferrScale_ieta%d",ieta),"[0]*TMath::Erf((x-[1])/[2]) / ([3]*TMath::Erf((x-[4])/[5]))",0.0,30);
+
+    ferr1[ieta]->SetParameter(0,1);
+    ferr1[ieta]->SetParameter(1,2);
+    ferr1[ieta]->SetParameter(2,1);
+    ferr2[ieta]->SetParameter(0,1);
+    ferr2[ieta]->SetParameter(1,2);
+    ferr2[ieta]->SetParameter(2,1);
     float lowx = 1;
     if ( ieta == 1 )  lowx = 3;
     else if ( ieta == 2 )  lowx = 2;
     else if ( ieta == 3 )  lowx = 1;
 
-    eff_pt1[ieta]->Fit(ferr1->GetName(),"LM","",lowx,15);
-    ferr1->SetLineColor(2);
+    //    eff_pt1[ieta]->Fit(ferr1[ieta]->GetName(),"M","",lowx,15);
+    //   eff_pt1[ieta]->Fit(ferr1[ieta]->GetName(),"M","",lowx,15);
+    //   eff_pt1[ieta]->Fit(ferr1[ieta]->GetName(),"M","",lowx,15);
+    //  ferr1[ieta]->SetLineColor(2);
 
-    eff_pt2[ieta]->Fit(ferr2->GetName(),"LM","",lowx,15);
-    ferr2->SetLineColor(1);
+    //    eff_pt2[ieta]->Fit(ferr2[ieta]->GetName(),"M","",lowx,15);
+    //   eff_pt2[ieta]->Fit(ferr2[ieta]->GetName(),"M","",lowx,15);
+    //  eff_pt2[ieta]->Fit(ferr2[ieta]->GetName(),"M","",lowx,15);
+    //  ferr2[ieta]->SetLineColor(1);
     
 
-    ferr1->Draw("same");
-    ferr2->Draw("same");
-    
+    //    ferr1[ieta]->Draw("same");
+    //  ferr2[ieta]->Draw("same");
+
     if  (ieta==1 )    drawText(  "     |#eta|<1.2",0.5,0.3);
     else if ( ieta==2)  drawText("1.2 <|#eta|<1.6",0.5,0.3);
     else if ( ieta==3)  drawText("1.6 <|#eta|<2.4",0.5,0.3);
@@ -170,13 +160,14 @@ void drawTnPDataVsMc(int opt=4)  // 1 tracking,  2 muonId,  3 trigger
     tempTH1f->SetYTitle("Data/MC Ratio");
     tempTH1f->DrawCopy(); 
     
-    ferrScale->SetParameter(0, ferr1->GetParameter(0));
-    ferrScale->SetParameter(1, ferr1->GetParameter(1));
-    ferrScale->SetParameter(2, ferr1->GetParameter(2));
-    ferrScale->SetParameter(3, ferr2->GetParameter(0));
-    ferrScale->SetParameter(4, ferr2->GetParameter(1));
-    ferrScale->SetParameter(5, ferr2->GetParameter(2));
-    ferrScale->Draw("same"); //feff_rate[ieta]->Draw("p");
+    ferrScale[ieta]->SetParameter(0, ferr1[ieta]->GetParameter(0));
+    ferrScale[ieta]->SetParameter(1, ferr1[ieta]->GetParameter(1));
+    ferrScale[ieta]->SetParameter(2, ferr1[ieta]->GetParameter(2));
+    ferrScale[ieta]->SetParameter(3, ferr2[ieta]->GetParameter(0));
+    ferrScale[ieta]->SetParameter(4, ferr2[ieta]->GetParameter(1));
+    ferrScale[ieta]->SetParameter(5, ferr2[ieta]->GetParameter(2));
+    eff_rate[ieta]->Draw("p");
+    ferrScale[ieta]->Draw("same");
     jumSun(0,1,20,1);
 
 
@@ -200,6 +191,9 @@ void drawTnPDataVsMc(int opt=4)  // 1 tracking,  2 muonId,  3 trigger
     eff_pt1[ieta]->Write();
     eff_pt2[ieta]->Write();
     eff_rate[ieta]->Write();
+    ferr1[ieta]->Write();
+    ferr2[ieta]->Write();
+    ferrScale[ieta]->Write();
   } 
   fout->Close();
 
