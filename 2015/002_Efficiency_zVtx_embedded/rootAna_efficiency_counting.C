@@ -48,7 +48,8 @@ struct Condition {
 } ;
 
 //read TNP plots for useDataDrivenEff
-TFile* fTnpRate = new TFile("./tagAndProbe/tnpRate_V14.root");
+//TFile* fTnpRate = new TFile("./tagAndProbe/tnpRate_V14.root");
+TFile* fTnpRate = new TFile("./tagAndProbe/tnpRate_V16_eff_fit_expo.root");
 TF1* hTnpRateEtaBin1 = (TF1*)fTnpRate->Get("ferrScale_ieta1");
 TF1* hTnpRateEtaBin2 = (TF1*)fTnpRate->Get("ferrScale_ieta2");
 TF1* hTnpRateEtaBin3 = (TF1*)fTnpRate->Get("ferrScale_ieta3");
@@ -70,7 +71,7 @@ TH1D* hEffCorr2nd3 = (TH1D*)fEffWeight2nd3->Get("hWF");
 
 /////// main func. ///////
 
-int rootAna_efficiency_counting(char *strBinning = "8rap9pt", bool isPrompt = false, bool is1st = true, bool isEmbedded = false, bool useCtErrRangeEff =true, bool useDataDrivenEff=true, bool useZvtxWeightStep1 = false, bool useZvtxWeightStep2=true){
+int rootAna_efficiency_counting(char *strBinning = "8rap9pt", bool isPrompt = true, bool is1st = true, bool isEmbedded = false, bool useCtErrRangeEff =true, bool useDataDrivenEff=true, bool useZvtxWeightStep1 = false, bool useZvtxWeightStep2=true){
 
   using namespace std;
   
@@ -612,6 +613,11 @@ float getEffWeight(float mupt1, float mueta1, float mupt2, float mueta2) {
 
 	float effWeight1 = hw1->Eval(mupt1);
 	float effWeight2 = hw2->Eval(mupt2);
+
+	// special setting for 1.2< |eta| <1.6 	
+	if (TMath::Abs(mueta1) >= 1.2 && TMath::Abs(mueta1) < 1.6 && TMath::Abs(mupt1) < 2.3) {effWeight1=0.886417;}
+	if (TMath::Abs(mueta2) >= 1.2 && TMath::Abs(mueta2) < 1.6 && TMath::Abs(mupt2) < 2.3) {effWeight2=0.886417;}
+
 	return effWeight1 * effWeight2;
 }
 
