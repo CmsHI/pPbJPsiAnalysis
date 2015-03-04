@@ -26,9 +26,8 @@
 #include "KYOcommonOpt.h"
 
 
-void draw_1D(bool isPrompt = true, bool is1st = true, bool isEmbedded = false, char* dirName = "draw_1D_0113")
+void draw_1D(bool isPrompt = true, bool is1st = true, bool isEmbedded = false, bool useCtErrRangeEff =true, bool useDataDrivenEff=false,  bool useZvtxWeightStep1 = false, bool useZvtxWeightStep2=true,char* dirName = "draw_1D_tnpV14")
 {
-
 	gROOT->Macro("./JpsiStyle.C");
 	//gStyle->SetOptStat(0);
   //gStyle->SetLabelFont(42,"xyz");
@@ -37,54 +36,21 @@ void draw_1D(bool isPrompt = true, bool is1st = true, bool isEmbedded = false, c
 
 	// --- read-in file
 	TFile * f2D;
-	char* sampleName;
+	char* strEmbd;
+	char* strPrompt;
+	char* str1st;
 
-	if (isEmbedded) {
-		if (is1st) {
-			if (isPrompt) {
-				f2D = new TFile("EffCounting_8rap9pt_PRMCembedded_Pbp_useCtErr_0_useDataDriven_0_useZvtxStep1_1_Step2_1.root");
-				sampleName = "PRMCembedded_Pbp";
-			}
-			else {
-				f2D = new TFile("EffCounting_8rap9pt_NPMCembedded_Pbp_useCtErr_0_useDataDriven_0_useZvtxStep1_1_Step2_1.root");
-				sampleName = "NPMCembedded_Pbp";
-			}	 
-		}
-		else {
-			if (isPrompt) {
-				f2D = new TFile("EffCounting_8rap9pt_PRMCembedded_pPb_useCtErr_0_useDataDriven_0_useZvtxStep1_1_Step2_1.root");
-				sampleName = "PRMCembedded_pPb";
-			}
-			else {
-				f2D = new TFile("EffCounting_8rap9pt_NPMCembedded_pPb_useCtErr_0_useDataDriven_0_useZvtxStep1_1_Step2_1.root");
-				sampleName = "NPMCembedded_pPb";
-			}	 
-		}
-	}
-	else {
-		if (is1st) {
-			if (isPrompt) {
-				f2D = new TFile("EffCounting_8rap9pt_PRMCpythia_Pbp_useCtErr_0_useDataDriven_0_useZvtxStep1_0_Step2_1.root");
-				//f2D = new TFile("./oldRoot_0_3_65/EffCounting_8rap9pt_PRMCpythia_Pbp_useCtErr_0_useDataDriven_0_useZvtxStep1_0_Step2_1.root");
-				sampleName = "PRMCpythia_Pbp";
-			} 
-			else {
-				f2D = new TFile("EffCounting_8rap9pt_NPMCpythia_Pbp_useCtErr_0_useDataDriven_0_useZvtxStep1_0_Step2_1.root");
-				sampleName = "NPMCpythia_Pbp";
-			}
-		}
-		else {
-			if (isPrompt) {
-				f2D = new TFile("EffCounting_8rap9pt_PRMCpythia_pPb_useCtErr_0_useDataDriven_0_useZvtxStep1_0_Step2_1.root");
-				sampleName = "PRMCpythia_pPb";
-			} 
-			else {
-				f2D = new TFile("EffCounting_8rap9pt_NPMCpythia_pPb_useCtErr_0_useDataDriven_0_useZvtxStep1_0_Step2_1.root");
-				sampleName = "NPMCpythia_pPb";
-			}
-		}
-	}
+	if (isEmbedded) strEmbd = "embedded";
+	else strEmbd = "pythia";
+	if (isPrompt) strPrompt = "PRMC";
+	else strPrompt = "NPMC";
+	if (is1st) str1st = "Pbp";
+	else str1st = "pPb";
+
+	const char* sampleName = Form("%s%s_%s",strPrompt,strEmbd,str1st);
 	cout << "sampleName = " << sampleName << endl;
+	
+	f2D = new TFile(Form("EffCounting_8rap9pt_%s_useCtErr_%d_useDataDriven_%d_useZvtxStep1_%d_Step2_%d.root",sampleName,(int)useCtErrRangeEff,(int)useDataDrivenEff,(int)useZvtxWeightStep1,(int)useZvtxWeightStep2));
 
 	// --- read-in 2D hist
 	TH2D* h2D_Eff = (TH2D*)f2D->Get("h2D_Eff_pt_y");
@@ -130,6 +96,7 @@ void draw_1D(bool isPrompt = true, bool is1st = true, bool isEmbedded = false, c
 	// --- Draw histograms
 	TCanvas* c1 = new TCanvas("c1","c1",600,600);
 	c1->cd();
+	cout << "sampleName = " << sampleName << endl;
 
 	for (Int_t iy = 0; iy < nbinsX; iy++) {
 		SetHistStyle(h1D_EffPt[iy],0,0);
@@ -138,14 +105,18 @@ void draw_1D(bool isPrompt = true, bool is1st = true, bool isEmbedded = false, c
 		h1D_EffPt[iy]->SetMinimum(0.);
 		h1D_EffPt[iy]->SetMaximum(1.);
 		h1D_EffPt[iy]->Draw("pe");
+		if (iy==1 || iy==6) dashedLine (3.,0.,3.,1.,1,1);
+		else if (iy==2)  dashedLine (5.,0.,5.,1.,1,1);
+		else if (iy==3 || iy==4 || iy==5)  dashedLine (6.5,0.,6.5,1.,1,1);
 		latex->DrawLatex(0.50,0.31,sampleName);
 		latex->DrawLatex(0.50,0.25,Form("%.2f < y_{lab} < %.2f",rapEdge[iy],rapEdge[iy+1]));
-		c1->SaveAs(Form("%s/%s_EffPt_%d.pdf",dirName,sampleName,iy));
-		c1->SaveAs(Form("%s/%s_EffPt_%d.png",dirName,sampleName,iy));
+		c1->SaveAs(Form("%s/%s_sf%d_EffPt_%d.pdf",dirName,sampleName,(int)useDataDrivenEff,iy));
 	}
 	
 	// root file
-	TFile *fOut = new TFile(Form("%s/%s_EffPt.root",dirName,sampleName),"RECREATE");
+	cout << "sampleName = " << sampleName << endl;
+	//TFile *fOut = new TFile(Form("%s/%s_EffPt.root",dirName,sampleName),"RECREATE");
+	TFile *fOut = new TFile(Form("%s/%s_sf%d_EffPt.root",dirName,sampleName,(int)useDataDrivenEff),"RECREATE");
 	fOut->cd();
 	for (Int_t iy = 0; iy < nbinsX; iy++) {
 		h1D_EffPt[iy]->Write();
