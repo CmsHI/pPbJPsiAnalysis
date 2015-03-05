@@ -40,7 +40,7 @@ bool massCut(double lv_dimu_mass);
 void jumSun(Double_t x1=0,Double_t y1=0,Double_t x2=1,Double_t y2=1,Int_t color=1, Double_t width=1);
 void onSun(Double_t x1=0,Double_t y1=0,Double_t x2=1,Double_t y2=1,Int_t color=1, Double_t width=1);
 
-void S2_AccDistMaker(bool isPrompt=true, bool isPbp=true){
+void S2_AccDistMaker_test(bool isPrompt=true, bool isPbp=true){
 //void S2_AccDistMaker(char *strBinnig = "8rap9pt", bool isPrompt=true, bool isPbp=true){
     gRandom->SetSeed(time(0));
     //gRandom->SetSeed(0);
@@ -210,7 +210,7 @@ void S2_AccDistMaker(bool isPrompt=true, bool isPbp=true){
         hWeight[iy]=(TH1D*) toyFile->Get(Form("hWeight_%s_%d",runstring.c_str(),iy)); 
     }
 
-    TFile* outFileAcc = new TFile(Form("isPrompt%disPbp%d/AccDist_isPrompt%d_%s_date%d.root",(int)isPrompt,(int)isPbp,(int)isPrompt,runstring.c_str(),time(0)),"recreate");
+    TFile* outFileAcc = new TFile(Form("isPrompt%disPbp%d/AccDist_isPrompt%d_%s_test.root",(int)isPrompt,(int)isPbp,(int)isPrompt,runstring.c_str()),"recreate");
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
 	///////////////////////////////////////////////////////////////////////////////////////////////
@@ -264,7 +264,7 @@ void S2_AccDistMaker(bool isPrompt=true, bool isPbp=true){
         can[itoy] = new TCanvas(Form("can_%d",itoy),Form("can_%d",itoy),500,500);
     }
 */
-    int Ntoy = 1000;
+    int Ntoy = 1;
     for(int itoy=0; itoy<Ntoy; itoy++){
         //ctemp->cd();
         if(itoy%100==0) cout << ">>>>> itoy " << itoy << " / " << Ntoy <<  endl;
@@ -300,7 +300,6 @@ void S2_AccDistMaker(bool isPrompt=true, bool isPbp=true){
             }
             if(yflag==99) continue;
             if(dimu_pt<ptThr) st_AccRange="out of the range";
-       
            // cout << "yflag : " << yflag << ", pt : " << dimu_pt<< endl; 
             Int_t hBin = hWeight[yflag]->FindBin(dimu_pt);
             //cout << hBin << endl;
@@ -311,7 +310,8 @@ void S2_AccDistMaker(bool isPrompt=true, bool isPbp=true){
           //  if(i<100) cout <<"Before!!!!!! pt : " << dimu_pt << ", y : " << dimu_y << ", mean : " << mean << ", sigma : " << sigma << ", weighting : " << w_toy << ", " << st_AccRange << endl;
             if(sigma==0.000) continue;
             w_toy = gRandom->Gaus(mean,sigma);
-            if(i<2) cout << "weighting factor : " << w_toy << endl;
+            if(yflag==0 && dimu_pt > 15 && dimu_pt <30) cout << "yflag : " << yflag << ", y : " << dimu_y << ", pt : " << dimu_pt << ", w : " << w_toy<< endl;
+           // if(i<2) cout << "weighting factor : " << w_toy << endl;
           //  if(i<100) cout <<"After!!!!!!! pt : " << dimu_pt << ", y : " << dimu_y << ", mean : " << mean << ", sigma : " << sigma << ", weighting : " << w_toy << ", " << st_AccRange << endl;
 
             ////// --- cut01 : no cut
