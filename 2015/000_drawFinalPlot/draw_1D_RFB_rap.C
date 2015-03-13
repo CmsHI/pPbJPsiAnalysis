@@ -30,7 +30,7 @@ void formAbsRapArr(Double_t binmin, Double_t binmax, string* arr);
 void formPtArr(Double_t binmin, Double_t binmax, string* arr);
 
 //// runCode // 0=merged, 1=1stRun, 2=2ndRun
-void draw_1D_RFB_rap(char* dirName = "8rap9pt", int runCode=0, bool isPrompt = false)
+void draw_1D_RFB_rap(char* dirName = "8rap9pt", int runCode=0, bool isPrompt = true)
 {
 	gROOT->Macro("./JpsiStyleForFinalResult.C");
 
@@ -60,6 +60,7 @@ void draw_1D_RFB_rap(char* dirName = "8rap9pt", int runCode=0, bool isPrompt = f
 	Double_t pxtmp_highpt[ntmp]; // x point
 	Double_t pytmp_lowpt[ntmp]; // y point
 	Double_t pytmp_highpt[ntmp]; // y point
+	Double_t eytmp[ntmp]; // y point error
 	Double_t ex[ntmp]; //x error
 	Double_t exsys[ntmp]; //sys x error
 	Double_t eysys_lowpt[ntmp]; //sys y error
@@ -67,12 +68,20 @@ void draw_1D_RFB_rap(char* dirName = "8rap9pt", int runCode=0, bool isPrompt = f
 	ex = {0.0, 0.0, 0.0};
 	exsys = {0.04, 0.04, 0.04};
 	if (isPrompt) {
-		eysys_lowpt = {0.05, 0.05, 0.05};
-		eysys_highpt = {0.05, 0.05, 0.05};
+		eysys_lowpt = {0.025307419,
+		0.020268401,
+		0.027684865};
+		eysys_highpt = {0.027477816,
+		0.020839944,
+		0.048824342};
 	}
 	else {
-		eysys_lowpt = {0.05, 0.05, 0.05};
-		eysys_highpt = {0.05, 0.05, 0.05};
+		eysys_lowpt = {0.04629685,
+		0.064973771,
+		0.0671048};
+		eysys_highpt = {0.032774347,
+		0.029414238,
+		0.075415151};
 	}
 			
 	
@@ -319,7 +328,9 @@ void draw_1D_RFB_rap(char* dirName = "8rap9pt", int runCode=0, bool isPrompt = f
 		gRFB_lowpt->	SetPointEXlow(iy, ex[iy]);
 		gRFB_lowpt->	SetPointEXhigh(iy, ex[iy]);
 		gRFB_lowpt->GetPoint(iy, pxtmp_lowpt[iy], pytmp_lowpt[iy]);
+		eytmp[iy] = gRFB_lowpt-> GetErrorY(iy);
 		cout << "pytmp_lowpt["<<iy<<"] = " << pytmp_lowpt[iy]<<endl;
+		cout << "eytmp_lowpt["<<iy<<"] = " << eytmp[iy]<<endl;
 	}	
 	SetGraphStyle(gRFB_lowpt, 1, 3);
 	gRFB_lowpt->SetMarkerSize(1.2);
@@ -330,7 +341,9 @@ void draw_1D_RFB_rap(char* dirName = "8rap9pt", int runCode=0, bool isPrompt = f
 		gRFB_highpt->	SetPointEXlow(iy, ex[iy]);
 		gRFB_highpt->	SetPointEXhigh(iy, ex[iy]);
 		gRFB_highpt->GetPoint(iy, pxtmp_highpt[iy], pytmp_highpt[iy]);
+		eytmp[iy] = gRFB_highpt-> GetErrorY(iy);
 		cout << "pytmp_highpt["<<iy<<"] = " << pytmp_highpt[iy]<<endl;
+		cout << "eytmp_highpt["<<iy<<"] = " << eytmp[iy]<<endl;
 	}	
 	SetGraphStyle(gRFB_highpt, 0, 5);
 	gRFB_highpt->SetMarkerSize(1.9);

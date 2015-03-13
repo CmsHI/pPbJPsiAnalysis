@@ -60,6 +60,7 @@ void draw_1D_RFB_pt(char* dirName = "8rap9pt", int runCode=0, bool isPrompt=fals
 	Double_t px[3][ntmp]; //x point
 	Double_t pxtmp[3][ntmp]; //x point
 	Double_t pytmp[3][ntmp]; //y point
+	Double_t eytmp[3][ntmp]; //y point error
 	Double_t ex[ntmp]; // x error
 	Double_t exsys[ntmp]; //sys x error
 	Double_t eysys[3][ntmp]; //sys y error
@@ -69,14 +70,26 @@ void draw_1D_RFB_pt(char* dirName = "8rap9pt", int runCode=0, bool isPrompt=fals
 	ex = {0.,0.,0.};
 	exsys = {0.4,0.4,0.4};
 	if (isPrompt) {
-		eysys[0] = {0.06, 0.06, 0.06}; // 1.5-1.93
-		eysys[1] = {0.00, 0.06, 0.06}; //0.9-1.5
-		eysys[2] = {0.00, 0.06, 0.06}; //0.0-0.9
+		eysys[0] = {0.015681895,
+		0.027684865,
+		0.048824342}; // 1.5-1.93
+		eysys[1] = {0.00,
+		0.020268401,
+		0.020839944}; //0.9-1.5
+		eysys[2] = {0.00, 
+		0.025307419,
+		0.027477816}; //0.0-0.9
 	}
 	else {
-		eysys[0] = {0.06, 0.06, 0.06}; // 1.5-1.93
-		eysys[1] = {0.00, 0.06, 0.06}; //0.9-1.5
-		eysys[2] = {0.00, 0.06, 0.06}; //0.0-0.9
+		eysys[0] = {0.039079108,
+		0.0671048,
+		0.075415151}; // 1.5-1.93
+		eysys[1] = {0.00,
+		0.064973771,
+		0.029414238 }; //0.9-1.5
+		eysys[2] = {0.00, 
+		0.04629685,
+		0.032774347}; //0.0-0.9
 	}	
 
 	//rap array in yCM (from forward to backward)
@@ -323,7 +336,9 @@ void draw_1D_RFB_pt(char* dirName = "8rap9pt", int runCode=0, bool isPrompt=fals
 		gRFB[iy] = new TGraphAsymmErrors(h1D_RFB[iy]);
 		for (int ipt=0; ipt<nPtRFB; ipt++){
 			gRFB[iy]->GetPoint(ipt, pxtmp[iy][ipt], pytmp[iy][ipt]);
+			eytmp[iy][ipt] = gRFB[iy]-> GetErrorY(ipt);
 			cout << "pytmp["<<iy<<"]["<<ipt<<"] = " << pytmp[iy][ipt]<<endl;
+			cout << "eytmp["<<iy<<"]["<<ipt<<"] = " << eytmp[iy][ipt]<<endl;
 			gRFB[iy]->SetPoint(ipt, px[iy][ipt], pytmp[iy][ipt]);
 			gRFB[iy]->SetPointEXlow(ipt, ex[iy]);
 			gRFB[iy]->SetPointEXhigh(ipt, ex[iy]);

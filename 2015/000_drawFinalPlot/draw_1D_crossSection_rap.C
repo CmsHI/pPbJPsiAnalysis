@@ -31,7 +31,7 @@ void formAbsRapArr(Double_t binmin, Double_t binmax, string* arr);
 void formPtArr(Double_t binmin, Double_t binmax, string* arr);
 
 //// runCode // 0=merged, 1=1stRun, 2=2ndRun
-void draw_1D_crossSection_rap(char* dirName = "8rap9pt", int runCode=0, bool isScale = false)
+void draw_1D_crossSection_rap(char* dirName = "8rap9pt", int runCode=0, bool isScale = true)
 {
 	gROOT->Macro("./JpsiStyleForFinalResult.C");
 
@@ -61,6 +61,7 @@ void draw_1D_crossSection_rap(char* dirName = "8rap9pt", int runCode=0, bool isS
 	Double_t pxtmp_highpt[ntmp]; //x point
 	Double_t pytmp_lowpt[ntmp]; //y point
 	Double_t pytmp_highpt[ntmp]; //y point
+	Double_t eytmp[ntmp]; //y point error
 	Double_t ex[ntmp]; //x error
 	Double_t exsys[ntmp]; //sys x error
 	Double_t eysys_pr_lowpt[ntmp]; //sys y error
@@ -69,10 +70,38 @@ void draw_1D_crossSection_rap(char* dirName = "8rap9pt", int runCode=0, bool isS
 	Double_t eysys_np_highpt[ntmp]; //sys y error
 	ex = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
 	exsys = {0.08, 0.08, 0.08, 0.08, 0.08, 0.08, 0.08, 0.08};
-	eysys_pr_lowpt = {3,3,3,3,3,3,3,3};
-	eysys_pr_highpt = {3,3,3,3,3,3,3,3};
-	eysys_np_lowpt = {1.5,1.5,1.5,1.5,1.5,1.5,1.5,1.5};
-	eysys_np_highpt = {1.5,1.5,1.5,1.5,1.5,1.5,1.5,1.5};
+	eysys_pr_lowpt = {0.628666817,
+	0.561047916,
+	0.895414993,
+	0.589828772,
+	1.134482956,
+	0.641988608,
+	0.475608925,
+	0.960925124};
+	eysys_pr_highpt = {0.218257817,
+	0.102275582,
+	0.164164131,
+	0.154916299,
+	0.132015219,
+	0.200981767,
+	0.143377822,
+	0.291853215};
+	eysys_np_lowpt = {0.473823549,
+	0.335739426,
+	0.761779396,
+	0.527160575,
+	0.472154727,
+	0.603763331,
+	0.328782614,
+	0.59449566};
+	eysys_np_highpt = {0.126110923,
+	0.065680913,
+	0.108619524,
+	0.11810767,
+	0.084655322,
+	0.122616945,
+	0.111377214,
+	0.207573424};
 	
 	//rap array in yCM (from forward to backward)
 	//Double_t rapArrNumFB[] = {1.93, 1.5, 0.9, 0., -0.9, -1.5, -1.93, -2.4, -2.87};// for pt dist.
@@ -392,7 +421,9 @@ void draw_1D_crossSection_rap(char* dirName = "8rap9pt", int runCode=0, bool isS
 		gCross_pr_lowpt->SetPointEXlow(iy,ex[iy]);
 		gCross_pr_lowpt->SetPointEXhigh(iy,ex[iy]);
 		gCross_pr_lowpt->GetPoint(iy, pxtmp_lowpt[iy], pytmp_lowpt[iy]);
+		eytmp[iy] = gCross_pr_lowpt-> GetErrorY(iy);
 		cout << "pr : pytmp_lowpt["<<iy<<"] = " << pytmp_lowpt[iy]<<endl;
+		cout << "pr : eytmp_lowpt["<<iy<<"] = " << eytmp[iy]<<endl;
 	}
 	SetGraphStyle(gCross_pr_lowpt,1,3);
 	gCross_pr_lowpt->SetMarkerSize(1.2);
@@ -403,7 +434,9 @@ void draw_1D_crossSection_rap(char* dirName = "8rap9pt", int runCode=0, bool isS
 		gCross_pr_highpt->SetPointEXlow(iy,ex[iy]);
 		gCross_pr_highpt->SetPointEXhigh(iy,ex[iy]);
 		gCross_pr_highpt->GetPoint(iy, pxtmp_highpt[iy], pytmp_highpt[iy]);
+		eytmp[iy] = gCross_pr_highpt-> GetErrorY(iy);
 		cout << "pr : pytmp_highpt["<<iy<<"] = " << pytmp_highpt[iy]<<endl;
+		cout << "pr : eytmp_highpt["<<iy<<"] = " << eytmp[iy]<<endl;
 	}
 	SetGraphStyle(gCross_pr_highpt,0,5);
 	gCross_pr_highpt->SetMarkerSize(1.9);
@@ -457,7 +490,9 @@ void draw_1D_crossSection_rap(char* dirName = "8rap9pt", int runCode=0, bool isS
 		gCross_np_lowpt->SetPointEXlow(iy,ex[iy]);
 		gCross_np_lowpt->SetPointEXhigh(iy,ex[iy]);
 		gCross_np_lowpt->GetPoint(iy, pxtmp_lowpt[iy], pytmp_lowpt[iy]);
+		eytmp[iy] = gCross_np_lowpt-> GetErrorY(iy);
 		cout << "np : pytmp_lowpt["<<iy<<"] = " << pytmp_lowpt[iy]<<endl;
+		cout << "np : eytmp_lowpt["<<iy<<"] = " << eytmp[iy]<<endl;
 	}
 	SetGraphStyle(gCross_np_lowpt,1,3);
 	gCross_np_lowpt->SetMarkerSize(1.2);
@@ -468,7 +503,9 @@ void draw_1D_crossSection_rap(char* dirName = "8rap9pt", int runCode=0, bool isS
 		gCross_np_highpt->SetPointEXlow(iy,ex[iy]);
 		gCross_np_highpt->SetPointEXhigh(iy,ex[iy]);
 		gCross_np_highpt->GetPoint(iy, pxtmp_highpt[iy], pytmp_highpt[iy]);
+		eytmp[iy] = gCross_np_highpt-> GetErrorY(iy);
 		cout << "np : pytmp_highpt["<<iy<<"] = " << pytmp_highpt[iy]<<endl;
+		cout << "np : eytmp_highpt["<<iy<<"] = " << eytmp[iy]<<endl;
 	}
 	SetGraphStyle(gCross_np_highpt,0,5);
 	gCross_np_highpt->SetMarkerSize(1.9);

@@ -59,6 +59,7 @@ void draw_1D_crossSection_pt(char* dirName = "8rap9pt", int runCode=0, bool isSc
 	Double_t px[8][ntmp]; //x point
 	Double_t pxtmp[8][ntmp]; //x point
 	Double_t pytmp[8][ntmp]; //y point
+	Double_t eytmp[8][ntmp]; //y point error
 	Double_t ex[ntmp]; // x error
 	Double_t exsys[ntmp]; //sys x error
 	Double_t eysys_pr[8][ntmp]; //sys y error
@@ -72,7 +73,7 @@ void draw_1D_crossSection_pt(char* dirName = "8rap9pt", int runCode=0, bool isSc
 	px[6] = {0.00000, 3.52893, 4.48328, 5.69351, 6.96188, 7.95707, 9.14886, 11.4747, 17.231}; 
 	px[7] = {1.78552, 3.47853, 4.46938, 5.6761, 6.96419, 7.97702, 9.16158, 11.5077, 17.3061}; 
 	ex = {0,0,0,0,0,0,0,0,0};
-	exsys = {0.3,0.3,0.3,0.3,0.3,0.3,0.3,0.3,0.3};
+	exsys = {0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4};
 	//exsys = {1.,1.,1.,1.,1.,1.,1.,1.,1.};
 	eysys_pr[0] = {6.823585599,
 	2.754553939,
@@ -562,7 +563,11 @@ void draw_1D_crossSection_pt(char* dirName = "8rap9pt", int runCode=0, bool isSc
 			gCross_pr_sys[iy]->SetPoint(ipt, px[iy][ipt], pytmp[iy][ipt]);
 			gCross_pr_sys[iy]->SetPointError(ipt, exsys[ipt], exsys[ipt], eysys_pr[iy][ipt], eysys_pr[iy][ipt]);
 			gCross_pr[iy]->GetPoint(ipt, pxtmp[iy][ipt], pytmp[iy][ipt]);
+//			eytmp[iy][ipt] = gCross_pr[iy]-> GetErrorYhigh(ipt);
+//			eytmp[iy][ipt] = gCross_pr[iy]-> GetErrorYlow(ipt);
+			eytmp[iy][ipt] = gCross_pr[iy]-> GetErrorY(ipt);
 			cout << "pr : pytmp["<<iy<<"]["<<ipt<<"] = " << pytmp[iy][ipt]<<endl;
+			cout << "pr : eytmp["<<iy<<"]["<<ipt<<"] = " << eytmp[iy][ipt]<<endl;
 			gCross_pr[iy]->SetPoint(ipt, px[iy][ipt], pytmp[iy][ipt]);
 			gCross_pr[iy]->SetPointEXlow(ipt, ex[ipt]);
 			gCross_pr[iy]->SetPointEXhigh(ipt, ex[ipt]);
@@ -571,7 +576,9 @@ void draw_1D_crossSection_pt(char* dirName = "8rap9pt", int runCode=0, bool isSc
 			gCross_np_sys[iy]->SetPoint(ipt, px[iy][ipt], pytmp[iy][ipt]);
 			gCross_np_sys[iy]->SetPointError(ipt, exsys[ipt], exsys[ipt], eysys_np[iy][ipt], eysys_np[iy][ipt]);
 			gCross_np[iy]->GetPoint(ipt, pxtmp[iy][ipt], pytmp[iy][ipt]);
+			eytmp[iy][ipt] = gCross_np[iy]-> GetErrorY(ipt);
 			cout << "np : pytmp["<<iy<<"]["<<ipt<<"] = " << pytmp[iy][ipt]<<endl;
+			cout << "np : eytmp["<<iy<<"]["<<ipt<<"] = " << eytmp[iy][ipt]<<endl;
 			gCross_np[iy]->SetPoint(ipt, px[iy][ipt], pytmp[iy][ipt]);
 			gCross_np[iy]->SetPointEXlow(ipt, ex[ipt]);
 			gCross_np[iy]->SetPointEXhigh(ipt, ex[ipt]);
@@ -606,8 +613,9 @@ void draw_1D_crossSection_pt(char* dirName = "8rap9pt", int runCode=0, bool isSc
 	SetGraphStyle(gCross_pr[0],	8,12);
 	SetGraphStyle(gCross_pr[1],	0,15);
 	SetGraphStyle(gCross_pr[2],	1,13);
+	gCross_pr[0]->SetMarkerSize(1.3);
 	gCross_pr[0]->Draw("P");
-	gCross_pr[1]->SetMarkerSize(1.9);
+	gCross_pr[1]->SetMarkerSize(1.7);
 	gCross_pr[1]->Draw("P");
 	gCross_pr[2]->Draw("P");
 	legUR -> SetHeader("Prompt J/#psi");
@@ -672,8 +680,10 @@ void draw_1D_crossSection_pt(char* dirName = "8rap9pt", int runCode=0, bool isSc
 	SetGraphStyle(gCross_pr[5],	1,13);
 	SetGraphStyle(gCross_pr[6],	2,10);
 	SetGraphStyle(gCross_pr[7],	5,11);
+	gCross_pr[3]->SetMarkerSize(1.3);
 	gCross_pr[3]->Draw("P");
-	gCross_pr[4]->SetMarkerSize(1.9);
+	gCross_pr[4]->SetMarkerSize(1.7);
+	gCross_pr[4]->Draw("P");
 	gCross_pr[5]->Draw("P");
 	gCross_pr[6]->Draw("P");
 	gCross_pr[7]->Draw("P");
@@ -729,8 +739,9 @@ void draw_1D_crossSection_pt(char* dirName = "8rap9pt", int runCode=0, bool isSc
 	SetGraphStyle(gCross_np[0],	8,12);
 	SetGraphStyle(gCross_np[1],	0,15);
 	SetGraphStyle(gCross_np[2],	1,13);
+	gCross_np[0]->SetMarkerSize(1.3);
 	gCross_np[0]->Draw("P");
-	gCross_np[1]->SetMarkerSize(1.9);
+	gCross_np[1]->SetMarkerSize(1.7);
 	gCross_np[1]->Draw("P");
 	gCross_np[2]->Draw("P");
 	legUR -> SetHeader("Non-prompt J/#psi");
@@ -795,8 +806,10 @@ void draw_1D_crossSection_pt(char* dirName = "8rap9pt", int runCode=0, bool isSc
 	SetGraphStyle(gCross_np[5],	1,13);
 	SetGraphStyle(gCross_np[6],	2,10);
 	SetGraphStyle(gCross_np[7],	5,11);
+	gCross_np[3]->SetMarkerSize(1.3);
 	gCross_np[3]->Draw("P");
-	gCross_np[4]->SetMarkerSize(1.9);
+	gCross_np[4]->SetMarkerSize(1.7);
+	gCross_np[4]->Draw("P");
 	gCross_np[5]->Draw("P");
 	gCross_np[6]->Draw("P");
 	gCross_np[7]->Draw("P");

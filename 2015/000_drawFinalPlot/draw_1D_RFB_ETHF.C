@@ -65,6 +65,7 @@ void draw_1D_RFB_ETHF(char* dirName = "6rap3pt", int runCode=0, bool isPrompt=fa
 	Double_t px[ntmp]; //x point
 	Double_t pxtmp[4][ntmp]; //x point
 	Double_t pytmp[4][ntmp]; //y point
+	Double_t eytmp[4][ntmp]; //y point error
 	Double_t ex[ntmp]; // x error
 	Double_t exsys[ntmp]; //sys x error
 	Double_t eysys[4][ntmp]; //sys y error
@@ -72,16 +73,32 @@ void draw_1D_RFB_ETHF(char* dirName = "6rap3pt", int runCode=0, bool isPrompt=fa
 	ex = {0.,0.,0.};
 	exsys = {1.0,1.0,1.0};
 	if (isPrompt) {
-		eysys[0] = {0.06, 0.06, 0.06}; //1.5-1.93 low
-		eysys[1] = {0.06, 0.06, 0.06}; //1.5-1.93
-		eysys[2] = {0.06, 0.06, 0.06}; //0.9-1.5
-		eysys[3] = {0.06, 0.06, 0.06}; //0.0-0.9
+		eysys[0] = {0.024966391,
+		0.020452587,
+		0.024167557}; //1.5-1.93 low
+		eysys[1] = {0.060315512,
+		0.051766382,
+		0.059315558}; //1.5-1.93
+		eysys[2] = {0.034289468,
+		0.033121073,
+		0.033001869}; //0.9-1.5
+		eysys[3] = {0.03615479,
+		0.038642297,
+		0.038111265}; //0.0-0.9
 	}
 	else {
-		eysys[0] = {0.06, 0.06, 0.06}; // 1.5-1.93 low
-		eysys[1] = {0.06, 0.06, 0.06}; //0.5-1.93
-		eysys[2] = {0.06, 0.06, 0.06}; //0.9-1.5
-		eysys[3] = {0.06, 0.06, 0.06}; //0.0-0.9
+		eysys[0] = {0.072574644,
+		0.061929006,
+		0.095699801}; // 1.5-1.93 low
+		eysys[1] = {0.083839006,
+		0.082056209,
+		0.084226544}; //0.5-1.93
+		eysys[2] = {0.051212653,
+		0.063088028,
+		0.056589627}; //0.9-1.5
+		eysys[3] = {0.068937782,
+		0.074606187,
+		0.082299452}; //0.0-0.9
 	}	
 
 	//rap array in yCM (from forward to backward)
@@ -320,7 +337,9 @@ void draw_1D_RFB_ETHF(char* dirName = "6rap3pt", int runCode=0, bool isPrompt=fa
 		gRFB[in] = new TGraphAsymmErrors(h1D_RFB_ETHF[in]);
 		for (int iet=0; iet<nEtBins;iet++){
 			gRFB[in]->GetPoint(iet, pxtmp[in][iet], pytmp[in][iet]);
+			eytmp[in][iet] = gRFB[in] -> GetErrorY(iet);
 			cout << "pytmp["<<in<<"]["<<iet<<"] = " << pytmp[in][iet]<<endl;
+			cout << "eytmp["<<in<<"]["<<iet<<"] = " << eytmp[in][iet]<<endl;
 			gRFB[in]->SetPoint(iet, px[iet], pytmp[in][iet]);
 			gRFB[in]->SetPointEXlow(iet, ex[in]);
 			gRFB[in]->SetPointEXhigh(iet, ex[in]);
