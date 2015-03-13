@@ -1,0 +1,127 @@
+
+Processing rootAna_meanPt_rfb.C+...
+Warning in <TFile::Init>: no StreamerInfo found in /home/songkyo/kyo/pPbDataSample/merged_pPbData_1st_ntuple_PromptReco-v1_GR_P_V43D_pileupRej_noMuID_tot.root therefore preventing schema evolution when reading this file.
+nPt=3
+nRap=6
+rap string arr = 1.50 < y_{CM} < 1.93
+rap string arr = 0.90 < y_{CM} < 1.50
+rap string arr = 0 < y_{CM} < 0.90
+rap string arr = -0.90 < y_{CM} < 0
+rap string arr = -1.50 < y_{CM} < -0.90
+rap string arr = -1.93 < y_{CM} < -1.50
+nEt=1
+et string arr = 0 < E_{T}^{HF} < 120 GeV
+ptRange = Reco_QQ_4mom.Pt()>5.0 && Reco_QQ_4mom.Pt()<6.5
+rapRangePbp = -0.47-1.*Reco_QQ_4mom.Rapidity()>1.50 && -0.47-1.*Reco_QQ_4mom.Rapidity()<1.93
+rapRangepPb = -0.47+Reco_QQ_4mom.Rapidity()>1.50 && -0.47+Reco_QQ_4mom.Rapidity()<1.93
+ptRange = Reco_QQ_4mom.Pt()>6.5 && Reco_QQ_4mom.Pt()<10.0
+rapRangePbp = -0.47-1.*Reco_QQ_4mom.Rapidity()>1.50 && -0.47-1.*Reco_QQ_4mom.Rapidity()<1.93
+rapRangepPb = -0.47+Reco_QQ_4mom.Rapidity()>1.50 && -0.47+Reco_QQ_4mom.Rapidity()<1.93
+ptRange = Reco_QQ_4mom.Pt()>10.0 && Reco_QQ_4mom.Pt()<30.0
+rapRangePbp = -0.47-1.*Reco_QQ_4mom.Rapidity()>1.50 && -0.47-1.*Reco_QQ_4mom.Rapidity()<1.93
+rapRangepPb = -0.47+Reco_QQ_4mom.Rapidity()>1.50 && -0.47+Reco_QQ_4mom.Rapidity()<1.93
+ptRange = Reco_QQ_4mom.Pt()>5.0 && Reco_QQ_4mom.Pt()<6.5
+rapRangePbp = -0.47-1.*Reco_QQ_4mom.Rapidity()>0.90 && -0.47-1.*Reco_QQ_4mom.Rapidity()<1.50
+rapRangepPb = -0.47+Reco_QQ_4mom.Rapidity()>0.90 && -0.47+Reco_QQ_4mom.Rapidity()<1.50
+ptRange = Reco_QQ_4mom.Pt()>6.5 && Reco_QQ_4mom.Pt()<10.0
+rapRangePbp = -0.47-1.*Reco_QQ_4mom.Rapidity()>0.90 && -0.47-1.*Reco_QQ_4mom.Rapidity()<1.50
+rapRangepPb = -0.47+Reco_QQ_4mom.Rapidity()>0.90 && -0.47+Reco_QQ_4mom.Rapidity()<1.50
+ptRange = Reco_QQ_4mom.Pt()>10.0 && Reco_QQ_4mom.Pt()<30.0
+rapRangePbp = -0.47-1.*Reco_QQ_4mom.Rapidity()>0.90 && -0.47-1.*Reco_QQ_4mom.Rapidity()<1.50
+rapRangepPb = -0.47+Reco_QQ_4mom.Rapidity()>0.90 && -0.47+Reco_QQ_4mom.Rapidity()<1.50
+ptRange = Reco_QQ_4mom.Pt()>5.0 && Reco_QQ_4mom.Pt()<6.5
+rapRangePbp = -0.47-1.*Reco_QQ_4mom.Rapidity()>0.00 && -0.47-1.*Reco_QQ_4mom.Rapidity()<0.90
+rapRangepPb = -0.47+Reco_QQ_4mom.Rapidity()>0.00 && -0.47+Reco_QQ_4mom.Rapidity()<0.90
+ptRange = Reco_QQ_4mom.Pt()>6.5 && Reco_QQ_4mom.Pt()<10.0
+rapRangePbp = -0.47-1.*Reco_QQ_4mom.Rapidity()>0.00 && -0.47-1.*Reco_QQ_4mom.Rapidity()<0.90
+rapRangepPb = -0.47+Reco_QQ_4mom.Rapidity()>0.00 && -0.47+Reco_QQ_4mom.Rapidity()<0.90
+ptRange = Reco_QQ_4mom.Pt()>10.0 && Reco_QQ_4mom.Pt()<30.0
+rapRangePbp = -0.47-1.*Reco_QQ_4mom.Rapidity()>0.00 && -0.47-1.*Reco_QQ_4mom.Rapidity()<0.90
+rapRangepPb = -0.47+Reco_QQ_4mom.Rapidity()>0.00 && -0.47+Reco_QQ_4mom.Rapidity()<0.90
+ptRange = Reco_QQ_4mom.Pt()>5.0 && Reco_QQ_4mom.Pt()<6.5
+rapRangePbp = -0.47-1.*Reco_QQ_4mom.Rapidity()>-0.90 && -0.47-1.*Reco_QQ_4mom.Rapidity()<0.00
+rapRangepPb = -0.47+Reco_QQ_4mom.Rapidity()>-0.90 && -0.47+Reco_QQ_4mom.Rapidity()<0.00
+ptRange = Reco_QQ_4mom.Pt()>6.5 && Reco_QQ_4mom.Pt()<10.0
+rapRangePbp = -0.47-1.*Reco_QQ_4mom.Rapidity()>-0.90 && -0.47-1.*Reco_QQ_4mom.Rapidity()<0.00
+rapRangepPb = -0.47+Reco_QQ_4mom.Rapidity()>-0.90 && -0.47+Reco_QQ_4mom.Rapidity()<0.00
+ptRange = Reco_QQ_4mom.Pt()>10.0 && Reco_QQ_4mom.Pt()<30.0
+rapRangePbp = -0.47-1.*Reco_QQ_4mom.Rapidity()>-0.90 && -0.47-1.*Reco_QQ_4mom.Rapidity()<0.00
+rapRangepPb = -0.47+Reco_QQ_4mom.Rapidity()>-0.90 && -0.47+Reco_QQ_4mom.Rapidity()<0.00
+ptRange = Reco_QQ_4mom.Pt()>5.0 && Reco_QQ_4mom.Pt()<6.5
+rapRangePbp = -0.47-1.*Reco_QQ_4mom.Rapidity()>-1.50 && -0.47-1.*Reco_QQ_4mom.Rapidity()<-0.90
+rapRangepPb = -0.47+Reco_QQ_4mom.Rapidity()>-1.50 && -0.47+Reco_QQ_4mom.Rapidity()<-0.90
+ptRange = Reco_QQ_4mom.Pt()>6.5 && Reco_QQ_4mom.Pt()<10.0
+rapRangePbp = -0.47-1.*Reco_QQ_4mom.Rapidity()>-1.50 && -0.47-1.*Reco_QQ_4mom.Rapidity()<-0.90
+rapRangepPb = -0.47+Reco_QQ_4mom.Rapidity()>-1.50 && -0.47+Reco_QQ_4mom.Rapidity()<-0.90
+ptRange = Reco_QQ_4mom.Pt()>10.0 && Reco_QQ_4mom.Pt()<30.0
+rapRangePbp = -0.47-1.*Reco_QQ_4mom.Rapidity()>-1.50 && -0.47-1.*Reco_QQ_4mom.Rapidity()<-0.90
+rapRangepPb = -0.47+Reco_QQ_4mom.Rapidity()>-1.50 && -0.47+Reco_QQ_4mom.Rapidity()<-0.90
+ptRange = Reco_QQ_4mom.Pt()>5.0 && Reco_QQ_4mom.Pt()<6.5
+rapRangePbp = -0.47-1.*Reco_QQ_4mom.Rapidity()>-1.93 && -0.47-1.*Reco_QQ_4mom.Rapidity()<-1.50
+rapRangepPb = -0.47+Reco_QQ_4mom.Rapidity()>-1.93 && -0.47+Reco_QQ_4mom.Rapidity()<-1.50
+ptRange = Reco_QQ_4mom.Pt()>6.5 && Reco_QQ_4mom.Pt()<10.0
+rapRangePbp = -0.47-1.*Reco_QQ_4mom.Rapidity()>-1.93 && -0.47-1.*Reco_QQ_4mom.Rapidity()<-1.50
+rapRangepPb = -0.47+Reco_QQ_4mom.Rapidity()>-1.93 && -0.47+Reco_QQ_4mom.Rapidity()<-1.50
+ptRange = Reco_QQ_4mom.Pt()>10.0 && Reco_QQ_4mom.Pt()<30.0
+rapRangePbp = -0.47-1.*Reco_QQ_4mom.Rapidity()>-1.93 && -0.47-1.*Reco_QQ_4mom.Rapidity()<-1.50
+rapRangepPb = -0.47+Reco_QQ_4mom.Rapidity()>-1.93 && -0.47+Reco_QQ_4mom.Rapidity()<-1.50
+hMeanPt_0_0_0 : entries = 7238
+ <p_{T}> = 5.68792
+hMeanPt_0_0_1 : entries = 7169
+ <p_{T}> = 7.86015
+hMeanPt_0_0_2 : entries = 2893
+ <p_{T}> = 13.331
+Info in <TCanvas::Print>: file meanPt_rfb_6rap3pt_0_0.png has been created
+hMeanPt_0_1_0 : entries = 18054
+ <p_{T}> = 5.71709
+hMeanPt_0_1_1 : entries = 19359
+ <p_{T}> = 7.84788
+hMeanPt_0_1_2 : entries = 6776
+ <p_{T}> = 13.1882
+Info in <TCanvas::Print>: file meanPt_rfb_6rap3pt_0_1.png has been created
+hMeanPt_0_2_0 : entries = 3475
+ <p_{T}> = 5.89528
+hMeanPt_0_2_1 : entries = 14143
+ <p_{T}> = 8.14091
+hMeanPt_0_2_2 : entries = 9045
+ <p_{T}> = 13.5508
+Info in <TCanvas::Print>: file meanPt_rfb_6rap3pt_0_2.png has been created
+hMeanPt_0_3_0 : entries = 78
+ <p_{T}> = 6.35376
+hMeanPt_0_3_1 : entries = 8108
+ <p_{T}> = 8.44388
+hMeanPt_0_3_2 : entries = 8214
+ <p_{T}> = 13.6955
+Info in <TCanvas::Print>: file meanPt_rfb_6rap3pt_0_3.png has been created
+hMeanPt_0_4_0 : entries = 587
+ <p_{T}> = 6.05177
+hMeanPt_0_4_1 : entries = 7053
+ <p_{T}> = 8.2657
+hMeanPt_0_4_2 : entries = 5465
+ <p_{T}> = 13.4617
+Info in <TCanvas::Print>: file meanPt_rfb_6rap3pt_0_4.png has been created
+hMeanPt_0_5_0 : entries = 4708
+ <p_{T}> = 5.82095
+hMeanPt_0_5_1 : entries = 8783
+ <p_{T}> = 7.94008
+hMeanPt_0_5_2 : entries = 3740
+ <p_{T}> = 13.1206
+Info in <TCanvas::Print>: file meanPt_rfb_6rap3pt_0_5.png has been created
+strBin : 6rap3pt
+(int)0
+87
+ <p_{T}> = 6.05177
+hMeanPt_0_4_1 : entries = 7053
+ <p_{T}> = 8.2657
+hMeanPt_0_4_2 : entries = 5465
+ <p_{T}> = 13.4617
+Info in <TCanvas::Print>: file meanPt_rfb_6rap3pt_0_4.png has been created
+hMeanPt_0_5_0 : entries = 4708
+ <p_{T}> = 5.82095
+hMeanPt_0_5_1 : entries = 8783
+ <p_{T}> = 7.94008
+hMeanPt_0_5_2 : entries = 3740
+ <p_{T}> = 13.1206
+Info in <TCanvas::Print>: file meanPt_rfb_6rap3pt_0_5.png has been created
+strBin : 6rap3pt
+(int)0
