@@ -57,10 +57,14 @@ TH1D* hTrkRatio_NP_1 = (TH1D*)fWeightNP->Get("hTrkRatio_1");
 TH1D* hTrkRatio_NP_2 = (TH1D*)fWeightNP->Get("hTrkRatio_2");
 TH1D* hTrkRatio_NP_3 = (TH1D*)fWeightNP->Get("hTrkRatio_3");
 
-void makeEfficiency_74X_setBr(bool isPrompt=true, bool isPair=true, bool isEmbedded=true, bool isPtCut = false, bool doWeight = false)
+void makeEfficiency_74X_setBr(bool isPrompt=false, bool isPair=true, bool isEmbedded=true, bool isPtCut = false, bool doWeight = false)
 {
 	gROOT->Macro("./JpsiStyle.C");
 	gStyle->SetPaintTextFormat(".3f"); // for text colz
+	
+	//string strDir = "eff_74X_setBr"; // directory name
+	//string strDir = "eff_74X_setBr_wDetached"; // directory name
+	string strDir = "eff_74X_noRegitMuDetached"; // directory name
 
 	int initev =0;
 	int nevt = -1; //all
@@ -80,7 +84,6 @@ void makeEfficiency_74X_setBr(bool isPrompt=true, bool isPair=true, bool isEmbed
 	string strPrompt;
 	string strEmbd;
 	string strPair;
-	string strDir = "eff_74X_setBr"; // directory name
 	if(isPrompt){ strPrompt = "prompt"; }
 	else { strPrompt = "nonprompt"; }
 	if(isEmbedded){ strEmbd = "embd";	}
@@ -94,9 +97,15 @@ void makeEfficiency_74X_setBr(bool isPrompt=true, bool isPair=true, bool isEmbed
 	////// read-in file & tree
 	TFile * refFile;
 	if (isEmbedded){
-		//740pre3 -embd
-		if (isPrompt){	refFile = new TFile("/home/songkyo/kyo/regitSample/tot_Pythiagun_PromptJpsi_step2nMatch_KYO_regit_embd_20150211.root");}
-		else { refFile = new TFile("/home/songkyo/kyo/regitSample/tot_Pythiagun_B2JpsiMuMu_step2nMatch_KYO_regit_embd_20150211.root");}
+		////// 740pre3 -embd
+		//if (isPrompt){	refFile = new TFile("/home/songkyo/kyo/regitSample/tot_Pythiagun_PromptJpsi_step2nMatch_KYO_regit_embd_20150211.root");}
+		//else { refFile = new TFile("/home/songkyo/kyo/regitSample/tot_Pythiagun_B2JpsiMuMu_step2nMatch_KYO_regit_embd_20150211.root");}
+		////// 740pre3 -embd with HiDetachedTripletStep
+		//if (isPrompt){	refFile = new TFile("/home/songkyo/kyo/regitSample/tot_Pythiagun_PromptJpsi_step2nMatch_KYO_regit_wDetached_embd_20150224.root");}
+		//else { refFile = new TFile("/home/songkyo/kyo/regitSample/tot_Pythiagun_B2JpsiMuMu_step2nMatch_KYO_regit_wDetached_embd_20150224.root");}
+		////// 740pre3 - remove some regit : noRegitMuDetached
+		if (isPrompt){	refFile = new TFile("/home/songkyo/kyo/regitSample/tot_Pythiagun_PromptJpsi_step2nMatch_KYO_regit_noRegitMuDetached_embd_20150310.root");}
+		else { refFile = new TFile("/home/songkyo/kyo/regitSample/tot_Pythiagun_B2JpsiMuMu_step2nMatch_KYO_regit_noRegitMuDetached_embd_20150310.root");}
 	}
 	else {
 		//730pre2 -nonembd
@@ -484,12 +493,16 @@ void makeEfficiency_74X_setBr(bool isPrompt=true, bool isPair=true, bool isEmbed
 	hGenPtY->Write();
 	hRecoPtY->Write();
 	hEffPtY->Write();
+	
 	hGenPt->Write();
-	hRecoPt->Write();
 	hGenRap->Write();
+	hGenLxy->Write();
+	hRecoPt->Write();
 	hRecoRap->Write();
+	hRecoLxy->Write();
 	hEffPt->Write();
 	hEffRap->Write();
+	hEffLxy->Write();
 	outFile->Close();	
 	
 	return;
