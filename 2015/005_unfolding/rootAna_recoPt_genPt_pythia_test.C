@@ -32,9 +32,11 @@
 //const double shiftvar = -0.47; // conversion constant y=0(collision)==y=-0.47(LAB frame)  
 
 bool kineCut(double muPt, double muEta, double muP);
+bool softCut(bool muPurity, bool TrkArb, bool TMSta, double nTrk, double nPix, double dxy, double dz);
 bool massCut1(double lv_dimu_mass);
 bool massCut2(double lv_dimu_mass);
-void formPtArr(Double_t binmin, Double_t binmax, string* arr);
+void formPtStr(Double_t binmin, Double_t binmax, string* arr);
+void formRapStr(Double_t min, Double_t max, string* arr);
 
 struct Condition {
 	double theCentrality;
@@ -42,9 +44,12 @@ struct Condition {
 	double theMass, theRapidity, thePt, thePhi;
 	double mupl_p, mumi_p, mupl_pt, mumi_pt, mupl_eta, mumi_eta;
 	float theCtErr;
+	bool mupl_isHighPurity, mumi_isHighPurity, mupl_TrkMuArb, mumi_TrkMuArb, mupl_TMOneStaTight, mumi_TMOneStaTight;
+	Int_t mupl_nTrkWMea, mumi_nTrkWMea, mupl_nPixWMea, mumi_nPixWMea;
+	Float_t mupl_dxy, mumi_dxy, mupl_dz, mumi_dz;
 };
 
-void rootAna_recoPt_genPt_pythia(char *strBinning = "8rap9ptMatchdR", bool isPrompt = true){
+void rootAna_recoPt_genPt_pythia_test(char *strBinning = "8rap18ptMatchdR", bool isPrompt = false, bool is1st = false){
 
 	using namespace std;
 	
@@ -57,17 +62,30 @@ void rootAna_recoPt_genPt_pythia(char *strBinning = "8rap9ptMatchdR", bool isPro
 	double minylab=-2.4;
 	double maxylab=2.4;
 	double minpt=0.0;
-	double maxpt=30.0;
+	double maxpt=35.0;
 
 // read-in root file
 	TFile *f1;
-	if (isPrompt==1) {
-		//f1 = new TFile("/home/songkyo/kyo/pPbDataSample/EfficiencySample/merged_PromptJpsi_PYTHIAboosted_1st_STARTHI53_V27_1Mevt.root");
-		f1 = new TFile("/home/songkyo/kyo/pPbDataSample/EfficiencySample/tot_PromptJpsi_PYTHIAboosted_1st_STARTHI53_V27_noMuID_sglTrig_genMatch_20150205.root");
-		samplename="PRMCboosted_Pbp"; 
+	if (isPrompt) {
+		if ( is1st) {
+			f1 = new TFile("/home/songkyo/kyo/pPbDataSample/EfficiencySample/tot_PromptJpsi_PYTHIAboosted_1st_STARTHI53_V27_noMuID_sglTrig_genMatch_20150205.root");
+			samplename="PRMCboosted_Pbp"; 
+		}
+		else {
+			f1 = new TFile("/home/songkyo/kyo/pPbDataSample/EfficiencySample/tot_PromptJpsi_PYTHIAboosted_2nd_STARTHI53_V27_noMuID_sglTrig_genMatch_20150205.root");
+			samplename="PRMCboosted_pPb"; 
+		}
 	} else  {
-		f1 = new TFile("/home/songkyo/kyo/pPbDataSample/EfficiencySample/merged_B2Jpsi_PYTHIAboosted_1st_STARTHI53_V27_1Mevt.root");
-		samplename="NPMCboosted_Pbp";
+		if(is1st)
+		{
+			f1 = new TFile("/home/songkyo/kyo/pPbDataSample/EfficiencySample/tot_B2Jpsi_PYTHIAboosted_1st_STARTHI53_V27_noMuID_sglTrig_genMatch_20150206.root");
+			samplename="NPMCboosted_Pbp";
+		}
+		else
+		{
+			f1 = new TFile("/home/songkyo/kyo/pPbDataSample/EfficiencySample/tot_B2Jpsi_PYTHIAboosted_2nd_STARTHI53_V27_noMuID_sglTrig_genMatch_20150206.root");
+			samplename="NPMCboosted_pPb";
+		}
 	} 
 
 	const char* datestring = Form("%s_%s",strBinning,samplename);
@@ -76,18 +94,48 @@ void rootAna_recoPt_genPt_pythia(char *strBinning = "8rap9ptMatchdR", bool isPro
 	///////////////////////////////////////////////////
 	// Definition of binning
 	// --- pt Bin
-	//	Double_t ptBinsArr[] = {0.0,1.0,2.0,3.0,4.0,5.0, 6.5, 7.5, 8.5, 10.0, 14.0, 30.0, 35.0}; //20141228Finer
-	Double_t ptBinsArr[] = {0.0,3.0,4.0,5.0, 6.5, 7.5, 8.5, 10.0, 14.0, 30.0}; //20141228
+		Double_t ptBinsArr[] = {0.0,1.5,3.0,3.5,4.0,4.5,5.0,5.8,6.5,7.0,7.5,8.0,8.5,9.0,10.0,12.5,14.0,22.0,30.0,35.0}; //20141228Finer
+	//Double_t ptBinsArr[] = {0.0,3.0,4.0,5.0, 6.5, 7.5, 8.5, 10.0, 14.0, 30.0, 35.0}; //20141228
 	const Int_t nPtBins = sizeof(ptBinsArr)/sizeof(double)-1;
 	cout << "nPtBins=" << nPtBins << endl;
 
+	// --- y Bin //set to 1st run (For 2nd run, will be automatically changed later)
+	Double_t tmp_yBinsArr[] = {-2.4, -1.97, -1.37, -0.47, 0.43, 1.03, 1.46, 1.93, 2.4}; // 8rap9pt
+	const Int_t tmp_nYBins = sizeof(tmp_yBinsArr)/sizeof(double);
+	cout << "tmp_nYBins=" << tmp_nYBins << endl;
+
+	Double_t yBinsArr[tmp_nYBins] = {};
+	if (is1st){
+		for (Int_t i=0; i<tmp_nYBins; i++) {
+			yBinsArr[i] = tmp_yBinsArr[i]; 
+			cout <<"yBinsArr["<<i<<"] = " <<yBinsArr[i]<<endl;
+		}
+	}
+	else {
+		// change 1st run to 2nd run
+		for (Int_t i=0; i<tmp_nYBins; i++) {
+			yBinsArr[i] = -1*tmp_yBinsArr[tmp_nYBins-1-i]; 
+			cout <<"yBinsArr["<<i<<"] = " <<yBinsArr[i]<<endl;
+		}
+	}
+  const Int_t nYBins = sizeof(yBinsArr)/sizeof(double)-1;
+  cout << "nYBins=" << nYBins << endl;
+
+
 	// form array string
-	string ptArr[nPtBins];
+	string ptrange[nPtBins];
+	string yrange[nPtBins];
 	for (Int_t i=0; i<nPtBins; i++) {
-		formPtArr(ptBinsArr[i], ptBinsArr[i+1], &ptArr[i]);
-		cout << i <<"th ptArr = " << ptArr[i] << endl;
+		formPtStr(ptBinsArr[i], ptBinsArr[i+1], &ptrange[i]);
+		cout << i <<"th ptrange = " << ptrange[i] << endl;
 	}
 
+	for (Int_t i=0; i<nYBins; i++){
+		formRapStr(yBinsArr[i], yBinsArr[i+1], &yrange[i]);
+		cout << "yrange["<<i<<"] = "<< yrange[i].c_str() << endl;
+	}
+
+	
 	///////////////////////////////////////////////////
 	//read-in tree
 	TTree *mytree = (TTree*)f1->Get("myTree");
@@ -107,6 +155,21 @@ void rootAna_recoPt_genPt_pythia(char *strBinning = "8rap9ptMatchdR", bool isPro
   TClonesArray    *Reco_QQ_mumi_4mom;
   TClonesArray    *Reco_QQ_mupl_matchedGen_4mom;
   TClonesArray    *Reco_QQ_mumi_matchedGen_4mom;
+   bool            Reco_QQ_mupl_isHighPurity[20];
+   bool            Reco_QQ_mumi_isHighPurity[20];
+   bool            Reco_QQ_mupl_TrkMuArb[20];
+   bool            Reco_QQ_mumi_TrkMuArb[20];
+   bool            Reco_QQ_mupl_TMOneStaTight[20];
+   bool            Reco_QQ_mumi_TMOneStaTight[20];
+   Int_t           Reco_QQ_mupl_nTrkWMea[20];
+   Int_t           Reco_QQ_mumi_nTrkWMea[20];
+   Int_t           Reco_QQ_mupl_nPixWMea[20];
+   Int_t           Reco_QQ_mumi_nPixWMea[20];
+   Float_t         Reco_QQ_mupl_dxy[20];
+   Float_t         Reco_QQ_mumi_dxy[20];
+   Float_t         Reco_QQ_mupl_dz[20];
+   Float_t         Reco_QQ_mumi_dz[20];
+
 	float						Reco_QQ_mupl_matchedGen_dR[20];
 	float						Reco_QQ_mumi_matchedGen_dR[20];
 //  Int_t           Gen_QQ_size;
@@ -132,6 +195,21 @@ void rootAna_recoPt_genPt_pythia(char *strBinning = "8rap9ptMatchdR", bool isPro
   TBranch        *b_Reco_QQ_mumi_matchedGen_4mom;   //!
   TBranch        *b_Reco_QQ_mupl_matchedGen_dR;   //!
   TBranch        *b_Reco_QQ_mumi_matchedGen_dR;   //!
+
+   TBranch        *b_Reco_QQ_mupl_isHighPurity;
+   TBranch        *b_Reco_QQ_mumi_isHighPurity;
+   TBranch        *b_Reco_QQ_mupl_TrkMuArb;
+   TBranch        *b_Reco_QQ_mumi_TrkMuArb;
+   TBranch        *b_Reco_QQ_mupl_TMOneStaTight;
+   TBranch        *b_Reco_QQ_mumi_TMOneStaTight;
+   TBranch        *b_Reco_QQ_mupl_nTrkWMea;
+   TBranch        *b_Reco_QQ_mumi_nTrkWMea;
+   TBranch        *b_Reco_QQ_mupl_nPixWMea;
+   TBranch        *b_Reco_QQ_mumi_nPixWMea;
+   TBranch        *b_Reco_QQ_mupl_dxy;
+   TBranch        *b_Reco_QQ_mumi_dxy;
+   TBranch        *b_Reco_QQ_mupl_dz;
+   TBranch        *b_Reco_QQ_mumi_dz;
 //  TBranch        *b_Gen_QQ_size;   //!
 //  TBranch        *b_Gen_QQ_type;
 //  TBranch        *b_Gen_QQ_4mom;   //!
@@ -174,6 +252,20 @@ void rootAna_recoPt_genPt_pythia(char *strBinning = "8rap9ptMatchdR", bool isPro
   mytree->SetBranchAddress("Reco_QQ_mumi_matchedGen_4mom", &Reco_QQ_mumi_matchedGen_4mom, &b_Reco_QQ_mumi_matchedGen_4mom);
   mytree->SetBranchAddress("Reco_QQ_mupl_matchedGen_dR", &Reco_QQ_mupl_matchedGen_dR, &b_Reco_QQ_mupl_matchedGen_dR);
   mytree->SetBranchAddress("Reco_QQ_mumi_matchedGen_dR", &Reco_QQ_mumi_matchedGen_dR, &b_Reco_QQ_mumi_matchedGen_dR);
+   mytree->SetBranchAddress("Reco_QQ_mupl_isHighPurity", &Reco_QQ_mupl_isHighPurity, &b_Reco_QQ_mupl_isHighPurity);
+   mytree->SetBranchAddress("Reco_QQ_mumi_isHighPurity", &Reco_QQ_mumi_isHighPurity, &b_Reco_QQ_mumi_isHighPurity);
+   mytree->SetBranchAddress("Reco_QQ_mupl_TrkMuArb", &Reco_QQ_mupl_TrkMuArb, &b_Reco_QQ_mupl_TrkMuArb);
+   mytree->SetBranchAddress("Reco_QQ_mumi_TrkMuArb", &Reco_QQ_mumi_TrkMuArb, &b_Reco_QQ_mumi_TrkMuArb);
+   mytree->SetBranchAddress("Reco_QQ_mupl_TMOneStaTight", &Reco_QQ_mupl_TMOneStaTight, &b_Reco_QQ_mupl_TMOneStaTight);
+   mytree->SetBranchAddress("Reco_QQ_mumi_TMOneStaTight", &Reco_QQ_mumi_TMOneStaTight, &b_Reco_QQ_mumi_TMOneStaTight);
+   mytree->SetBranchAddress("Reco_QQ_mupl_nTrkWMea", &Reco_QQ_mupl_nTrkWMea, &b_Reco_QQ_mupl_nTrkWMea);
+   mytree->SetBranchAddress("Reco_QQ_mumi_nTrkWMea", &Reco_QQ_mumi_nTrkWMea, &b_Reco_QQ_mumi_nTrkWMea);
+   mytree->SetBranchAddress("Reco_QQ_mupl_nPixWMea", &Reco_QQ_mupl_nPixWMea, &b_Reco_QQ_mupl_nPixWMea);
+   mytree->SetBranchAddress("Reco_QQ_mumi_nPixWMea", &Reco_QQ_mumi_nPixWMea, &b_Reco_QQ_mumi_nPixWMea);
+   mytree->SetBranchAddress("Reco_QQ_mupl_dxy", &Reco_QQ_mupl_dxy, &b_Reco_QQ_mupl_dxy);
+   mytree->SetBranchAddress("Reco_QQ_mumi_dxy", &Reco_QQ_mumi_dxy, &b_Reco_QQ_mumi_dxy);
+   mytree->SetBranchAddress("Reco_QQ_mupl_dz", &Reco_QQ_mupl_dz, &b_Reco_QQ_mupl_dz);
+   mytree->SetBranchAddress("Reco_QQ_mumi_dz", &Reco_QQ_mumi_dz, &b_Reco_QQ_mumi_dz);
 //	mytree->SetBranchAddress("Gen_QQ_size", &Gen_QQ_size, &b_Gen_QQ_size);
 //	mytree->SetBranchAddress("Gen_QQ_type", Gen_QQ_type, &b_Gen_QQ_type);
 //  mytree->SetBranchAddress("Gen_QQ_4mom", &Gen_QQ_4mom, &b_Gen_QQ_4mom);
@@ -183,16 +275,42 @@ void rootAna_recoPt_genPt_pythia(char *strBinning = "8rap9ptMatchdR", bool isPro
 	////////////////////////////////////////////////////////////////////////////////////////////////
 	///////////////////////////////////////////////////////////////////////////////////////////////
 	// define 2D hist
-	// fine binning
-	TH2D *h2D_recoY_genY = new TH2D(Form("h2D_recoY_genY_%s",strBinning),"",1000,-2.5,2.5,1000,-2.5,2.5);
-	TH2D *h2D_recoPt_genPt = new TH2D(Form("h2D_recoPt_genPt_%s",strBinning),"",1000,0.,30,1000,0.,30);
-	TH2D *h2D_rawMatrix = new TH2D(Form("h2D_rawMatrix_%s",strBinning),"",nPtBins,ptBinsArr,nPtBins,ptBinsArr);
-	TH2D *h2D_fixedMatrix = new TH2D(Form("h2D_fixedMatrix_%s",strBinning),"",nPtBins,0,nPtBins,nPtBins,0,nPtBins);
+	
+	// 1) integrated rapidity
+	TH2D *h2D_recoY_genY_tot = new TH2D(Form("h2D_recoY_genY_tot_%s",strBinning),"",1000,-2.5,2.5,1000,-2.5,2.5);
+	TH2D *h2D_recoPt_genPt_tot = new TH2D(Form("h2D_recoPt_genPt_tot_%s",strBinning),"",1000,0.,30,1000,0.,30);
+	TH2D *h2D_rawMatrix_tot = new TH2D(Form("h2D_rawMatrix_tot_%s",strBinning),"",nPtBins,ptBinsArr,nPtBins,ptBinsArr);
+	TH2D *h2D_fixedMatrix_tot = new TH2D(Form("h2D_fixedMatrix_tot_%s",strBinning),"",nPtBins,0,nPtBins,nPtBins,0,nPtBins);
 
-	h2D_recoY_genY->Sumw2();
-	h2D_recoPt_genPt->Sumw2();
-	h2D_rawMatrix->Sumw2();
-	h2D_fixedMatrix->Sumw2();
+	h2D_recoY_genY_tot->Sumw2();
+	h2D_recoPt_genPt_tot->Sumw2();
+	h2D_rawMatrix_tot->Sumw2();
+	h2D_fixedMatrix_tot->Sumw2();
+
+	// 2) differential rapidity
+	TH2D* h2D_recoY_genY[nYBins];
+	TH2D* h2D_recoPt_genPt[nYBins];
+	TH2D* h2D_rawMatrix[nYBins];
+	TH2D* h2D_fixedMatrix[nYBins];
+   TH1D *h1D_Reco_Matrix[nYBins];
+   TH1D *h1D_Gen_Matrix[nYBins];
+
+	
+	for (int in=0; in <nYBins; in++ ) {
+		h2D_recoY_genY[in] = new TH2D(Form("h2D_recoY_genY_%s_%d",strBinning,in),"",1000,-2.5,2.5,1000,-2.5,2.5);
+		h2D_recoPt_genPt[in] = new TH2D(Form("h2D_recoPt_genPt_%s_%d",strBinning,in),"",1000,0.,30.,1000,0.,30.);
+		h2D_rawMatrix[in] = new TH2D(Form("h2D_rawMatrix_%s_%d",strBinning,in),"",nPtBins,ptBinsArr,nPtBins,ptBinsArr);
+		h2D_fixedMatrix[in] = new TH2D(Form("h2D_fixedMatrix_%s_%d",strBinning,in),"",nPtBins,0,nPtBins,nPtBins,0,nPtBins);
+	   h1D_Reco_Matrix[in] = new TH1D(Form("h1D_Reco_Matrix_%s_%d",strBinning,in),"",nPtBins,0,nPtBins);
+	   h1D_Gen_Matrix[in] = new TH1D(Form("h1D_Gen_Matrix_%s_%d",strBinning,in),"",nPtBins,0,nPtBins);
+		//cout << in<<"th recoPt_genPt = " <<h2D_recoPt_genPt[in] << endl; 
+		h2D_recoY_genY[in]->Sumw2();
+		h2D_recoPt_genPt[in]->Sumw2();
+		h2D_rawMatrix[in]->Sumw2();
+		h2D_fixedMatrix[in]->Sumw2();
+   	h1D_Reco_Matrix[in]->Sumw2();
+   	h1D_Gen_Matrix[in]->Sumw2();
+	}
 
 	////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -236,14 +354,32 @@ void rootAna_recoPt_genPt_pythia(char *strBinning = "8rap9ptMatchdR", bool isPro
 			Jpsi_Reco.mupl_eta = m1P_Reco->Eta();
 			Jpsi_Reco.mumi_eta = m2P_Reco->Eta();
 	
+         Jpsi_Reco.mupl_isHighPurity = Reco_QQ_mupl_isHighPurity[irqq];
+         Jpsi_Reco.mumi_isHighPurity = Reco_QQ_mumi_isHighPurity[irqq];
+         Jpsi_Reco.mupl_TrkMuArb = Reco_QQ_mupl_TrkMuArb[irqq];
+         Jpsi_Reco.mumi_TrkMuArb = Reco_QQ_mumi_TrkMuArb[irqq];
+         Jpsi_Reco.mupl_TMOneStaTight = Reco_QQ_mupl_TMOneStaTight[irqq];
+         Jpsi_Reco.mumi_TMOneStaTight = Reco_QQ_mumi_TMOneStaTight[irqq];
+         Jpsi_Reco.mupl_nTrkWMea = Reco_QQ_mupl_nTrkWMea[irqq];
+         Jpsi_Reco.mumi_nTrkWMea = Reco_QQ_mumi_nTrkWMea[irqq];
+         Jpsi_Reco.mupl_nPixWMea = Reco_QQ_mupl_nPixWMea[irqq];
+         Jpsi_Reco.mumi_nPixWMea = Reco_QQ_mumi_nPixWMea[irqq];
+         Jpsi_Reco.mupl_dxy = Reco_QQ_mupl_dxy[irqq];
+         Jpsi_Reco.mumi_dxy = Reco_QQ_mumi_dxy[irqq];
+         Jpsi_Reco.mupl_dz = Reco_QQ_mupl_dz[irqq];
+         Jpsi_Reco.mumi_dz = Reco_QQ_mumi_dz[irqq];
+
 			bool yn_reco = false;
 			bool yn_gen = false;
+
 			if ( Jpsi_Reco.theSign ==0 
 				//&& massCut1(Jpsi_Reco.theMass)
 				&& massCut2(Jpsi_Reco.theMass)
 				&& ( (Jpsi_Reco.Reco_QQ_trig&1)==1 && (Jpsi_Reco.HLTriggers&1)==1 )
 				&& kineCut(Jpsi_Reco.mupl_pt, Jpsi_Reco.mupl_eta, Jpsi_Reco.mupl_p) 
 				&& kineCut(Jpsi_Reco.mumi_pt, Jpsi_Reco.mumi_eta, Jpsi_Reco.mumi_p) 
+            && softCut(Jpsi_Reco.mupl_isHighPurity, Jpsi_Reco.mupl_TrkMuArb, Jpsi_Reco.mupl_TMOneStaTight, Jpsi_Reco.mupl_nTrkWMea, Jpsi_Reco.mupl_nPixWMea, Jpsi_Reco.mupl_dxy, Jpsi_Reco.mupl_dz)
+            && softCut(Jpsi_Reco.mumi_isHighPurity, Jpsi_Reco.mumi_TrkMuArb, Jpsi_Reco.mumi_TMOneStaTight, Jpsi_Reco.mumi_nTrkWMea, Jpsi_Reco.mumi_nPixWMea, Jpsi_Reco.mumi_dxy, Jpsi_Reco.mumi_dz)
 				&& minpt<=Jpsi_Reco.thePt && Jpsi_Reco.thePt < maxpt
 				&& minylab<=Jpsi_Reco.theRapidity && Jpsi_Reco.theRapidity < maxylab) {
 					yn_reco = true;
@@ -288,10 +424,19 @@ void rootAna_recoPt_genPt_pythia(char *strBinning = "8rap9ptMatchdR", bool isPro
 				
 			// fill the histogram
 			if (yn_reco == true &&yn_gen == true){
-				h2D_recoY_genY->Fill(Jpsi_Gen.theRapidity,Jpsi_Reco.theRapidity);
-				h2D_recoPt_genPt->Fill(Jpsi_Gen.thePt,Jpsi_Reco.thePt);
-				h2D_rawMatrix->Fill(Jpsi_Gen.thePt,Jpsi_Reco.thePt);
-				//h2D_fixedMatrix->Fill(Jpsi_Gen.thePt,Jpsi_Reco.thePt);
+				// 1) integrated rapidity
+				h2D_recoY_genY_tot->Fill(Jpsi_Gen.theRapidity,Jpsi_Reco.theRapidity);
+				h2D_recoPt_genPt_tot->Fill(Jpsi_Gen.thePt,Jpsi_Reco.thePt);
+				h2D_rawMatrix_tot->Fill(Jpsi_Gen.thePt,Jpsi_Reco.thePt);
+				// 2) differential rapidity
+				for (int in=0; in <nYBins; in++ ) {
+					if (yBinsArr[in]<=Jpsi_Gen.theRapidity && Jpsi_Gen.theRapidity < yBinsArr[in+1]){ 
+						//cout << in<<"th rap range from " << yBinsArr[in] << "to " << yBinsArr[in+1] << endl;
+						h2D_recoY_genY[in]->Fill(Jpsi_Gen.theRapidity,Jpsi_Reco.theRapidity);
+						h2D_recoPt_genPt[in]->Fill(Jpsi_Gen.thePt,Jpsi_Reco.thePt);
+						h2D_rawMatrix[in]->Fill(Jpsi_Gen.thePt,Jpsi_Reco.thePt);
+					}
+				}
 			}
 		} // end of Reco_QQ_size loop
 
@@ -340,10 +485,10 @@ void rootAna_recoPt_genPt_pythia(char *strBinning = "8rap9ptMatchdR", bool isPro
 /*
 		// fill the histogram
 		if (yn_reco == true &&yn_gen == true){
-			h2D_recoY_genY->Fill(Jpsi_Gen.theRapidity,Jpsi_Reco.theRapidity);
-			h2D_recoPt_genPt->Fill(Jpsi_Gen.thePt,Jpsi_Reco.thePt);
-			h2D_rawMatrix->Fill(Jpsi_Gen.thePt,Jpsi_Reco.thePt);
-			//h2D_fixedMatrix->Fill(Jpsi_Gen.thePt,Jpsi_Reco.thePt);
+			h2D_recoY_genY_tot->Fill(Jpsi_Gen.theRapidity,Jpsi_Reco.theRapidity);
+			h2D_recoPt_genPt_tot->Fill(Jpsi_Gen.thePt,Jpsi_Reco.thePt);
+			h2D_rawMatrix_tot->Fill(Jpsi_Gen.thePt,Jpsi_Reco.thePt);
+			//h2D_fixedMatrix_tot->Fill(Jpsi_Gen.thePt,Jpsi_Reco.thePt);
 		}
 */
 	} //end of event loop
@@ -351,14 +496,16 @@ void rootAna_recoPt_genPt_pythia(char *strBinning = "8rap9ptMatchdR", bool isPro
 	////////////////////////////////////////////////////////////////////////////
 	////////////////////////////////////////////////////////////////////////////
 	// calculate for fixedMatrix
+	// 1) integrated rapidity
 	double fix_entries[nPtBins][nPtBins];
 	double fixden_entries[nPtBins];
+
 	for (Int_t igenpt=0; igenpt< nPtBins; igenpt++){	 
 		fixden_entries[igenpt] =0;
 		//cout << "***** igenpt= " <<igenpt << " ***********" << endl;
 		for (Int_t irecopt=0; irecopt<nPtBins; irecopt++) {
-			fix_entries[igenpt][irecopt] = (double)h2D_rawMatrix->GetBinContent(igenpt+1, irecopt+1);
-			fixden_entries[igenpt] += (double)h2D_rawMatrix->GetBinContent(igenpt+1, irecopt+1);
+			fix_entries[igenpt][irecopt] = (double)h2D_rawMatrix_tot->GetBinContent(igenpt+1, irecopt+1);
+			fixden_entries[igenpt] += (double)h2D_rawMatrix_tot->GetBinContent(igenpt+1, irecopt+1);
 			//cout << "* irecopt= "<<irecopt<< endl;
 			//cout << "fix_entries = " <<fix_entries[igenpt][irecopt]<<endl;
 			//cout << "fixden_entries = " <<fixden_entries[igenpt]<<endl;
@@ -367,33 +514,82 @@ void rootAna_recoPt_genPt_pythia(char *strBinning = "8rap9ptMatchdR", bool isPro
 
 	for (Int_t igenpt=0; igenpt< nPtBins; igenpt++){	 
 		for (Int_t irecopt=0; irecopt<nPtBins; irecopt++) {
-			cout << "***** igenpt= " <<igenpt <<", irecopt= "<<irecopt<< endl;
-			cout << "fix_entries = " <<fix_entries[igenpt][irecopt]<<endl;
-			cout << "fixden_entries = " <<fixden_entries[igenpt]<<endl;
-			h2D_fixedMatrix->SetBinContent(igenpt+1, irecopt+1, fix_entries[igenpt][irecopt]/fixden_entries[igenpt]);	
+			//cout << "***** igenpt= " <<igenpt <<", irecopt= "<<irecopt<< endl;
+			//cout << "fix_entries = " <<fix_entries[igenpt][irecopt]<<endl;
+			//cout << "fixden_entries = " <<fixden_entries[igenpt]<<endl;
+			h2D_fixedMatrix_tot->SetBinContent(igenpt+1, irecopt+1, fix_entries[igenpt][irecopt]/fixden_entries[igenpt]);	
 		}
 	}
 
 	// axis
 	for (Int_t igenpt=0; igenpt< nPtBins; igenpt++){	 
-		h2D_fixedMatrix->GetXaxis()->SetBinLabel(igenpt+1,ptArr[igenpt].c_str());
+		h2D_fixedMatrix_tot->GetXaxis()->SetBinLabel(igenpt+1,ptrange[igenpt].c_str());
 	}
 	for (Int_t irecopt=0; irecopt< nPtBins; irecopt++){	 
-		h2D_fixedMatrix->GetYaxis()->SetBinLabel(irecopt+1,ptArr[irecopt].c_str());
+		h2D_fixedMatrix_tot->GetYaxis()->SetBinLabel(irecopt+1,ptrange[irecopt].c_str());
 	}
+
+	////////////////////////////////////////////////////////////////////////////
+	// 2) differential rapidity
+	double fix_entries_diff[nYBins][nPtBins][nPtBins];
+	double fixden_entries_diff[nYBins][nPtBins];
+   double Reco_entries[nYBins][nPtBins];
+   double Gen_entries[nYBins][nPtBins];
+
+	for (Int_t in=0; in< nYBins; in++){
+		for (Int_t igenpt=0; igenpt< nPtBins; igenpt++){	 
+			fixden_entries_diff[in][igenpt] =0;
+			Reco_entries[in][igenpt] = 0;
+			Gen_entries[in][igenpt] = 0;
+			for (Int_t irecopt=0; irecopt<nPtBins; irecopt++) {
+				fix_entries_diff[in][igenpt][irecopt] = (double)h2D_rawMatrix[in]->GetBinContent(igenpt+1, irecopt+1);
+				fixden_entries_diff[in][igenpt] += (double)h2D_rawMatrix[in]->GetBinContent(igenpt+1, irecopt+1);
+				Reco_entries[in][igenpt] += (double)h2D_rawMatrix[in]->GetBinContent(irecopt+1, igenpt+1);
+				Gen_entries[in][igenpt] += (double)h2D_rawMatrix[in]->GetBinContent(igenpt+1, irecopt+1);
+			}
+		}
+	}
+
+	for (Int_t in=0; in< nYBins; in++){
+		for (Int_t igenpt=0; igenpt< nPtBins; igenpt++){	 
+			for (Int_t irecopt=0; irecopt<nPtBins; irecopt++) {
+				h2D_fixedMatrix[in]->SetBinContent(igenpt+1, irecopt+1, fix_entries_diff[in][igenpt][irecopt]/fixden_entries_diff[in][igenpt]);	
+			}
+			h1D_Reco_Matrix[in]->SetBinContent(igenpt+1, Reco_entries[in][igenpt]);
+			h1D_Gen_Matrix[in]->SetBinContent(igenpt+1, Gen_entries[in][igenpt]);
+		}
+	}
+	// axis
+	for (Int_t in=0; in< nYBins; in++){
+		for (Int_t igenpt=0; igenpt< nPtBins; igenpt++){	 
+			h2D_fixedMatrix[in]->GetXaxis()->SetBinLabel(igenpt+1,ptrange[igenpt].c_str());
+		}
+		for (Int_t irecopt=0; irecopt< nPtBins; irecopt++){	 
+			h2D_fixedMatrix[in]->GetYaxis()->SetBinLabel(irecopt+1,ptrange[irecopt].c_str());
+		}
+	}
+
 	
 	////////////////////////////////////////////////////////////////////////////
 	////////////////////////////////////////////////////////////////////////////
 	// Save the data!
 
 	// --- save03 : save as a root file
-	TFile *outFile = new TFile(Form("recoPt_genPt_%s.root",datestring),"RECREATE");
+	TFile *outFile = new TFile(Form("recoPt_genPt_%s_test.root",datestring),"RECREATE");
 	std::cout << "datestring: " << datestring << std::endl;
 	outFile->cd();
-	h2D_recoY_genY->Write();
-	h2D_recoPt_genPt->Write();
-	h2D_rawMatrix->Write();
-	h2D_fixedMatrix->Write();
+	h2D_recoY_genY_tot->Write();
+	h2D_recoPt_genPt_tot->Write();
+	h2D_rawMatrix_tot->Write();
+	h2D_fixedMatrix_tot->Write();
+	for (Int_t in=0; in< nYBins; in++){
+		h2D_recoY_genY[in]->Write();
+		h2D_recoPt_genPt[in]->Write();
+		h2D_rawMatrix[in]->Write();
+		h2D_fixedMatrix[in]->Write();
+      h1D_Reco_Matrix[in]->Write();
+      h1D_Gen_Matrix[in]->Write();
+	}	
 	outFile->Close();
 
 } // end of main func
@@ -419,7 +615,19 @@ bool massCut2(double lv_dimu_mass) {
 	else {return true;}
 }
 
-void formPtArr(Double_t binmin, Double_t binmax, string* arr) {
+bool softCut(bool muPurity, bool TrkArb, bool TMSta, double nTrk, double nPix, double dxy, double dz)     
+{  
+   return (muPurity == 1
+         && TrkArb == 1
+         && TMSta == 1
+         && nTrk > 5
+         && nPix > 0 
+         && dxy < 0.3
+         && dz < 20
+   );
+}
+
+void formPtStr(Double_t binmin, Double_t binmax, string* arr) {
 	Double_t intMin, intMax; 
 	Double_t fracMin = modf(binmin, &intMin);
 	Double_t fracMax = modf(binmax, &intMax);
@@ -434,3 +642,10 @@ void formPtArr(Double_t binmin, Double_t binmax, string* arr) {
 		*arr = Form("%.1f-%.1f", binmin, binmax);
 	}
 }
+
+void formRapStr(Double_t min, Double_t max, string* arr) { //byHand KYO
+	if (min==-2.4 || min==2.4) *arr = Form("%.1f-%.2f",min,max);
+	else if (max==-2.4 || max==2.4) *arr = Form("%.2f-%.1f",min,max);
+	else *arr = Form("%.2f-%.2f",min,max);
+}
+
