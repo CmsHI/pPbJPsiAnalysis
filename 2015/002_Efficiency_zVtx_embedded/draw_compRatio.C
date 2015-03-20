@@ -25,55 +25,84 @@
 
 #include "KYOcommonOpt.h"
 
-
-void draw_compRatio(bool isPrompt = true, bool is1st = true, char* dirName = "draw_1D_tnpV14", char* dirName02 = "draw_compRatio_tnpV14")
+// no ordering in rap (just y_lab)
+void draw_compRatio(bool isPrompt = false, bool is1st = true, char* dirName = "draw_1D_vertex", char* dirName02 = "draw_compRatio_vertex", bool isNoError=true)
 {
 	gROOT->Macro("./JpsiStyle.C");
 
 	// --- read-in file
 	TFile * f01;
 	TFile * f02;
-	char* f01name="with SF";
-	char* f02name="without SF";
+	//char* f01name="with SF";
+	//char* f02name="without SF";
+	char* f01name="z vtx weight";
+	char* f02name="no weight";
+	//char* f01name="reco pt filled";
+	//char* f02name="gen pt filled";
 	
-	char* sampleName;
+	//char* sampleName;
 	//double ratiomin=0.8; 
 	//double ratiomax=1.2; 
 	double ratiomin=0.7; 
 	double ratiomax=1.3; 
-	double relmin=-0.3; 
-	double relmax=0.3; 
 
+	char* strPrompt;
+	char* str1st;
+	if (isPrompt) strPrompt = "PRMC";
+	else strPrompt = "NPMC";
+	if (is1st) str1st = "Pbp";
+	else str1st = "pPb";
+
+	//const char* sampleName = Form("%s%s_%s",strPrompt,strEmbd,str1st);
+	const char* sampleName = Form("%spythia_%s",strPrompt,str1st);
+	cout << "sampleName = " << sampleName << endl;
+
+	f01 = new TFile(Form("%s/1Dhist_EffCounting_8rap9pt_%s_useCtErr_1_useDataDriven_1_useZvtxStep1_0_Step2_1.root",dirName,sampleName));
+	f02 = new TFile(Form("%s/1Dhist_EffCounting_8rap9pt_%s_useCtErr_1_useDataDriven_1_useZvtxStep1_0_Step2_0.root",dirName,sampleName));
+
+/*
 	if (is1st) {
 		if (isPrompt) {
-			//f01 = new TFile(Form("%s/PRMCpythia_Pbp_EffPt.root",dirName));
-			//f02 = new TFile(Form("%s/PRMCembedded_Pbp_EffPt.root",dirName));
+			//f01 = new TFile(Form("%s/PRMCpythia_Pbp_sf1_EffPt.root",dirName));
+			//f02 = new TFile(Form("%s/PRMCpythia_Pbp_sf0_EffPt.root",dirName));
 			//f01 = new TFile(Form("%s/PRMCpythia_Pbp_weight_EffPt.root",dirName));
 			//f02 = new TFile(Form("%s/PRMCpythia_Pbp_noweight_EffPt.root",dirName));
 			f01 = new TFile(Form("%s/PRMCpythia_Pbp_sf1_EffPt.root",dirName));
-			f02 = new TFile(Form("%s/PRMCpythia_Pbp_sf0_EffPt.root",dirName));
+			f02 = new TFile(Form("%s/PRMCpythia_Pbp_EffPt.root",dirName));
 			sampleName = "PRMC_Pbp";
 		}
 		else {
-			//f01 = new TFile(Form("%s/NPMCpythia_Pbp_EffPt.root",dirName));
-			//f02 = new TFile(Form("%s/NPMCembedded_Pbp_EffPt.root",dirName));
+			//f01 = new TFile(Form("%s/NPMCpythia_Pbp_sf1_EffPt.root",dirName));
+			//f02 = new TFile(Form("%s/NPMCpythia_Pbp_sf0_EffPt.root",dirName));
 			//f01 = new TFile(Form("%s/NPMCpythia_Pbp_weight_EffPt.root",dirName));
 			//f02 = new TFile(Form("%s/NPMCpythia_Pbp_noweight_EffPt.root",dirName));
+			f01 = new TFile(Form("%s/NPMCpythia_Pbp_sf1_EffPt.root",dirName));
+			f02 = new TFile(Form("%s/NPMCpythia_Pbp_EffPt.root",dirName));
 			sampleName = "NPMC_Pbp";
 		}	 
 	}
 	else {
 		if (isPrompt) {
+			//f01 = new TFile(Form("%s/PRMCpythia_pPb_sf1_EffPt.root",dirName));
+			//f02 = new TFile(Form("%s/PRMCpythia_pPb_sf0_EffPt.root",dirName));
 			//f01 = new TFile(Form("%s/PRMCpythia_pPb_EffPt.root",dirName));
 			//f02 = new TFile(Form("%s/PRMCembedded_pPb_EffPt.root",dirName));
+			f01 = new TFile(Form("%s/PRMCpythia_pPb_sf1_EffPt.root",dirName));
+			f02 = new TFile(Form("%s/PRMCpythia_pPb_EffPt.root",dirName));
 			sampleName = "PRMC_pPb";
 		}
 		else {
+			//f01 = new TFile(Form("%s/NPMCpythia_pPb_sf1_EffPt.root",dirName));
+			//f02 = new TFile(Form("%s/NPMCpythia_pPb_sf0_EffPt.root",dirName));
 			//f01 = new TFile(Form("%s/NPMCpythia_pPb_EffPt.root",dirName));
 			//f02 = new TFile(Form("%s/NPMCembedded_pPb_EffPt.root",dirName));
+			f01 = new TFile(Form("%s/NPMCpythia_pPb_sf1_EffPt.root",dirName));
+			f02 = new TFile(Form("%s/NPMCpythia_pPb_EffPt.root",dirName));
 			sampleName = "NPMC_pPb";
 		}	 
 	}
+*/
+
 	cout << "sampleName = " << sampleName << endl;
 
 	// --- read-in tree
@@ -128,8 +157,8 @@ void draw_compRatio(bool isPrompt = true, bool is1st = true, char* dirName = "dr
 	c1->Divide(4,2);
 	TCanvas* c2 = new TCanvas("c2","c2",1600,800);
 	c2->Divide(4,2);
-	TCanvas* c3 = new TCanvas("c3","c3",1600,800);
-	c3->Divide(4,2);
+//	TCanvas* c3 = new TCanvas("c3","c3",1600,800);
+//	c3->Divide(4,2);
 	//TLegend *legBR = new TLegend(0.58,0.30,0.85,0.40,NULL,"brNDC");
 	TLegend *legBR = new TLegend(0.50,0.30,0.80,0.41,NULL,"brNDC");
 	SetLegendStyle(legBR);
@@ -146,9 +175,16 @@ void draw_compRatio(bool isPrompt = true, bool is1st = true, char* dirName = "dr
 		h1D_EffPt01[iy]->SetMaximum(1.);
 		h1D_EffPt01[iy]->Draw("pe");
 		h1D_EffPt02[iy]->Draw("pe same");
-		if (iy==1 || iy==6) dashedLine (3.,0.,3.,1.,2,.8);
-		else if (iy==2)  dashedLine (5.,0.,5.,1.,2,.8);
-		else if (iy==3 || iy==4 || iy==5)  dashedLine (6.5,0.,6.5,1.,2,.8);
+		if (is1st) {
+			if (iy==1 || iy==6) dashedLine (3.,0.,3.,1.,2,.8);
+			else if (iy==5)  dashedLine (5.,0.,5.,1.,2,.8);
+			else if (iy==2 || iy==3 || iy==4)  dashedLine (6.5,0.,6.5,1.,2,.8);
+		}
+		else {
+			if (iy==1 || iy==6) dashedLine (3.,0.,3.,1.,2,.8);
+			else if (iy==2)  dashedLine (5.,0.,5.,1.,2,.8);
+			else if (iy==3 || iy==4 || iy==5)  dashedLine (6.5,0.,6.5,1.,2,.8);
+		}
 		latex->DrawLatex(0.53,0.25,sampleName);
 		latex->DrawLatex(0.53,0.19,Form("%.2f < y_{lab} < %.2f",rapEdge[iy],rapEdge[iy+1]));
 		if (iy==0) {
@@ -165,19 +201,31 @@ void draw_compRatio(bool isPrompt = true, bool is1st = true, char* dirName = "dr
 		c2->cd(iy+1);
 		SetHistStyle(hRatio[iy],5,0);
 		hRatio[iy]->GetXaxis()->SetTitle("p_{T} (GeV)");
-		hRatio[iy]->GetYaxis()->SetTitle(Form("%s / %s",f01name,f02name));
+		hRatio[iy]->GetYaxis()->SetTitle(Form("[ %s ]/[ %s ]",f01name,f02name));
 		hRatio[iy]->SetMinimum(ratiomin);
 		hRatio[iy]->SetMaximum(ratiomax);
+		if (isNoError) {
+			for (int ipt=0; ipt<9; ipt++) {
+				hRatio[iy]->SetBinError(ipt+1,0.);
+			}
+		}
 		hRatio[iy]->Draw("pe");
 		dashedLine(0.,1.,30.,1.,1,.8);
-		if (iy==1 || iy==6) dashedLine (3.,ratiomin,3.,ratiomax,2,.8);
-		else if (iy==2)  dashedLine (5.,ratiomin,5.,ratiomax,2,.8);
-		else if (iy==3 || iy==4 || iy==5)  dashedLine (6.5,ratiomin,6.5,ratiomax,2,.8);
+		if (is1st) {
+			if (iy==1 || iy==6) dashedLine (3.,ratiomin,3.,ratiomax,2,.8);
+			else if (iy==5)  dashedLine (5.,ratiomin,5.,ratiomax,2,.8);
+			else if (iy==2 || iy==3 || iy==4)  dashedLine (6.5,ratiomin,6.5,ratiomax,2,.8);
+		}
+		else {
+			if (iy==1 || iy==6) dashedLine (3.,ratiomin,3.,ratiomax,2,.8);
+			else if (iy==2)  dashedLine (5.,ratiomin,5.,ratiomax,2,.8);
+			else if (iy==3 || iy==4 || iy==5)  dashedLine (6.5,ratiomin,6.5,ratiomax,2,.8);
+		}
 		latex->DrawLatex(0.53,0.25,sampleName);
 		latex->DrawLatex(0.53,0.19,Form("%.2f < y_{lab} < %.2f",rapEdge[iy],rapEdge[iy+1]));
 		//c2->SaveAs(Form("%s/%s_compRatio_%d.pdf",dirName02,sampleName,iy));
 		//c2->Clear();
-
+/*
 		//// 3) relative (f01-f02)/f02
 		//c3->cd();
 		c3->cd(iy+1);
@@ -195,12 +243,12 @@ void draw_compRatio(bool isPrompt = true, bool is1st = true, char* dirName = "dr
 		latex->DrawLatex(0.53,0.19,Form("%.2f < y_{lab} < %.2f",rapEdge[iy],rapEdge[iy+1]));
 		//c3->SaveAs(Form("%s/%s_compRel_%d.pdf",dirName02,sampleName,iy));
 		//c3->Clear();
-
+*/
 	}
 
 	c1->SaveAs(Form("%s/%s_compEff.pdf",dirName02,sampleName));
 	c2->SaveAs(Form("%s/%s_compRatio.pdf",dirName02,sampleName));
-	c3->SaveAs(Form("%s/%s_compRel.pdf",dirName02,sampleName));
+//	c3->SaveAs(Form("%s/%s_compRel.pdf",dirName02,sampleName));
 
 	return;
 

@@ -36,7 +36,7 @@ bool massCut1(double lv_dimu_mass);
 bool massCut2(double lv_dimu_mass);
 void formRapStr(Double_t min, Double_t max, string* arr);
 void formStr(Double_t min, Double_t max, string* arr);
-float getEffWeight(float mupt1=0, float mueta1=0, float mupt2=0, float mueta2=0); // runId parameter removed
+float getEffWeight(float mupt1=0, float mueta1=0, float mupt2=0, float mueta2=0);
 
 struct Condition {
   double theCentrality; 
@@ -48,30 +48,14 @@ struct Condition {
 } ;
 
 //read TNP plots for useDataDrivenEff
-//TFile* fTnpRate = new TFile("./tagAndProbe/tnpRate_V14.root");
 TFile* fTnpRate = new TFile("./tagAndProbe/tnpRate_V16_eff_fit_expo.root");
 TF1* hTnpRateEtaBin1 = (TF1*)fTnpRate->Get("ferrScale_ieta1");
 TF1* hTnpRateEtaBin2 = (TF1*)fTnpRate->Get("ferrScale_ieta2");
 TF1* hTnpRateEtaBin3 = (TF1*)fTnpRate->Get("ferrScale_ieta3");
 
-/*
-TFile* fEffWeight1st1 = new TFile("triggerRatio/WeightFactor_total_etabin1CS_1st_12bin_20140327.root");
-TH1D* hEffCorr1st1 = (TH1D*)fEffWeight1st1->Get("hWF");
-TFile* fEffWeight1st2 = new TFile("triggerRatio/WeightFactor_total_etabin2CS_1st_12bin_20140327.root");
-TH1D* hEffCorr1st2 = (TH1D*)fEffWeight1st2->Get("hWF");
-TFile*fEffWeight1st3 = new TFile("triggerRatio/WeightFactor_total_etabin3CS_1st_12bin_20140327.root");
-TH1D* hEffCorr1st3 = (TH1D*)fEffWeight1st3->Get("hWF");
-TFile* fEffWeight2nd1 = new TFile("triggerRatio/WeightFactor_total_etabin1CS_1st_12bin_20140327.root");
-TH1D* hEffCorr2nd1 = (TH1D*)fEffWeight2nd1->Get("hWF");
-TFile* fEffWeight2nd2 = new TFile("triggerRatio/WeightFactor_total_etabin2CS_1st_12bin_20140327.root");
-TH1D* hEffCorr2nd2 = (TH1D*)fEffWeight2nd2->Get("hWF");
-TFile*fEffWeight2nd3 = new TFile("triggerRatio/WeightFactor_total_etabin3CS_1st_12bin_20140327.root");
-TH1D* hEffCorr2nd3 = (TH1D*)fEffWeight2nd3->Get("hWF");
-*/
-
 /////// main func. ///////
 
-int rootAna_efficiency_counting(char *strBinning = "8rap9pt", bool isPrompt = false, bool is1st = true, bool isEmbedded = false, bool useCtErrRangeEff =true, bool useDataDrivenEff=true, bool useZvtxWeightStep1 = false, bool useZvtxWeightStep2=false){
+int rootAna_efficiency_counting_ethf_bin1(char *strBinning = "6rap3pt", bool isPrompt = false, bool is1st = true, bool isEmbedded = false, bool useCtErrRangeEff =true, bool useDataDrivenEff=true, bool useZvtxWeightStep1 = false, bool useZvtxWeightStep2=true){
 
   using namespace std;
   
@@ -97,15 +81,6 @@ int rootAna_efficiency_counting(char *strBinning = "8rap9pt", bool isPrompt = fa
 	//// Step2 : pythia -> data
 	TFile* fZvtx = new TFile("zVtxFit/zVtxFit_20141007.root");
 	TF1* gRatio = (TF1*)fZvtx->Get("gRatio");
-
-	TCanvas* c0 = new TCanvas("c0","",900,400);
-	c0->Divide(3,1);
-	c0->cd(1);
-	hTnpRateEtaBin1->Draw();
-	c0->cd(2);
-	hTnpRateEtaBin2->Draw();
-	c0->cd(3);
-	hTnpRateEtaBin3->Draw();
 /*
 	TCanvas* c0 = new TCanvas("c0","",900,400);
 	c0->Divide(3,1);
@@ -125,7 +100,7 @@ int rootAna_efficiency_counting(char *strBinning = "8rap9pt", bool isPrompt = fa
 	c00->cd(3);
 	hEffCorr2nd3->Draw();
 	//c00->SaveAs("weight2nd.gif");
-*/
+
 	TCanvas* c000 = new TCanvas("c000","",800,400);
 	c000->Divide(2,1);
 	c000->cd(1);
@@ -133,7 +108,7 @@ int rootAna_efficiency_counting(char *strBinning = "8rap9pt", bool isPrompt = fa
 	c000->cd(2);
 	gRatio->Draw();
 	//c000->SaveAs(Form("zVtxRatio_is1st%d_isEmbd%d_isPr%d.gif",(int)is1st,(int)isEmbedded,(int)isPrompt));
-		
+*/		
 	TFile *f1;
 	char* sampleName;
 	double minylab =-2.4;
@@ -168,6 +143,7 @@ int rootAna_efficiency_counting(char *strBinning = "8rap9pt", bool isPrompt = fa
 		if (is1st){
 			if (isPrompt) {
 				f1 = new TFile("/home/songkyo/kyo/pPbDataSample/EfficiencySample/merged_PromptJpsi_PYTHIAboosted_1st_STARTHI53_V27_1Mevt.root"); //actual
+				//f1 = new TFile("/home/songkyo/kyo/pPbDataSample/EfficiencySampleKYOvtx/tot_PromptJpsi_PYTHIAboosted_1st_STARTHI53_V27_20150123.root");
 				sampleName="PRMCpythia_Pbp"; 
 			}
 			else {
@@ -178,6 +154,7 @@ int rootAna_efficiency_counting(char *strBinning = "8rap9pt", bool isPrompt = fa
 		else {
 			if (isPrompt) {
 				f1 = new TFile("/home/songkyo/kyo/pPbDataSample/EfficiencySample/merged_PromptJpsi_PYTHIAboosted_2nd_STARTHI53_V27_1Mevt.root"); //actual
+				//f1 = new TFile("/home/songkyo/kyo/pPbDataSample/EfficiencySampleKYOvtx/tot_PromptJpsi_PYTHIAboosted_2nd_STARTHI53_V27_20150123.root");
 				sampleName="PRMCpythia_pPb"; 
 			}
 			else {
@@ -188,11 +165,18 @@ int rootAna_efficiency_counting(char *strBinning = "8rap9pt", bool isPrompt = fa
 	}
 
 	///// read in Ctau error range file
+/*
+	char* fctauName;
+	if(is1st) fctauName = "fit_ctauErrorRange_Pbp.txt";
+	else fctauName = "fit_ctauErrorRange_pPb.txt";
+	std::ifstream fctau(Form("./outCtErr_cross66/%s",fctauName),std::ios::in);
+	if(!fctau.is_open()) { cout << "Warning : can NOT open the ctauErrorRange file!"<<endl; }
+*/
 	char* runName;
 	if(is1st) runName = "Pbp";
 	else runName = "pPb";	
-//	char * dirName = "fitRes_8rap9pt_20150106";
-	char * dirName = "fitRes_8rap9pt";
+	//char * dirName = "fitRes_8rap9pt_20150106"; //8rap9pt
+	char * dirName = "fitRes_6rap3pt"; //8rap9pt
 	std::ifstream fctau(Form("./%s/summary_%s/fit_ctauErrorRange",dirName,runName),std::ios::in);
 	if(!fctau.is_open()) { cout << "Warning : can NOT open the fit_ctauErrorRange file!"<<endl; }
 
@@ -202,12 +186,14 @@ int rootAna_efficiency_counting(char *strBinning = "8rap9pt", bool isPrompt = fa
 	///////////////////////////////////////////////////
 	//////// Definition of binning
 	// --- pt Bin
-	Double_t ptBinsArr[] = {0.0, 3.0, 4.0, 5.0, 6.5, 7.5, 8.5, 10.0, 14.0, 30.0}; // 8rap9pt
+	//Double_t ptBinsArr[] = {0.0, 3.0, 4.0, 5.0, 6.5, 7.5, 8.5, 10.0, 14.0, 30.0}; // 8rap9pt
+	Double_t ptBinsArr[] = {5.0, 6.5, 10.0, 30.0}; // 6rap3pt
 	const Int_t nPtBins = sizeof(ptBinsArr)/sizeof(double)-1;
    cout << "nPtBins=" << nPtBins << endl;
 
 	// --- y Bin //set to 1st run (For 2nd run, will be automatically changed later)
-  Double_t tmp_yBinsArr[] = {-2.4, -1.97, -1.37, -0.47, 0.43, 1.03, 1.46, 1.93, 2.4}; // 8rap9pt
+  //Double_t tmp_yBinsArr[] = {-2.4, -1.97, -1.37, -0.47, 0.43, 1.03, 1.46, 1.93, 2.4}; // 8rap9pt
+  Double_t tmp_yBinsArr[] = {-2.4, -1.97, -1.37, -0.47, 0.43, 1.03, 1.46}; // 6rap3pt
   //const Int_t tmp_nYBins = sizeof(tmp_yBinsArr)/sizeof(double)-1;
   const Int_t tmp_nYBins = sizeof(tmp_yBinsArr)/sizeof(double);
   cout << "tmp_nYBins=" << tmp_nYBins << endl;
@@ -230,11 +216,14 @@ int rootAna_efficiency_counting(char *strBinning = "8rap9pt", bool isPrompt = fa
   cout << "nYBins=" << nYBins << endl;
 
 	// --- ntrk bin
-	Double_t ntrBinsArr[] = {0.0, 350.0};
+	Double_t ntrBinsArr[] = {0.0, 350.0}; //8rap9pt
 	const Int_t nNtrBins = sizeof(ntrBinsArr)/sizeof(double)-1;
 	cout << "nNtrBins=" << nNtrBins << endl;
 	// --- Et bin
-	Double_t etBinsArr[] = {0.0, 120.0};
+	//Double_t etBinsArr[] = {0.0, 120.0}; //8rap9pt
+	Double_t etBinsArr[] = {0.0, 20.0}; //6rap3pt bin1
+	//Double_t etBinsArr[] = {20.0, 30.0}; //6rap3pt bin2
+	//Double_t etBinsArr[] = {30.0, 120.0}; //6rap3pt bin3
 	const Int_t nEtBins = sizeof(etBinsArr)/sizeof(double)-1;
 	cout << "nEtBins=" << nEtBins << endl;
 
@@ -359,7 +348,7 @@ int rootAna_efficiency_counting(char *strBinning = "8rap9pt", bool isPrompt = fa
 	  for (Int_t iy=0; iy<nYBins; iy++){
 	    for (Int_t ipt=0; ipt<nPtBins; ipt++) {
 				if (useCtErrRangeEff) {
-		      if (!yrange[iy].compare(rapdum) && !ptrange[ipt].compare(ptdum) ) {
+		      if (!yrange[iy].compare(rapdum) && !ptrange[ipt].compare(ptdum) && !etrange[0].compare(etdum)) {
 						ctErrmin[iy][ipt] = atof(errmin.c_str());
 						ctErrmax[iy][ipt] = atof(errmax.c_str());
 		      }
@@ -402,8 +391,21 @@ int rootAna_efficiency_counting(char *strBinning = "8rap9pt", bool isPrompt = fa
 	h2D_Den_pt_y->Sumw2();
 	h2D_Num_pt_y->Sumw2();
 	h2D_Eff_pt_y->Sumw2();
+
 	h1D_zVtx->Sumw2();
 
+	/////// for pT mean value calculation
+	/*
+	TH1D* hNumPt[nYBins][nPtBins];
+	for (Int_t iy=0; iy<nYBins; iy++){
+		for (Int_t ipt=0; ipt<nPtBins; ipt++ ){
+			hNumPt[iy][ipt] = new TH1D(Form("hNumPt_%d_%d",iy,ipt),"",100,ptBinsArr[ipt],ptBinsArr[ipt+1]);	
+			//cout << "hNumPt["<<iy<<"]["<<ipt<<"] = " << hNumPt[iy][ipt] << endl;
+		}
+	}
+	*/
+
+	////////////////////////////////////////////////////////////////////////////////////////////////
 	////////////////////////////////////////////////////////////////////////////////////////////////
 
 	float theZvtx;
@@ -425,12 +427,14 @@ int rootAna_efficiency_counting(char *strBinning = "8rap9pt", bool isPrompt = fa
 		if (useZvtxWeightStep1) { 
 			tmpbin = hRatio -> FindBin(theZvtx);
 			zWeight01 = hRatio->GetBinContent(tmpbin); 
+			//cout <<"zWeight01 = "<< zWeight01 << endl;
 		}
 		if (useZvtxWeightStep2) { 
 			zWeight02 = gRatio -> Eval(theZvtx); 
+			//cout <<"zWeight02 = "<< zWeight02 << endl;
 		}
 		// zVtxCut
-		if (useZvtxWeightStep2 && TMath::Abs(theZvtx) > 10.) continue;
+		if (TMath::Abs(theZvtx) > 10.) continue;
 		h1D_zVtx->Fill(theZvtx, zWeight01*zWeight02);
 	
 	  if ( Gen_QQ_size ==0 ) continue;
@@ -440,6 +444,7 @@ int rootAna_efficiency_counting(char *strBinning = "8rap9pt", bool isPrompt = fa
 	  
 	  // Reco_QQ_size loop
 		for (Int_t irqq=0; irqq<Reco_QQ_size; ++irqq) {
+	    //struct Condition Jpsi_Reco; 
 	    JP_Reco = (TLorentzVector*) Reco_QQ_4mom->At(irqq);
 	    m1P_Reco = (TLorentzVector*) Reco_QQ_mupl_4mom->At(irqq);
 	    m2P_Reco = (TLorentzVector*) Reco_QQ_mumi_4mom->At(irqq);
@@ -465,13 +470,17 @@ int rootAna_efficiency_counting(char *strBinning = "8rap9pt", bool isPrompt = fa
 	    
 	    // --- cut01 : RECO - No cut at all
 			h2D_NoCut_Reco_pt_y->Fill(Jpsi_Reco.theRapidity,Jpsi_Reco.thePt);
+	  	// trigger check for - DoubleMuOpen_v1
+	  	//if ( ! ( (Jpsi_Reco.Reco_QQ_trig&1)==1 && (Jpsi_Reco.HLTriggers&1)==1 ) ) continue;
 
 	  	// --- cut02 : RECO for numerator
 	  	bool yn_reco = false;
+	  	//bool yn_reco_pPb = false;
 	  	int bmin, bmax, bminpPb, bmaxpPb; // bins
 	  	double emin, emax, eminpPb, emaxpPb; // values
 	  
 			if ( Jpsi_Reco.theSign ==0 
+	    //&& massCut1(Jpsi_Reco.theMass)
 	    && massCut2(Jpsi_Reco.theMass)
 	   	&& ( (Jpsi_Reco.Reco_QQ_trig&1)==1 && (Jpsi_Reco.HLTriggers&1)==1 ) 
 			&& kineCut(Jpsi_Reco.mupl_pt, Jpsi_Reco.mupl_eta, Jpsi_Reco.mupl_p) 
@@ -483,16 +492,31 @@ int rootAna_efficiency_counting(char *strBinning = "8rap9pt", bool isPrompt = fa
 	    	emin = h2D_ctErrmin->GetBinContent(bmin);
 	    	bmax = h2D_ctErrmax->FindBin(Jpsi_Reco.theRapidity,Jpsi_Reco.thePt);
 	    	emax = h2D_ctErrmax->GetBinContent(bmax);
+	    	/*
+	      cout << iev << "th "<< irqq<< endl;
+	      cout << "** Jpsi_Reco.theRapidity = " << Jpsi_Reco.theRapidity << endl;
+	      cout << "** Jpsi_Reco.thePt = " << Jpsi_Reco.thePt << endl;
+	      cout << "** Jpsi_Reco.theCtErr = " << Jpsi_Reco.theCtErr << endl;
+	      cout << "emin = " << emin << endl;
+	      cout << "emax = " << emax << endl;
+	      cout << "** CtErrRange from " << emin <<" to "<< emax << endl;
+	      //cout << "eminpPb = " << eminpPb << endl;
+	      //cout << "emaxpPb = " << emaxpPb << endl;
+	      //cout << "** CtErrRange from " << eminpPb <<" to "<< emaxpPb << endl;
+	    	*/
 	    	if (emin < Jpsi_Reco.theCtErr && Jpsi_Reco.theCtErr < emax ){	
 	      	yn_reco = true;
 	   		}
 			}
 		
 			//// TNP Eff weighting && vZtx weighting	
+	  	//float effWeight = 1;
+	 		//float zWeight01 = 1; 
+	 		//float zWeight02 = 1; 
 	  	effWeight = 1;
 	  	if (yn_reco == true){ 
 	    	if (useDataDrivenEff){
-					effWeight = getEffWeight(Jpsi_Reco.mupl_pt, Jpsi_Reco.mupl_eta, Jpsi_Reco.mumi_pt, Jpsi_Reco.mumi_eta); 
+					effWeight = getEffWeight(Jpsi_Reco.mupl_pt, Jpsi_Reco.mupl_eta, Jpsi_Reco.mumi_pt, Jpsi_Reco.mumi_eta);
 				}
 				h2D_Num_pt_y->Fill(Jpsi_Reco.theRapidity,Jpsi_Reco.thePt, effWeight*zWeight01*zWeight02);
 			}
@@ -500,6 +524,7 @@ int rootAna_efficiency_counting(char *strBinning = "8rap9pt", bool isPrompt = fa
 	  
 	  ////// Gen_QQ_size loop
 	  for (Int_t igqq=0; igqq<Gen_QQ_size; ++igqq) {
+			//struct Condition Jpsi_Gen; 
 	    m1P_Gen = (TLorentzVector*) Gen_QQ_mupl_4mom->At(igqq);
 	    m2P_Gen = (TLorentzVector*) Gen_QQ_mumi_4mom->At(igqq);
 	    JP_Gen_tmp_qq = (TLorentzVector*) Gen_QQ_4mom->At(igqq); // Gen Jpsi (for filling NoCut)
@@ -548,6 +573,7 @@ int rootAna_efficiency_counting(char *strBinning = "8rap9pt", bool isPrompt = fa
 	h2D_Eff_pt_y->Divide(h2D_Num_pt_y,h2D_Den_pt_y,1,1,"B");
 	
 	////////////////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////////
 	// Save the data!
 	
 	// --- cout check
@@ -560,13 +586,15 @@ int rootAna_efficiency_counting(char *strBinning = "8rap9pt", bool isPrompt = fa
 	    cout << "" << endl;
 			cout << iy<<"th rap : "<< yBinsArr[iy]<<" - "<<yBinsArr[iy+1]<<endl;
 	    cout << ipt<<"th pt : "<< ptBinsArr[ipt]<<" - "<<ptBinsArr[ipt+1]<<endl;
+	    //cout << "yrange["<<iy<<"] = "<< yrange[iy].c_str() << endl;
 	    cout << "EffVal = " << EffVal[iy][ipt] << endl;
 	    cout << "EffValErr = " << EffValErr[iy][ipt] << endl;
 	  }
 	}
 	
 	// --- save as a root file
-	TFile *outFile = new TFile(Form("EffCounting_%s_useCtErr_%d_useDataDriven_%d_useZvtxStep1_%d_Step2_%d.root",strName, (int)useCtErrRangeEff ,(int)useDataDrivenEff, (int)useZvtxWeightStep1, (int)useZvtxWeightStep2),"RECREATE");
+
+	TFile *outFile = new TFile(Form("EffCounting_%s_useCtErr_%d_useDataDriven_%d_useZvtxStep1_%d_Step2_%d_bin1.root",strName, (int)useCtErrRangeEff ,(int)useDataDrivenEff, (int)useZvtxWeightStep1, (int)useZvtxWeightStep2),"RECREATE");
 	std::cout << "strName: " << strName << std::endl;
 	outFile->cd();
 
@@ -576,13 +604,20 @@ int rootAna_efficiency_counting(char *strBinning = "8rap9pt", bool isPrompt = fa
 	h2D_Num_pt_y->Write();
 	h2D_Eff_pt_y->Write();
 	h1D_zVtx->Write();
+	/*	
+	for (Int_t iy=0; iy<nYBins; iy++){
+		for (Int_t ipt=0; ipt<nPtBins; ipt++ ){
+			hNumPt[iy][ipt] ->Write();	
+		}
+	}
+	*/
 	outFile->Close();
 
 	return 0;
 
 } // end of main func
 
-/////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // sub-routines function 
 
 

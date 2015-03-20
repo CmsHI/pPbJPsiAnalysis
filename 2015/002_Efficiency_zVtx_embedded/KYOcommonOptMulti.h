@@ -75,9 +75,11 @@ void SetHistStyle(TH1* h, Int_t c, Int_t m) {
 	h-> SetMarkerColor(colorArr[c]);
 	if(m<10) h-> SetMarkerStyle(markerFullArr[m]);
 	else h-> SetMarkerStyle(markerOpenArr[m-10]);
-	h-> SetMarkerSize(1.2);
+	//h-> SetMarkerSize(1.2);
+	h-> SetMarkerSize(0.9); //KYO multi
 	h-> SetLineColor(colorArr[c]);
-	h-> SetLineWidth(1.8);
+	//h-> SetLineWidth(1.8);
+	h-> SetLineWidth(0.9); // KYO multi
 }
 
 void SetGraphStyle(TGraph* gr, Int_t c, Int_t m) {

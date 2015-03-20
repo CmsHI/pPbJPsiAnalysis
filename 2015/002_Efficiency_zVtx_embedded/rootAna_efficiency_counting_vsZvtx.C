@@ -71,14 +71,14 @@ TH1D* hEffCorr2nd3 = (TH1D*)fEffWeight2nd3->Get("hWF");
 
 /////// main func. ///////
 
-int rootAna_efficiency_counting(char *strBinning = "8rap9pt", bool isPrompt = false, bool is1st = true, bool isEmbedded = false, bool useCtErrRangeEff =true, bool useDataDrivenEff=true, bool useZvtxWeightStep1 = false, bool useZvtxWeightStep2=false){
+int rootAna_efficiency_counting_vsZvtx(char *strBinning = "8rap9pt", bool isPrompt = false, bool is1st = true, bool isEmbedded = false, bool useCtErrRangeEff =false, bool useDataDrivenEff=false, bool useZvtxWeightStep1 = false, bool useZvtxWeightStep2=false){
 
   using namespace std;
   
 	// # of event range
   int initev =0;
   int nevt = -1; //all
-  //int nevt = 50000;
+//  int nevt = 50000;
 
 	//////// read zTtx functions for weight
 
@@ -98,6 +98,7 @@ int rootAna_efficiency_counting(char *strBinning = "8rap9pt", bool isPrompt = fa
 	TFile* fZvtx = new TFile("zVtxFit/zVtxFit_20141007.root");
 	TF1* gRatio = (TF1*)fZvtx->Get("gRatio");
 
+/*
 	TCanvas* c0 = new TCanvas("c0","",900,400);
 	c0->Divide(3,1);
 	c0->cd(1);
@@ -106,6 +107,7 @@ int rootAna_efficiency_counting(char *strBinning = "8rap9pt", bool isPrompt = fa
 	hTnpRateEtaBin2->Draw();
 	c0->cd(3);
 	hTnpRateEtaBin3->Draw();
+*/
 /*
 	TCanvas* c0 = new TCanvas("c0","",900,400);
 	c0->Divide(3,1);
@@ -126,6 +128,7 @@ int rootAna_efficiency_counting(char *strBinning = "8rap9pt", bool isPrompt = fa
 	hEffCorr2nd3->Draw();
 	//c00->SaveAs("weight2nd.gif");
 */
+/*
 	TCanvas* c000 = new TCanvas("c000","",800,400);
 	c000->Divide(2,1);
 	c000->cd(1);
@@ -133,6 +136,7 @@ int rootAna_efficiency_counting(char *strBinning = "8rap9pt", bool isPrompt = fa
 	c000->cd(2);
 	gRatio->Draw();
 	//c000->SaveAs(Form("zVtxRatio_is1st%d_isEmbd%d_isPr%d.gif",(int)is1st,(int)isEmbedded,(int)isPrompt));
+*/
 		
 	TFile *f1;
 	char* sampleName;
@@ -140,6 +144,13 @@ int rootAna_efficiency_counting(char *strBinning = "8rap9pt", bool isPrompt = fa
 	double maxylab = 2.4;
 	double minpt =0.0;
 	double maxpt = 30.0;
+
+//	const int nbinZ = 20;
+//	const double minbinZ = -20.;
+//	const double maxbinZ = 20.;
+	const int nbinZ = 30;
+	const double minbinZ = -30.;
+	const double maxbinZ = 30.;
 
 	////// read-in HiOniaTrees
 	if (isEmbedded) {
@@ -228,6 +239,14 @@ int rootAna_efficiency_counting(char *strBinning = "8rap9pt", bool isPrompt = fa
 	}
   const Int_t nYBins = sizeof(yBinsArr)/sizeof(double)-1;
   cout << "nYBins=" << nYBins << endl;
+
+	// vxZvtx 
+	Double_t ptLimit[nYBins];
+	if (is1st) ptLimit= {0.0, 3.0, 6.5, 6.5, 6.5, 5.0, 3.0, 0.};
+	else ptLimit = {0.0, 3.0, 5.0, 6.5, 6.5, 6.5, 3.0, 0.};
+	for (Int_t i=0; i<nYBins; i++){	
+		cout << i <<"th ptLimit = " << ptLimit[i] <<endl;
+	}
 
 	// --- ntrk bin
 	Double_t ntrBinsArr[] = {0.0, 350.0};
@@ -395,6 +414,11 @@ int rootAna_efficiency_counting(char *strBinning = "8rap9pt", bool isPrompt = fa
 	TH2D *h2D_Eff_pt_y = new TH2D("h2D_Eff_pt_y","",nYBins,yBinsArr,nPtBins,ptBinsArr);
 
 	TH1D* h1D_zVtx = new TH1D("h1D_zVtx","",80,-30,30);
+	// Eff vs zVtx
+	TH1D* h1D_Den_zVtx[nYBins];
+	TH1D* h1D_Num_zVtx[nYBins];
+	TH1D* h1D_Eff_zVtx[nYBins];
+					
 	
 	h2D_NoCut_Reco_pt_y->Sumw2();
 	h2D_NoCut_Gen_pt_y->Sumw2();
@@ -403,6 +427,19 @@ int rootAna_efficiency_counting(char *strBinning = "8rap9pt", bool isPrompt = fa
 	h2D_Num_pt_y->Sumw2();
 	h2D_Eff_pt_y->Sumw2();
 	h1D_zVtx->Sumw2();
+	
+	
+	for (int in=0; in< nYBins; in++) {
+		//h1D_Den_zVtx[in] = new TH1D(Form("h1D_Den_zVtx_%d",in),"",40,-30,30);
+		//h1D_Num_zVtx[in] = new TH1D(Form("h1D_Num_zVtx_%d",in),"",40,-30,30);
+		//h1D_Eff_zVtx[in] = new TH1D(Form("h1D_Eff_zVtx_%d",in),"",40,-30,30);
+		h1D_Den_zVtx[in] = new TH1D(Form("h1D_Den_zVtx_%d",in),"",nbinZ,minbinZ,maxbinZ);
+		h1D_Num_zVtx[in] = new TH1D(Form("h1D_Num_zVtx_%d",in),"",nbinZ,minbinZ,maxbinZ);
+		h1D_Eff_zVtx[in] = new TH1D(Form("h1D_Eff_zVtx_%d",in),"",nbinZ,minbinZ,maxbinZ);
+		h1D_Den_zVtx[in]->Sumw2();
+		h1D_Num_zVtx[in]->Sumw2();
+		h1D_Eff_zVtx[in]->Sumw2();
+	}
 
 	////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -495,6 +532,12 @@ int rootAna_efficiency_counting(char *strBinning = "8rap9pt", bool isPrompt = fa
 					effWeight = getEffWeight(Jpsi_Reco.mupl_pt, Jpsi_Reco.mupl_eta, Jpsi_Reco.mumi_pt, Jpsi_Reco.mumi_eta); 
 				}
 				h2D_Num_pt_y->Fill(Jpsi_Reco.theRapidity,Jpsi_Reco.thePt, effWeight*zWeight01*zWeight02);
+	 			//vsZvtx
+				for (int in=0; in< nYBins; in++) {
+					if (yBinsArr[in]<=Jpsi_Reco.theRapidity && Jpsi_Reco.theRapidity < yBinsArr[in+1] && ptLimit[in] < Jpsi_Reco.thePt) {
+						h1D_Num_zVtx[in]->Fill(theZvtx);
+					}
+				}
 			}
 		} //end of Reco_QQ_size loop
 	  
@@ -540,13 +583,22 @@ int rootAna_efficiency_counting(char *strBinning = "8rap9pt", bool isPrompt = fa
 	    }
 	    if (yn_gen == true){
 				h2D_Den_pt_y->Fill(Jpsi_Gen.theRapidity,Jpsi_Gen.thePt,zWeight01*zWeight02);
+	 			//vsZvtx
+				for (int in=0; in< nYBins; in++) {
+					if (yBinsArr[in]<=Jpsi_Gen.theRapidity && Jpsi_Gen.theRapidity < yBinsArr[in+1] && ptLimit[in] < Jpsi_Gen.thePt) {
+						h1D_Den_zVtx[in]->Fill(theZvtx);
+					}
+				}
 	    } // end of yn_gen
 	  } //end of Gen_QQ_size loop
 	} //end of event loop
 	
 	// (Num/Den) to get efficiency (B : binomial error)
 	h2D_Eff_pt_y->Divide(h2D_Num_pt_y,h2D_Den_pt_y,1,1,"B");
-	
+	for (int in=0; in< nYBins; in++) {
+		h1D_Eff_zVtx[in]->Divide(h1D_Num_zVtx[in],h1D_Den_zVtx[in],1,1,"B");
+	}
+
 	////////////////////////////////////////////////////////////////////////////
 	// Save the data!
 	
@@ -566,7 +618,7 @@ int rootAna_efficiency_counting(char *strBinning = "8rap9pt", bool isPrompt = fa
 	}
 	
 	// --- save as a root file
-	TFile *outFile = new TFile(Form("EffCounting_%s_useCtErr_%d_useDataDriven_%d_useZvtxStep1_%d_Step2_%d.root",strName, (int)useCtErrRangeEff ,(int)useDataDrivenEff, (int)useZvtxWeightStep1, (int)useZvtxWeightStep2),"RECREATE");
+	TFile *outFile = new TFile(Form("vsZvtx_EffCounting_%s_useCtErr_%d_useDataDriven_%d_useZvtxStep1_%d_Step2_%d.root",strName, (int)useCtErrRangeEff ,(int)useDataDrivenEff, (int)useZvtxWeightStep1, (int)useZvtxWeightStep2),"RECREATE");
 	std::cout << "strName: " << strName << std::endl;
 	outFile->cd();
 
@@ -576,6 +628,11 @@ int rootAna_efficiency_counting(char *strBinning = "8rap9pt", bool isPrompt = fa
 	h2D_Num_pt_y->Write();
 	h2D_Eff_pt_y->Write();
 	h1D_zVtx->Write();
+	for (int in=0; in< nYBins; in++) {
+		h1D_Den_zVtx[in]->Write();
+		h1D_Num_zVtx[in]->Write();
+		h1D_Eff_zVtx[in]->Write();
+	}
 	outFile->Close();
 
 	return 0;

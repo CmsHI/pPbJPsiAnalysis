@@ -31,7 +31,8 @@
   //gStyle->SetPadTopMargin(0.07); //KYO
   gStyle->SetPadTopMargin(0.03);
   //gStyle->SetPadRightMargin(0.15); //KYO
-  gStyle->SetPadRightMargin(0.07);
+  //gStyle->SetPadRightMargin(0.07);
+  gStyle->SetPadRightMargin(0.11);
   //gStyle->SetPadLeftMargin(0.17); //KYO
   gStyle->SetPadLeftMargin(0.12);
 
@@ -44,7 +45,7 @@
   gStyle->SetPadTickY(1);
 
   gStyle->SetCanvasDefH(600);
-  gStyle->SetCanvasDefW(600);
+  gStyle->SetCanvasDefW(700);
 
   gStyle->SetHistMinimumZero(kTRUE);
 

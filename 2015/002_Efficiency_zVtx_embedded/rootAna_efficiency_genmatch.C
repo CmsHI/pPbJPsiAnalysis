@@ -48,8 +48,7 @@ struct Condition {
 } ;
 
 //read TNP plots for useDataDrivenEff
-//TFile* fTnpRate = new TFile("./tagAndProbe/tnpRate_V14.root");
-TFile* fTnpRate = new TFile("./tagAndProbe/tnpRate_V16_eff_fit_expo.root");
+TFile* fTnpRate = new TFile("./tagAndProbe/tnpRate_V14.root");
 TF1* hTnpRateEtaBin1 = (TF1*)fTnpRate->Get("ferrScale_ieta1");
 TF1* hTnpRateEtaBin2 = (TF1*)fTnpRate->Get("ferrScale_ieta2");
 TF1* hTnpRateEtaBin3 = (TF1*)fTnpRate->Get("ferrScale_ieta3");
@@ -71,7 +70,7 @@ TH1D* hEffCorr2nd3 = (TH1D*)fEffWeight2nd3->Get("hWF");
 
 /////// main func. ///////
 
-int rootAna_efficiency_counting(char *strBinning = "8rap9pt", bool isPrompt = false, bool is1st = true, bool isEmbedded = false, bool useCtErrRangeEff =true, bool useDataDrivenEff=true, bool useZvtxWeightStep1 = false, bool useZvtxWeightStep2=false){
+int rootAna_efficiency_genmatch(char *strBinning = "8rap9pt", bool isPrompt = false, bool is1st = true, bool isEmbedded = false, bool useCtErrRangeEff =true, bool useDataDrivenEff=true, bool useZvtxWeightStep1 = false, bool useZvtxWeightStep2=true){
 
   using namespace std;
   
@@ -97,7 +96,7 @@ int rootAna_efficiency_counting(char *strBinning = "8rap9pt", bool isPrompt = fa
 	//// Step2 : pythia -> data
 	TFile* fZvtx = new TFile("zVtxFit/zVtxFit_20141007.root");
 	TF1* gRatio = (TF1*)fZvtx->Get("gRatio");
-
+/*
 	TCanvas* c0 = new TCanvas("c0","",900,400);
 	c0->Divide(3,1);
 	c0->cd(1);
@@ -106,6 +105,7 @@ int rootAna_efficiency_counting(char *strBinning = "8rap9pt", bool isPrompt = fa
 	hTnpRateEtaBin2->Draw();
 	c0->cd(3);
 	hTnpRateEtaBin3->Draw();
+*/
 /*
 	TCanvas* c0 = new TCanvas("c0","",900,400);
 	c0->Divide(3,1);
@@ -126,6 +126,7 @@ int rootAna_efficiency_counting(char *strBinning = "8rap9pt", bool isPrompt = fa
 	hEffCorr2nd3->Draw();
 	//c00->SaveAs("weight2nd.gif");
 */
+	/*
 	TCanvas* c000 = new TCanvas("c000","",800,400);
 	c000->Divide(2,1);
 	c000->cd(1);
@@ -133,7 +134,8 @@ int rootAna_efficiency_counting(char *strBinning = "8rap9pt", bool isPrompt = fa
 	c000->cd(2);
 	gRatio->Draw();
 	//c000->SaveAs(Form("zVtxRatio_is1st%d_isEmbd%d_isPr%d.gif",(int)is1st,(int)isEmbedded,(int)isPrompt));
-		
+*/
+			
 	TFile *f1;
 	char* sampleName;
 	double minylab =-2.4;
@@ -167,21 +169,25 @@ int rootAna_efficiency_counting(char *strBinning = "8rap9pt", bool isPrompt = fa
 	else {
 		if (is1st){
 			if (isPrompt) {
-				f1 = new TFile("/home/songkyo/kyo/pPbDataSample/EfficiencySample/merged_PromptJpsi_PYTHIAboosted_1st_STARTHI53_V27_1Mevt.root"); //actual
+				//f1 = new TFile("/home/songkyo/kyo/pPbDataSample/EfficiencySample/merged_PromptJpsi_PYTHIAboosted_1st_STARTHI53_V27_1Mevt.root"); //actual
+				f1 = new TFile("/home/songkyo/kyo/pPbDataSample/EfficiencySample/tot_PromptJpsi_PYTHIAboosted_1st_STARTHI53_V27_noMuID_sglTrig_genMatch_20150205.root");
 				sampleName="PRMCpythia_Pbp"; 
 			}
 			else {
-				f1 = new TFile("/home/songkyo/kyo/pPbDataSample/EfficiencySample/merged_B2Jpsi_PYTHIAboosted_1st_STARTHI53_V27_1Mevt.root");
+//				f1 = new TFile("/home/songkyo/kyo/pPbDataSample/EfficiencySample/merged_B2Jpsi_PYTHIAboosted_1st_STARTHI53_V27_1Mevt.root");
+				 f1 = new TFile("/home/songkyo/kyo/pPbDataSample/EfficiencySample/tot_PromptJpsi_PYTHIAboosted_2nd_STARTHI53_V27_noMuID_sglTrig_genMatch_20150205.root");
 				sampleName="NPMCpythia_Pbp";
 			}
 		}
 		else {
 			if (isPrompt) {
-				f1 = new TFile("/home/songkyo/kyo/pPbDataSample/EfficiencySample/merged_PromptJpsi_PYTHIAboosted_2nd_STARTHI53_V27_1Mevt.root"); //actual
+				//f1 = new TFile("/home/songkyo/kyo/pPbDataSample/EfficiencySample/merged_PromptJpsi_PYTHIAboosted_2nd_STARTHI53_V27_1Mevt.root"); //actual
+				 f1 = new TFile("/home/songkyo/kyo/pPbDataSample/EfficiencySample/tot_B2Jpsi_PYTHIAboosted_1st_STARTHI53_V27_noMuID_sglTrig_genMatch_20150206.root");
 				sampleName="PRMCpythia_pPb"; 
 			}
 			else {
-				f1 = new TFile("/home/songkyo/kyo/pPbDataSample/EfficiencySample/merged_B2Jpsi_PYTHIAboosted_2nd_STARTHI53_V27_1Mevt.root");
+				//f1 = new TFile("/home/songkyo/kyo/pPbDataSample/EfficiencySample/merged_B2Jpsi_PYTHIAboosted_2nd_STARTHI53_V27_1Mevt.root");
+				 f1 = new TFile("/home/songkyo/kyo/pPbDataSample/EfficiencySample/tot_B2Jpsi_PYTHIAboosted_2nd_STARTHI53_V27_noMuID_sglTrig_genMatch_20150206.root");
 				sampleName="NPMCpythia_pPb";
 			}
 		}
@@ -278,6 +284,10 @@ int rootAna_efficiency_counting(char *strBinning = "8rap9pt", bool isPrompt = fa
 	TClonesArray    *Reco_QQ_4mom;
 	TClonesArray    *Reco_QQ_mupl_4mom;
 	TClonesArray    *Reco_QQ_mumi_4mom;
+	TClonesArray    *Reco_QQ_mupl_matchedGen_4mom; // matched GEN info
+	TClonesArray    *Reco_QQ_mumi_matchedGen_4mom;
+	Float_t           Reco_QQ_mupl_matchedGen_dR[20];
+	Float_t           Reco_QQ_mumi_matchedGen_dR[20];
 	Int_t           Gen_QQ_size;
 	Int_t           Gen_QQ_type[20];	//[Gen_QQ_size] : for MC PR=0 / NP=1
   TClonesArray    *Gen_QQ_4mom;
@@ -297,6 +307,10 @@ int rootAna_efficiency_counting(char *strBinning = "8rap9pt", bool isPrompt = fa
 	TBranch        *b_Reco_QQ_4mom;   //!
   TBranch        *b_Reco_QQ_mupl_4mom;   //!
   TBranch        *b_Reco_QQ_mumi_4mom;   //!
+  TBranch        *b_Reco_QQ_mupl_matchedGen_4mom;   //!
+  TBranch        *b_Reco_QQ_mumi_matchedGen_4mom;   //!
+  TBranch        *b_Reco_QQ_mupl_matchedGen_dR; 
+  TBranch        *b_Reco_QQ_mumi_matchedGen_dR; 
   TBranch        *b_Gen_QQ_size;   //!
   TBranch        *b_Gen_QQ_type;
   TBranch        *b_Gen_QQ_4mom;   //!
@@ -306,6 +320,9 @@ int rootAna_efficiency_counting(char *strBinning = "8rap9pt", bool isPrompt = fa
   TLorentzVector* JP_Reco = new TLorentzVector;
   TLorentzVector* m1P_Reco = new TLorentzVector;
   TLorentzVector* m2P_Reco = new TLorentzVector;
+  TLorentzVector* JP_matchedGen = new TLorentzVector; //matching
+  TLorentzVector* m1P_matchedGen = new TLorentzVector;
+  TLorentzVector* m2P_matchedGen = new TLorentzVector;
   TLorentzVector* JP_Gen_tmp = new TLorentzVector; // GEN dimuon - NoCut
   TLorentzVector* JP_Gen_tmp_qq = new TLorentzVector; // GEN Jpsi - NoCut
   TLorentzVector* JP_Gen = new TLorentzVector; //for GEN dimuon - Actual Denominator
@@ -315,6 +332,8 @@ int rootAna_efficiency_counting(char *strBinning = "8rap9pt", bool isPrompt = fa
 	Reco_QQ_4mom =0;
 	Reco_QQ_mupl_4mom =0;
 	Reco_QQ_mumi_4mom =0;
+	Reco_QQ_mupl_matchedGen_4mom =0;
+	Reco_QQ_mumi_matchedGen_4mom =0;
 	Gen_QQ_4mom =0;
 	Gen_QQ_mupl_4mom =0;
 	Gen_QQ_mumi_4mom =0;
@@ -338,7 +357,10 @@ int rootAna_efficiency_counting(char *strBinning = "8rap9pt", bool isPrompt = fa
   mytree->SetBranchAddress("Gen_QQ_4mom", &Gen_QQ_4mom, &b_Gen_QQ_4mom);
   mytree->SetBranchAddress("Gen_QQ_mupl_4mom", &Gen_QQ_mupl_4mom, &b_Gen_QQ_mupl_4mom);
   mytree->SetBranchAddress("Gen_QQ_mumi_4mom", &Gen_QQ_mumi_4mom, &b_Gen_QQ_mumi_4mom);
-
+	mytree->SetBranchAddress("Reco_QQ_mupl_matchedGen_4mom", &Reco_QQ_mupl_matchedGen_4mom, &b_Reco_QQ_mupl_matchedGen_4mom);
+	mytree->SetBranchAddress("Reco_QQ_mumi_matchedGen_4mom", &Reco_QQ_mumi_matchedGen_4mom, &b_Reco_QQ_mumi_matchedGen_4mom);
+	mytree->SetBranchAddress("Reco_QQ_mupl_matchedGen_dR", &Reco_QQ_mupl_matchedGen_dR, &b_Reco_QQ_mupl_matchedGen_dR);
+	mytree->SetBranchAddress("Reco_QQ_mumi_matchedGen_dR", &Reco_QQ_mumi_matchedGen_dR, &b_Reco_QQ_mumi_matchedGen_dR);
 
 	//////////////////////////////////////////////////////
 	////// read ctauErr txt
@@ -436,6 +458,7 @@ int rootAna_efficiency_counting(char *strBinning = "8rap9pt", bool isPrompt = fa
 	  if ( Gen_QQ_size ==0 ) continue;
 	  
 		struct Condition Jpsi_Reco;
+		struct Condition Jpsi_matchedGen; //kyo for gen matching
 	  struct Condition Jpsi_Gen; 
 	  
 	  // Reco_QQ_size loop
@@ -443,6 +466,8 @@ int rootAna_efficiency_counting(char *strBinning = "8rap9pt", bool isPrompt = fa
 	    JP_Reco = (TLorentzVector*) Reco_QQ_4mom->At(irqq);
 	    m1P_Reco = (TLorentzVector*) Reco_QQ_mupl_4mom->At(irqq);
 	    m2P_Reco = (TLorentzVector*) Reco_QQ_mumi_4mom->At(irqq);
+	    m1P_matchedGen = (TLorentzVector*) Reco_QQ_mupl_matchedGen_4mom->At(irqq);
+	    m2P_matchedGen = (TLorentzVector*) Reco_QQ_mumi_matchedGen_4mom->At(irqq);
 	    
 	    Jpsi_Reco.theCentrality = 97.5; // for pp!
 	    Jpsi_Reco.HLTriggers = HLTriggers;
@@ -494,7 +519,15 @@ int rootAna_efficiency_counting(char *strBinning = "8rap9pt", bool isPrompt = fa
 	    	if (useDataDrivenEff){
 					effWeight = getEffWeight(Jpsi_Reco.mupl_pt, Jpsi_Reco.mupl_eta, Jpsi_Reco.mumi_pt, Jpsi_Reco.mumi_eta); 
 				}
-				h2D_Num_pt_y->Fill(Jpsi_Reco.theRapidity,Jpsi_Reco.thePt, effWeight*zWeight01*zWeight02);
+//				h2D_Num_pt_y->Fill(Jpsi_Reco.theRapidity,Jpsi_Reco.thePt, effWeight*zWeight01*zWeight02);
+
+				///// fill the GenPt instead of RecoPt
+				//if ( Reco_QQ_mupl_matchedGen_dR[irqq] < 0.2 &&  Reco_QQ_mumi_matchedGen_dR[irqq] < 0.2){
+					*JP_matchedGen = *m1P_matchedGen + *m2P_matchedGen;
+					Jpsi_matchedGen.theRapidity = JP_matchedGen->Rapidity();
+	    		Jpsi_matchedGen.thePt = JP_matchedGen->Pt();
+					h2D_Num_pt_y->Fill(Jpsi_matchedGen.theRapidity,Jpsi_matchedGen.thePt, effWeight*zWeight01*zWeight02);
+				//}
 			}
 		} //end of Reco_QQ_size loop
 	  
@@ -566,7 +599,7 @@ int rootAna_efficiency_counting(char *strBinning = "8rap9pt", bool isPrompt = fa
 	}
 	
 	// --- save as a root file
-	TFile *outFile = new TFile(Form("EffCounting_%s_useCtErr_%d_useDataDriven_%d_useZvtxStep1_%d_Step2_%d.root",strName, (int)useCtErrRangeEff ,(int)useDataDrivenEff, (int)useZvtxWeightStep1, (int)useZvtxWeightStep2),"RECREATE");
+	TFile *outFile = new TFile(Form("EffGenmatching_%s_useCtErr_%d_useDataDriven_%d_useZvtxStep1_%d_Step2_%d.root",strName, (int)useCtErrRangeEff ,(int)useDataDrivenEff, (int)useZvtxWeightStep1, (int)useZvtxWeightStep2),"RECREATE");
 	std::cout << "strName: " << strName << std::endl;
 	outFile->cd();
 
@@ -614,11 +647,6 @@ float getEffWeight(float mupt1, float mueta1, float mupt2, float mueta2) {
 
 	float effWeight1 = hw1->Eval(mupt1);
 	float effWeight2 = hw2->Eval(mupt2);
-
-	// special setting for 1.2< |eta| <1.6 	
-	if (TMath::Abs(mueta1) >= 1.2 && TMath::Abs(mueta1) < 1.6 && TMath::Abs(mupt1) < 2.3) {effWeight1=0.886417;}
-	if (TMath::Abs(mueta2) >= 1.2 && TMath::Abs(mueta2) < 1.6 && TMath::Abs(mupt2) < 2.3) {effWeight2=0.886417;}
-
 	return effWeight1 * effWeight2;
 }
 
