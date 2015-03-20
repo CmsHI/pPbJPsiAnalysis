@@ -544,9 +544,6 @@ void draw_1D_crossSection_pt(char* dirName = "8rap9pt", int runCode=0, bool isSc
 */
 
 
-
-
-
 	//////////////////////////////////////////////////////////////////////////////////////
 	// convert to TGraphAsymErrors
 	TGraphAsymmErrors* gCross_pr_sys[nRap];	
@@ -558,6 +555,10 @@ void draw_1D_crossSection_pt(char* dirName = "8rap9pt", int runCode=0, bool isSc
 		gCross_pr[iy] = new TGraphAsymmErrors(h1D_cross_PR_tot[iy]);
 		gCross_np_sys[iy] = new TGraphAsymmErrors(h1D_cross_NP_tot[iy]);
 		gCross_np[iy] = new TGraphAsymmErrors(h1D_cross_NP_tot[iy]);
+		gCross_pr_sys[iy]->SetName(Form("gCross_pr_sys_%d",iy));
+		gCross_pr[iy]->SetName(Form("gCross_pr_%d",iy));
+		gCross_np_sys[iy]->SetName(Form("gCross_np_sys_%d",iy));
+		gCross_np[iy]->SetName(Form("gCross_np_%d",iy));
 		for (Int_t ipt=0; ipt<nPt; ipt++ ){
 			gCross_pr_sys[iy]->GetPoint(ipt, pxtmp[iy][ipt], pytmp[iy][ipt]);
 			gCross_pr_sys[iy]->SetPoint(ipt, px[iy][ipt], pytmp[iy][ipt]);
@@ -641,9 +642,6 @@ void draw_1D_crossSection_pt(char* dirName = "8rap9pt", int runCode=0, bool isSc
 	}
 	c_pr_fw->SaveAs(Form("cross_%s/crossSection_pt_pr_fw_isLog%d_isScale%d.pdf",dirName,(int)isLog,(int)isScale));
 	legUR->Clear();
-	
-
-
 	
 	////prompt bw
 	TCanvas* c_pr_bw = new TCanvas("c_pr_bw","c_pr_bw",200,10,800,600);
@@ -839,10 +837,17 @@ void draw_1D_crossSection_pt(char* dirName = "8rap9pt", int runCode=0, bool isSc
 	
 
 
-
-	
-	
-	
+	///////////////////////////////////////////////////////////////////
+	// save as a root file
+	TFile *outFile = new TFile(Form("cross_%s/crossSection_pt_isLog%d_isScale%d.root",dirName,(int)isLog,(int)isScale),"RECREATE");
+	outFile->cd();
+	for (Int_t iy = 0; iy < nRap; iy++) {
+		gCross_pr_sys[iy]->Write();	
+		gCross_pr[iy]->Write();	
+		gCross_np_sys[iy]->Write();	
+		gCross_np[iy]->Write();	
+	}
+	outFile->Close();
 	
 	
 	

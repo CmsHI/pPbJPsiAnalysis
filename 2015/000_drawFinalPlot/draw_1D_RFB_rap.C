@@ -30,7 +30,7 @@ void formAbsRapArr(Double_t binmin, Double_t binmax, string* arr);
 void formPtArr(Double_t binmin, Double_t binmax, string* arr);
 
 //// runCode // 0=merged, 1=1stRun, 2=2ndRun
-void draw_1D_RFB_rap(char* dirName = "8rap9pt", int runCode=0, bool isPrompt = true)
+void draw_1D_RFB_rap(char* dirName = "8rap9pt", int runCode=0, bool isPrompt = false)
 {
 	gROOT->Macro("./JpsiStyleForFinalResult.C");
 
@@ -304,6 +304,7 @@ void draw_1D_RFB_rap(char* dirName = "8rap9pt", int runCode=0, bool isPrompt = t
 	/// convert to TGraphErrors	
 	//sys_lowpt
 	TGraphAsymmErrors* gRFB_sys_lowpt = new TGraphAsymmErrors(h1D_RFB[lowpt_init]); 
+	gRFB_sys_lowpt->SetName("gRFB_sys_lowpt");
 	for (int iy=0; iy <nRapRFB; iy ++ ){ 
 		gRFB_sys_lowpt->SetPointError(iy, exsys[iy], exsys[iy], eysys_lowpt[iy], eysys_lowpt[iy]);
 	}	
@@ -317,6 +318,7 @@ void draw_1D_RFB_rap(char* dirName = "8rap9pt", int runCode=0, bool isPrompt = t
 	gRFB_sys_lowpt->Draw("A2");
 	//sys_highpt
 	TGraphAsymmErrors* gRFB_sys_highpt = new TGraphAsymmErrors(h1D_RFB[highpt_init]); 
+	gRFB_sys_highpt->SetName("gRFB_sys_highpt");
 	for (int iy=0; iy <nRapRFB; iy ++ ){ 
 		gRFB_sys_highpt->SetPointError(iy, exsys[iy], exsys[iy], eysys_highpt[iy], eysys_highpt[iy]);
 	}	
@@ -324,6 +326,7 @@ void draw_1D_RFB_rap(char* dirName = "8rap9pt", int runCode=0, bool isPrompt = t
 	gRFB_sys_highpt->Draw("2");
 	//lowpt
 	TGraphAsymmErrors* gRFB_lowpt = new TGraphAsymmErrors(h1D_RFB[lowpt_init]); 
+	gRFB_lowpt->SetName("gRFB_lowpt");
 	for (int iy=0; iy <nRapRFB; iy ++ ){ 
 		gRFB_lowpt->	SetPointEXlow(iy, ex[iy]);
 		gRFB_lowpt->	SetPointEXhigh(iy, ex[iy]);
@@ -337,6 +340,7 @@ void draw_1D_RFB_rap(char* dirName = "8rap9pt", int runCode=0, bool isPrompt = t
 	gRFB_lowpt->Draw("P");	
 	//highpt
 	TGraphAsymmErrors* gRFB_highpt = new TGraphAsymmErrors(h1D_RFB[highpt_init]); 
+	gRFB_highpt->SetName("gRFB_highpt");
 	for (int iy=0; iy <nRapRFB; iy ++ ){ 
 		gRFB_highpt->	SetPointEXlow(iy, ex[iy]);
 		gRFB_highpt->	SetPointEXhigh(iy, ex[iy]);
@@ -364,6 +368,16 @@ void draw_1D_RFB_rap(char* dirName = "8rap9pt", int runCode=0, bool isPrompt = t
 	latex->DrawLatex(0.56, 0.20, lumistring.c_str());
 
 	c1->SaveAs(Form("RFB_%s/RFB_rap_isPrompt%d_%s.pdf",dirName,(int)isPrompt,runstring.c_str()));
+	
+	///////////////////////////////////////////////////////////////////
+	// save as a root file
+	TFile *outFile = new TFile(Form("RFB_%s/RFB_rap_isPrompt%d.root",dirName,(int)isPrompt),"RECREATE");
+	outFile->cd();
+	gRFB_sys_lowpt->Write();	
+	gRFB_lowpt->Write();	
+	gRFB_sys_highpt->Write();	
+	gRFB_highpt->Write();	
+	outFile->Close();
 	
 	
 	return;

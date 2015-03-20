@@ -310,6 +310,7 @@ void draw_1D_RFB_ETHF(char* dirName = "6rap3pt", int runCode=0, bool isPrompt=fa
 	TGraphAsymmErrors* gRFB_sys[nHist];
 	for (int in=0; in< nHist; in++){
 		gRFB_sys[in] = new TGraphAsymmErrors(h1D_RFB_ETHF[in]);
+		gRFB_sys[in]->SetName(Form("gRFB_sys_%d",in));
 		for (int iet=0; iet<nEtBins;iet++){
 			gRFB_sys[in]->GetPoint(iet, pxtmp[in][iet], pytmp[in][iet]);
 			gRFB_sys[in]->SetPoint(iet, px[iet], pytmp[in][iet]);
@@ -335,6 +336,7 @@ void draw_1D_RFB_ETHF(char* dirName = "6rap3pt", int runCode=0, bool isPrompt=fa
 	TGraphAsymmErrors*gRFB[nHist]; 
 	for (int in=0; in< nHist; in++){
 		gRFB[in] = new TGraphAsymmErrors(h1D_RFB_ETHF[in]);
+		gRFB[in]->SetName(Form("gRFB_%d",in));
 		for (int iet=0; iet<nEtBins;iet++){
 			gRFB[in]->GetPoint(iet, pxtmp[in][iet], pytmp[in][iet]);
 			eytmp[in][iet] = gRFB[in] -> GetErrorY(iet);
@@ -359,7 +361,7 @@ void draw_1D_RFB_ETHF(char* dirName = "6rap3pt", int runCode=0, bool isPrompt=fa
 	if (isPrompt) legBL -> SetHeader("Prompt J/#psi");
 	else legBL -> SetHeader("Non-prompt J/#psi");
 	legBL->SetTextSize(0.037);
-	legBL -> AddEntry(gRFB[0],"1.5 < |y_{CM}| < 1.93,   3 < p_{T} < 6.5 GeV/c","lp");
+	legBL -> AddEntry(gRFB[0],"1.5 < |y_{CM}| < 1.93,   5 < p_{T} < 6.5 GeV/c","lp");
 	legBL -> AddEntry(gRFB[1],"1.5 < |y_{CM}| < 1.93,  6.5 < p_{T} < 30 GeV/c","lp");
 	legBL -> AddEntry(gRFB[2],"0.9 < |y_{CM}| < 1.5,   6.5 < p_{T} < 30 GeV/c","lp");
 	legBL -> AddEntry(gRFB[3],"0.0 < |y_{CM}| < 0.9,   6.5 < p_{T} < 30 GeV/c","lp");
@@ -372,7 +374,17 @@ void draw_1D_RFB_ETHF(char* dirName = "6rap3pt", int runCode=0, bool isPrompt=fa
 	latex->DrawLatex(0.55, 0.77, lumistring.c_str());
 
 //	c1->SaveAs(Form("RFB_%s/RFB_ETHF_isPrompt%d_%s.pdf",dirName,(int)isPrompt,runstring.c_str()));
-	c1->SaveAs(Form("RFB_8rap9pt/RFB_ETHF_isPrompt%d_%s.pdf",(int)isPrompt,runstring.c_str()));
+	c1->SaveAs(Form("RFB_%s/RFB_ETHF_isPrompt%d_%s.pdf",dirName,(int)isPrompt,runstring.c_str()));
+
+	///////////////////////////////////////////////////////////////////
+	// save as a root file
+	TFile *outFile = new TFile(Form("RFB_%s/RFB_ETHF_isPrompt%d.root",dirName,(int)isPrompt),"RECREATE");
+	outFile->cd();
+	for (int in=0; in< nHist; in++){
+		gRFB_sys[in]->Write();	
+		gRFB[in]->Write();	
+	}
+	outFile->Close();
 
 	return;
 

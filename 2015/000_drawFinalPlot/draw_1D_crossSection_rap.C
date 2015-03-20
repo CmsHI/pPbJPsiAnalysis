@@ -31,7 +31,7 @@ void formAbsRapArr(Double_t binmin, Double_t binmax, string* arr);
 void formPtArr(Double_t binmin, Double_t binmax, string* arr);
 
 //// runCode // 0=merged, 1=1stRun, 2=2ndRun
-void draw_1D_crossSection_rap(char* dirName = "8rap9pt", int runCode=0, bool isScale = true)
+void draw_1D_crossSection_rap(char* dirName = "8rap9pt", int runCode=0, bool isScale = false)
 {
 	gROOT->Macro("./JpsiStyleForFinalResult.C");
 
@@ -394,6 +394,7 @@ void draw_1D_crossSection_rap(char* dirName = "8rap9pt", int runCode=0, bool isS
 	
 	//sys_lowpt
 	TGraphAsymmErrors* gCross_pr_sys_lowpt = new TGraphAsymmErrors(h1D_corrY_PR_tot[lowpt_init]);
+	gCross_pr_sys_lowpt->SetName("gCross_pr_sys_lowpt");
 	for (Int_t iy=0; iy<nbinsX; iy++){
 //		gCross_pr_sys_lowpt->SetPointError(iy, exsys[iy], exsys[iy], eysys_pr_lowpt[iy], eysys_pr_lowpt[iy]);
 		gCross_pr_sys_lowpt->SetPointError(iy, exsys[iy], exsys[iy], scalePR_low*eysys_pr_lowpt[iy], scalePR_low*eysys_pr_lowpt[iy]);
@@ -408,6 +409,7 @@ void draw_1D_crossSection_rap(char* dirName = "8rap9pt", int runCode=0, bool isS
 	gCross_pr_sys_lowpt->Draw("A2");
 	//sys_highpt
 	TGraphAsymmErrors* gCross_pr_sys_highpt = new TGraphAsymmErrors(h1D_corrY_PR_tot[highpt_init]);
+	gCross_pr_sys_highpt->SetName("gCross_pr_sys_highpt");
 	for (Int_t iy=0; iy<nbinsX; iy++){
 //		gCross_pr_sys_highpt->SetPointError(iy, exsys[iy], exsys[iy], eysys_pr_highpt[iy], eysys_pr_highpt[iy]);
 		gCross_pr_sys_highpt->SetPointError(iy, exsys[iy], exsys[iy], scalePR_high*eysys_pr_highpt[iy], scalePR_high*eysys_pr_highpt[iy]);
@@ -417,6 +419,7 @@ void draw_1D_crossSection_rap(char* dirName = "8rap9pt", int runCode=0, bool isS
 	
 	//lowpt
 	TGraphAsymmErrors* gCross_pr_lowpt = new TGraphAsymmErrors(h1D_corrY_PR_tot[lowpt_init]);
+	gCross_pr_lowpt->SetName("gCross_pr_lowpt");
 	for (Int_t iy=0; iy<nbinsX; iy++){
 		gCross_pr_lowpt->SetPointEXlow(iy,ex[iy]);
 		gCross_pr_lowpt->SetPointEXhigh(iy,ex[iy]);
@@ -430,6 +433,7 @@ void draw_1D_crossSection_rap(char* dirName = "8rap9pt", int runCode=0, bool isS
 	gCross_pr_lowpt->Draw("P");
 	//highpt
 	TGraphAsymmErrors* gCross_pr_highpt = new TGraphAsymmErrors(h1D_corrY_PR_tot[highpt_init]);
+	gCross_pr_highpt->SetName("gCross_pr_highpt");
 	for (Int_t iy=0; iy<nbinsX; iy++){
 		gCross_pr_highpt->SetPointEXlow(iy,ex[iy]);
 		gCross_pr_highpt->SetPointEXhigh(iy,ex[iy]);
@@ -463,6 +467,7 @@ void draw_1D_crossSection_rap(char* dirName = "8rap9pt", int runCode=0, bool isS
 	
 	//sys_lowpt
 	TGraphAsymmErrors* gCross_np_sys_lowpt = new TGraphAsymmErrors(h1D_corrY_NP_tot[lowpt_init]);
+	gCross_np_sys_lowpt->SetName("gCross_np_sys_lowpt");
 	for (Int_t iy=0; iy<nbinsX; iy++){
 //		gCross_np_sys_lowpt->SetPointError(iy, exsys[iy], exsys[iy], eysys_np_lowpt[iy], eysys_np_lowpt[iy]);
 		gCross_np_sys_lowpt->SetPointError(iy, exsys[iy], exsys[iy], scaleNP_low*eysys_np_lowpt[iy], scaleNP_low*eysys_np_lowpt[iy]);
@@ -477,6 +482,7 @@ void draw_1D_crossSection_rap(char* dirName = "8rap9pt", int runCode=0, bool isS
 	gCross_np_sys_lowpt->Draw("A2");
 	//sys_highpt
 	TGraphAsymmErrors* gCross_np_sys_highpt = new TGraphAsymmErrors(h1D_corrY_NP_tot[highpt_init]);
+	gCross_np_sys_highpt->SetName("gCross_np_sys_highpt");
 	for (Int_t iy=0; iy<nbinsX; iy++){
 //		gCross_np_sys_highpt->SetPointError(iy, exsys[iy], exsys[iy], eysys_np_highpt[iy], eysys_np_highpt[iy]);
 		gCross_np_sys_highpt->SetPointError(iy, exsys[iy], exsys[iy], scaleNP_high*eysys_np_highpt[iy], scaleNP_high*eysys_np_highpt[iy]);
@@ -486,6 +492,7 @@ void draw_1D_crossSection_rap(char* dirName = "8rap9pt", int runCode=0, bool isS
 	
 	//lowpt
 	TGraphAsymmErrors* gCross_np_lowpt = new TGraphAsymmErrors(h1D_corrY_NP_tot[lowpt_init]);
+	gCross_np_lowpt->SetName("gCross_np_lowpt");
 	for (Int_t iy=0; iy<nbinsX; iy++){
 		gCross_np_lowpt->SetPointEXlow(iy,ex[iy]);
 		gCross_np_lowpt->SetPointEXhigh(iy,ex[iy]);
@@ -499,6 +506,7 @@ void draw_1D_crossSection_rap(char* dirName = "8rap9pt", int runCode=0, bool isS
 	gCross_np_lowpt->Draw("P");
 	//highpt
 	TGraphAsymmErrors* gCross_np_highpt = new TGraphAsymmErrors(h1D_corrY_NP_tot[highpt_init]);
+	gCross_np_highpt->SetName("gCross_np_highpt");
 	for (Int_t iy=0; iy<nbinsX; iy++){
 		gCross_np_highpt->SetPointEXlow(iy,ex[iy]);
 		gCross_np_highpt->SetPointEXhigh(iy,ex[iy]);
@@ -526,25 +534,20 @@ void draw_1D_crossSection_rap(char* dirName = "8rap9pt", int runCode=0, bool isS
 	c_np->SaveAs(Form("cross_%s/crossSection_rap_np_isScale%d.pdf",dirName,(int)isScale));
 	legUR->Clear();
 
-
-
-
-
-
-
+	///////////////////////////////////////////////////////////////////
+	// save as a root file
+	TFile *outFile = new TFile(Form("cross_%s/crossSection_rap_isScale%d.root",dirName,(int)isScale),"RECREATE");
+	outFile->cd();
+	gCross_pr_sys_lowpt->Write();	
+	gCross_pr_lowpt->Write();	
+	gCross_pr_sys_highpt->Write();	
+	gCross_pr_highpt->Write();	
+	gCross_np_sys_lowpt->Write();	
+	gCross_np_lowpt->Write();	
+	gCross_np_sys_highpt->Write();	
+	gCross_np_highpt->Write();	
+	outFile->Close();
 	
-	
-	
-	
-
-
-
-
-
-
-
-
-
 	return;
 
 } // end of main func.

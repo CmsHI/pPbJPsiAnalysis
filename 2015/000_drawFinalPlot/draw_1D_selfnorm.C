@@ -25,7 +25,7 @@
 
 #include "KYOcommonOptFinal.h"
 
-void draw_1D_selfnorm(char* dirName = "9et", int runCode=0)
+void draw_1D_selfnorm(char* dirName = "1rap9et", int runCode=0)
 {
 	gROOT->Macro("./JpsiStyleForFinalResult.C");
 

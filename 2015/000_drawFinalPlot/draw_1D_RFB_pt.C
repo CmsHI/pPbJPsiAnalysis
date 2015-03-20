@@ -30,7 +30,7 @@ void formAbsRapArr(Double_t binmin, Double_t binmax, string* arr);
 void formPtArr(Double_t binmin, Double_t binmax, string* arr);
 
 //// runCode // 0=merged, 1=1stRun, 2=2ndRun
-void draw_1D_RFB_pt(char* dirName = "8rap9pt", int runCode=0, bool isPrompt=false)
+void draw_1D_RFB_pt(char* dirName = "8rap9pt", int runCode=0, bool isPrompt=true)
 {
 	gROOT->Macro("./JpsiStyleForFinalResult.C");
 
@@ -311,6 +311,7 @@ void draw_1D_RFB_pt(char* dirName = "8rap9pt", int runCode=0, bool isPrompt=fals
 	TGraphAsymmErrors*gRFB_sys[nRapRFB]; 
 	for (int iy=0; iy<nRapRFB; iy++){
 		gRFB_sys[iy] = new TGraphAsymmErrors(h1D_RFB[iy]);
+		gRFB_sys[iy] -> SetName(Form("gRFB_sys_%d",iy));
 		for (int ipt=0; ipt<nPtRFB; ipt++){
 			gRFB_sys[iy]->GetPoint(ipt, pxtmp[iy][ipt], pytmp[iy][ipt]);
 			gRFB_sys[iy]->SetPoint(ipt, px[iy][ipt], pytmp[iy][ipt]);
@@ -334,6 +335,7 @@ void draw_1D_RFB_pt(char* dirName = "8rap9pt", int runCode=0, bool isPrompt=fals
 	TGraphAsymmErrors*gRFB[nRapRFB]; 
 	for (int iy=0; iy<nRapRFB; iy++){
 		gRFB[iy] = new TGraphAsymmErrors(h1D_RFB[iy]);
+		gRFB[iy] -> SetName(Form("gRFB_%d",iy));
 		for (int ipt=0; ipt<nPtRFB; ipt++){
 			gRFB[iy]->GetPoint(ipt, pxtmp[iy][ipt], pytmp[iy][ipt]);
 			eytmp[iy][ipt] = gRFB[iy]-> GetErrorY(ipt);
@@ -370,6 +372,21 @@ void draw_1D_RFB_pt(char* dirName = "8rap9pt", int runCode=0, bool isPrompt=fals
 
 	c1->SaveAs(Form("RFB_%s/RFB_pt_isPrompt%d_%s.pdf",dirName,(int)isPrompt,runstring.c_str()));
 	
+	///////////////////////////////////////////////////////////////////
+	// save as a root file
+	TFile *outFile = new TFile(Form("RFB_%s/RFB_pt_isPrompt%d.root",dirName,(int)isPrompt),"RECREATE");
+	outFile->cd();
+	for (int iy=0; iy<nRapRFB; iy++){
+		gRFB_sys[iy]->Write();	
+		gRFB[iy]->Write();	
+	}
+	outFile->Close();
+	
+	
+
+
+
+
 	
 	
 	
