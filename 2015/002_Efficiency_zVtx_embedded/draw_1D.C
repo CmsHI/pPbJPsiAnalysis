@@ -106,9 +106,6 @@ void draw_1D(bool isPrompt = true, bool is1st = true, bool isEmbedded = false, b
 		h1D_EffPt[iy]->SetMinimum(0.);
 		h1D_EffPt[iy]->SetMaximum(1.);
 		h1D_EffPt[iy]->Draw("pe");
-		//if (iy==1 || iy==6) dashedLine (3.,0.,3.,1.,1,1);
-		//else if (iy==2)  dashedLine (5.,0.,5.,1.,1,1);
-		//else if (iy==3 || iy==4 || iy==5)  dashedLine (6.5,0.,6.5,1.,1,1);
 		latex->DrawLatex(0.50,0.31,sampleName);
 		latex->DrawLatex(0.50,0.25,Form("%.2f < y_{lab} < %.2f",rapEdge[iy],rapEdge[iy+1]));
 //		c1->SaveAs(Form("%s/%s_EffPt_%d.pdf",dirName,sampleName,iy));
