@@ -36,6 +36,16 @@ void MultiplyValue(Double_t a, Double_t aErr, Double_t b, Double_t bErr, Double_
 	*resErr = (*res) * TMath::Sqrt( TMath::Power(aErr/a,2) + TMath::Power(bErr/b,2) );
 }
 
+void AddValue(Double_t a, Double_t aErr, Double_t b, Double_t bErr, Double_t* res, Double_t* resErr){
+	*res = a+b;
+	*resErr = 1 * TMath::Sqrt( TMath::Power(aErr,2) + TMath::Power(bErr,2) );
+}
+
+void SubtractValue(Double_t a, Double_t aErr, Double_t b, Double_t bErr, Double_t* res, Double_t* resErr){
+	*res = a-b;
+	*resErr = 1 * TMath::Sqrt( TMath::Power(aErr,2) + TMath::Power(bErr,2) );
+}
+
 ////// draw lines
 
 void dashedLine(Double_t x1=0,Double_t y1=0,Double_t x2=1,Double_t y2=1,Int_t color=1, Double_t width=1)
@@ -59,7 +69,7 @@ void solidLine(Double_t x1=0,Double_t y1=0,Double_t x2=1,Double_t y2=1,Int_t col
 ////// SetStyle
 
 void SetHistStyle(TH1* h, Int_t c, Int_t m) {
-	Int_t colorArr[] = { kGray+3, kRed-4, kBlue, kOrange+7, kGreen+3, kAzure+8, kViolet-4, kGreen+1,kBlack };
+	Int_t colorArr[] = { kGray+3, kRed+2, kBlue+1, kOrange+7, kGreen+3, kAzure+9, kViolet-4, kGreen+1,kBlack };
 	Int_t markerFullArr[] = {kFullCircle, kFullTriangleUp, kFullTriangleDown, kFullSquare, kFullStar, kFullDiamond};
 	Int_t markerOpenArr[] = {kOpenCircle, kOpenTriangleUp, kOpenTriangleDown, kOpenSquare, kOpenStar, kOpenDiamond};
 	h-> SetMarkerColor(colorArr[c]);
@@ -71,7 +81,7 @@ void SetHistStyle(TH1* h, Int_t c, Int_t m) {
 }
 
 void SetGraphStyle(TGraph* gr, Int_t c, Int_t m) {
-	Int_t colorArr[] = { kGray+3, kRed-4, kBlue, kOrange+7, kGreen+3, kViolet-4, kAzure+8, kGreen+1, kBlack };
+	Int_t colorArr[] = { kGray+3, kRed-4, kBlue, kOrange+7, kGreen+3, kAzure+9, kViolet-4, kGreen+1, kBlack };
 	Int_t markerFullArr[] = {kFullCircle, kFullTriangleUp, kFullTriangleDown, kFullSquare, kFullStar, kFullDiamond};
 	Int_t markerOpenArr[] = {kOpenCircle, kOpenTriangleUp, kOpenTriangleDown, kOpenSquare, kOpenStar, kOpenDiamond};
 
