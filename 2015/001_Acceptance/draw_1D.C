@@ -25,7 +25,7 @@
 
 #include "KYOcommonOpt.h"
 
-
+// Pbp only
 void draw_1D(bool isPrompt = true, bool is8rap9pt = true, char* dirName = "draw_1D_acc")
 {
 	gROOT->Macro("./JpsiStyle.C");
@@ -102,8 +102,8 @@ void draw_1D(bool isPrompt = true, bool is8rap9pt = true, char* dirName = "draw_
 		h1D_AccPt[iy]->SetMaximum(1.);
 		h1D_AccPt[iy]->Draw("pe");
 		if (iy==1 || iy==6) dashedLine (3.,0.,3.,1.,1,1);
-		else if (iy==2)  dashedLine (5.,0.,5.,1.,1,1);
-		else if (iy==3 || iy==4 || iy==5)  dashedLine (6.5,0.,6.5,1.,1,1);
+		else if (iy==5)  dashedLine (5.,0.,5.,1.,1,1);
+		else if (iy==2 || iy==3 || iy==4)  dashedLine (6.5,0.,6.5,1.,1,1);
 		latex->DrawLatex(0.50,0.31,sampleName);
 		latex->DrawLatex(0.50,0.25,Form("%.2f < y_{lab} < %.2f",rapEdge[iy],rapEdge[iy+1]));
 		c1->SaveAs(Form("%s/%s_AccPt_%d.pdf",dirName,sampleName,iy));
