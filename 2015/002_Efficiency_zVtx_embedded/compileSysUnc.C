@@ -82,6 +82,17 @@ void compileSysUnc(bool isPrompt=1){
     
   TCanvas* c=  new TCanvas("cTot","", 500,500);
   tot_sys->Draw("colz TEXT45");
+
+
+
+  for ( int ix=1 ; ix<=tot_sys->GetNbinsX(); ix++) {
+    
+    cout << endl << " x bin : " << tot_sys->GetXaxis()->GetBinLowEdge(ix) << endl;
+    for ( int iy=1 ; iy<=tot_sys->GetNbinsY(); iy++) {
+      cout << "    y bin : " << tot_sys->GetYaxis()->GetBinLowEdge(iy) << "   : ";
+      cout << tot_sys->GetBinContent(ix,iy) * 100 << endl;
+    }
+  }
   
   TFile* output = new TFile("total_sys_unc_from_efficiency.root","update");
   tot_sys->Write();
