@@ -90,6 +90,7 @@ void compileSysUnc(bool isPrompt=1){
     cout << endl << " x bin : " << tot_sys->GetXaxis()->GetBinLowEdge(ix) << endl;
     for ( int iy=1 ; iy<=tot_sys->GetNbinsY(); iy++) {
       cout << "    y bin : " << tot_sys->GetYaxis()->GetBinLowEdge(iy) << "   : ";
+      cout << hNominal->GetBinContent(ix,iy) << " $\pm$"<< hNominal->GetBinError(ix,iy) << "  ";
       cout << tot_sys->GetBinContent(ix,iy) * 100 << endl;
     }
   }
