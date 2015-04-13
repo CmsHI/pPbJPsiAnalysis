@@ -30,7 +30,7 @@ void formAbsRapArr(Double_t binmin, Double_t binmax, string* arr);
 void formPtArr(Double_t binmin, Double_t binmax, string* arr);
 
 //// runCode // 0=merged, 1=1stRun, 2=2ndRun
-void draw_1D_crossSection_pt(char* dirName = "8rap9pt", int runCode=0, bool isScale = false,bool isLog = false)
+void draw_1D_crossSection_pt(char* dirName = "8rap9pt", int runCode=0, bool isScale = false,bool isLog = true)
 {
 	gROOT->Macro("./JpsiStyleForFinalResult.C");
 
@@ -75,150 +75,165 @@ void draw_1D_crossSection_pt(char* dirName = "8rap9pt", int runCode=0, bool isSc
 	ex = {0,0,0,0,0,0,0,0,0};
 	exsys = {0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4};
 	//exsys = {1.,1.,1.,1.,1.,1.,1.,1.,1.};
-	eysys_pr[0] = {6.823585599,
-	2.754553939,
-	2.09561067,
-	0.751742545,
-	0.292440732,
-	0.177658156,
-	0.113507836,
-	0.042074566,
-	0.003424401};
-	eysys_pr[1] = {0.00000,
-	2.066727035,
-	2.298526697,
-	0.506996157,
-	0.166204429,
-	0.082983383,
-	0.067116223,
-	0.019912669,
-	0.001803345};	
-	eysys_pr[2] = {0.00000,
+	eysys_pr[0] = {
+	26.81041405,
+	5.383938169,
+	3.091980569,
+	1.225678758,
+	0.540157815,
+	0.300436285,
+	0.147265948,
+	0.051548853,
+	0.003867935};
+	eysys_pr[1] = {
+	0.00000,
+	6.633335195,
+	3.55796013,
+	1.283889241,
+	0.530364196,
+	0.268513556,
+	0.152537715,
+	0.0437906,
+	0.00302274};
+	eysys_pr[2] = {
 	0.00000,
 	0.00000,
 	0.00000,
-	0.158412943,
-	0.172238804,
-	0.079986558,
-	0.01679906,
-	0.002508664};
-	eysys_pr[3] = {0.00000,
+	0.00000,
+	0.645909078,
+	0.353424408,
+	0.165133823,
+	0.045947322,
+	0.0036747};
+	eysys_pr[3] = {
 	0.00000,
 	0.00000,
 	0.00000,
-	0.614088927,
-	0.146153707,
-	0.068923197,
-	0.009788824,
-	0.001781335};
-	eysys_pr[4] = {0.00000,
+	0.00000,
+	0.964986896,
+	0.362818278,
+	0.173570256,
+	0.043943348,
+	0.003399353};
+	eysys_pr[4] = {
 	0.00000,
 	0.00000,
 	0.00000,
-	0.310255688,
-	0.160917164,
-	0.067657419,
-	0.014814111,
-	0.001799864};
-	eysys_pr[5] = {0.00000,
 	0.00000,
-	0.00000,
-	0.598184541,
-	0.291530553,
-	0.123517678,
-	0.122278663,
-	0.021084514,
-	0.001946998};
-	eysys_pr[6] = {0.00000,
-	1.774023634,
-	3.720423311,
-	0.583501479,
-	0.192082261,
-	0.133188232,
-	0.07282919,
-	0.008813247,
-	0.001347129};
-	eysys_pr[7] = {8.591314953,
-	3.74427176,
-	1.808696997,
-	0.78623807,
-	0.243599481,
-	0.16402451,
-	0.080699254,
-	0.02293258,
-	0.002158739};
-	eysys_np[0] = {4.906648373,
-	1.298000157,
-	0.84588776,
-	0.39274983,
-	0.173108453,
-	0.137606813,
-	0.10351739,
-	0.036142245,
-	0.003766755};
-	eysys_np[1] = {0.00000,
-	0.962486758,
-	1.273613649,
-	0.354226692,
-	0.119848294,
-	0.043266719,
-	0.05300501,
-	0.01894851,
-	0.00206701};
-	eysys_np[2] = {0.00000,
+	0.732903568,
+	0.39905451,
+	0.163547727,
+	0.044930612,
+	0.002974681};
+	eysys_pr[5] = {
 	0.00000,
 	0.00000,
 	0.00000,
-	0.128308574,
-	0.166978353,
-	0.077367096,
-	0.015572486,
-	0.002431642};
-	eysys_np[3] = {0.00000,
+	1.929565307,
+	0.616384331,
+	0.310376518,
+	0.184045453,
+	0.040576784,
+	0.002843494};
+	eysys_pr[6] = {
+	0.00000,
+	6.519870116,
+	4.698278855,
+	1.280084561,
+	0.495381691,
+	0.270972096,
+	0.133989269,
+	0.030769158};
+	eysys_pr[7] = {
+	50.56637137,
+	6.254239562,
+	2.832856582,
+	1.198478229,
+	0.437816816,
+	0.247160691,
+	0.115008887,
+	0.031007202,
+	0.002385162};
+	eysys_np[0] = {
+	5.611871506,
+	1.468333206,
+	0.95957761,
+	0.449820828,
+	0.204587166,
+	0.153000469,
+	0.110607509,
+	0.03856886,
+	0.004065718};
+	eysys_np[1] = {
+	0.00000,
+	1.49142051,
+	1.38928316,
+	0.441111581,
+	0.182709624,
+	0.090325752,
+	0.070362427,
+	0.02658613,
+	0.002831733};
+	eysys_np[2] = {
 	0.00000,
 	0.00000,
 	0.00000,
-	0.244033742,
-	0.098904713,
-	0.061190229,
-	0.009067791,
-	0.001507802};
-	eysys_np[4] = {0.00000,
+	0.00000,
+	0.210668807,
+	0.192808861,
+	0.098754119,
+	0.024345719,
+	0.003271259};
+	eysys_np[3] = {
 	0.00000,
 	0.00000,
 	0.00000,
-	0.248351543,
-	0.118099805,
-	0.063202782,
-	0.013466951,
-	0.002164002};
-	eysys_np[5] = {0.00000,
+	0.00000,
+	0.325705956,
+	0.149226706,
+	0.080239832,
+	0.021969149,
+	0.002455387};
+	eysys_np[4] = {
 	0.00000,
 	0.00000,
-	0.434174112,
-	0.209918891,
-	0.098543151,
-	0.101866676,
-	0.015888018,
-	0.002042434};
-	eysys_np[6] = {0.00000,
-	0.893125017,
-	1.234527744,
-	0.422629695,
-	0.098374138,
-	0.041311919,
-	0.053527578,
-	0.008328016,
-	0.001080907};
-	eysys_np[7] = {4.758456686,
-	1.024871016,
-	0.600404252,
-	0.305984184,
-	0.193471649,
-	0.119464542,
-	0.045602308,
-	0.013624571,
-	0.00201605};
+	0.00000,
+	0.00000,
+	0.30971046,
+	0.161314534,
+	0.081416149,
+	0.024078431,
+	0.002966572};
+	eysys_np[5] = {
+	0.00000,
+	0.00000,
+	0.00000,
+	0.800759697,
+	0.2584444,
+	0.128983265,
+	0.108259637,
+	0.020984046,
+	0.002540798};
+	eysys_np[6] = {
+	0.00000,
+	1.426536239,
+	1.338498264,
+	0.478904963,
+	0.143895623,
+	0.071440476,
+	0.06373351,
+	0.015152708,
+	0.00155838};
+	eysys_np[7] = {
+	5.206957075,
+	1.250974093,
+	0.703309277,
+	0.339865421,
+	0.216214722,
+	0.127629427,
+	0.05225028,
+	0.015704499,
+	0.002130154};
 	
 	//rap array in yCM (from forward to backward)
 	Double_t rapArrNumFB[] = {1.93, 1.5, 0.9, 0., -0.9, -1.5, -1.93, -2.4, -2.87};// for pt dist.
@@ -372,177 +387,8 @@ void draw_1D_crossSection_pt(char* dirName = "8rap9pt", int runCode=0, bool isSc
 	TBox * globalbox = new TBox(0.5, 6.4, 1.5, 13.6);
 	globalbox->SetFillColor(kYellow);
 	
-	// --- Draw histograms
-	
 	const int fw_init = 0;
 	const int bw_init = 3;
-/*	
-	// ---- prompt forward
-	TCanvas* c_pr_fw = new TCanvas("c_pr_fw","c_pr_fw",200,10,800,600);
-	c_pr_fw->cd();
-	if (isLog) gPad->SetLogy(1);
-	else gPad->SetLogy(0);
-	SetHistStyle(h1D_cross_PR_tot[fw_init],fw_init,0);
-	h1D_cross_PR_tot[fw_init]->GetXaxis()->SetTitle("p_{T} (GeV/c)");
-	h1D_cross_PR_tot[fw_init]->GetXaxis()->CenterTitle();
-	h1D_cross_PR_tot[fw_init]->GetXaxis()->SetRangeUser(0.,30.);
-	h1D_cross_PR_tot[fw_init]->GetYaxis()->SetTitle("d^{2}#sigma/dp_{T}dy [ #mub/(GeV/c)]");
-	//h1D_cross_PR_tot[fw_init]->GetYaxis()->SetRangeUser(0.01,150000);
-	if (isLog) h1D_cross_PR_tot[fw_init]->GetYaxis()->SetRangeUser(0.01,700);
-	else h1D_cross_PR_tot[fw_init]->GetYaxis()->SetRangeUser(0.0,350);
-	h1D_cross_PR_tot[fw_init]->Draw("pe");
-	for (Int_t iy = fw_init+1; iy < bw_init; iy++) {
-		SetHistStyle(h1D_cross_PR_tot[iy],iy,0);
-		h1D_cross_PR_tot[iy]->Draw("pe same");
-	}
-	legUR -> SetHeader("Prompt J/#psi");
-	for (Int_t iy = fw_init; iy < bw_init; iy++) {
-		legUR -> AddEntry(h1D_cross_PR_tot[iy],Form("%s",rapArr[iy].c_str()),"lp");
-	}
-	legUR->Draw();
-	if (isLog) {
-		latex->SetTextSize(0.04);
-		latex->DrawLatex(0.17, 0.34, lumistring.c_str());
-		latex->SetTextSize(0.04);
-		latex->DrawLatex(0.17, 0.27, beamstring.c_str());
-		latex->SetTextSize(0.05);
-		latex->DrawLatex(0.17, 0.19, cmsstring.c_str());	
-	}
-	else{
-		latex->SetTextSize(0.04);
-		latex->DrawLatex(0.57, 0.34, lumistring.c_str());
-		latex->SetTextSize(0.04);
-		latex->DrawLatex(0.57, 0.27, beamstring.c_str());
-		latex->SetTextSize(0.05);
-		latex->DrawLatex(0.57, 0.19, cmsstring.c_str());	
-	}
-	c_pr_fw->SaveAs(Form("cross_%s/crossSection_pt_pr_fw_isLog%d_isScale%d.pdf",dirName,(int)isLog,(int)isScale));
-	legUR->Clear();
-
-	// ---- prompt backward
-	TCanvas* c_pr_bw = new TCanvas("c_pr_bw","c_pr_bw",200,10,800,600);
-	c_pr_bw->cd();
-	if (isLog) gPad->SetLogy(1);
-	else gPad->SetLogy(0);
-	SetHistStyle(h1D_cross_PR_tot[bw_init],bw_init,0);
-	h1D_cross_PR_tot[bw_init]->GetXaxis()->SetTitle("p_{T} (GeV/c)");
-	h1D_cross_PR_tot[bw_init]->GetXaxis()->CenterTitle();
-	h1D_cross_PR_tot[bw_init]->GetXaxis()->SetRangeUser(0.,30.);
-	h1D_cross_PR_tot[bw_init]->GetYaxis()->SetTitle("d^{2}#sigma/dp_{T}dy [ #mub/(GeV/c)]");
-	if (isLog) h1D_cross_PR_tot[bw_init]->GetYaxis()->SetRangeUser(0.01,700);
-	else h1D_cross_PR_tot[bw_init]->GetYaxis()->SetRangeUser(0.0,350);
-	h1D_cross_PR_tot[bw_init]->Draw("pe");
-	for (Int_t iy = bw_init+1; iy < nbinsX; iy++) {
-		SetHistStyle(h1D_cross_PR_tot[iy],iy,0);
-		h1D_cross_PR_tot[iy]->Draw("pe same");
-	}
-	legUR -> SetHeader("Prompt J/#psi");
-	for (Int_t iy = bw_init; iy < nbinsX; iy++) {
-		legUR -> AddEntry(h1D_cross_PR_tot[iy],Form("%s",rapArr[iy].c_str()),"lp");
-	}
-	legUR->Draw();
-	if (isLog) {
-		latex->SetTextSize(0.04);
-		latex->DrawLatex(0.17, 0.34, lumistring.c_str());
-		latex->SetTextSize(0.04);
-		latex->DrawLatex(0.17, 0.27, beamstring.c_str());
-		latex->SetTextSize(0.05);
-		latex->DrawLatex(0.17, 0.19, cmsstring.c_str());	
-	}
-	else{
-		latex->SetTextSize(0.04);
-		latex->DrawLatex(0.57, 0.34, lumistring.c_str());
-		latex->SetTextSize(0.04);
-		latex->DrawLatex(0.57, 0.27, beamstring.c_str());
-		latex->SetTextSize(0.05);
-		latex->DrawLatex(0.57, 0.19, cmsstring.c_str());	
-	}
-	c_pr_bw->SaveAs(Form("cross_%s/crossSection_pt_pr_bw_isLog%d_isScale%d.pdf",dirName,(int)isLog,(int)isScale));
-	legUR->Clear();
-
-	// ---- non-prompt forward
-	TCanvas* c_np_fw = new TCanvas("c_np_fw","c_np_fw",200,10,800,600);
-	c_np_fw->cd();
-	if (isLog) gPad->SetLogy(1);
-	else gPad->SetLogy(0);
-	SetHistStyle(h1D_cross_NP_tot[fw_init],fw_init,0);
-	h1D_cross_NP_tot[fw_init]->GetXaxis()->SetTitle("p_{T} (GeV/c)");
-	h1D_cross_NP_tot[fw_init]->GetXaxis()->CenterTitle();
-	h1D_cross_NP_tot[fw_init]->GetXaxis()->SetRangeUser(0.,30.);
-	h1D_cross_NP_tot[fw_init]->GetYaxis()->SetTitle("d^{2}#sigma/dp_{T}dy [ #mub/(GeV/c)]");
-	if (isLog) h1D_cross_NP_tot[fw_init]->GetYaxis()->SetRangeUser(0.01,130);
-	else h1D_cross_NP_tot[fw_init]->GetYaxis()->SetRangeUser(0.,65);
-	h1D_cross_NP_tot[fw_init]->Draw("pe");
-	for (Int_t iy = fw_init+1; iy < bw_init; iy++) {
-		SetHistStyle(h1D_cross_NP_tot[iy],iy,0);
-		h1D_cross_NP_tot[iy]->Draw("pe same");
-	}
-	legUR -> SetHeader("Non-prompt J/#psi");
-	for (Int_t iy = fw_init; iy < bw_init; iy++) {
-		legUR -> AddEntry(h1D_cross_NP_tot[iy],Form("%s",rapArr[iy].c_str()),"lp");
-	}
-	legUR->Draw();
-	if (isLog) {
-		latex->SetTextSize(0.04);
-		latex->DrawLatex(0.17, 0.34, lumistring.c_str());
-		latex->SetTextSize(0.04);
-		latex->DrawLatex(0.17, 0.27, beamstring.c_str());
-		latex->SetTextSize(0.05);
-		latex->DrawLatex(0.17, 0.19, cmsstring.c_str());	
-	}
-	else{
-		latex->SetTextSize(0.04);
-		latex->DrawLatex(0.57, 0.34, lumistring.c_str());
-		latex->SetTextSize(0.04);
-		latex->DrawLatex(0.57, 0.27, beamstring.c_str());
-		latex->SetTextSize(0.05);
-		latex->DrawLatex(0.57, 0.19, cmsstring.c_str());	
-	}
-	c_np_fw->SaveAs(Form("cross_%s/crossSection_pt_np_fw_isLog%d_isScale%d.pdf",dirName,(int)isLog,(int)isScale));
-	legUR->Clear();
-
-	// ---- non-prompt backward
-	TCanvas* c_np_bw = new TCanvas("c_np_bw","c_np_bw",200,10,800,600);
-	c_np_bw->cd();
-	if (isLog) gPad->SetLogy(1);
-	else gPad->SetLogy(0);
-	SetHistStyle(h1D_cross_NP_tot[bw_init],bw_init,0);
-	h1D_cross_NP_tot[bw_init]->GetXaxis()->SetTitle("p_{T} (GeV/c)");
-	h1D_cross_NP_tot[bw_init]->GetXaxis()->CenterTitle();
-	h1D_cross_NP_tot[bw_init]->GetXaxis()->SetRangeUser(0.,30.);
-	h1D_cross_NP_tot[bw_init]->GetYaxis()->SetTitle("d^{2}#sigma/dp_{T}dy [ #mub/(GeV/c)]");
-	if (isLog) h1D_cross_NP_tot[bw_init]->GetYaxis()->SetRangeUser(0.01,130);
-	else h1D_cross_NP_tot[bw_init]->GetYaxis()->SetRangeUser(0.,65);
-	h1D_cross_NP_tot[bw_init]->Draw("pe");
-	for (Int_t iy = bw_init+1; iy < nbinsX; iy++) {
-		SetHistStyle(h1D_cross_NP_tot[iy],iy,0);
-		h1D_cross_NP_tot[iy]->Draw("pe same");
-	}
-	legUR -> SetHeader("Non-prompt J/#psi");
-	for (Int_t iy = bw_init; iy < nbinsX; iy++) {
-		legUR -> AddEntry(h1D_cross_NP_tot[iy],Form("%s",rapArr[iy].c_str()),"lp");
-	}
-	legUR->Draw();
-	if (isLog) {
-		latex->SetTextSize(0.04);
-		latex->DrawLatex(0.17, 0.34, lumistring.c_str());
-		latex->SetTextSize(0.04);
-		latex->DrawLatex(0.17, 0.27, beamstring.c_str());
-		latex->SetTextSize(0.05);
-		latex->DrawLatex(0.17, 0.19, cmsstring.c_str());	
-	}
-	else{
-		latex->SetTextSize(0.04);
-		latex->DrawLatex(0.57, 0.34, lumistring.c_str());
-		latex->SetTextSize(0.04);
-		latex->DrawLatex(0.57, 0.27, beamstring.c_str());
-		latex->SetTextSize(0.05);
-		latex->DrawLatex(0.57, 0.19, cmsstring.c_str());	
-	}
-	c_np_bw->SaveAs(Form("cross_%s/crossSection_pt_np_bw_isLog%d_isScale%d.pdf",dirName,(int)isLog,(int)isScale));
-	legUR->Clear();
-*/
-
 
 	//////////////////////////////////////////////////////////////////////////////////////
 	// convert to TGraphAsymErrors
@@ -567,8 +413,8 @@ void draw_1D_crossSection_pt(char* dirName = "8rap9pt", int runCode=0, bool isSc
 //			eytmp[iy][ipt] = gCross_pr[iy]-> GetErrorYhigh(ipt);
 //			eytmp[iy][ipt] = gCross_pr[iy]-> GetErrorYlow(ipt);
 			eytmp[iy][ipt] = gCross_pr[iy]-> GetErrorY(ipt);
-			cout << "pr : pytmp["<<iy<<"]["<<ipt<<"] = " << pytmp[iy][ipt]<<endl;
-			cout << "pr : eytmp["<<iy<<"]["<<ipt<<"] = " << eytmp[iy][ipt]<<endl;
+			//cout << "pr : pytmp["<<iy<<"]["<<ipt<<"] = " << pytmp[iy][ipt]<<endl;
+			//cout << "pr : eytmp["<<iy<<"]["<<ipt<<"] = " << eytmp[iy][ipt]<<endl;
 			gCross_pr[iy]->SetPoint(ipt, px[iy][ipt], pytmp[iy][ipt]);
 			gCross_pr[iy]->SetPointEXlow(ipt, ex[ipt]);
 			gCross_pr[iy]->SetPointEXhigh(ipt, ex[ipt]);
@@ -592,9 +438,9 @@ void draw_1D_crossSection_pt(char* dirName = "8rap9pt", int runCode=0, bool isSc
 	if (isLog) gPad->SetLogy(1);
 	else gPad->SetLogy(0);
 	//sys
-	gCross_pr_sys[0]->GetXaxis()->SetTitle("p_{T} (GeV/c)");
+	gCross_pr_sys[0]->GetXaxis()->SetTitle("p_{T} [GeV/c]");
 	gCross_pr_sys[0]->GetXaxis()->CenterTitle("");
-	gCross_pr_sys[0]->GetYaxis()->SetTitle("d^{2}#sigma/dp_{T}dy #mub/(GeV/c)");
+	gCross_pr_sys[0]->GetYaxis()->SetTitle("d^{2}#sigma/dp_{T}dy [#mub/(GeV/c)]");
 	if (isLog) {
 		gCross_pr_sys[0]->SetMinimum(0.01);
 		gCross_pr_sys[0]->SetMaximum(700.);
@@ -649,9 +495,9 @@ void draw_1D_crossSection_pt(char* dirName = "8rap9pt", int runCode=0, bool isSc
 	if (isLog) gPad->SetLogy(1);
 	else gPad->SetLogy(0);
 	//sys
-	gCross_pr_sys[3]->GetXaxis()->SetTitle("p_{T} (GeV/c)");
+	gCross_pr_sys[3]->GetXaxis()->SetTitle("p_{T} [GeV/c]");
 	gCross_pr_sys[3]->GetXaxis()->CenterTitle("");
-	gCross_pr_sys[3]->GetYaxis()->SetTitle("d^{2}#sigma/dp_{T}dy #mub/(GeV/c)");
+	gCross_pr_sys[3]->GetYaxis()->SetTitle("d^{2}#sigma/dp_{T}dy [#mub/(GeV/c)]");
 	if (isLog) {
 		gCross_pr_sys[3]->SetMinimum(0.01);
 		gCross_pr_sys[3]->SetMaximum(700.);
@@ -715,9 +561,9 @@ void draw_1D_crossSection_pt(char* dirName = "8rap9pt", int runCode=0, bool isSc
 	if (isLog) gPad->SetLogy(1);
 	else gPad->SetLogy(0);
 	//sys
-	gCross_np_sys[0]->GetXaxis()->SetTitle("p_{T} (GeV/c)");
+	gCross_np_sys[0]->GetXaxis()->SetTitle("p_{T} [GeV/c]");
 	gCross_np_sys[0]->GetXaxis()->CenterTitle("");
-	gCross_np_sys[0]->GetYaxis()->SetTitle("d^{2}#sigma/dp_{T}dy #mub/(GeV/c)");
+	gCross_np_sys[0]->GetYaxis()->SetTitle("d^{2}#sigma/dp_{T}dy [#mub/(GeV/c)]");
 	if (isLog) {
 		gCross_np_sys[0]->SetMinimum(0.01);
 		gCross_np_sys[0]->SetMaximum(130.);
@@ -775,9 +621,9 @@ void draw_1D_crossSection_pt(char* dirName = "8rap9pt", int runCode=0, bool isSc
 	if (isLog) gPad->SetLogy(1);
 	else gPad->SetLogy(0);
 	//sys
-	gCross_np_sys[3]->GetXaxis()->SetTitle("p_{T} (GeV/c)");
+	gCross_np_sys[3]->GetXaxis()->SetTitle("p_{T} [GeV/c]");
 	gCross_np_sys[3]->GetXaxis()->CenterTitle("");
-	gCross_np_sys[3]->GetYaxis()->SetTitle("d^{2}#sigma/dp_{T}dy #mub/(GeV/c)");
+	gCross_np_sys[3]->GetYaxis()->SetTitle("d^{2}#sigma/dp_{T}dy [#mub/(GeV/c)]");
 	if (isLog) {
 		gCross_np_sys[3]->SetMinimum(0.01);
 		gCross_np_sys[3]->SetMaximum(130.);
@@ -892,13 +738,13 @@ void formPtArr(Double_t binmin, Double_t binmax, string* arr) {
 	Double_t fracMin = modf(binmin, &intMin);
 	Double_t fracMax = modf(binmax, &intMax);
 	if ( fracMin == 0 && fracMax == 0 ) {
-		*arr = Form("%.0f < p_{T} < %.0f GeV/c", binmin, binmax);
+		*arr = Form("%.0f < p_{T} < %.0f [GeV/c]", binmin, binmax);
 	} else if ( fracMin != 0 && fracMax == 0 ) {
-		*arr = Form("%.1f < p_{T} < %.0f GeV/c", binmin, binmax);
+		*arr = Form("%.1f < p_{T} < %.0f [GeV/c]", binmin, binmax);
 	} else if ( fracMin == 0 && fracMax != 0 ) {
-		*arr = Form("%.0f < p_{T} < %.1f GeV/c", binmin, binmax);
+		*arr = Form("%.0f < p_{T} < %.1f [GeV/c]", binmin, binmax);
 	} else {
-		*arr = Form("%.1f < p_{T} < %.1f GeV/c", binmin, binmax);
+		*arr = Form("%.1f < p_{T} < %.1f [GeV/c]", binmin, binmax);
 	}
 }
 

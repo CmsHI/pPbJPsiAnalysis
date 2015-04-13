@@ -30,7 +30,7 @@ void formAbsRapArr(Double_t binmin, Double_t binmax, string* arr);
 void formPtArr(Double_t binmin, Double_t binmax, string* arr);
 
 //// runCode // 0=merged, 1=1stRun, 2=2ndRun
-void draw_1D_RFB_pt(char* dirName = "8rap9pt", int runCode=0, bool isPrompt=true)
+void draw_1D_RFB_pt(char* dirName = "8rap9pt", int runCode=0, bool isZoomIn = true, bool isPrompt=false)
 {
 	gROOT->Macro("./JpsiStyleForFinalResult.C");
 
@@ -70,26 +70,38 @@ void draw_1D_RFB_pt(char* dirName = "8rap9pt", int runCode=0, bool isPrompt=true
 	ex = {0.,0.,0.};
 	exsys = {0.4,0.4,0.4};
 	if (isPrompt) {
-		eysys[0] = {0.015681895,
-		0.027684865,
-		0.048824342}; // 1.5-1.93
-		eysys[1] = {0.00,
-		0.020268401,
-		0.020839944}; //0.9-1.5
-		eysys[2] = {0.00, 
-		0.025307419,
-		0.027477816}; //0.0-0.9
+		//1.5-1.93
+		eysys[0] = {
+		0.026101147,
+		0.035871392,
+		0.055155744};
+		//0.9-1.5
+		eysys[1] = {
+		0.00,
+		0.03050345,
+		0.034713623};
+		//0.0-0.9
+		eysys[2] = {
+		0.00, 
+		0.03971931,
+		0.040430809};
 	}
 	else {
-		eysys[0] = {0.039079108,
-		0.0671048,
-		0.075415151}; // 1.5-1.93
-		eysys[1] = {0.00,
-		0.064973771,
-		0.029414238 }; //0.9-1.5
-		eysys[2] = {0.00, 
-		0.04629685,
-		0.032774347}; //0.0-0.9
+		//1.5-1.93
+		eysys[0] = {
+		0.056049769,
+		0.07101411,
+		0.080530222};
+		//0.9-1.5
+		eysys[1] = {
+		0.00,
+		0.069039457,
+		0.04044452};
+		//0.0-0.9
+		eysys[2] = {
+		0.00, 
+		0.053426749,
+		0.044291073};
 	}	
 
 	//rap array in yCM (from forward to backward)
@@ -254,11 +266,10 @@ void draw_1D_RFB_pt(char* dirName = "8rap9pt", int runCode=0, bool isPrompt=true
 	
 	//////////////////////////////////////////////////////////////////
 
-	TLegend *legUR = new TLegend(0.52, 0.55, 0.86, 0.92); //upper left
-//	TLegend *legBL = new TLegend(0.17,0.20,0.51,0.42,NULL,"brNDC");
-//	TLegend *legBL = new TLegend(0.17,0.16,0.45,0.38,NULL,"brNDC");
+	//TLegend *legUL = new TLegend(0.16, 0.65, 0.45, 0.92, NULL, "brNDC");
+	TLegend *legUL = new TLegend(0.16, 0.71, 0.45, 0.93, NULL, "brNDC");
 	TLegend *legBL = new TLegend(0.16,0.16,0.45,0.38,NULL,"brNDC");
-	SetLegendStyle(legUR);
+	SetLegendStyle(legUL);
 	SetLegendStyle(legBL);
 	 	
 	//latex box for beam, rapidity, pT info
@@ -267,46 +278,13 @@ void draw_1D_RFB_pt(char* dirName = "8rap9pt", int runCode=0, bool isPrompt=true
 	latex->SetTextAlign(12);
 	latex->SetTextSize(0.04);
 
-	// --- Draw histograms
-	const int fw_init = 0;
-	
-	// ---- prompt
 	TCanvas* c1 = new TCanvas("c1","c1",600,600);
 	c1->cd();
 	
-	/*
-	gPad->SetLogy(0);
-	SetHistStyle(h1D_RFB[fw_init],fw_init,0);
-	h1D_RFB[fw_init]->GetXaxis()->SetTitle("p_{T} (GeV/c)");
-	h1D_RFB[fw_init]->GetXaxis()->CenterTitle();
-	h1D_RFB[fw_init]->GetXaxis()->SetRangeUser(0.0,30.0);
-	h1D_RFB[fw_init]->GetYaxis()->SetTitle("R_{FB}");
-	h1D_RFB[fw_init]->GetYaxis()->SetRangeUser(0.0,1.3);
-	h1D_RFB[fw_init]->Draw("pe");
-	for (Int_t iy = fw_init+1; iy < nRapRFB; iy++) {
-		SetHistStyle(h1D_RFB[iy],iy,0);
-		h1D_RFB[iy]->Draw("pe same");
-	}
-	dashedLine(0.,1.,30.,1.,1,1);
-	if (isPrompt) legBL -> SetHeader("Prompt J/ #psi");
-	else legBL -> SetHeader("Non-prompt J/ #psi");
-	for (Int_t iy = fw_init; iy < nRapRFB; iy++) {
-		legBL -> AddEntry(h1D_RFB[iy],Form("%s",rapAbsArr[iy].c_str()),"lp");
-	}
-	legBL->Draw();
-	latex->SetTextSize(0.04);
-	latex->DrawLatex(0.57, 0.34, lumistring.c_str());
-	latex->SetTextSize(0.04);
-	latex->DrawLatex(0.57, 0.27, beamstring.c_str());
-	latex->SetTextSize(0.05);
-	latex->DrawLatex(0.57, 0.19, cmsstring.c_str());	
-	c1->SaveAs(Form("RFB_%s/RFB_pt_isPrompt%d_%s.pdf",dirName,(int)isPrompt,runstring.c_str()));
-//	c1->Clear();
-//	legBL->Clear();
-*/
-
 	//////////////////////////////////////////////////////////////////
 	// convert to TGraphAsymErrors
+	const int fw_init = 0;
+	
 	//sys
 	TGraphAsymmErrors*gRFB_sys[nRapRFB]; 
 	for (int iy=0; iy<nRapRFB; iy++){
@@ -318,12 +296,18 @@ void draw_1D_RFB_pt(char* dirName = "8rap9pt", int runCode=0, bool isPrompt=true
 			gRFB_sys[iy]->SetPointError(ipt, exsys[ipt], exsys[ipt], eysys[iy][ipt], eysys[iy][ipt]);
 		}
 	}
-	gRFB_sys[0]->GetXaxis()->SetTitle("p_{T} (GeV/c)");
+	gRFB_sys[0]->GetXaxis()->SetTitle("p_{T} [GeV/c]");
 	gRFB_sys[0]->GetXaxis()->CenterTitle();
 	gRFB_sys[0]->GetYaxis()->SetTitle("R_{FB}");
 	gRFB_sys[0]->GetXaxis()->SetLimits(0.,20.0);
-	gRFB_sys[0]->SetMinimum(0.0);
-	gRFB_sys[0]->SetMaximum(1.4);
+	if (isZoomIn) {
+		gRFB_sys[0]->SetMinimum(0.5);
+		gRFB_sys[0]->SetMaximum(1.25);
+	} 
+	else {
+		gRFB_sys[0]->SetMinimum(0.0);
+		gRFB_sys[0]->SetMaximum(1.4);
+	}
 	gRFB_sys[0]->SetFillColor(kTeal+7);
 	gRFB_sys[0]->Draw("A2");
 	gRFB_sys[1]->SetFillColor(kRed-9);
@@ -356,13 +340,24 @@ void draw_1D_RFB_pt(char* dirName = "8rap9pt", int runCode=0, bool isPrompt=true
 	gRFB[2]->Draw("P");
 
 	dashedLine(0.,1.,20.,1.,1,1);
-	if (isPrompt) legBL -> SetHeader("Prompt J/#psi");
-	else legBL -> SetHeader("Non-prompt J/#psi");
-	legBL->SetTextSize(0.037);
-	for (Int_t iy = fw_init; iy < nRapRFB; iy++) {
-		legBL -> AddEntry(gRFB[iy],Form("%s",rapAbsArr[iy].c_str()),"lp");
+	if (isZoomIn) {
+		if (isPrompt) legUL -> SetHeader("Prompt J/#psi");
+		else legUL -> SetHeader("Non-prompt J/#psi");
+		legUL->SetTextSize(0.037);
+		for (Int_t iy = fw_init; iy < nRapRFB; iy++) {
+			legUL -> AddEntry(gRFB[iy],Form("%s",rapAbsArr[iy].c_str()),"lp");
+		}
+		legUL->Draw();
+	} 
+	else {
+		if (isPrompt) legBL -> SetHeader("Prompt J/#psi");
+		else legBL -> SetHeader("Non-prompt J/#psi");
+		legBL->SetTextSize(0.037);
+		for (Int_t iy = fw_init; iy < nRapRFB; iy++) {
+			legBL -> AddEntry(gRFB[iy],Form("%s",rapAbsArr[iy].c_str()),"lp");
+		}
+		legBL->Draw();
 	}
-	legBL->Draw();
 	latex->SetTextSize(0.05);
 	latex->DrawLatex(0.53, 0.35, cmsstring.c_str());	
 	latex->SetTextSize(0.04);
@@ -413,14 +408,16 @@ void formAbsRapArr(Double_t binmin, Double_t binmax, string* arr) {
 	Double_t intMin, intMax; 
 	Double_t fracMin = modf(binmin, &intMin);
 	Double_t fracMax = modf(binmax, &intMax);
-	if ( fracMin == 0 && fracMax == 0 ) {
+	if ( binmax==1.93 ) { //tmp
+		*arr = Form("%.1f < |y_{CM}| < %.2f", binmin, binmax);
+	} else if ( fracMin == 0 && fracMax == 0 ) {
 		*arr = Form("%.0f < |y_{CM}| < %.0f", binmin, binmax);
 	} else if ( fracMin != 0 && fracMax == 0 ) {
-		*arr = Form("%.2f < |y_{CM}| < %.0f", binmin, binmax);
+		*arr = Form("%.1f < |y_{CM}| < %.0f", binmin, binmax);
 	} else if ( fracMin == 0 && fracMax != 0 ) {
-		*arr = Form("%.0f < |y_{CM}| < %.2f", binmin, binmax);
+		*arr = Form("%.0f < |y_{CM}| < %.1f", binmin, binmax);
 	} else {
-		*arr = Form("%.2f < |y_{CM}| < %.2f", binmin, binmax);
+		*arr = Form("%.1f < |y_{CM}| < %.1f", binmin, binmax);
 	}
 }
 
@@ -429,13 +426,13 @@ void formPtArr(Double_t binmin, Double_t binmax, string* arr) {
 	Double_t fracMin = modf(binmin, &intMin);
 	Double_t fracMax = modf(binmax, &intMax);
 	if ( fracMin == 0 && fracMax == 0 ) {
-		*arr = Form("%.0f < p_{T} < %.0f GeV/c", binmin, binmax);
+		*arr = Form("%.0f < p_{T} < %.0f [GeV/c]", binmin, binmax);
 	} else if ( fracMin != 0 && fracMax == 0 ) {
-		*arr = Form("%.1f < p_{T} < %.0f GeV/c", binmin, binmax);
+		*arr = Form("%.1f < p_{T} < %.0f [GeV/c]", binmin, binmax);
 	} else if ( fracMin == 0 && fracMax != 0 ) {
-		*arr = Form("%.0f < p_{T} < %.1f GeV/c", binmin, binmax);
+		*arr = Form("%.0f < p_{T} < %.1f [GeV/c]", binmin, binmax);
 	} else {
-		*arr = Form("%.1f < p_{T} < %.1f GeV/c", binmin, binmax);
+		*arr = Form("%.1f < p_{T} < %.1f [GeV/c]", binmin, binmax);
 	}
 }
 

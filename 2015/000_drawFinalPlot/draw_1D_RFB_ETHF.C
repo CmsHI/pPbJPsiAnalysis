@@ -32,7 +32,7 @@ void formPtArr(Double_t binmin, Double_t binmax, string* arr);
 void formEtArr(Double_t min, Double_t max, string* arr);
 
 //// runCode // 0=merged, 1=1stRun, 2=2ndRun
-void draw_1D_RFB_ETHF(char* dirName = "6rap3pt", int runCode=0, bool isPrompt=false)
+void draw_1D_RFB_ETHF(char* dirName = "6rap3pt", int runCode=0, bool isPrompt=true)
 {
 	gROOT->Macro("./JpsiStyleForFinalResult.C");
 
@@ -317,7 +317,7 @@ void draw_1D_RFB_ETHF(char* dirName = "6rap3pt", int runCode=0, bool isPrompt=fa
 			gRFB_sys[in]->SetPointError(iet, exsys[iet], exsys[iet], eysys[in][iet], eysys[in][iet]);
 		}
 	}
-	gRFB_sys[0]->GetXaxis()->SetTitle("E_{T}^{HF |#eta|>4} (GeV)");
+	gRFB_sys[0]->GetXaxis()->SetTitle("E_{T}^{HF |#eta|>4} [GeV]");
 	gRFB_sys[0]->GetXaxis()->CenterTitle();
 	gRFB_sys[0]->GetYaxis()->SetTitle("R_{FB}");
 	gRFB_sys[0]->GetXaxis()->SetLimits(0.,50.0);
@@ -361,17 +361,17 @@ void draw_1D_RFB_ETHF(char* dirName = "6rap3pt", int runCode=0, bool isPrompt=fa
 	if (isPrompt) legBL -> SetHeader("Prompt J/#psi");
 	else legBL -> SetHeader("Non-prompt J/#psi");
 	legBL->SetTextSize(0.037);
-	legBL -> AddEntry(gRFB[0],"1.5 < |y_{CM}| < 1.93,   5 < p_{T} < 6.5 GeV/c","lp");
-	legBL -> AddEntry(gRFB[1],"1.5 < |y_{CM}| < 1.93,  6.5 < p_{T} < 30 GeV/c","lp");
-	legBL -> AddEntry(gRFB[2],"0.9 < |y_{CM}| < 1.5,   6.5 < p_{T} < 30 GeV/c","lp");
-	legBL -> AddEntry(gRFB[3],"0.0 < |y_{CM}| < 0.9,   6.5 < p_{T} < 30 GeV/c","lp");
+	legBL -> AddEntry(gRFB[0],"1.5 < |y_{CM}| < 1.93,   5 < p_{T} < 6.5 [GeV/c]","lp");
+	legBL -> AddEntry(gRFB[1],"1.5 < |y_{CM}| < 1.93,  6.5 < p_{T} < 30 [GeV/c]","lp");
+	legBL -> AddEntry(gRFB[2],"0.9 < |y_{CM}| < 1.5,   6.5 < p_{T} < 30 [GeV/c]","lp");
+	legBL -> AddEntry(gRFB[3],"0.0 < |y_{CM}| < 0.9,   6.5 < p_{T} < 30 [GeV/c]","lp");
 	legBL->Draw();
 	latex->SetTextSize(0.05);
-	latex->DrawLatex(0.53, 0.89, cmsstring.c_str());	
+	latex->DrawLatex(0.53, 0.90, cmsstring.c_str());	
 	latex->SetTextSize(0.04);
-	latex->DrawLatex(0.55, 0.82, beamstring.c_str());
+	latex->DrawLatex(0.55, 0.83, beamstring.c_str());
 	latex->SetTextSize(0.04);
-	latex->DrawLatex(0.55, 0.77, lumistring.c_str());
+	latex->DrawLatex(0.55, 0.78, lumistring.c_str());
 
 //	c1->SaveAs(Form("RFB_%s/RFB_ETHF_isPrompt%d_%s.pdf",dirName,(int)isPrompt,runstring.c_str()));
 	c1->SaveAs(Form("RFB_%s/RFB_ETHF_isPrompt%d_%s.pdf",dirName,(int)isPrompt,runstring.c_str()));
@@ -425,13 +425,13 @@ void formPtArr(Double_t binmin, Double_t binmax, string* arr) {
 	Double_t fracMin = modf(binmin, &intMin);
 	Double_t fracMax = modf(binmax, &intMax);
 	if ( fracMin == 0 && fracMax == 0 ) {
-		*arr = Form("%.0f < p_{T} < %.0f GeV/c", binmin, binmax);
+		*arr = Form("%.0f < p_{T} < %.0f [GeV/c]", binmin, binmax);
 	} else if ( fracMin != 0 && fracMax == 0 ) {
-		*arr = Form("%.1f < p_{T} < %.0f GeV/c", binmin, binmax);
+		*arr = Form("%.1f < p_{T} < %.0f [GeV/c]", binmin, binmax);
 	} else if ( fracMin == 0 && fracMax != 0 ) {
-		*arr = Form("%.0f < p_{T} < %.1f GeV/c", binmin, binmax);
+		*arr = Form("%.0f < p_{T} < %.1f [GeV/c]", binmin, binmax);
 	} else {
-		*arr = Form("%.1f < p_{T} < %.1f GeV/c", binmin, binmax);
+		*arr = Form("%.1f < p_{T} < %.1f [GeV/c]", binmin, binmax);
 	}
 }
 

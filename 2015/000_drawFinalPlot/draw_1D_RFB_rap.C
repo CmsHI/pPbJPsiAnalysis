@@ -68,20 +68,24 @@ void draw_1D_RFB_rap(char* dirName = "8rap9pt", int runCode=0, bool isPrompt = f
 	ex = {0.0, 0.0, 0.0};
 	exsys = {0.04, 0.04, 0.04};
 	if (isPrompt) {
-		eysys_lowpt = {0.025307419,
-		0.020268401,
-		0.027684865};
-		eysys_highpt = {0.027477816,
-		0.020839944,
-		0.048824342};
+		eysys_lowpt = {
+		0.039700808,
+		0.03048564,
+		0.036009465};
+		eysys_highpt = {
+		0.040365942,
+		0.034592218,
+		0.055332865};
 	}
 	else {
-		eysys_lowpt = {0.04629685,
-		0.064973771,
-		0.0671048};
-		eysys_highpt = {0.032774347,
-		0.029414238,
-		0.075415151};
+		eysys_lowpt = {
+		0.053403861,
+		0.06900436,
+		0.071267586};
+		eysys_highpt = {
+		0.044216832,
+		0.040294776,
+		0.080713354};
 	}
 			
 	
@@ -419,13 +423,13 @@ void formPtArr(Double_t binmin, Double_t binmax, string* arr) {
 	Double_t fracMin = modf(binmin, &intMin);
 	Double_t fracMax = modf(binmax, &intMax);
 	if ( fracMin == 0 && fracMax == 0 ) {
-		*arr = Form("%.0f < p_{T} < %.0f GeV/c", binmin, binmax);
+		*arr = Form("%.0f < p_{T} < %.0f [GeV/c]", binmin, binmax);
 	} else if ( fracMin != 0 && fracMax == 0 ) {
-		*arr = Form("%.1f < p_{T} < %.0f GeV/c", binmin, binmax);
+		*arr = Form("%.1f < p_{T} < %.0f [GeV/c]", binmin, binmax);
 	} else if ( fracMin == 0 && fracMax != 0 ) {
-		*arr = Form("%.0f < p_{T} < %.1f GeV/c", binmin, binmax);
+		*arr = Form("%.0f < p_{T} < %.1f [GeV/c]", binmin, binmax);
 	} else {
-		*arr = Form("%.1f < p_{T} < %.1f GeV/c", binmin, binmax);
+		*arr = Form("%.1f < p_{T} < %.1f [GeV/c]", binmin, binmax);
 	}
 }
 

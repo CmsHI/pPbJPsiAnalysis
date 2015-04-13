@@ -31,7 +31,7 @@ void formAbsRapArr(Double_t binmin, Double_t binmax, string* arr);
 void formPtArr(Double_t binmin, Double_t binmax, string* arr);
 
 //// runCode // 0=merged, 1=1stRun, 2=2ndRun
-void draw_1D_crossSection_rap(char* dirName = "8rap9pt", int runCode=0, bool isScale = false)
+void draw_1D_crossSection_rap(char* dirName = "8rap9pt", int runCode=0, bool isZoomIn = true, bool isScale = false)
 {
 	gROOT->Macro("./JpsiStyleForFinalResult.C");
 
@@ -70,38 +70,42 @@ void draw_1D_crossSection_rap(char* dirName = "8rap9pt", int runCode=0, bool isS
 	Double_t eysys_np_highpt[ntmp]; //sys y error
 	ex = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
 	exsys = {0.08, 0.08, 0.08, 0.08, 0.08, 0.08, 0.08, 0.08};
-	eysys_pr_lowpt = {0.628666817,
-	0.561047916,
-	0.895414993,
-	0.589828772,
-	1.134482956,
-	0.641988608,
-	0.475608925,
-	0.960925124};
-	eysys_pr_highpt = {0.218257817,
-	0.102275582,
-	0.164164131,
-	0.154916299,
-	0.132015219,
-	0.200981767,
-	0.143377822,
-	0.291853215};
-	eysys_np_lowpt = {0.473823549,
-	0.335739426,
-	0.761779396,
-	0.527160575,
-	0.472154727,
-	0.603763331,
-	0.328782614,
-	0.59449566};
-	eysys_np_highpt = {0.126110923,
-	0.065680913,
-	0.108619524,
-	0.11810767,
-	0.084655322,
-	0.122616945,
-	0.111377214,
-	0.207573424};
+	eysys_pr_lowpt = {
+	0.898820715,
+	1.031468734,
+	1.346790924,
+	1.391354777,
+	1.779710939,
+	1.316109273,
+	1.080258441,
+	1.249867022};
+	eysys_pr_highpt = {
+	0.241930657,
+	0.179949883,
+	0.239682523,
+	0.257145527,
+	0.253101028,
+	0.295249754,
+	0.240360887,
+	0.330758676};
+	eysys_np_lowpt = {
+	0.50718924,
+	0.399441023,
+	0.809035698,
+	0.65642744,
+	0.629217628,
+	0.696446789,
+	0.436210879,
+	0.636740804};
+	eysys_np_highpt = {
+	0.133619436,
+	0.094721065,
+	0.135558015,
+	0.162624141,
+	0.139069451,
+	0.165426114,
+	0.152576446,
+	0.222156252};
 	
 	//rap array in yCM (from forward to backward)
 	//Double_t rapArrNumFB[] = {1.93, 1.5, 0.9, 0., -0.9, -1.5, -1.93, -2.4, -2.87};// for pt dist.
@@ -139,7 +143,7 @@ void draw_1D_crossSection_rap(char* dirName = "8rap9pt", int runCode=0, bool isS
 	// scaling for drawing
 	double	scalePR_low, scalePR_high, scaleNP_low, scaleNP_high;
 	if (isScale) {
-		scalePR_low = 1.0; scalePR_high = 2.0; scaleNP_low = 1.0; scaleNP_high=1.5;
+		scalePR_low = 1.0; scalePR_high = 2.0; scaleNP_low = 1.0; scaleNP_high=2.0;
 	}
 	else {
 		scalePR_low = 1.0; scalePR_high = 1.0; scaleNP_low = 1.0; scaleNP_high=1.0;
@@ -309,32 +313,7 @@ void draw_1D_crossSection_rap(char* dirName = "8rap9pt", int runCode=0, bool isS
 	string ptArr_high;
 	formPtArr(ptArrNum[lowpt_init], ptArrNum[highpt_init], &ptArr_low);
 	formPtArr(ptArrNum[highpt_init], ptArrNum[nbinsY], &ptArr_high);
-/*	
-	gPad->SetLogy(0);
-	SetHistStyle(h1D_corrY_PR_tot[lowpt_init],lowpt_init,0);
-	SetHistStyle(h1D_corrY_PR_tot[highpt_init],highpt_init,0);
-	h1D_corrY_PR_tot[lowpt_init]->GetXaxis()->SetTitle("y_{CM}");
-	h1D_corrY_PR_tot[lowpt_init]->GetXaxis()->CenterTitle();
-	h1D_corrY_PR_tot[lowpt_init]->GetXaxis()->SetRangeUser(-3.,2.);
-	h1D_corrY_PR_tot[lowpt_init]->GetYaxis()->SetTitle("d#sigma/dy [ #mub]");
-	h1D_corrY_PR_tot[lowpt_init]->GetYaxis()->SetRangeUser(0.,80);
-	h1D_corrY_PR_tot[lowpt_init]->Draw("pe");
-	h1D_corrY_PR_tot[highpt_init]->Draw("pe same");
-	legUR -> SetHeader("Prompt J/ #psi");
-	if (isScale && scalePR_low != 1.0) legUR -> AddEntry(h1D_corrY_PR_tot[lowpt_init],Form("%s [x%.1f]",ptArr_low.c_str(),scalePR_low));
-	else legUR -> AddEntry(h1D_corrY_PR_tot[lowpt_init],Form("%s",ptArr_low.c_str()));
-	if (isScale && scalePR_high != 1.0) legUR -> AddEntry(h1D_corrY_PR_tot[highpt_init],Form("%s [x%.1f]",ptArr_high.c_str(),scalePR_high));
-	else legUR -> AddEntry(h1D_corrY_PR_tot[highpt_init],Form("%s",ptArr_high.c_str()));
-	legUR->Draw();
-	latex->SetTextSize(0.04);
-	latex->DrawLatex(0.17, 0.85, lumistring.c_str());
-	latex->SetTextSize(0.04);
-	latex->DrawLatex(0.17, 0.78, beamstring.c_str());
-	latex->SetTextSize(0.05);
-	latex->DrawLatex(0.17, 0.70, cmsstring.c_str());	
-	c_pr->SaveAs(Form("cross_%s/crossSection_rap_pr_isScale%d.pdf",dirName,(int)isScale));
-	legUR->Clear();
-*/
+	
 	/////////////////////////////////////
 	// ---- non-prompt
 	// *** bin merging
@@ -348,39 +327,12 @@ void draw_1D_crossSection_rap(char* dirName = "8rap9pt", int runCode=0, bool isS
 		h1D_corrY_NP_tot[highpt_init]->Add(h1D_corrY_NP_tot[ipt]);
 		cout << " *** and to high pT, merging : " << ptArr[ipt].c_str() << endl; 
 	}
-/*	
-	gPad->SetLogy(0);
-	SetHistStyle(h1D_corrY_NP_tot[lowpt_init],lowpt_init,0);
-	SetHistStyle(h1D_corrY_NP_tot[highpt_init],highpt_init,0);
-	h1D_corrY_NP_tot[lowpt_init]->GetXaxis()->SetTitle("y_{CM}");
-	h1D_corrY_NP_tot[lowpt_init]->GetXaxis()->CenterTitle();
-	h1D_corrY_NP_tot[lowpt_init]->GetXaxis()->SetRangeUser(-3.,2.);
-	h1D_corrY_NP_tot[lowpt_init]->GetYaxis()->SetTitle("d#sigma/dy [ #mub]");
-	h1D_corrY_NP_tot[lowpt_init]->GetYaxis()->SetRangeUser(0.,28);
-	h1D_corrY_NP_tot[lowpt_init]->Draw("pe");
-	h1D_corrY_NP_tot[highpt_init]->Draw("pe same");
-	legUR -> SetHeader("Non-prompt J/ #psi");
-	if (isScale && scaleNP_low != 1.0) legUR -> AddEntry(h1D_corrY_NP_tot[lowpt_init],Form("%s [x%.1f]",ptArr_low.c_str(),scaleNP_low));
-	else legUR -> AddEntry(h1D_corrY_NP_tot[lowpt_init],Form("%s",ptArr_low.c_str()));
-	if (isScale && scaleNP_high != 1.0) legUR -> AddEntry(h1D_corrY_NP_tot[highpt_init],Form("%s [x%.1f]",ptArr_high.c_str(),scaleNP_high));
-	else legUR -> AddEntry(h1D_corrY_NP_tot[highpt_init],Form("%s",ptArr_high.c_str()));
-	legUR->Draw();
-	latex->SetTextSize(0.04);
-	latex->DrawLatex(0.17, 0.85, lumistring.c_str());
-	latex->SetTextSize(0.04);
-	latex->DrawLatex(0.17, 0.78, beamstring.c_str());
-	latex->SetTextSize(0.05);
-	latex->DrawLatex(0.17, 0.70, cmsstring.c_str());	
-
-	c_np->SaveAs(Form("cross_%s/crossSection_rap_np_isScale%d.pdf",dirName,(int)isScale));
-	legUR->Clear();
-*/
 
 	//////////////////////////////////////////////
 	/// convert to TGraphErrors 	
 
-	//TLegend *legUR = new TLegend(0.50, 0.66, 0.86, 0.89); //upper left
-	TLegend *legUR = new TLegend(0.50, 0.70, 0.86, 0.92); //upper left
+	//TLegend *legUR = new TLegend(0.50, 0.70, 0.86, 0.92); //upper left
+	TLegend *legUR = new TLegend(0.56, 0.75, 0.90, 0.94); //upper left
 	SetLegendStyle(legUR);
 
 	TLatex* latex = new TLatex();
@@ -401,10 +353,17 @@ void draw_1D_crossSection_rap(char* dirName = "8rap9pt", int runCode=0, bool isS
 	}
 	gCross_pr_sys_lowpt->GetXaxis()->SetTitle("y_{CM}");	
 	gCross_pr_sys_lowpt->GetXaxis()->CenterTitle();	
-	gCross_pr_sys_lowpt->GetYaxis()->SetTitle("d#sigma/dy (#mub)");	
+	gCross_pr_sys_lowpt->GetYaxis()->SetTitle("d#sigma/dy [#mub]");	
 	gCross_pr_sys_lowpt->GetXaxis()->SetLimits(-2.87,1.93);	
-	gCross_pr_sys_lowpt->SetMinimum(0.0);	
-	gCross_pr_sys_lowpt->SetMaximum(85.0);	
+	//gCross_pr_sys_lowpt->GetXaxis()->SetLimits(-3.1,2.2);	
+	if (isZoomIn) {
+		gCross_pr_sys_lowpt->SetMinimum(0.0);	
+		gCross_pr_sys_lowpt->SetMaximum(62.5);	
+	}
+	else {
+		gCross_pr_sys_lowpt->SetMinimum(0.0);	
+		gCross_pr_sys_lowpt->SetMaximum(85.0);	
+	}
 	gCross_pr_sys_lowpt->SetFillColor(kRed-9);	
 	gCross_pr_sys_lowpt->Draw("A2");
 	//sys_highpt
@@ -414,7 +373,7 @@ void draw_1D_crossSection_rap(char* dirName = "8rap9pt", int runCode=0, bool isS
 //		gCross_pr_sys_highpt->SetPointError(iy, exsys[iy], exsys[iy], eysys_pr_highpt[iy], eysys_pr_highpt[iy]);
 		gCross_pr_sys_highpt->SetPointError(iy, exsys[iy], exsys[iy], scalePR_high*eysys_pr_highpt[iy], scalePR_high*eysys_pr_highpt[iy]);
 	}
-	gCross_pr_sys_highpt->SetFillColor(kTeal-9);	
+	gCross_pr_sys_highpt->SetFillColor(kTeal+7);	
 	gCross_pr_sys_highpt->Draw("2");
 	
 	//lowpt
@@ -447,17 +406,17 @@ void draw_1D_crossSection_rap(char* dirName = "8rap9pt", int runCode=0, bool isS
 	gCross_pr_highpt->Draw("P");
 
 	legUR -> SetHeader("Prompt J/#psi");
-	if (isScale && scalePR_low != 1.0) legUR -> AddEntry(gCross_pr_lowpt,Form("6.5 < p_{T} < 10 (GeV/c) [x%1.f]",scalePR_low), "lp");
-	else legUR -> AddEntry(gCross_pr_lowpt,"6.5 < p_{T} < 10 (GeV/c)","lp");
-	if (isScale && scalePR_high != 1.0) legUR -> AddEntry(gCross_pr_highpt,Form("10 < p_{T} < 30 (GeV/c) [x%.1f]",scalePR_high),"lp");
-	else legUR -> AddEntry(gCross_pr_highpt,"10 < p_{T} < 30 (GeV/c)","lp");
+	if (isScale && scalePR_low != 1.0) legUR -> AddEntry(gCross_pr_lowpt,Form("6.5 < p_{T} < 10 [GeV/c] [x%1.f]",scalePR_low), "lp");
+	else legUR -> AddEntry(gCross_pr_lowpt,"6.5 < p_{T} < 10 [GeV/c]","lp");
+	if (isScale && scalePR_high != 1.0) legUR -> AddEntry(gCross_pr_highpt,Form("10 < p_{T} < 30 [GeV/c] [x%.1f]",scalePR_high),"lp");
+	else legUR -> AddEntry(gCross_pr_highpt,"10 < p_{T} < 30 [GeV/c]","lp");
 	legUR->Draw();
 	latex->SetTextSize(0.05);
-	latex->DrawLatex(0.17, 0.88, cmsstring.c_str());
+	latex->DrawLatex(0.17, 0.90, cmsstring.c_str());
 	latex->SetTextSize(0.04);
-	latex->DrawLatex(0.17, 0.79, beamstring.c_str());
+	latex->DrawLatex(0.17, 0.81, beamstring.c_str());
 	latex->SetTextSize(0.04);
-	latex->DrawLatex(0.17, 0.72, lumistring.c_str());
+	latex->DrawLatex(0.17, 0.74, lumistring.c_str());
 	c_pr->SaveAs(Form("cross_%s/crossSection_rap_pr_isScale%d.pdf",dirName,(int)isScale));
 	legUR->Clear();
 
@@ -474,10 +433,17 @@ void draw_1D_crossSection_rap(char* dirName = "8rap9pt", int runCode=0, bool isS
 	}
 	gCross_np_sys_lowpt->GetXaxis()->SetTitle("y_{CM}");	
 	gCross_np_sys_lowpt->GetXaxis()->CenterTitle();	
-	gCross_np_sys_lowpt->GetYaxis()->SetTitle("d#sigma/dy (#mub)");	
+	gCross_np_sys_lowpt->GetYaxis()->SetTitle("d#sigma/dy [#mub]");	
 	gCross_np_sys_lowpt->GetXaxis()->SetLimits(-2.87,1.93);	
-	gCross_np_sys_lowpt->SetMinimum(0.0);	
-	gCross_np_sys_lowpt->SetMaximum(27.0);	
+	//gCross_np_sys_lowpt->GetXaxis()->SetLimits(-3.1,2.2);	
+	if (isZoomIn) {
+		gCross_np_sys_lowpt->SetMinimum(0.0);	
+		gCross_np_sys_lowpt->SetMaximum(20.0);	
+	}
+	else {
+		gCross_np_sys_lowpt->SetMinimum(0.0);	
+		gCross_np_sys_lowpt->SetMaximum(27.0);	
+	}
 	gCross_np_sys_lowpt->SetFillColor(kRed-9);	
 	gCross_np_sys_lowpt->Draw("A2");
 	//sys_highpt
@@ -487,7 +453,7 @@ void draw_1D_crossSection_rap(char* dirName = "8rap9pt", int runCode=0, bool isS
 //		gCross_np_sys_highpt->SetPointError(iy, exsys[iy], exsys[iy], eysys_np_highpt[iy], eysys_np_highpt[iy]);
 		gCross_np_sys_highpt->SetPointError(iy, exsys[iy], exsys[iy], scaleNP_high*eysys_np_highpt[iy], scaleNP_high*eysys_np_highpt[iy]);
 	}
-	gCross_np_sys_highpt->SetFillColor(kTeal-9);	
+	gCross_np_sys_highpt->SetFillColor(kTeal+7);	
 	gCross_np_sys_highpt->Draw("2");
 	
 	//lowpt
@@ -520,17 +486,17 @@ void draw_1D_crossSection_rap(char* dirName = "8rap9pt", int runCode=0, bool isS
 	gCross_np_highpt->Draw("P");
 
 	legUR -> SetHeader("Non-prompt J/#psi");
-	if (isScale && scaleNP_low != 1.0) legUR -> AddEntry(gCross_np_lowpt,Form("6.5 < p_{T} < 10 (GeV/c) [x%1.f]",scaleNP_low), "lp");
-	else legUR -> AddEntry(gCross_np_lowpt,"6.5 < p_{T} < 10 (GeV/c)","lp");
-	if (isScale && scaleNP_high != 1.0) legUR -> AddEntry(gCross_np_highpt,Form("10 < p_{T} < 30 (GeV/c) [x%.1f]",scaleNP_high),"lp");
-	else legUR -> AddEntry(gCross_np_highpt,"10 < p_{T} < 30 (GeV/c)","lp");
+	if (isScale && scaleNP_low != 1.0) legUR -> AddEntry(gCross_np_lowpt,Form("6.5 < p_{T} < 10 [GeV/c] [x%1.f]",scaleNP_low), "lp");
+	else legUR -> AddEntry(gCross_np_lowpt,"6.5 < p_{T} < 10 [GeV/c]","lp");
+	if (isScale && scaleNP_high != 1.0) legUR -> AddEntry(gCross_np_highpt,Form("10 < p_{T} < 30 [GeV/c] [x%.1f]",scaleNP_high),"lp");
+	else legUR -> AddEntry(gCross_np_highpt,"10 < p_{T} < 30 [GeV/c]","lp");
 	legUR->Draw();
 	latex->SetTextSize(0.05);
-	latex->DrawLatex(0.17, 0.88, cmsstring.c_str());
+	latex->DrawLatex(0.17, 0.90, cmsstring.c_str());
 	latex->SetTextSize(0.04);
-	latex->DrawLatex(0.17, 0.79, beamstring.c_str());
+	latex->DrawLatex(0.17, 0.81, beamstring.c_str());
 	latex->SetTextSize(0.04);
-	latex->DrawLatex(0.17, 0.72, lumistring.c_str());
+	latex->DrawLatex(0.17, 0.74, lumistring.c_str());
 	c_np->SaveAs(Form("cross_%s/crossSection_rap_np_isScale%d.pdf",dirName,(int)isScale));
 	legUR->Clear();
 
@@ -587,13 +553,13 @@ void formPtArr(Double_t binmin, Double_t binmax, string* arr) {
 	Double_t fracMin = modf(binmin, &intMin);
 	Double_t fracMax = modf(binmax, &intMax);
 	if ( fracMin == 0 && fracMax == 0 ) {
-		*arr = Form("%.0f < p_{T} < %.0f GeV/c", binmin, binmax);
+		*arr = Form("%.0f < p_{T} < %.0f [GeV/c]", binmin, binmax);
 	} else if ( fracMin != 0 && fracMax == 0 ) {
-		*arr = Form("%.1f < p_{T} < %.0f GeV/c", binmin, binmax);
+		*arr = Form("%.1f < p_{T} < %.0f [GeV/c]", binmin, binmax);
 	} else if ( fracMin == 0 && fracMax != 0 ) {
-		*arr = Form("%.0f < p_{T} < %.1f GeV/c", binmin, binmax);
+		*arr = Form("%.0f < p_{T} < %.1f [GeV/c]", binmin, binmax);
 	} else {
-		*arr = Form("%.1f < p_{T} < %.1f GeV/c", binmin, binmax);
+		*arr = Form("%.1f < p_{T} < %.1f [GeV/c]", binmin, binmax);
 	}
 }
 
