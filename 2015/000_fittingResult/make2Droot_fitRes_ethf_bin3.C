@@ -36,7 +36,7 @@ void formStr(Double_t min, Double_t max, string* arr);
 
 /////// main func. ///////
 
-int make2Droot_fitRes(char *dirName = "fitRes_8rap9pt", bool is1st = false){
+int make2Droot_fitRes_ethf_bin3(char *dirName = "fitRes_6rap3pt", bool is1st = false){
 
   using namespace std;
 	
@@ -57,15 +57,14 @@ int make2Droot_fitRes(char *dirName = "fitRes_8rap9pt", bool is1st = false){
 	///////////////////////////////////////////////////
 	//////// Definition of binning
 	// --- pt Bin
-//	Double_t ptBinsArr[] = {0.0, 3.0, 6.5, 7.5, 8.5, 10.0, 14.0, 30.0};
-	Double_t ptBinsArr[] = {0.0, 3.0, 4.0, 5.0, 6.5, 7.5, 8.5, 10.0, 14.0, 30.0}; // 8rap9pt
-//	Double_t ptBinsArr[] = {0.0, 1.0, 2.0, 3.0, 4.0, 5.0, 6.5, 7.5, 8.5, 10.0, 14.0, 30.0}; // finer
-	//Double_t ptBinsArr[] = {0.0, 3.0, 6.5, 10.0, 30.0}; // ntrk33
+	//Double_t ptBinsArr[] = {0.0, 3.0, 4.0, 5.0, 6.5, 7.5, 8.5, 10.0, 14.0, 30.0}; // 8rap9pt
+	Double_t ptBinsArr[] = {5.0, 6.5, 10.0, 30.0}; // 6rap3pt
 	const Int_t nPtBins = sizeof(ptBinsArr)/sizeof(double)-1;
    cout << "nPtBins=" << nPtBins << endl;
 
 	// --- y Bin
-  Double_t tmp_yBinsArr[] = {-2.4, -1.97, -1.37, -0.47, 0.43, 1.03, 1.46, 1.93, 2.4}; // KYO! set to 1st run
+  //Double_t tmp_yBinsArr[] = {-2.4, -1.97, -1.37, -0.47, 0.43, 1.03, 1.46, 1.93, 2.4}; // 8rap9pt
+  Double_t tmp_yBinsArr[] = {-2.4, -1.97, -1.37, -0.47, 0.43, 1.03, 1.46}; // 6rap3pt
   //const Int_t tmp_nYBins = sizeof(tmp_yBinsArr)/sizeof(double)-1;
   const Int_t tmp_nYBins = sizeof(tmp_yBinsArr)/sizeof(double);
   cout << "tmp_nYBins=" << tmp_nYBins << endl;
@@ -92,7 +91,10 @@ int make2Droot_fitRes(char *dirName = "fitRes_8rap9pt", bool is1st = false){
 	const Int_t nNtrBins = sizeof(ntrBinsArr)/sizeof(double)-1;
 	cout << "nNtrBins=" << nNtrBins << endl;
 	// --- Et bin
-	Double_t etBinsArr[] = {0.0, 120.0};
+	//Double_t etBinsArr[] = {0.0, 120.0}; // 8rap9pt
+	//Double_t etBinsArr[] = {0.0, 20.0}; // 6rap3pt bin1
+	//Double_t etBinsArr[] = {20.0, 30.0}; // 6rap3pt bin2
+	Double_t etBinsArr[] = {30.0, 120.0}; // 6rap3pt bin3
 	const Int_t nEtBins = sizeof(etBinsArr)/sizeof(double)-1;
 	cout << "nEtBins=" << nEtBins << endl;
 
@@ -136,31 +138,10 @@ int make2Droot_fitRes(char *dirName = "fitRes_8rap9pt", bool is1st = false){
 		//cout << rapdum << ptdum << centdum << dphidum << ntrkdum << etdum << errmin << errmax << endl;
 	  for (Int_t iy=0; iy<nYBins; iy++){
 	    for (Int_t ipt=0; ipt<nPtBins; ipt++) {
-		  	if (!yrange[iy].compare(rapdum) && !ptrange[ipt].compare(ptdum) ) {
+		  	if (!yrange[iy].compare(rapdum) && !ptrange[ipt].compare(ptdum) && !etrange[0].compare(etdum)) {
 					ctErrmin[iy][ipt] = atof(errmin.c_str());
 					ctErrmax[iy][ipt] = atof(errmax.c_str());
 				}
-		    // Special bin setting with no ctau error ranges from txt //for Cross76!! //byHand KYO
-		    /*
-				else if ( 
-				(is1st) && 
-				(( ptrange[ipt].compare("0.0-3.0") ==0 && yrange[iy].compare("-2.4--1.97")!=0 ) || 
-				( ptrange[ipt].compare("3.0-6.5")==0 
-				&& (yrange[iy].compare("-2.4--1.97")!=0 && yrange[iy].compare("1.03-1.93")!=0 ) ) || 
-				(yrange[iy].compare("1.93-2.4")!=0) ) ){
-					ctErrmin[iy][ipt]=-532;
-					ctErrmax[iy][ipt]=532;
-				}
-				else if ( 
-				(!is1st) && 
-				(( ptrange[ipt].compare("0.0-3.0") ==0 && yrange[iy].compare("1.97-2.4")!=0 ) || 
-				( ptrange[ipt].compare("3.0-6.5")==0 
-			 	&& (yrange[iy].compare("1.97-2.4")!=0 && yrange[iy].compare("-1.93--1.03")!=0 ) ) ||
-				yrange[iy].compare("-2.4--1.93")!=0 )) { 
-					ctErrmin[iy][ipt]=-532;
-					ctErrmax[iy][ipt]=532;
-	   		}
-				*/
 	    } 
 	  }
 	} //end of while file open
@@ -207,7 +188,7 @@ int make2Droot_fitRes(char *dirName = "fitRes_8rap9pt", bool is1st = false){
 		//cout <<  rapdum << ptdum << centdum << dphidum << ntrkdum << etdum << sigdum << sigerrdum << bkgdum << bkgerrdum << prdum << prerrdum << npdum << nperrdum << bfrdum << bfrerrdum << endl;
 	  for (Int_t iy=0; iy<nYBins; iy++){
 	    for (Int_t ipt=0; ipt<nPtBins; ipt++) {
-		  	if (!yrange[iy].compare(rapdum) && !ptrange[ipt].compare(ptdum) ) {
+		  	if (!yrange[iy].compare(rapdum) && !ptrange[ipt].compare(ptdum) && !etrange[0].compare(etdum)) {
 					nSig[iy][ipt] = atof(sigdum.c_str());
 					nSigErr[iy][ipt] = atof(sigerrdum.c_str());
 					nBkg[iy][ipt] = atof(bkgdum.c_str());
@@ -247,7 +228,7 @@ int make2Droot_fitRes(char *dirName = "fitRes_8rap9pt", bool is1st = false){
 	// Save as a root file
 
 //	TFile *outFile = new TFile(Form("EffCounting_%s_useCtErr_%d_useDataDriven_%d_useZvtxStep1_%d_Step2_%d.root",strName, (int)useCtErrRangeEff ,(int)useDataDrivenEff, (int)useZvtxWeightStep1, (int)useZvtxWeightStep2),"RECREATE");
-	TFile *outFile = new TFile(Form("2Dhist_%s.root",strName),"RECREATE");
+	TFile *outFile = new TFile(Form("2Dhist_%s_bin3.root",strName),"RECREATE");
 	std::cout << "strName: " << strName << std::endl;
 	
 	outFile->cd();

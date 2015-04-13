@@ -31,13 +31,16 @@
 #include <TPaveStats.h>
 
 /////// main func. ///////
-int make2Droot_total(char *dirName = "8rap9pt"){
+int make2Droot_total(char *dirName = "8rap9pt", char *dateName = "no"){
 
   using namespace std;
 
+	////////////////////////////////////////////////
 	////// read in Acceptance file
-	TFile *fAccPR = new TFile("/home/songkyo/kyo/2015/001_Acceptance/AccAna_8rap9pt_PRMC_boosted.root");
-	TFile *fAccNP = new TFile("/home/songkyo/kyo/2015/001_Acceptance/AccAna_8rap9pt_NPMC_boosted.root");
+	//TFile *fAccPR = new TFile("/home/songkyo/kyo/2015/001_Acceptance/AccAna_8rap9pt_PRMC_boosted.root");
+	//TFile *fAccNP = new TFile("/home/songkyo/kyo/2015/001_Acceptance/AccAna_8rap9pt_NPMC_boosted.root");
+	TFile *fAccPR = new TFile("../001_Acceptance/AccAna_8rap9pt_PRMC_boosted.root");
+	TFile *fAccNP = new TFile("../001_Acceptance/AccAna_8rap9pt_NPMC_boosted.root");
 	TH2D* h2D_Acc_pt_y_PRMC_Pbp = (TH2D*)fAccPR->Get("h2D_Acc_pt_y_Pbp");
 	TH2D* h2D_Acc_pt_y_PRMC_pPb = (TH2D*)fAccPR->Get("h2D_Acc_pt_y_pPb");
 	TH2D* h2D_Acc_pt_y_NPMC_Pbp = (TH2D*)fAccNP->Get("h2D_Acc_pt_y_Pbp");
@@ -47,12 +50,38 @@ int make2Droot_total(char *dirName = "8rap9pt"){
 	h2D_Acc_pt_y_NPMC_Pbp->SetName("h2D_Acc_pt_y_NPMC_Pbp");
 	h2D_Acc_pt_y_NPMC_pPb->SetName("h2D_Acc_pt_y_NPMC_pPb");
 	cout << "4 Acc TH2D : "<<h2D_Acc_pt_y_PRMC_Pbp<<" "<<h2D_Acc_pt_y_PRMC_pPb<<" "<<h2D_Acc_pt_y_NPMC_Pbp<<" "<<h2D_Acc_pt_y_NPMC_pPb<<endl;
+	
+	TH2D* h2D_Acc_Den_pt_y_PRMC_Pbp = (TH2D*)fAccPR->Get("h2D_Den_pt_y_Pbp");
+	TH2D* h2D_Acc_Den_pt_y_PRMC_pPb = (TH2D*)fAccPR->Get("h2D_Den_pt_y_pPb");
+	TH2D* h2D_Acc_Den_pt_y_NPMC_Pbp = (TH2D*)fAccNP->Get("h2D_Den_pt_y_Pbp");
+	TH2D* h2D_Acc_Den_pt_y_NPMC_pPb = (TH2D*)fAccNP->Get("h2D_Den_pt_y_pPb");
+	h2D_Acc_Den_pt_y_PRMC_Pbp->SetName("h2D_Acc_Den_pt_y_PRMC_Pbp");
+	h2D_Acc_Den_pt_y_PRMC_pPb->SetName("h2D_Acc_Den_pt_y_PRMC_pPb");
+	h2D_Acc_Den_pt_y_NPMC_Pbp->SetName("h2D_Acc_Den_pt_y_NPMC_Pbp");
+	h2D_Acc_Den_pt_y_NPMC_pPb->SetName("h2D_Acc_Den_pt_y_NPMC_pPb");
+	
+	TH2D* h2D_Acc_Num_pt_y_PRMC_Pbp = (TH2D*)fAccPR->Get("h2D_Num_pt_y_Pbp");
+	TH2D* h2D_Acc_Num_pt_y_PRMC_pPb = (TH2D*)fAccPR->Get("h2D_Num_pt_y_pPb");
+	TH2D* h2D_Acc_Num_pt_y_NPMC_Pbp = (TH2D*)fAccNP->Get("h2D_Num_pt_y_Pbp");
+	TH2D* h2D_Acc_Num_pt_y_NPMC_pPb = (TH2D*)fAccNP->Get("h2D_Num_pt_y_pPb");
+	h2D_Acc_Num_pt_y_PRMC_Pbp->SetName("h2D_Acc_Num_pt_y_PRMC_Pbp");
+	h2D_Acc_Num_pt_y_PRMC_pPb->SetName("h2D_Acc_Num_pt_y_PRMC_pPb");
+	h2D_Acc_Num_pt_y_NPMC_Pbp->SetName("h2D_Acc_Num_pt_y_NPMC_Pbp");
+	h2D_Acc_Num_pt_y_NPMC_pPb->SetName("h2D_Acc_Num_pt_y_NPMC_pPb");
 
+
+	////////////////////////////////////////////////
 	////// read in Efficiency file
-	TFile *fEffPRPbp = new TFile("/home/songkyo/kyo/2015/002_Efficiency_zVtx_embedded/EffCounting_8rap9pt_PRMCpythia_Pbp_useCtErr_1_useDataDriven_0_useZvtxStep1_0_Step2_1.root");
-	TFile *fEffPRpPb = new TFile("/home/songkyo/kyo/2015/002_Efficiency_zVtx_embedded/EffCounting_8rap9pt_PRMCpythia_pPb_useCtErr_1_useDataDriven_0_useZvtxStep1_0_Step2_1.root");
-	TFile *fEffNPPbp = new TFile("/home/songkyo/kyo/2015/002_Efficiency_zVtx_embedded/EffCounting_8rap9pt_NPMCpythia_Pbp_useCtErr_1_useDataDriven_0_useZvtxStep1_0_Step2_1.root");
-	TFile *fEffNPpPb = new TFile("/home/songkyo/kyo/2015/002_Efficiency_zVtx_embedded/EffCounting_8rap9pt_NPMCpythia_pPb_useCtErr_1_useDataDriven_0_useZvtxStep1_0_Step2_1.root");
+	//wo TNP
+	//TFile *fEffPRPbp = new TFile("../002_Efficiency_zVtx_embedded/EffCounting_8rap9pt_PRMCpythia_Pbp_useCtErr_1_useDataDriven_0_useZvtxStep1_0_Step2_1.root");
+	//TFile *fEffPRpPb = new TFile("../002_Efficiency_zVtx_embedded/EffCounting_8rap9pt_PRMCpythia_pPb_useCtErr_1_useDataDriven_0_useZvtxStep1_0_Step2_1.root");
+	//TFile *fEffNPPbp = new TFile("../002_Efficiency_zVtx_embedded/EffCounting_8rap9pt_NPMCpythia_Pbp_useCtErr_1_useDataDriven_0_useZvtxStep1_0_Step2_1.root");
+	//TFile *fEffNPpPb = new TFile("../002_Efficiency_zVtx_embedded/EffCounting_8rap9pt_NPMCpythia_pPb_useCtErr_1_useDataDriven_0_useZvtxStep1_0_Step2_1.root");
+	//with TNP
+	TFile *fEffPRPbp = new TFile("../002_Efficiency_zVtx_embedded/EffCounting_8rap9pt_PRMCpythia_Pbp_useCtErr_1_useDataDriven_1_useZvtxStep1_0_Step2_1.root");
+	TFile *fEffPRpPb = new TFile("../002_Efficiency_zVtx_embedded/EffCounting_8rap9pt_PRMCpythia_pPb_useCtErr_1_useDataDriven_1_useZvtxStep1_0_Step2_1.root");
+	TFile *fEffNPPbp = new TFile("../002_Efficiency_zVtx_embedded/EffCounting_8rap9pt_NPMCpythia_Pbp_useCtErr_1_useDataDriven_1_useZvtxStep1_0_Step2_1.root");
+	TFile *fEffNPpPb = new TFile("../002_Efficiency_zVtx_embedded/EffCounting_8rap9pt_NPMCpythia_pPb_useCtErr_1_useDataDriven_1_useZvtxStep1_0_Step2_1.root");
 	TH2D* h2D_Eff_pt_y_PRMC_Pbp = (TH2D*)fEffPRPbp->Get("h2D_Eff_pt_y");
 	TH2D* h2D_Eff_pt_y_PRMC_pPb = (TH2D*)fEffPRpPb->Get("h2D_Eff_pt_y");
 	TH2D* h2D_Eff_pt_y_NPMC_Pbp = (TH2D*)fEffNPPbp->Get("h2D_Eff_pt_y");
@@ -63,9 +92,30 @@ int make2Droot_total(char *dirName = "8rap9pt"){
 	h2D_Eff_pt_y_NPMC_pPb->SetName("h2D_Eff_pt_y_NPMC_pPb");
 	cout << "4 Eff TH2D : "<<h2D_Eff_pt_y_PRMC_Pbp<<" "<<h2D_Eff_pt_y_PRMC_pPb<<" "<<h2D_Eff_pt_y_NPMC_Pbp<<" "<<h2D_Eff_pt_y_NPMC_pPb<<endl;
 	
+	TH2D* h2D_Eff_Den_pt_y_PRMC_Pbp = (TH2D*)fEffPRPbp->Get("h2D_Den_pt_y");
+	TH2D* h2D_Eff_Den_pt_y_PRMC_pPb = (TH2D*)fEffPRpPb->Get("h2D_Den_pt_y");
+	TH2D* h2D_Eff_Den_pt_y_NPMC_Pbp = (TH2D*)fEffNPPbp->Get("h2D_Den_pt_y");
+	TH2D* h2D_Eff_Den_pt_y_NPMC_pPb = (TH2D*)fEffNPpPb->Get("h2D_Den_pt_y");
+	h2D_Eff_Den_pt_y_PRMC_Pbp->SetName("h2D_Eff_Den_pt_y_PRMC_Pbp");
+	h2D_Eff_Den_pt_y_PRMC_pPb->SetName("h2D_Eff_Den_pt_y_PRMC_pPb");
+	h2D_Eff_Den_pt_y_NPMC_Pbp->SetName("h2D_Eff_Den_pt_y_NPMC_Pbp");
+	h2D_Eff_Den_pt_y_NPMC_pPb->SetName("h2D_Eff_Den_pt_y_NPMC_pPb");
+	
+	TH2D* h2D_Eff_Num_pt_y_PRMC_Pbp = (TH2D*)fEffPRPbp->Get("h2D_Num_pt_y");
+	TH2D* h2D_Eff_Num_pt_y_PRMC_pPb = (TH2D*)fEffPRpPb->Get("h2D_Num_pt_y");
+	TH2D* h2D_Eff_Num_pt_y_NPMC_Pbp = (TH2D*)fEffNPPbp->Get("h2D_Num_pt_y");
+	TH2D* h2D_Eff_Num_pt_y_NPMC_pPb = (TH2D*)fEffNPpPb->Get("h2D_Num_pt_y");
+	h2D_Eff_Num_pt_y_PRMC_Pbp->SetName("h2D_Eff_Num_pt_y_PRMC_Pbp");
+	h2D_Eff_Num_pt_y_PRMC_pPb->SetName("h2D_Eff_Num_pt_y_PRMC_pPb");
+	h2D_Eff_Num_pt_y_NPMC_Pbp->SetName("h2D_Eff_Num_pt_y_NPMC_Pbp");
+	h2D_Eff_Num_pt_y_NPMC_pPb->SetName("h2D_Eff_Num_pt_y_NPMC_pPb");
+	
+	////////////////////////////////////////////////
 	////// read in fromfit file
-	TFile* fFitPbp = new TFile("/home/songkyo/kyo/2015/000_fittingResult/2Dhist_fitRes_8rap9pt_20150106_Pbp.root");	
-	TFile* fFitpPb = new TFile("/home/songkyo/kyo/2015/000_fittingResult/2Dhist_fitRes_8rap9pt_20150106_pPb.root");	
+	TFile* fFitPbp = new TFile("./2Dhist_fitRes_8rap9pt_Pbp.root");
+	TFile* fFitpPb = new TFile("./2Dhist_fitRes_8rap9pt_pPb.root");
+//	TFile* fFitPbp = new TFile(Form("/home/songkyo/kyo/2015/000_fittingResult/2Dhist_fitRes_8rap9pt_%s_Pbp.root",dateName));	
+//	TFile* fFitpPb = new TFile(Form("/home/songkyo/kyo/2015/000_fittingResult/2Dhist_fitRes_8rap9pt_%s_pPb.root",dateName));	
 	TH2D* h2D_fit_pt_y_PR_Pbp = (TH2D*)fFitPbp->Get("h2D_nPrompt");	
 	TH2D* h2D_fit_pt_y_NP_Pbp = (TH2D*)fFitPbp->Get("h2D_nNonprompt");	
 	TH2D* h2D_fit_pt_y_nSig_Pbp = (TH2D*)fFitPbp->Get("h2D_nSig");	
@@ -102,7 +152,8 @@ int make2Droot_total(char *dirName = "8rap9pt"){
 	cout << "2 ctErrmin TH2D : "<<h2D_fit_pt_y_ctErrmin_Pbp<<" "<<h2D_fit_pt_y_ctErrmin_pPb<<endl;
 	cout << "2 ctErrmax TH2D : "<<h2D_fit_pt_y_ctErrmax_Pbp<<" "<<h2D_fit_pt_y_ctErrmax_pPb<<endl;
 	
-	////// get corrected yield = rawYield/(Acc*Eff)
+	////////////////////////////////////////////////
+	////// data corrected yield = rawYield/(Acc*Eff)
 	TH2D* h2D_corrY_PR_Pbp = (TH2D*)h2D_fit_pt_y_PR_Pbp->Clone("h2D_corrY_PR_Pbp");
 	h2D_corrY_PR_Pbp->SetName("h2D_corrY_PR_Pbp");
 	h2D_corrY_PR_Pbp->Divide(h2D_Acc_pt_y_PRMC_Pbp);
@@ -120,6 +171,28 @@ int make2Droot_total(char *dirName = "8rap9pt"){
 	h2D_corrY_NP_pPb->Divide(h2D_Acc_pt_y_NPMC_pPb);
 	h2D_corrY_NP_pPb->Divide(h2D_Eff_pt_y_NPMC_pPb);
 	
+	////////////////////////////////////////////////
+	////// MC corrected yield RECO/(Acc*Eff)
+	TH2D* h2D_MCcorrY_PR_Pbp = (TH2D*)h2D_Eff_Num_pt_y_PRMC_Pbp->Clone("h2D_MCcorrY_PR_Pbp");
+	h2D_MCcorrY_PR_Pbp->SetName("h2D_MCcorrY_PR_Pbp");
+	h2D_MCcorrY_PR_Pbp->Divide(h2D_Acc_pt_y_PRMC_Pbp);
+	h2D_MCcorrY_PR_Pbp->Divide(h2D_Eff_pt_y_PRMC_Pbp);
+	TH2D* h2D_MCcorrY_NP_Pbp = (TH2D*)h2D_Eff_Num_pt_y_NPMC_Pbp->Clone("h2D_MCcorrY_NP_Pbp");
+	h2D_MCcorrY_NP_Pbp->SetName("h2D_MCcorrY_NP_Pbp");
+	h2D_MCcorrY_NP_Pbp->Divide(h2D_Acc_pt_y_NPMC_Pbp);
+	h2D_MCcorrY_NP_Pbp->Divide(h2D_Eff_pt_y_NPMC_Pbp);
+	TH2D* h2D_MCcorrY_PR_pPb = (TH2D*)h2D_Eff_Num_pt_y_PRMC_pPb->Clone("h2D_MCcorrY_PR_pPb");
+	h2D_MCcorrY_PR_pPb->SetName("h2D_MCcorrY_PR_pPb");
+	h2D_MCcorrY_PR_pPb->Divide(h2D_Acc_pt_y_PRMC_pPb);
+	h2D_MCcorrY_PR_pPb->Divide(h2D_Eff_pt_y_PRMC_pPb);
+	TH2D* h2D_MCcorrY_NP_pPb = (TH2D*)h2D_Eff_Num_pt_y_NPMC_pPb->Clone("h2D_MCcorrY_NP_pPb");
+	h2D_MCcorrY_NP_pPb->SetName("h2D_MCcorrY_NP_pPb");
+	h2D_MCcorrY_NP_pPb->Divide(h2D_Acc_pt_y_NPMC_pPb);
+	h2D_MCcorrY_NP_pPb->Divide(h2D_Eff_pt_y_NPMC_pPb);
+	
+	
+	////////////////////////////////////////////////
+	////// save as a root file
 	TFile *outFile = new TFile(Form("total2Dhist_%s.root",dirName),"RECREATE");
 	std::cout << "dirName: " << dirName << std::endl;
 	cout << "total2Dhist_"<<dirName<<".root has been created :) " <<endl;	
@@ -145,9 +218,39 @@ int make2Droot_total(char *dirName = "8rap9pt"){
 	h2D_corrY_PR_pPb->Write();	
 	h2D_corrY_NP_Pbp->Write();	
 	h2D_corrY_NP_pPb->Write();	
-	// else in otherInfor directory
-	TDirectoryFile *otherInfo = new TDirectoryFile("otherInfo","otherInfo");
-	otherInfo->cd();
+	
+	// DIRECTORY : num, den distributions for acc & eff
+	TDirectoryFile *otherMCInfo = new TDirectoryFile("otherMCInfo","otherMCInfo");
+	otherMCInfo->cd();
+	// acc den & num
+	h2D_Acc_Den_pt_y_PRMC_Pbp->Write();
+	h2D_Acc_Den_pt_y_PRMC_pPb->Write();
+	h2D_Acc_Den_pt_y_NPMC_Pbp->Write();
+	h2D_Acc_Den_pt_y_NPMC_pPb->Write();
+	h2D_Acc_Num_pt_y_PRMC_Pbp->Write();
+	h2D_Acc_Num_pt_y_PRMC_pPb->Write();
+	h2D_Acc_Num_pt_y_NPMC_Pbp->Write();
+	h2D_Acc_Num_pt_y_NPMC_pPb->Write();
+	// eff den & num
+	h2D_Eff_Den_pt_y_PRMC_Pbp->Write();
+	h2D_Eff_Den_pt_y_PRMC_pPb->Write();
+	h2D_Eff_Den_pt_y_NPMC_Pbp->Write();
+	h2D_Eff_Den_pt_y_NPMC_pPb->Write();
+	h2D_Eff_Num_pt_y_PRMC_Pbp->Write();
+	h2D_Eff_Num_pt_y_PRMC_pPb->Write();
+	h2D_Eff_Num_pt_y_NPMC_Pbp->Write();
+	h2D_Eff_Num_pt_y_NPMC_pPb->Write();
+	// MC corrYield
+	h2D_MCcorrY_PR_Pbp->Write();	
+	h2D_MCcorrY_PR_pPb->Write();	
+	h2D_MCcorrY_NP_Pbp->Write();	
+	h2D_MCcorrY_NP_pPb->Write();	
+	otherMCInfo->Write();
+	
+	// DIRECTORY : other information for fittng
+	outFile->cd();
+	TDirectoryFile *otherFitInfo = new TDirectoryFile("otherFitInfo","otherFitInfo");
+	otherFitInfo->cd();
 	h2D_fit_pt_y_nSig_Pbp->Write();	
 	h2D_fit_pt_y_nSig_pPb->Write();	
 	h2D_fit_pt_y_nBkg_Pbp->Write();	
@@ -158,10 +261,10 @@ int make2Droot_total(char *dirName = "8rap9pt"){
 	h2D_fit_pt_y_ctErrmin_pPb->Write();	
 	h2D_fit_pt_y_ctErrmax_Pbp->Write();	
 	h2D_fit_pt_y_ctErrmax_pPb->Write();	
-	otherInfo->Write();
+	otherFitInfo->Write();
 		
 	outFile->Close();
-
+	
 	return 0;
 
 } // end of main func
