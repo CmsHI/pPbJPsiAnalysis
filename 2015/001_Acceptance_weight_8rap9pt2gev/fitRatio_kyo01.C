@@ -123,7 +123,7 @@ void fitRatio_kyo01(bool isPrompt=false, bool isPbp=true, char* dirName="8rap9pt
             func[iy] = new TF1(Form("func_%d",iy), fitHevi,0.0,30.0,5);
             func[iy]->SetParameters(-4.795, 1.653, 0.923, 3.018, 2.369);
             if(isPrompt==1 && isPbp==0 && iy==0) { 
-          //      func[iy]->SetParameters(-51.7167, -0.694876, 0.491544,4.55470,12.1672);
+                //      func[iy]->SetParameters(-51.7167, -0.694876, 0.491544,4.55470,12.1672);
 #if 1
                 func[iy]->FixParameter(0,-5.17167e+01 );
                 func[iy]->FixParameter(1,-6.94876e-01 );
@@ -133,48 +133,71 @@ void fitRatio_kyo01(bool isPrompt=false, bool isPbp=true, char* dirName="8rap9pt
                 //func[iy]->FixParameter(3,3.55470e+00 );
                 //func[iy]->FixParameter(4,1.11672e+01 );
 #endif
+            } else if (isPrompt==0 && isPbp==1 && iy==7) {
+                func[iy]->FixParameter(0, -3.40711e+02);
+                func[iy]->FixParameter(1, 3.20176e+00); 
+                func[iy]->FixParameter(2, 1.09760e+00);
             }
-        } else if(isPrompt==1 && isPbp==0 && iy==4){
-                func[iy] = new TF1(Form("func_%d",iy), fitHevi,0.0,30.0,5); 
-                func[iy]->SetParameters(-3.40747e+02,3.32373e+00,6.51294e-01,2.98861e+00,1.14947e+02);
-        } else{
-                func[iy] = new TF1(Form("func_%d",iy), fitHevi,0.0,30.0,5); 
-                func[iy]->SetParameters(-3.40747e+02,3.32373e+00,6.51294e-01,2.98861e+00,1.14947e+02);
-            		//KYO
-								if (isPrompt && iy==1 || iy==6) func[iy]->SetParameters(-4.795, 1.653, 0.923, 3.018, 2.369);
-								else if (isPrompt && iy==2) {
-         					func[iy]->FixParameter(0,-3.40743e+02);
-          				func[iy]->FixParameter(1,-1.37032e-01);
-          				func[iy]->FixParameter(2,1.19902);
-								}									 
-/*
-            func[iy] = new TF1(Form("func_%d",iy), fitExp,0.0,30.0,3);
-            if(isPrompt==0 && isPbp==1 && (iy==2 || iy==3 || iy==4 || iy==5) ) func[iy]->SetParameters(-1.01556e+01,1.51712e-01,2.80282e+01);
-            if(isPrompt==0 && isPbp==0 && (iy==2 || iy==3 || iy==4) ) func[iy]->SetParameters(-1.01556e+01,1.51712e-01,2.80282e+01);
-            if(isPrompt==1 && isPbp==0 && (iy==3) ) func[iy]->SetParameters(-1.01556e+01,1.51712e-01,2.80282e+01);
-            if(isPrompt==1 && isPbp==1 && (iy==3) ) func[iy]->SetParameters(-1.01556e+01,1.51712e-01,2.80282e+01);
-*/
+
+
+        }  
+        //else if(isPrompt==1 && isPbp==0 && iy==4){
+        //  func[iy] = new TF1(Form("func_%d",iy), fitHevi,0.0,30.0,5); 
+        //  func[iy]->SetParameters(-3.40747e+02,3.32373e+00,6.51294e-01,2.98861e+00,1.14947e+02);
+        //} 
+        else{
+            func[iy] = new TF1(Form("func_%d",iy), fitHevi,0.0,30.0,5); 
+            //func[iy]->SetParameters(-3.40711e+02,-2.02319e+00,1.42753e+00,2.98897e+00,1.14958e+02); //yeonju 0509
+            func[iy]->SetParameters(-3.40711e+02,-5.20176e+00,1.79760e+00,2.98896e+00,1.14958e+02); //yeonju 0509
+            //func[iy]->SetParameters(-3.40747e+02,3.32373e+00,6.51294e-01,2.98861e+00,1.14947e+02); //yeonju
+            //yeonju
+            if (isPrompt==0 && iy==2) {
+                func[iy]->FixParameter(0, -3.40711e+02);
+                func[iy]->FixParameter(1, -5.20176e+00); 
+                func[iy]->FixParameter(2, 1.79760e+00);
+                func[iy]->FixParameter(3, 2.98896);
+
+            } else if (isPrompt==0 && iy==6) {
+                func[iy]->FixParameter(0, -3.40711e+02);
+                func[iy]->FixParameter(1, 3.20176e+00); 
+                func[iy]->FixParameter(2, 1.79760e+00);
+
+            }        
+            //KYO
+            if (isPrompt && iy==1 || iy==6) func[iy]->SetParameters(-4.795, 1.653, 0.923, 3.018, 2.369);
+            else if (isPrompt && iy==2) {
+                func[iy]->FixParameter(0,-3.40743e+02);
+                func[iy]->FixParameter(1,-1.37032e-01);
+                func[iy]->FixParameter(2,1.19902);
+            }									 
+            /*
+               func[iy] = new TF1(Form("func_%d",iy), fitExp,0.0,30.0,3);
+               if(isPrompt==0 && isPbp==1 && (iy==2 || iy==3 || iy==4 || iy==5) ) func[iy]->SetParameters(-1.01556e+01,1.51712e-01,2.80282e+01);
+               if(isPrompt==0 && isPbp==0 && (iy==2 || iy==3 || iy==4) ) func[iy]->SetParameters(-1.01556e+01,1.51712e-01,2.80282e+01);
+               if(isPrompt==1 && isPbp==0 && (iy==3) ) func[iy]->SetParameters(-1.01556e+01,1.51712e-01,2.80282e+01);
+               if(isPrompt==1 && isPbp==1 && (iy==3) ) func[iy]->SetParameters(-1.01556e+01,1.51712e-01,2.80282e+01);
+               */
         }
         //KYO for TGraphAsymmErrors only
-				if (!isPrompt && iy==0){
-        	func[iy]->SetParameters(-1.04829e+01,-5.38813e+00,2.10443e+00,1.74460e+00,6.89848e+02);
-          func[iy]->FixParameter(0,-1.04829e+01);
-          func[iy]->FixParameter(1,-5.38813e+00);
-          func[iy]->FixParameter(2,2.10443e+00);
-				}
-				SetGraphStyle(gRatio[iy],2,0);
-				SetGraphStyle(gRatioOverlay[iy],4,10);
-				func[iy]->SetLineColor(kRed);
-				gRatio[iy]->Fit(Form("func_%d",iy));
+        if (!isPrompt && iy==0){
+            func[iy]->SetParameters(-1.04829e+01,-5.38813e+00,2.10443e+00,1.74460e+00,6.89848e+02);
+            func[iy]->FixParameter(0,-1.04829e+01);
+            func[iy]->FixParameter(1,-5.38813e+00);
+            func[iy]->FixParameter(2,2.10443e+00);
+        }
+        SetGraphStyle(gRatio[iy],2,0);
+        SetGraphStyle(gRatioOverlay[iy],4,10);
+        func[iy]->SetLineColor(kRed);
+        gRatio[iy]->Fit(Form("func_%d",iy));
         gRatio[iy]->Draw("AP");
         gRatioOverlay[iy]->Draw("P");
-				//func[iy]->Draw("same");
-				if (iy==0){
-					if (isPrompt) latex->DrawLatex(0.23,0.23,"Prompt J/#psi Pbp");
-					else latex->DrawLatex(0.23, 0.23,"Non-prompt J/#psi Pbp");
-				}
-				latex->DrawLatex(0.56,0.80,Form("%s",rapArr[iy].c_str()));
-				dashedLine(0.,1.,25.,1.,1,1);
+        //func[iy]->Draw("same");
+        if (iy==0){
+            if (isPrompt) latex->DrawLatex(0.23,0.23,"Prompt J/#psi Pbp");
+            else latex->DrawLatex(0.23, 0.23,"Non-prompt J/#psi Pbp");
+        }
+        latex->DrawLatex(0.56,0.80,Form("%s",rapArr[iy].c_str()));
+        dashedLine(0.,1.,25.,1.,1,1);
 
         /*
 				for(int ifpt=0;ifpt<nPtFine;ifpt++){
