@@ -48,30 +48,15 @@ struct Condition {
 } ;
 
 //read TNP plots for useDataDrivenEff
-//TFile* fTnpRate = new TFile("./tagAndProbe/tnpRate_V14.root");
-TFile* fTnpRate = new TFile("./tagAndProbe/tnpRate_V16_eff_fit_expo.root");
+//TFile* fTnpRate = new TFile("./tagAndProbe/tnpRate_V16_eff_fit_expo.root");
+TFile* fTnpRate = new TFile("./tagAndProbe/tnpRate_V17_eff_fit_expo_ZV.root");
 TF1* hTnpRateEtaBin1 = (TF1*)fTnpRate->Get("ferrScale_ieta1");
 TF1* hTnpRateEtaBin2 = (TF1*)fTnpRate->Get("ferrScale_ieta2");
 TF1* hTnpRateEtaBin3 = (TF1*)fTnpRate->Get("ferrScale_ieta3");
 
-/*
-TFile* fEffWeight1st1 = new TFile("triggerRatio/WeightFactor_total_etabin1CS_1st_12bin_20140327.root");
-TH1D* hEffCorr1st1 = (TH1D*)fEffWeight1st1->Get("hWF");
-TFile* fEffWeight1st2 = new TFile("triggerRatio/WeightFactor_total_etabin2CS_1st_12bin_20140327.root");
-TH1D* hEffCorr1st2 = (TH1D*)fEffWeight1st2->Get("hWF");
-TFile*fEffWeight1st3 = new TFile("triggerRatio/WeightFactor_total_etabin3CS_1st_12bin_20140327.root");
-TH1D* hEffCorr1st3 = (TH1D*)fEffWeight1st3->Get("hWF");
-TFile* fEffWeight2nd1 = new TFile("triggerRatio/WeightFactor_total_etabin1CS_1st_12bin_20140327.root");
-TH1D* hEffCorr2nd1 = (TH1D*)fEffWeight2nd1->Get("hWF");
-TFile* fEffWeight2nd2 = new TFile("triggerRatio/WeightFactor_total_etabin2CS_1st_12bin_20140327.root");
-TH1D* hEffCorr2nd2 = (TH1D*)fEffWeight2nd2->Get("hWF");
-TFile*fEffWeight2nd3 = new TFile("triggerRatio/WeightFactor_total_etabin3CS_1st_12bin_20140327.root");
-TH1D* hEffCorr2nd3 = (TH1D*)fEffWeight2nd3->Get("hWF");
-*/
-
 /////// main func. ///////
 
-int rootAna_efficiency_counting(char *strBinning = "8rap9pt", bool isPrompt = false, bool is1st = true, bool isEmbedded = false, bool useCtErrRangeEff =true, bool useDataDrivenEff=true, bool useZvtxWeightStep1 = false, bool useZvtxWeightStep2=false){
+int rootAna_efficiency_counting(char *strBinning = "8rap9pt2gev", bool isPrompt = true, bool is1st = true, bool isEmbedded = false, bool useCtErrRangeEff =true, bool useDataDrivenEff=true, bool useZvtxWeightStep1 = false, bool useZvtxWeightStep2=true){
 
   using namespace std;
   
@@ -97,7 +82,7 @@ int rootAna_efficiency_counting(char *strBinning = "8rap9pt", bool isPrompt = fa
 	//// Step2 : pythia -> data
 	TFile* fZvtx = new TFile("zVtxFit/zVtxFit_20141007.root");
 	TF1* gRatio = (TF1*)fZvtx->Get("gRatio");
-
+/*
 	TCanvas* c0 = new TCanvas("c0","",900,400);
 	c0->Divide(3,1);
 	c0->cd(1);
@@ -106,34 +91,13 @@ int rootAna_efficiency_counting(char *strBinning = "8rap9pt", bool isPrompt = fa
 	hTnpRateEtaBin2->Draw();
 	c0->cd(3);
 	hTnpRateEtaBin3->Draw();
-/*
-	TCanvas* c0 = new TCanvas("c0","",900,400);
-	c0->Divide(3,1);
-	c0->cd(1);
-	hEffCorr1st1->Draw();
-	c0->cd(2);
-	hEffCorr1st2->Draw();
-	c0->cd(3);
-	hEffCorr1st3->Draw();
-	//c0->SaveAs("weight1st.gif");
-	TCanvas* c00 = new TCanvas("c00","",900,400);
-	c00->Divide(3,1);
-	c00->cd(1);
-	hEffCorr2nd1->Draw();
-	c00->cd(2);
-	hEffCorr2nd2->Draw();
-	c00->cd(3);
-	hEffCorr2nd3->Draw();
-	//c00->SaveAs("weight2nd.gif");
-*/
 	TCanvas* c000 = new TCanvas("c000","",800,400);
 	c000->Divide(2,1);
 	c000->cd(1);
 	hRatio->Draw();
 	c000->cd(2);
 	gRatio->Draw();
-	//c000->SaveAs(Form("zVtxRatio_is1st%d_isEmbd%d_isPr%d.gif",(int)is1st,(int)isEmbedded,(int)isPrompt));
-		
+*/		
 	TFile *f1;
 	char* sampleName;
 	double minylab =-2.4;
@@ -191,8 +155,9 @@ int rootAna_efficiency_counting(char *strBinning = "8rap9pt", bool isPrompt = fa
 	char* runName;
 	if(is1st) runName = "Pbp";
 	else runName = "pPb";	
-//	char * dirName = "fitRes_8rap9pt_20150106";
-	char * dirName = "fitRes_8rap9pt";
+	//tmp
+	//char * dirName = "fitRes_8rap9pt";
+	char * dirName = Form("fitRes_%s",strBinning);
 	std::ifstream fctau(Form("./%s/summary_%s/fit_ctauErrorRange",dirName,runName),std::ios::in);
 	if(!fctau.is_open()) { cout << "Warning : can NOT open the fit_ctauErrorRange file!"<<endl; }
 
@@ -202,12 +167,14 @@ int rootAna_efficiency_counting(char *strBinning = "8rap9pt", bool isPrompt = fa
 	///////////////////////////////////////////////////
 	//////// Definition of binning
 	// --- pt Bin
-	Double_t ptBinsArr[] = {0.0, 3.0, 4.0, 5.0, 6.5, 7.5, 8.5, 10.0, 14.0, 30.0}; // 8rap9pt
+	//Double_t ptBinsArr[] = {0.0, 3.0, 4.0, 5.0, 6.5, 7.5, 8.5, 10.0, 14.0, 30.0}; // 8rap9pt
+	//Double_t ptBinsArr[] = {0.0, 1.5, 3.0, 4.0, 5.0, 6.5, 7.5, 8.5, 10.0, 14.0, 30.0}; // 8rap10pt
+	Double_t ptBinsArr[] = {2.0, 3.0, 4.0, 5.0, 6.5, 7.5, 8.5, 10.0, 14.0, 30.0}; // 8rap9pt2gev
 	const Int_t nPtBins = sizeof(ptBinsArr)/sizeof(double)-1;
    cout << "nPtBins=" << nPtBins << endl;
 
 	// --- y Bin //set to 1st run (For 2nd run, will be automatically changed later)
-  Double_t tmp_yBinsArr[] = {-2.4, -1.97, -1.37, -0.47, 0.43, 1.03, 1.46, 1.93, 2.4}; // 8rap9pt
+  Double_t tmp_yBinsArr[] = {-2.4, -1.97, -1.37, -0.47, 0.43, 1.03, 1.46, 1.93, 2.4};
   //const Int_t tmp_nYBins = sizeof(tmp_yBinsArr)/sizeof(double)-1;
   const Int_t tmp_nYBins = sizeof(tmp_yBinsArr)/sizeof(double);
   cout << "tmp_nYBins=" << tmp_nYBins << endl;
@@ -616,8 +583,10 @@ float getEffWeight(float mupt1, float mueta1, float mupt2, float mueta2) {
 	float effWeight2 = hw2->Eval(mupt2);
 
 	// special setting for 1.2< |eta| <1.6 	
-	if (TMath::Abs(mueta1) >= 1.2 && TMath::Abs(mueta1) < 1.6 && TMath::Abs(mupt1) < 2.3) {effWeight1=0.886417;}
-	if (TMath::Abs(mueta2) >= 1.2 && TMath::Abs(mueta2) < 1.6 && TMath::Abs(mupt2) < 2.3) {effWeight2=0.886417;}
+	//if (TMath::Abs(mueta1) >= 1.2 && TMath::Abs(mueta1) < 1.6 && TMath::Abs(mupt1) < 2.3) {effWeight1=0.886417;}
+	//if (TMath::Abs(mueta2) >= 1.2 && TMath::Abs(mueta2) < 1.6 && TMath::Abs(mupt2) < 2.3) {effWeight2=0.886417;}
+	if (TMath::Abs(mueta1) >= 1.2 && TMath::Abs(mueta1) < 1.6 && TMath::Abs(mupt1) < 2.3) {effWeight1=0.89122018;}
+	if (TMath::Abs(mueta2) >= 1.2 && TMath::Abs(mueta2) < 1.6 && TMath::Abs(mupt2) < 2.3) {effWeight2=0.89122018;}
 
 	return effWeight1 * effWeight2;
 }
