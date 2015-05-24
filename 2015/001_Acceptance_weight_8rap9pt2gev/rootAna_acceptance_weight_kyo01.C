@@ -77,7 +77,8 @@ void rootAna_acceptance_weight_kyo01(bool isPrompt=false, bool isPbp=true){
 
     // Definition of bin
     // --- pt Bin
-    Double_t ptBinsArr[] = {0.0, 3.0, 4.0, 5.0, 6.5, 7.5, 8.5, 10.0, 14.0, 30.0}; // 8rap9pt
+    //Double_t ptBinsArr[] = {0.0, 3.0, 4.0, 5.0, 6.5, 7.5, 8.5, 10.0, 14.0, 30.0}; // 8rap9pt
+    Double_t ptBinsArr[] = {2.0, 3.0, 4.0, 5.0, 6.5, 7.5, 8.5, 10.0, 14.0, 30.0}; // 8rap9pt2gev
     //Double_t ptBinsArr[] = {5.0, 6.5, 10.0, 30.0}; // 6rap3pt
     const Int_t nPtBins = sizeof(ptBinsArr)/sizeof(double)-1;
     cout << "nPtBins=" << nPtBins << endl;

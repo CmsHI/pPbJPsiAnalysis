@@ -49,16 +49,17 @@ struct Condition {
 } ;
 
 //read TNP plots for useDataDrivenEff
-TFile* fTnpRate = new TFile("./tagAndProbe/tnpRate_V17_eff_fit_expo_ZV.root");
+//TFile* fTnpRate = new TFile("./tagAndProbe/tnpRate_V17_eff_fit_expo_ZV.root");
+TFile* fTnpRate = new TFile("./tagAndProbe/tnpRate_V16_eff_fit_GTrack_CBGauss_expo_40bin_PAMu3_lowpt5_fine_v2_2sqrtxfit_v1.root");
 TF1* hTnpRateEtaBin1 = (TF1*)fTnpRate->Get("ferrScale_ieta1");
 TF1* hTnpRateEtaBin2 = (TF1*)fTnpRate->Get("ferrScale_ieta2");
 TF1* hTnpRateEtaBin3 = (TF1*)fTnpRate->Get("ferrScale_ieta3");
 
 ///////// read DataRecoRatio weight func. from Yeonju // KYO
 //TFile* toyFile = new TFile(Form("ToyGaussian_isPrompt%d_%s_kyo01.root",(int)isPrompt,runstring.c_str()));
-// tmp!!!!
-//TFile* fRatio = new TFile("fitRatio_isPrompt1_Pbp_kyo01.root");
-TFile* fRatio = new TFile("fitRatio_isPrompt0_Pbp_kyo01.root");
+// tmp!!!! prompt or non-prompt by hand
+TFile* fRatio = new TFile("fitRatio_isPrompt1_Pbp_kyo01.root");
+//TFile* fRatio = new TFile("fitRatio_isPrompt0_Pbp_kyo01.root");
 TF1* func_0=(TF1*)fRatio->Get("func_0");
 TF1* func_1=(TF1*)fRatio->Get("func_1");
 TF1* func_2=(TF1*)fRatio->Get("func_2");
@@ -70,7 +71,7 @@ TF1* func_7=(TF1*)fRatio->Get("func_7");
 
 /////// main func. ///////
 
-int rootAna_efficiency_counting_kyo01(char *strBinning = "8rap9pt", bool isPrompt = false, bool is1st = true, bool isEmbedded = false, bool useCtErrRangeEff =true, bool useDataDrivenEff=true, bool useZvtxWeightStep1 = false, bool useZvtxWeightStep2=true){
+int rootAna_efficiency_counting_kyo01(char *strBinning = "8rap9pt", bool isPrompt = true, bool is1st = true, bool isEmbedded = false, bool useCtErrRangeEff =true, bool useDataDrivenEff=true, bool useZvtxWeightStep1 = false, bool useZvtxWeightStep2=true){
 
   using namespace std;
   
@@ -224,7 +225,8 @@ int rootAna_efficiency_counting_kyo01(char *strBinning = "8rap9pt", bool isPromp
 	///////////////////////////////////////////////////
 	//////// Definition of binning
 	// --- pt Bin
-	Double_t ptBinsArr[] = {0.0, 3.0, 4.0, 5.0, 6.5, 7.5, 8.5, 10.0, 14.0, 30.0}; // 8rap9pt
+	//Double_t ptBinsArr[] = {0.0, 3.0, 4.0, 5.0, 6.5, 7.5, 8.5, 10.0, 14.0, 30.0}; // 8rap9pt
+	Double_t ptBinsArr[] = {2.0, 3.0, 4.0, 5.0, 6.5, 7.5, 8.5, 10.0, 14.0, 30.0}; // 8rap9pt2gev
 	const Int_t nPtBins = sizeof(ptBinsArr)/sizeof(double)-1;
    cout << "nPtBins=" << nPtBins << endl;
 
@@ -652,8 +654,8 @@ float getEffWeight(float mupt1, float mueta1, float mupt2, float mueta2) {
 	// special setting for 1.2< |eta| <1.6  
 	//if (TMath::Abs(mueta1) >= 1.2 && TMath::Abs(mueta1) < 1.6 && TMath::Abs(mupt1) < 2.3) {effWeight1=0.886417;}
 	//if (TMath::Abs(mueta2) >= 1.2 && TMath::Abs(mueta2) < 1.6 && TMath::Abs(mupt2) < 2.3) {effWeight2=0.886417;
-	if (TMath::Abs(mueta1) >= 1.2 && TMath::Abs(mueta1) < 1.6 && TMath::Abs(mupt1) < 2.3) {effWeight1=0.89122018;}
-	if (TMath::Abs(mueta2) >= 1.2 && TMath::Abs(mueta2) < 1.6 && TMath::Abs(mupt2) < 2.3) {effWeight2=0.89122018;}
+//	if (TMath::Abs(mueta1) >= 1.2 && TMath::Abs(mueta1) < 1.6 && TMath::Abs(mupt1) < 2.3) {effWeight1=0.89122018;}
+//	if (TMath::Abs(mueta2) >= 1.2 && TMath::Abs(mueta2) < 1.6 && TMath::Abs(mupt2) < 2.3) {effWeight2=0.89122018;}
 
 	return effWeight1 * effWeight2;
 }
