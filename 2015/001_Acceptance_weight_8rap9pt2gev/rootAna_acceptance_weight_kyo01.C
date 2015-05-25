@@ -170,18 +170,18 @@ void rootAna_acceptance_weight_kyo01(bool isPrompt=false, bool isPbp=true){
     ///////////////////////////////////////////////////////////////////////////////////////////////
     // define 2D hist
     // with defined binning - double 1
-    TH2D *h2D_NoCut_pt_y_Pbp = new TH2D("h2D_NoCut_pt_y_Pbp","",nYBins,yBinsArr,nPtBins,ptBinsArr);
-    TH2D *h2D_Den_pt_y_Pbp = new TH2D("h2D_Den_pt_y_Pbp","",nYBins,yBinsArr,nPtBins,ptBinsArr);
-    TH2D *h2D_Num_pt_y_Pbp = new TH2D("h2D_Num_pt_y_Pbp","",nYBins,yBinsArr,nPtBins,ptBinsArr);
-    TH2D *h2D_Acc_pt_y_Pbp = new TH2D("h2D_Acc_pt_y_Pbp","",nYBins,yBinsArr,nPtBins,ptBinsArr);
+    TH2D *h2D_NoCut_noWeight_pt_y_Pbp = new TH2D("h2D_NoCut_noWeight_pt_y_Pbp","",nYBins,yBinsArr,nPtBins,ptBinsArr);
+    TH2D *h2D_Den_noWeight_pt_y_Pbp = new TH2D("h2D_Den_noWeight_pt_y_Pbp","",nYBins,yBinsArr,nPtBins,ptBinsArr);
+    TH2D *h2D_Num_noWeight_pt_y_Pbp = new TH2D("h2D_Num_noWeight_pt_y_Pbp","",nYBins,yBinsArr,nPtBins,ptBinsArr);
+    TH2D *h2D_Acc_noWeight_pt_y_Pbp = new TH2D("h2D_Acc_noWeight_pt_y_Pbp","",nYBins,yBinsArr,nPtBins,ptBinsArr);
 
     //by Yeonju
-    TH2D* h2D_NoCut_weight_pt_y_Pbp = new TH2D("h2D_NoCut_weight_pt_y_Pbp","",nYBins,yBinsArr,nPtBins,ptBinsArr);
-    TH2D* h2D_Den_weight_pt_y_Pbp = new TH2D("h2D_Den_weight_pt_y_Pbp","",nYBins,yBinsArr,nPtBins,ptBinsArr);
-    TH2D* h2D_Num_weight_pt_y_Pbp = new TH2D("h2D_Num_weight_pt_y_Pbp","",nYBins,yBinsArr,nPtBins,ptBinsArr);
-    TH2D* h2D_Acc_weight_pt_y_Pbp = new TH2D("h2D_Acc_weight_pt_y_Pbp","",nYBins,yBinsArr,nPtBins,ptBinsArr);
+    TH2D* h2D_NoCut_pt_y_Pbp = new TH2D("h2D_NoCut_pt_y_Pbp","",nYBins,yBinsArr,nPtBins,ptBinsArr);
+    TH2D* h2D_Den_pt_y_Pbp = new TH2D("h2D_Den_pt_y_Pbp","",nYBins,yBinsArr,nPtBins,ptBinsArr);
+    TH2D* h2D_Num_pt_y_Pbp = new TH2D("h2D_Num_pt_y_Pbp","",nYBins,yBinsArr,nPtBins,ptBinsArr);
+    TH2D* h2D_Acc_pt_y_Pbp = new TH2D("h2D_Acc_pt_y_Pbp","",nYBins,yBinsArr,nPtBins,ptBinsArr);
     
-		TH1D *h1D_Num_pt= new TH1D("h1D_Num_pt","",nPtBins,ptBinsArr);
+	TH1D *h1D_Num_pt= new TH1D("h1D_Num_pt","",nPtBins,ptBinsArr);
     TH1D *h1D_Den_pt= new TH1D("h1D_Den_pt","",nPtBins,ptBinsArr);
     TH1D *h1D_Acc_pt= new TH1D("h1D_Acc_pt","",nPtBins,ptBinsArr);
     //	std::cout << "TH1, TH2 definition, strName: " << strName << std::endl;
@@ -189,16 +189,16 @@ void rootAna_acceptance_weight_kyo01(bool isPrompt=false, bool isPbp=true){
     ////////////////////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////////////////////////
     //2D hist
+    h2D_NoCut_noWeight_pt_y_Pbp->Sumw2();
+    h2D_Den_noWeight_pt_y_Pbp->Sumw2();
+    h2D_Num_noWeight_pt_y_Pbp->Sumw2();
+    h2D_Acc_noWeight_pt_y_Pbp->Sumw2();
+
+    //by Yeonju
     h2D_NoCut_pt_y_Pbp->Sumw2();
     h2D_Den_pt_y_Pbp->Sumw2();
     h2D_Num_pt_y_Pbp->Sumw2();
     h2D_Acc_pt_y_Pbp->Sumw2();
-
-    //by Yeonju
-    h2D_NoCut_weight_pt_y_Pbp->Sumw2();
-    h2D_Den_weight_pt_y_Pbp->Sumw2();
-    h2D_Num_weight_pt_y_Pbp->Sumw2();
-    h2D_Acc_weight_pt_y_Pbp->Sumw2();
 
     h1D_Num_pt->Sumw2();
     h1D_Den_pt->Sumw2();
@@ -215,7 +215,7 @@ void rootAna_acceptance_weight_kyo01(bool isPrompt=false, bool isPbp=true){
     ////////////////////////////////////////////////////////////////////////////////////////////////
     // Outputs
     //TFile* toyFile = new TFile(Form("ToyGaussian_isPrompt%d_%s_kyo01.root",(int)isPrompt,runstring.c_str()));
-    TFile* toyFile = new TFile(Form("fitRatio_isPrompt%d_%s_kyo01.root",(int)isPrompt,runstring.c_str()));
+    TFile* toyFile = new TFile("fitRatio_isPrompt1_Pbp_kyo01.root");
     TF1* Func[nYBins];
     for(int iy=0;iy<nYBins;iy++){
         Func[iy]=(TF1*) toyFile->Get(Form("func_%d",iy)); 
@@ -249,8 +249,8 @@ void rootAna_acceptance_weight_kyo01(bool isPrompt=false, bool isPbp=true){
         if(i<100) cout << " pt : " << dimu_pt << ", y : " << dimu_y << ", weigt : " << w_toy << ", " << st_AccRange <<  endl;
 
         ////// --- cut01 : no cut
-        h2D_NoCut_pt_y_Pbp->Fill(dimu_y,dimu_pt);
-        h2D_NoCut_weight_pt_y_Pbp->Fill(dimu_y,dimu_pt,w_toy);
+        h2D_NoCut_noWeight_pt_y_Pbp->Fill(dimu_y,dimu_pt);
+        h2D_NoCut_pt_y_Pbp->Fill(dimu_y,dimu_pt,w_toy);
 
         if (!dimuCut(dmom0_Id,dgmom0_Id,dkid0_ch,dkid1_ch)) continue;
 
@@ -258,24 +258,24 @@ void rootAna_acceptance_weight_kyo01(bool isPrompt=false, bool isPbp=true){
         bool yn = false;
         if (dimuCut(dmom0_Id,dgmom0_Id,dkid0_ch,dkid1_ch) && minpt<=dimu_pt && dimu_pt<maxpt && minylab<=dimu_y && dimu_y<maxylab) {yn = true;}
         if ( yn == true  ) {
-            h2D_Den_pt_y_Pbp->Fill(dimu_y,dimu_pt);
-            h2D_Den_weight_pt_y_Pbp->Fill(dimu_y,dimu_pt,w_toy);
+            h2D_Den_noWeight_pt_y_Pbp->Fill(dimu_y,dimu_pt);
+            h2D_Den_pt_y_Pbp->Fill(dimu_y,dimu_pt,w_toy);
             h1D_Den_pt->Fill(dimu_pt);
 
             ////// --- cut03 : for numerator
             bool yn2 = false;
             if (massCut(dimu_mass) && dimuCut(dmom0_Id,dgmom0_Id,dkid0_ch,dkid1_ch) && kineCut(dkid0_pt,dkid0_eta,dkid0_p) && kineCut(dkid1_pt,dkid1_eta,dkid1_p) && minpt<=dimu_pt && dimu_pt<maxpt && minylab<=dimu_y && dimu_y<maxylab) {yn2 = true;}
             if (yn2 == true){
-                h2D_Num_pt_y_Pbp->Fill(dimu_y,dimu_pt);
-                h2D_Num_weight_pt_y_Pbp->Fill(dimu_y,dimu_pt,w_toy);
+                h2D_Num_noWeight_pt_y_Pbp->Fill(dimu_y,dimu_pt);
+                h2D_Num_pt_y_Pbp->Fill(dimu_y,dimu_pt,w_toy);
                 h1D_Num_pt->Fill(dimu_pt);
             } // end of yn2
         } // end of yn
     } //end of loop
 
     // (Num/Den) to get acceptance (B : binomial error)
+    h2D_Acc_noWeight_pt_y_Pbp->Divide(h2D_Num_noWeight_pt_y_Pbp,h2D_Den_noWeight_pt_y_Pbp,1,1,"B");
     h2D_Acc_pt_y_Pbp->Divide(h2D_Num_pt_y_Pbp,h2D_Den_pt_y_Pbp,1,1,"B");
-    h2D_Acc_weight_pt_y_Pbp->Divide(h2D_Num_weight_pt_y_Pbp,h2D_Den_weight_pt_y_Pbp,1,1,"B");
     h1D_Acc_pt->Divide(h1D_Num_pt,h1D_Den_pt);
 
 		// difference and relative error calculation
@@ -284,22 +284,22 @@ void rootAna_acceptance_weight_kyo01(bool isPrompt=false, bool isPbp=true){
     h2D_Acc_err_pt_y_Pbp->Sumw2();
     for(int ipt=0;ipt<nPtBins;ipt++){
         for(int iy=0;iy<nYBins;iy++){
-            h2D_Acc_diff_pt_y_Pbp = (TH2D*) h2D_Acc_weight_pt_y_Pbp->Clone("h2D_Acc_diff_pt_y_Pbp");
-            h2D_Acc_diff_pt_y_Pbp->Add(h2D_Acc_pt_y_Pbp,-1); 
+            h2D_Acc_diff_pt_y_Pbp = (TH2D*) h2D_Acc_pt_y_Pbp->Clone("h2D_Acc_diff_pt_y_Pbp");
+            h2D_Acc_diff_pt_y_Pbp->Add(h2D_Acc_noWeight_pt_y_Pbp,-1); 
             h2D_Acc_err_pt_y_Pbp->Divide(h2D_Acc_diff_pt_y_Pbp,h2D_Acc_pt_y_Pbp);
         }
     }
 
   ////////////////////////////////////////////////////////////////////////////
 	// rapidity change, for 2nd run hist.
+	TH2D *h2D_Acc_noWeight_pt_y_pPb = new TH2D("h2D_Acc_noWeight_pt_y_pPb","",nYBins2nd,yBinsArr2nd,nPtBins,ptBinsArr);
+	TH2D *h2D_Den_pt_y_pPb = new TH2D("h2D_Den_pt_y_pPb","",nYBins2nd,yBinsArr2nd,nPtBins,ptBinsArr);
+	TH2D *h2D_Num_pt_y_pPb = new TH2D("h2D_Num_pt_y_pPb","",nYBins2nd,yBinsArr2nd,nPtBins,ptBinsArr);
 	TH2D *h2D_Acc_pt_y_pPb = new TH2D("h2D_Acc_pt_y_pPb","",nYBins2nd,yBinsArr2nd,nPtBins,ptBinsArr);
-	TH2D *h2D_Den_weight_pt_y_pPb = new TH2D("h2D_Den_weight_pt_y_pPb","",nYBins2nd,yBinsArr2nd,nPtBins,ptBinsArr);
-	TH2D *h2D_Num_weight_pt_y_pPb = new TH2D("h2D_Num_weight_pt_y_pPb","",nYBins2nd,yBinsArr2nd,nPtBins,ptBinsArr);
-	TH2D *h2D_Acc_weight_pt_y_pPb = new TH2D("h2D_Acc_weight_pt_y_pPb","",nYBins2nd,yBinsArr2nd,nPtBins,ptBinsArr);
 	TH2D *h2D_Acc_err_pt_y_pPb = new TH2D("h2D_Acc_err_pt_y_pPb","",nYBins2nd,yBinsArr2nd,nPtBins,ptBinsArr);
 	h2D_Acc_err_pt_y_pPb->Sumw2();
-	h2D_Acc_weight_pt_y_pPb->Sumw2();
 	h2D_Acc_pt_y_pPb->Sumw2();
+	h2D_Acc_noWeight_pt_y_pPb->Sumw2();
 
 	int tmpbin01Pbp, tmpbin01pPb; 
 	int tmpbin02Pbp, tmpbin02pPb; 
@@ -313,35 +313,35 @@ void rootAna_acceptance_weight_kyo01(bool isPrompt=false, bool isPbp=true){
 	float tmp05Val, tmp05Err;
 	for (Int_t iy=0; iy<nYBins; iy++){
 		for (Int_t ipt=0; ipt<nPtBins; ipt++) {
-			tmpbin01Pbp = h2D_Acc_pt_y_Pbp->FindBin((yBinsArr[iy]+yBinsArr[iy+1])/2, (ptBinsArr[ipt]+ptBinsArr[ipt+1])/2);
-			tmp01Val = h2D_Acc_pt_y_Pbp->GetBinContent(tmpbin01Pbp);
-			tmp01Err = h2D_Acc_pt_y_Pbp->GetBinError(tmpbin01Pbp);
-			tmpbin01pPb = h2D_Acc_pt_y_pPb->FindBin((yBinsArr2nd[nYBins-iy-1]+yBinsArr2nd[nYBins-iy])/2,(ptBinsArr[ipt]+ptBinsArr[ipt+1])/2);
-			h2D_Acc_pt_y_pPb->SetBinContent(tmpbin01pPb,tmp01Val);
-			h2D_Acc_pt_y_pPb->SetBinError(tmpbin01pPb,tmp01Err);
+			tmpbin01Pbp = h2D_Acc_noWeight_pt_y_Pbp->FindBin((yBinsArr[iy]+yBinsArr[iy+1])/2, (ptBinsArr[ipt]+ptBinsArr[ipt+1])/2);
+			tmp01Val = h2D_Acc_noWeight_pt_y_Pbp->GetBinContent(tmpbin01Pbp);
+			tmp01Err = h2D_Acc_noWeight_pt_y_Pbp->GetBinError(tmpbin01Pbp);
+			tmpbin01pPb = h2D_Acc_noWeight_pt_y_pPb->FindBin((yBinsArr2nd[nYBins-iy-1]+yBinsArr2nd[nYBins-iy])/2,(ptBinsArr[ipt]+ptBinsArr[ipt+1])/2);
+			h2D_Acc_noWeight_pt_y_pPb->SetBinContent(tmpbin01pPb,tmp01Val);
+			h2D_Acc_noWeight_pt_y_pPb->SetBinError(tmpbin01pPb,tmp01Err);
 			
-			tmpbin02Pbp = h2D_Den_weight_pt_y_Pbp->FindBin((yBinsArr[iy]+yBinsArr[iy+1])/2, (ptBinsArr[ipt]+ptBinsArr[ipt+1])/2);
-			tmp02Val = h2D_Den_weight_pt_y_Pbp->GetBinContent(tmpbin02Pbp);
-			tmp02Err = h2D_Den_weight_pt_y_Pbp->GetBinError(tmpbin02Pbp);
-			tmpbin02pPb = h2D_Den_weight_pt_y_pPb->FindBin((yBinsArr2nd[nYBins-iy-1]+yBinsArr2nd[nYBins-iy])/2,(ptBinsArr[ipt]+ptBinsArr[ipt+1])/2);
-			h2D_Den_weight_pt_y_pPb->SetBinContent(tmpbin02pPb,tmp02Val);
-			h2D_Den_weight_pt_y_pPb->SetBinError(tmpbin02pPb,tmp02Err);
-			
-			
-			tmpbin03Pbp = h2D_Num_weight_pt_y_Pbp->FindBin((yBinsArr[iy]+yBinsArr[iy+1])/2, (ptBinsArr[ipt]+ptBinsArr[ipt+1])/2);
-			tmp03Val = h2D_Num_weight_pt_y_Pbp->GetBinContent(tmpbin03Pbp);
-			tmp03Err = h2D_Num_weight_pt_y_Pbp->GetBinError(tmpbin03Pbp);
-			tmpbin03pPb = h2D_Num_weight_pt_y_pPb->FindBin((yBinsArr2nd[nYBins-iy-1]+yBinsArr2nd[nYBins-iy])/2,(ptBinsArr[ipt]+ptBinsArr[ipt+1])/2);
-			h2D_Num_weight_pt_y_pPb->SetBinContent(tmpbin03pPb,tmp03Val);
-			h2D_Num_weight_pt_y_pPb->SetBinError(tmpbin03pPb,tmp03Err);
+			tmpbin02Pbp = h2D_Den_pt_y_Pbp->FindBin((yBinsArr[iy]+yBinsArr[iy+1])/2, (ptBinsArr[ipt]+ptBinsArr[ipt+1])/2);
+			tmp02Val = h2D_Den_pt_y_Pbp->GetBinContent(tmpbin02Pbp);
+			tmp02Err = h2D_Den_pt_y_Pbp->GetBinError(tmpbin02Pbp);
+			tmpbin02pPb = h2D_Den_pt_y_pPb->FindBin((yBinsArr2nd[nYBins-iy-1]+yBinsArr2nd[nYBins-iy])/2,(ptBinsArr[ipt]+ptBinsArr[ipt+1])/2);
+			h2D_Den_pt_y_pPb->SetBinContent(tmpbin02pPb,tmp02Val);
+			h2D_Den_pt_y_pPb->SetBinError(tmpbin02pPb,tmp02Err);
 			
 			
-			tmpbin04Pbp = h2D_Acc_weight_pt_y_Pbp->FindBin((yBinsArr[iy]+yBinsArr[iy+1])/2, (ptBinsArr[ipt]+ptBinsArr[ipt+1])/2);
-			tmp04Val = h2D_Acc_weight_pt_y_Pbp->GetBinContent(tmpbin04Pbp);
-			tmp04Err = h2D_Acc_weight_pt_y_Pbp->GetBinError(tmpbin04Pbp);
-			tmpbin04pPb = h2D_Acc_weight_pt_y_pPb->FindBin((yBinsArr2nd[nYBins-iy-1]+yBinsArr2nd[nYBins-iy])/2,(ptBinsArr[ipt]+ptBinsArr[ipt+1])/2);
-			h2D_Acc_weight_pt_y_pPb->SetBinContent(tmpbin04pPb,tmp04Val);
-			h2D_Acc_weight_pt_y_pPb->SetBinError(tmpbin04pPb,tmp04Err);
+			tmpbin03Pbp = h2D_Num_pt_y_Pbp->FindBin((yBinsArr[iy]+yBinsArr[iy+1])/2, (ptBinsArr[ipt]+ptBinsArr[ipt+1])/2);
+			tmp03Val = h2D_Num_pt_y_Pbp->GetBinContent(tmpbin03Pbp);
+			tmp03Err = h2D_Num_pt_y_Pbp->GetBinError(tmpbin03Pbp);
+			tmpbin03pPb = h2D_Num_pt_y_pPb->FindBin((yBinsArr2nd[nYBins-iy-1]+yBinsArr2nd[nYBins-iy])/2,(ptBinsArr[ipt]+ptBinsArr[ipt+1])/2);
+			h2D_Num_pt_y_pPb->SetBinContent(tmpbin03pPb,tmp03Val);
+			h2D_Num_pt_y_pPb->SetBinError(tmpbin03pPb,tmp03Err);
+			
+			
+			tmpbin04Pbp = h2D_Acc_pt_y_Pbp->FindBin((yBinsArr[iy]+yBinsArr[iy+1])/2, (ptBinsArr[ipt]+ptBinsArr[ipt+1])/2);
+			tmp04Val = h2D_Acc_pt_y_Pbp->GetBinContent(tmpbin04Pbp);
+			tmp04Err = h2D_Acc_pt_y_Pbp->GetBinError(tmpbin04Pbp);
+			tmpbin04pPb = h2D_Acc_pt_y_pPb->FindBin((yBinsArr2nd[nYBins-iy-1]+yBinsArr2nd[nYBins-iy])/2,(ptBinsArr[ipt]+ptBinsArr[ipt+1])/2);
+			h2D_Acc_pt_y_pPb->SetBinContent(tmpbin04pPb,tmp04Val);
+			h2D_Acc_pt_y_pPb->SetBinError(tmpbin04pPb,tmp04Err);
 			
 			tmpbin05Pbp = h2D_Acc_err_pt_y_Pbp->FindBin((yBinsArr[iy]+yBinsArr[iy+1])/2, (ptBinsArr[ipt]+ptBinsArr[ipt+1])/2);
 			tmp05Val = h2D_Acc_err_pt_y_Pbp->GetBinContent(tmpbin05Pbp);
@@ -364,18 +364,18 @@ void rootAna_acceptance_weight_kyo01(bool isPrompt=false, bool isPbp=true){
     h1D_Den_pt->Write();
     h1D_Acc_pt->Write(); 
   
+    h2D_Den_noWeight_pt_y_Pbp->Write();
+    h2D_Num_noWeight_pt_y_Pbp->Write();
+    h2D_Acc_noWeight_pt_y_Pbp->Write();
     h2D_Den_pt_y_Pbp->Write();
     h2D_Num_pt_y_Pbp->Write();
     h2D_Acc_pt_y_Pbp->Write();
-    h2D_Den_weight_pt_y_Pbp->Write();
-    h2D_Num_weight_pt_y_Pbp->Write();
-    h2D_Acc_weight_pt_y_Pbp->Write();
     h2D_Acc_diff_pt_y_Pbp->Write();
     h2D_Acc_err_pt_y_Pbp->Write();
+    h2D_Acc_noWeight_pt_y_pPb->Write();
+    h2D_Den_pt_y_pPb->Write();
+    h2D_Num_pt_y_pPb->Write();
     h2D_Acc_pt_y_pPb->Write();
-    h2D_Den_weight_pt_y_pPb->Write();
-    h2D_Num_weight_pt_y_pPb->Write();
-    h2D_Acc_weight_pt_y_pPb->Write();
     h2D_Acc_err_pt_y_pPb->Write();
    
     outFile->Close();

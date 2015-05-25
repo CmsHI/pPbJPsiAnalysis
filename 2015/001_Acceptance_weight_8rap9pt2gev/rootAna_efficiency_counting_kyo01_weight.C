@@ -435,28 +435,28 @@ int rootAna_efficiency_counting_kyo01_weight(char *strBinning = "8rap9pt2gev", b
 
 ///////////////////////////////////
     //yeonju
-    TH2D *h2D_Den_weight_pt_y;
-    TH2D *h2D_Num_weight_pt_y;
-    TH2D *h2D_Eff_weight_pt_y;
+    TH2D *h2D_Den_noWeight_pt_y;
+    TH2D *h2D_Num_noWeight_pt_y;
+    TH2D *h2D_Eff_noWeight_pt_y;
     TH2D *h2D_Eff_diff_pt_y;
     TH2D *h2D_Eff_err_pt_y;
 
     if(is1st){
-        h2D_Den_weight_pt_y = new TH2D("h2D_Den_weight_pt_y","",nYBins,yBinsArr,nPtBins,ptBinsArr);
-        h2D_Num_weight_pt_y = new TH2D("h2D_Num_weight_pt_y","",nYBins,yBinsArr,nPtBins,ptBinsArr);
-        h2D_Eff_weight_pt_y = new TH2D("h2D_Eff_weight_pt_y","",nYBins,yBinsArr,nPtBins,ptBinsArr);
+        h2D_Den_noWeight_pt_y = new TH2D("h2D_Den_noWeight_pt_y","",nYBins,yBinsArr,nPtBins,ptBinsArr);
+        h2D_Num_noWeight_pt_y = new TH2D("h2D_Num_noWeight_pt_y","",nYBins,yBinsArr,nPtBins,ptBinsArr);
+        h2D_Eff_noWeight_pt_y = new TH2D("h2D_Eff_noWeight_pt_y","",nYBins,yBinsArr,nPtBins,ptBinsArr);
         h2D_Eff_diff_pt_y= new TH2D("h2D_Eff_diff_pt_y","",nYBins,yBinsArr,nPtBins,ptBinsArr);
         h2D_Eff_err_pt_y = new TH2D("h2D_Eff_err_pt_y","",nYBins,yBinsArr,nPtBins,ptBinsArr);
     } else if(is1st==0) {
-        h2D_Den_weight_pt_y = new TH2D("h2D_Den_weight_pt_y","",nYBins,yBinsArr,nPtBins,ptBinsArr);
-        h2D_Num_weight_pt_y = new TH2D("h2D_Num_weight_pt_y","",nYBins,yBinsArr,nPtBins,ptBinsArr);
-        h2D_Eff_weight_pt_y = new TH2D("h2D_Eff_weight_pt_y","",nYBins,yBinsArr,nPtBins,ptBinsArr);
+        h2D_Den_noWeight_pt_y = new TH2D("h2D_Den_noWeight_pt_y","",nYBins,yBinsArr,nPtBins,ptBinsArr);
+        h2D_Num_noWeight_pt_y = new TH2D("h2D_Num_noWeight_pt_y","",nYBins,yBinsArr,nPtBins,ptBinsArr);
+        h2D_Eff_noWeight_pt_y = new TH2D("h2D_Eff_noWeight_pt_y","",nYBins,yBinsArr,nPtBins,ptBinsArr);
         h2D_Eff_diff_pt_y = new TH2D("h2D_Eff_diff_pt_y","",nYBins,yBinsArr,nPtBins,ptBinsArr);
         h2D_Eff_err_pt_y = new TH2D("h2D_Eff_err_pt_y","",nYBins,yBinsArr,nPtBins,ptBinsArr);
     }
-    h2D_Den_weight_pt_y->Sumw2();
-    h2D_Num_weight_pt_y->Sumw2();
-    h2D_Eff_weight_pt_y->Sumw2();
+    h2D_Den_noWeight_pt_y->Sumw2();
+    h2D_Num_noWeight_pt_y->Sumw2();
+    h2D_Eff_noWeight_pt_y->Sumw2();
     h2D_Eff_diff_pt_y->Sumw2();
     h2D_Eff_err_pt_y->Sumw2();
 
@@ -573,7 +573,7 @@ int rootAna_efficiency_counting_kyo01_weight(char *strBinning = "8rap9pt2gev", b
 				}
 				recoWeight = getRecoWeight(Jpsi_Reco.thePt, Jpsi_Reco.theRapidity, is1st);
 				h2D_Num_pt_y->Fill(Jpsi_Reco.theRapidity,Jpsi_Reco.thePt, effWeight*zWeight01*zWeight02*recoWeight);
-                h2D_Num_weight_pt_y->Fill(Jpsi_Reco.theRapidity,Jpsi_Reco.thePt, effWeight*zWeight01*zWeight02);		
+                h2D_Num_noWeight_pt_y->Fill(Jpsi_Reco.theRapidity,Jpsi_Reco.thePt, effWeight*zWeight01*zWeight02);		
         	}
 		} //end of Reco_QQ_size loop
 	  
@@ -621,18 +621,18 @@ int rootAna_efficiency_counting_kyo01_weight(char *strBinning = "8rap9pt2gev", b
 	    if (yn_gen == true){
 				recoWeight = getRecoWeight(Jpsi_Gen.thePt, Jpsi_Gen.theRapidity, is1st);
 				h2D_Den_pt_y->Fill(Jpsi_Gen.theRapidity,Jpsi_Gen.thePt,zWeight01*zWeight02*recoWeight);
-                h2D_Den_weight_pt_y->Fill(Jpsi_Gen.theRapidity,Jpsi_Gen.thePt,zWeight01*zWeight02);
+                h2D_Den_noWeight_pt_y->Fill(Jpsi_Gen.theRapidity,Jpsi_Gen.thePt,zWeight01*zWeight02);
         } // end of yn_gen
 	  } //end of Gen_QQ_size loop
 	} //end of event loop
 	
 	// (Num/Den) to get efficiency (B : binomial error)
 	h2D_Eff_pt_y->Divide(h2D_Num_pt_y,h2D_Den_pt_y,1,1,"B");
-    h2D_Eff_weight_pt_y->Divide(h2D_Num_weight_pt_y,h2D_Den_weight_pt_y,1,1,"B");
+    h2D_Eff_noWeight_pt_y->Divide(h2D_Num_noWeight_pt_y,h2D_Den_noWeight_pt_y,1,1,"B");
 
     for(int ipt=0;ipt<nPtBins;ipt++){
         for(int iy=0;iy<nYBins;iy++){
-            h2D_Eff_diff_pt_y = (TH2D*) h2D_Eff_weight_pt_y->Clone("h2D_Eff_diff_pt_y");
+            h2D_Eff_diff_pt_y = (TH2D*) h2D_Eff_noWeight_pt_y->Clone("h2D_Eff_diff_pt_y");
             h2D_Eff_diff_pt_y->Add(h2D_Eff_pt_y,-1);
             h2D_Eff_err_pt_y->Divide(h2D_Eff_diff_pt_y,h2D_Eff_pt_y);
         }
@@ -667,9 +667,9 @@ int rootAna_efficiency_counting_kyo01_weight(char *strBinning = "8rap9pt2gev", b
     h2D_Num_pt_y->Write();
     h2D_Eff_pt_y->Write();
 
-    h2D_Den_weight_pt_y->Write();
-    h2D_Num_weight_pt_y->Write();
-    h2D_Eff_weight_pt_y->Write();
+    h2D_Den_noWeight_pt_y->Write();
+    h2D_Num_noWeight_pt_y->Write();
+    h2D_Eff_noWeight_pt_y->Write();
     h2D_Eff_diff_pt_y->Write();
     h2D_Eff_err_pt_y->Write();
 
