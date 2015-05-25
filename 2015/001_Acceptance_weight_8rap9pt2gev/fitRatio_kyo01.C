@@ -164,12 +164,17 @@ void fitRatio_kyo01(bool isPrompt=false, bool isPbp=true, char* dirName="8rap9pt
 
             }        
             //KYO
-            if (isPrompt && iy==1 || iy==6) func[iy]->SetParameters(-4.795, 1.653, 0.923, 3.018, 2.369);
-            else if (isPrompt && iy==2) {
+            if (isPrompt && iy==6) {
+                func[iy]->FixParameter(0,-3.40743e+02);
+                func[iy]->FixParameter(1,-2.56691e+01);
+                func[iy]->FixParameter(2,5.14736e+00); 
+            }
+            else if (isPrompt && (iy==2 || iy==1)) {
                 func[iy]->FixParameter(0,-3.40743e+02);
                 func[iy]->FixParameter(1,-1.37032e-01);
                 func[iy]->FixParameter(2,1.19902);
-            }									 
+            }
+
             /*
                func[iy] = new TF1(Form("func_%d",iy), fitExp,0.0,30.0,3);
                if(isPrompt==0 && isPbp==1 && (iy==2 || iy==3 || iy==4 || iy==5) ) func[iy]->SetParameters(-1.01556e+01,1.51712e-01,2.80282e+01);
