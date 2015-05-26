@@ -71,7 +71,7 @@ TF1* func_7=(TF1*)fRatio->Get("func_7");
 
 /////// main func. ///////
 
-int rootAna_efficiency_counting_kyo01(char *strBinning = "8rap9pt", bool isPrompt = true, bool is1st = true, bool isEmbedded = false, bool useCtErrRangeEff =true, bool useDataDrivenEff=true, bool useZvtxWeightStep1 = false, bool useZvtxWeightStep2=true){
+int rootAna_efficiency_counting_kyo01(char *strBinning = "8rap9pt2gev", bool isPrompt = true, bool is1st = true, bool isEmbedded = false, bool useCtErrRangeEff =true, bool useDataDrivenEff=true, bool useZvtxWeightStep1 = false, bool useZvtxWeightStep2=true){
 
   using namespace std;
   
@@ -215,8 +215,12 @@ int rootAna_efficiency_counting_kyo01(char *strBinning = "8rap9pt", bool isPromp
 	char* runName;
 	if(is1st) runName = "Pbp";
 	else runName = "pPb";	
-	char * dirName = "fitRes_8rap9pt_20150106";
-	std::ifstream fctau(Form("./%s/summary_%s/fit_ctauErrorRange",dirName,runName),std::ios::in);
+
+    char * dirName = Form("fitRes_%s",strBinning);
+    std::ifstream fctau(Form("./%s/summary_%s/fit_ctauErrorRange",dirName,runName),std::ios::in);	
+    
+    //char * dirName = "fitRes_8rap9pt_20150106";
+	//std::ifstream fctau(Form("./%s/summary_%s/fit_ctauErrorRange",dirName,runName),std::ios::in);
 	if(!fctau.is_open()) { cout << "Warning : can NOT open the fit_ctauErrorRange file!"<<endl; }
 
 	const char* strName = Form("%s_%s",strBinning,sampleName);
@@ -429,6 +433,46 @@ int rootAna_efficiency_counting_kyo01(char *strBinning = "8rap9pt", bool isPromp
 	h2D_Eff_pt_y->Sumw2();
 	h1D_zVtx->Sumw2();
 
+///////////////////////////////////
+    //yeonju
+    TH2D *h2D_Den_noWeight_pt_y;
+    TH2D *h2D_Num_noWeight_pt_y;
+    TH2D *h2D_Eff_noWeight_pt_y;
+    TH2D *h2D_Eff_diff_pt_y;
+    TH2D *h2D_Eff_err_pt_y;
+
+    if(is1st){
+        h2D_Den_noWeight_pt_y = new TH2D("h2D_Den_noWeight_pt_y","",nYBins,yBinsArr,nPtBins,ptBinsArr);
+        h2D_Num_noWeight_pt_y = new TH2D("h2D_Num_noWeight_pt_y","",nYBins,yBinsArr,nPtBins,ptBinsArr);
+        h2D_Eff_noWeight_pt_y = new TH2D("h2D_Eff_noWeight_pt_y","",nYBins,yBinsArr,nPtBins,ptBinsArr);
+        h2D_Eff_diff_pt_y= new TH2D("h2D_Eff_diff_pt_y","",nYBins,yBinsArr,nPtBins,ptBinsArr);
+        h2D_Eff_err_pt_y = new TH2D("h2D_Eff_err_pt_y","",nYBins,yBinsArr,nPtBins,ptBinsArr);
+    } else if(is1st==0) {
+        h2D_Den_noWeight_pt_y = new TH2D("h2D_Den_noWeight_pt_y","",nYBins,yBinsArr,nPtBins,ptBinsArr);
+        h2D_Num_noWeight_pt_y = new TH2D("h2D_Num_noWeight_pt_y","",nYBins,yBinsArr,nPtBins,ptBinsArr);
+        h2D_Eff_noWeight_pt_y = new TH2D("h2D_Eff_noWeight_pt_y","",nYBins,yBinsArr,nPtBins,ptBinsArr);
+        h2D_Eff_diff_pt_y = new TH2D("h2D_Eff_diff_pt_y","",nYBins,yBinsArr,nPtBins,ptBinsArr);
+        h2D_Eff_err_pt_y = new TH2D("h2D_Eff_err_pt_y","",nYBins,yBinsArr,nPtBins,ptBinsArr);
+    }
+    h2D_Den_noWeight_pt_y->Sumw2();
+    h2D_Num_noWeight_pt_y->Sumw2();
+    h2D_Eff_noWeight_pt_y->Sumw2();
+    h2D_Eff_diff_pt_y->Sumw2();
+    h2D_Eff_err_pt_y->Sumw2();
+
+    TString prom_st, run_st;
+    if(isPrompt) prom_st = "PR"; else prom_st = "NP";
+    if(is1st) run_st = "Pbp"; else run_st = "pPb";
+
+    //TFile* toyFile = new TFile(Form("../001_Acceptance_weight/ToyGaussian_isPrompt%d_%s.root",(int)isPrompt,run_st.Data()));
+    TFile* toyFile = new TFile(Form("../001_Acceptance_weight_8rap9pt2gev/fitRatio_isPrompt%d_%s_kyo01.root",(int)isPrompt,run_st.Data()));
+    TH1D* hWeight[nYBins];
+    TF1* Func[nYBins];
+
+    for(int iy=0;iy<nYBins;iy++){
+        //hWeight[iy]=(TH1D*) toyFile->Get(Form("hWeight_%s_%d",run_st.Data(),iy));
+        Func[iy]=(TF1*) toyFile->Get(Form("func_%d",iy));
+    }
 	////////////////////////////////////////////////////////////////////////////////////////////////
 
 	float theZvtx;
@@ -521,7 +565,7 @@ int rootAna_efficiency_counting_kyo01(char *strBinning = "8rap9pt", bool isPromp
 			}
 		
 			//// TNP Eff weighting && vZtx weighting && reco ratio weighting	
-	  	effWeight = 1;
+	   	effWeight = 1;
 	  	recoWeight = 1;
 	  	if (yn_reco == true){ 
 	    	if (useDataDrivenEff){
@@ -529,7 +573,8 @@ int rootAna_efficiency_counting_kyo01(char *strBinning = "8rap9pt", bool isPromp
 				}
 				recoWeight = getRecoWeight(Jpsi_Reco.thePt, Jpsi_Reco.theRapidity, is1st);
 				h2D_Num_pt_y->Fill(Jpsi_Reco.theRapidity,Jpsi_Reco.thePt, effWeight*zWeight01*zWeight02*recoWeight);
-			}
+                h2D_Num_noWeight_pt_y->Fill(Jpsi_Reco.theRapidity,Jpsi_Reco.thePt, effWeight*zWeight01*zWeight02);		
+        	}
 		} //end of Reco_QQ_size loop
 	  
 	  ////// Gen_QQ_size loop
@@ -576,13 +621,23 @@ int rootAna_efficiency_counting_kyo01(char *strBinning = "8rap9pt", bool isPromp
 	    if (yn_gen == true){
 				recoWeight = getRecoWeight(Jpsi_Gen.thePt, Jpsi_Gen.theRapidity, is1st);
 				h2D_Den_pt_y->Fill(Jpsi_Gen.theRapidity,Jpsi_Gen.thePt,zWeight01*zWeight02*recoWeight);
-	    } // end of yn_gen
+                h2D_Den_noWeight_pt_y->Fill(Jpsi_Gen.theRapidity,Jpsi_Gen.thePt,zWeight01*zWeight02);
+        } // end of yn_gen
 	  } //end of Gen_QQ_size loop
 	} //end of event loop
 	
 	// (Num/Den) to get efficiency (B : binomial error)
 	h2D_Eff_pt_y->Divide(h2D_Num_pt_y,h2D_Den_pt_y,1,1,"B");
-	
+    h2D_Eff_noWeight_pt_y->Divide(h2D_Num_noWeight_pt_y,h2D_Den_noWeight_pt_y,1,1,"B");
+
+    for(int ipt=0;ipt<nPtBins;ipt++){
+        for(int iy=0;iy<nYBins;iy++){
+            h2D_Eff_diff_pt_y = (TH2D*) h2D_Eff_noWeight_pt_y->Clone("h2D_Eff_diff_pt_y");
+            h2D_Eff_diff_pt_y->Add(h2D_Eff_pt_y,-1);
+            h2D_Eff_err_pt_y->Divide(h2D_Eff_diff_pt_y,h2D_Eff_pt_y);
+        }
+    }
+
 	////////////////////////////////////////////////////////////////////////////
 	// Save the data!
 	
@@ -609,8 +664,16 @@ int rootAna_efficiency_counting_kyo01(char *strBinning = "8rap9pt", bool isPromp
 	h2D_ctErrmin->Write();
 	h2D_ctErrmax->Write();
 	h2D_Den_pt_y->Write();
-	h2D_Num_pt_y->Write();
-	h2D_Eff_pt_y->Write();
+    h2D_Num_pt_y->Write();
+    h2D_Eff_pt_y->Write();
+
+    h2D_Den_noWeight_pt_y->Write();
+    h2D_Num_noWeight_pt_y->Write();
+    h2D_Eff_noWeight_pt_y->Write();
+    h2D_Eff_diff_pt_y->Write();
+    h2D_Eff_err_pt_y->Write();
+
+
 	h1D_zVtx->Write();
 	outFile->Close();
 

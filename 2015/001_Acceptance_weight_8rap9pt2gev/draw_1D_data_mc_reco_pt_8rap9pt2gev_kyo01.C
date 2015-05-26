@@ -29,7 +29,7 @@ void formRapArr(Double_t binmin, Double_t binmax, string* arr);
 void formAbsRapArr(Double_t binmin, Double_t binmax, string* arr);
 void formPtArr(Double_t binmin, Double_t binmax, string* arr);
 
-void draw_1D_data_mc_reco_pt_kyo01(char* dirName = "8rap9pt", bool isPrompt=true, bool isLog=false)
+void draw_1D_data_mc_reco_pt_8rap9pt2gev_kyo01(char* dirName = "8rap9pt2gev", bool isPrompt=true, bool isLog=false)
 {
 	gROOT->Macro("./JpsiStyle.C");
 
@@ -39,15 +39,20 @@ void draw_1D_data_mc_reco_pt_kyo01(char* dirName = "8rap9pt", bool isPrompt=true
 	Double_t pytmp[8][ntmp]; //y point
 	Double_t ex[ntmp]; // x error
 	
-	px[0] = {1.80888, 3.48529, 4.47275, 5.68792, 6.9644, 7.96271, 9.1754, 11.5315, 17.7588}; 
+	px[0] = {2.49530, 3.48529, 4.47275, 5.68792, 6.9644, 7.96271, 9.1754, 11.5315, 17.7588}; 
 	px[1] = {0.00000, 3.53123, 4.5027, 5.71709, 6.96523, 7.9693, 9.17314, 11.4952, 17.6927}; 
 	px[2] = {0.00000, 0.00000, 0.00000, 0.00000, 7.01977, 7.99712, 9.19936, 11.5743, 17.7732}; 
 	px[3] = {0.00000, 0.00000, 0.00000, 0.00000, 7.12292, 8.01305, 9.22816, 11.6279, 17.8879}; 
 	px[4] = {0.00000, 0.00000, 0.00000, 0.00000, 7.05476, 8.00208, 9.21589, 11.5645, 17.7176}; 
 	px[5] = {0.00000, 0.00000, 0.00000, 5.82095, 6.97886, 7.96732, 9.18979, 11.5158, 17.4116}; 
 	px[6] = {0.00000, 3.52893, 4.48328, 5.69351, 6.96188, 7.95707, 9.14886, 11.4747, 17.231}; 
-	px[7] = {1.78552, 3.47853, 4.46938, 5.6761, 6.96419, 7.97702, 9.16158, 11.5077, 17.3061}; 
+	px[7] = {2.49481, 3.47853, 4.46938, 5.6761, 6.96419, 7.97702, 9.16158, 11.5077, 17.3061}; 
 	ex = {0,0,0,0,0,0,0,0,0};
+
+
+
+
+
 	
 	//rap array in yCM (from forward to backward)
 	Double_t rapArrNumFB[] = {1.93, 1.5, 0.9, 0., -0.9, -1.5, -1.93, -2.4, -2.87};// for pt dist.
@@ -61,7 +66,8 @@ void draw_1D_data_mc_reco_pt_kyo01(char* dirName = "8rap9pt", bool isPrompt=true
 		cout << iy <<"th rapBinW = " << rapBinW[iy] <<endl;
 	}
 	//pt array
-	Double_t ptArrNum[] = {0.0, 3.0, 4.0, 5.0, 6.5, 7.5, 8.5, 10., 14., 30.};
+	//Double_t ptArrNum[] = {0.0, 3.0, 4.0, 5.0, 6.5, 7.5, 8.5, 10., 14., 30.};
+	Double_t ptArrNum[] = {2.0, 3.0, 4.0, 5.0, 6.5, 7.5, 8.5, 10., 14., 30.};//8rap9pt2gev
 	const Int_t nPt = sizeof(ptArrNum)/sizeof(Double_t)-1;
 	cout << "nPt = " << nPt << endl;
 	Double_t ptBinW[nPt];
@@ -83,7 +89,8 @@ void draw_1D_data_mc_reco_pt_kyo01(char* dirName = "8rap9pt", bool isPrompt=true
 	}
 	
 	// --- read-in file
-	TFile * f2D = new TFile(Form("./total2Dhist_%s_kyo01.root",dirName));
+	TFile * f2D = new TFile(Form("../000_fittingResult/total2Dhist_%s.root",dirName));
+	//TFile * f2D = new TFile(Form("total2Dhist_%s_kyo01.root",dirName));
 	cout << "dirName = " << dirName << endl;
 
 	// --- read-in 2D hist for data reco dist
@@ -271,7 +278,7 @@ void draw_1D_data_mc_reco_pt_kyo01(char* dirName = "8rap9pt", bool isPrompt=true
 		}
 		else latex->DrawLatex(0.56,0.88,Form("%s",rapArr[iy].c_str()));
 	}
-	c_Pbp->SaveAs(Form("DataMcReco_%s_kyo01/DataMcRecoPt_Pbp_isPrompt%d_isLog%d.pdf",dirName,(int)isPrompt,(int)isLog));
+	c_Pbp->SaveAs(Form("DataMcReco_%s_kyo01/DataMcRecoPt_Pbp_isPrompt%d_isLog%d_kyo01.pdf",dirName,(int)isPrompt,(int)isLog));
 	legUR->Clear();
 	
 	// --- pPb (2nd run)
@@ -303,7 +310,7 @@ void draw_1D_data_mc_reco_pt_kyo01(char* dirName = "8rap9pt", bool isPrompt=true
 		}
 		else latex->DrawLatex(0.56,0.88,Form("%s",rapArr[iy].c_str()));
 	}
-	c_pPb->SaveAs(Form("DataMcReco_%s_kyo01/DataMcRecoPt_pPb_isPrompt%d_isLog%d.pdf",dirName,(int)isPrompt,(int)isLog));
+	c_pPb->SaveAs(Form("DataMcReco_%s_kyo01/DataMcRecoPt_pPb_isPrompt%d_isLog%d_kyo01.pdf",dirName,(int)isPrompt,(int)isLog));
 	legUR->Clear();
 	
 	// --- tot (1st+2nd)
@@ -335,7 +342,7 @@ void draw_1D_data_mc_reco_pt_kyo01(char* dirName = "8rap9pt", bool isPrompt=true
 		}
 		else latex->DrawLatex(0.56,0.88,Form("%s",rapArr[iy].c_str()));
 	}
-	c_tot->SaveAs(Form("DataMcReco_%s_kyo01/DataMcRecoPt_tot_isPrompt%d_isLog%d.pdf",dirName,(int)isPrompt,(int)isLog));
+	c_tot->SaveAs(Form("DataMcReco_%s_kyo01/DataMcRecoPt_tot_isPrompt%d_isLog%d_kyo01.pdf",dirName,(int)isPrompt,(int)isLog));
 	legUR->Clear();
 
 
@@ -466,7 +473,7 @@ void draw_1D_data_mc_reco_pt_kyo01(char* dirName = "8rap9pt", bool isPrompt=true
 		latex->DrawLatex(0.56,0.88,Form("%s",rapArr[iy].c_str()));
 		dashedLine(0.,1.,25.,1.,1,1);
 	}	
-	c_Pbp2->SaveAs(Form("DataMcReco_%s_kyo01/DataMcRecoPt_gRatio_Pbp_isPrompt%d.pdf",dirName,(int)isPrompt));
+	c_Pbp2->SaveAs(Form("DataMcReco_%s_kyo01/DataMcRecoPt_gRatio_Pbp_isPrompt%d_kyo01.pdf",dirName,(int)isPrompt));
 
 	// --- pPb (2nd run)
 	for (Int_t iy = 0; iy < nbinsX; iy++) {
@@ -494,7 +501,7 @@ void draw_1D_data_mc_reco_pt_kyo01(char* dirName = "8rap9pt", bool isPrompt=true
 		latex->DrawLatex(0.56,0.88,Form("%s",rapArr[iy].c_str()));
 		dashedLine(0.,1.,25.,1.,1,1);
 	}	
-	c_pPb2->SaveAs(Form("DataMcReco_%s_kyo01/DataMcRecoPt_gRatio_pPb_isPrompt%d.pdf",dirName,(int)isPrompt));
+	c_pPb2->SaveAs(Form("DataMcReco_%s_kyo01/DataMcRecoPt_gRatio_pPb_isPrompt%d_kyo01.pdf",dirName,(int)isPrompt));
 
 
 
@@ -524,11 +531,11 @@ void draw_1D_data_mc_reco_pt_kyo01(char* dirName = "8rap9pt", bool isPrompt=true
 		latex->DrawLatex(0.56,0.88,Form("%s",rapArr[iy].c_str()));
 		dashedLine(0.,1.,25.,1.,1,1);
 	}	
-	c_tot2->SaveAs(Form("DataMcReco_%s_kyo01/DataMcRecoPt_gRatio_tot_isPrompt%d.pdf",dirName,(int)isPrompt));
+	c_tot2->SaveAs(Form("DataMcReco_%s_kyo01/DataMcRecoPt_gRatio_tot_isPrompt%d_kyo01.pdf",dirName,(int)isPrompt));
 
 	//////////////////////////////////////////////////////////////////
 	// root file
-	TFile *fOut = new TFile(Form("DataMcReco_%s_kyo01/DataMcRecoPt_isPropmt%d.root",dirName,(int)isPrompt),"RECREATE");
+	TFile *fOut = new TFile(Form("DataMcReco_%s_kyo01/DataMcRecoPt_isPropmt%d_kyo01.root",dirName,(int)isPrompt),"RECREATE");
 	fOut->cd();
 	for (Int_t iy = 0; iy < nbinsX; iy++) {
 		h1D_data_Pbp[iy]->Write();
