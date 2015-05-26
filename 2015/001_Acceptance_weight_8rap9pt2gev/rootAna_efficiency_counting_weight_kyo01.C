@@ -71,7 +71,7 @@ TF1* func_7=(TF1*)fRatio->Get("func_7");
 
 /////// main func. ///////
 
-int rootAna_efficiency_counting_kyo01(char *strBinning = "8rap9pt2gev", bool isPrompt = true, bool is1st = true, bool isEmbedded = false, bool useCtErrRangeEff =true, bool useDataDrivenEff=true, bool useZvtxWeightStep1 = false, bool useZvtxWeightStep2=true){
+int rootAna_efficiency_counting_weight_kyo01(char *strBinning = "8rap9pt2gev", bool isPrompt = true, bool is1st = true, bool isEmbedded = false, bool useCtErrRangeEff =true, bool useDataDrivenEff=true, bool useZvtxWeightStep1 = false, bool useZvtxWeightStep2=true){
 
   using namespace std;
   
