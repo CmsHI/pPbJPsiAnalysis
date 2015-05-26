@@ -24,49 +24,49 @@ void compileSysUnc(bool isPrompt=1){
 
   TH1::SetDefaultSumw2();
 
-  TFile *inf1;
-  if (isPrompt)  inf1 = new TFile("EffCounting_8rap9pt_PRMCpythia_Pbp_useCtErr_1_useDataDriven_1_useZvtxStep1_0_Step2_1.root");
-  else           inf1 = new TFile("EffCounting_8rap9pt_NPMCpythia_Pbp_useCtErr_1_useDataDriven_1_useZvtxStep1_0_Step2_1.root");
+  TFile *inf1;  // Kisoo's nominal
+  if (isPrompt)  inf1 = new TFile("systematics/EffCounting_8rap9pt2gev_PRMCpythia_Pbp_useCtErr_1_useDataDriven_1_useZvtxStep1_0_Step2_1_GTrack_PAMu3_expo_fine.root");
+  else           inf1 = new TFile("systematics/EffCounting_8rap9pt2gev_NPMCpythia_Pbp_useCtErr_1_useDataDriven_1_useZvtxStep1_0_Step2_1_GTrack_PAMu3_expo_fine.root");
 
   TH2D* hNominal = (TH2D*)inf1->Get("h2D_Eff_pt_y");
 
-  TFile *inf2;
-  if (isPrompt)  inf2 = new TFile("systematics/EffSys_SpectraVar_EffCounting_8rap9pt_PRMCpythia_Pbp_useCtErr_1_useDataDriven_1_useZvtxStep1_0_Step2_1.root");
-  else           inf2 = new TFile("systematics/EffSys_SpectraVar_EffCounting_8rap9pt_NPMCpythia_Pbp_useCtErr_1_useDataDriven_1_useZvtxStep1_0_Step2_1.root");
+  TFile *inf2; // Yeonju's nominal + spectra weight
+  if (isPrompt)  inf2 = new TFile("../001_Acceptance_weight_8rap9pt2gev/EffCounting_8rap9pt2gev_PRMCpythia_Pbp_useCtErr_1_useDataDriven_1_useZvtxStep1_0_Step2_1_kyo01.root");
+  else           inf2 = new TFile("../001_Acceptance_weight_8rap9pt2gev/EffCounting_8rap9pt2gev_NPMCpythia_Pbp_useCtErr_1_useDataDriven_1_useZvtxStep1_0_Step2_1_kyo01.root");
 
-  TH2D* hNominal1 = (TH2D*)inf2->Get("h2D_Eff_pt_y");
+  TH2D* hNominal1 = (TH2D*)inf2->Get("h2D_Eff_noWeight_pt_y");
   hNominal1->SetName("spectraVar");
   TH2D* hNominal1_sys = compareTwo2D(hNominal1,hNominal,"Nominal_y VS Nominal");
 
-  TH2D* hSpecWgt = (TH2D*)inf2->Get("h2D_Eff_weight_pt_y");
+  TH2D* hSpecWgt = (TH2D*)inf2->Get("h2D_Eff_pt_y");
   hSpecWgt->SetName("hSpecWgt");
   TH2D* hSpecWgt_sys = compareTwo2D(hSpecWgt,hNominal,"Spectra Reweighted");
-
+  
 
   TH2D* hTrackerEffVar = (TH2D*)hNominal->Clone("hTrackEffVar");
   for ( int ix=1 ; ix<=hTrackerEffVar->GetNbinsX(); ix++) {
     for ( int iy=1 ; iy<=hTrackerEffVar->GetNbinsY(); iy++) {
-      hTrackerEffVar->SetBinContent(ix,iy, hTrackerEffVar->GetBinContent(ix,iy) * 1.03);
+      hTrackerEffVar->SetBinContent(ix,iy, hTrackerEffVar->GetBinContent(ix,iy) * 1.02);
     }
   }
   TH2D* hTrackEffVar_sys = compareTwo2D(hTrackerEffVar, hNominal,"Tracking eff. sys.");
   
 
-  TFile *inf3;
-  if (isPrompt) inf3 = new TFile("systematics/EffSys_ZVtx_tnp_expo_PRMCpythia_Pbp_useCtErr_1_useDataDriven_V17_ZV_0_1_useZvtxStep1_0_Step2_1.root");
-  else          inf3 = new TFile("systematics/EffSys_ZVtx_tnp_expo_NPMCpythia_Pbp_useCtErr_1_useDataDriven_V17_ZV_0_1_useZvtxStep1_0_Step2_1.root");
+  TFile *infTnp1;
+  if (isPrompt)   infTnp1 = new TFile("systematics/EffCounting_8rap9pt2gev_PRMCpythia_Pbp_useCtErr_1_useDataDriven_1_useZvtxStep1_0_Step2_1_GTrack_PAMu3_Gversion_v2.root");
+  else            infTnp1 = new TFile("systematics/EffCounting_8rap9pt2gev_NPMCpythia_Pbp_useCtErr_1_useDataDriven_1_useZvtxStep1_0_Step2_1_GTrack_PAMu3_Gversion_v2.root");
 
-  TH2D* hNominal2 = (TH2D*)inf2->Get("h2D_Eff_pt_y");
-  hNominal2->SetName("spectraVar");
-  TH2D* hNominal2_sys = compareTwo2D(hNominal2,hNominal,"Nominal_tnp VS Nominal");
-  
-  TFile *infTnp;
-  if (isPrompt)   infTnp = new TFile("systematics/EffSys_ZVtx_tnp_plo1_PRMCpythia_Pbp_useCtErr_1_useDataDriven_V17_ZV_1_1_useZvtxStep1_0_Step2_1.root");
-  else            infTnp = new TFile("systematics/EffSys_ZVtx_tnp_pol1_NPMCpythia_Pbp_useCtErr_1_useDataDriven_V17_ZV_1_1_useZvtxStep1_0_Step2_1.root");
+  TH2D* hTnp1Var = (TH2D*)infTnp1->Get("h2D_Eff_pt_y");
+  hTnp1Var->SetName("tnp1Var");
+  TH2D* hTnp1Var_sys = compareTwo2D(hTnp1Var,hNominal,"Tnp1 Var VS Nominal");
 
-  TH2D* hTnpVar = (TH2D*)infTnp->Get("h2D_Eff_pt_y");
-  hTnpVar->SetName("tnpMuIdTriggerVar");
-  TH2D* hTnpVar_sys = compareTwo2D(hTnpVar,hNominal,"Tnp Var VS Nominal");
+  TFile *infTnp2;
+  if (isPrompt)   infTnp2 = new TFile("systematics/EffCounting_8rap9pt2gev_PRMCpythia_Pbp_useCtErr_1_useDataDriven_1_useZvtxStep1_0_Step2_1_GTrack_PAMu3_probeMulti.root");
+  else            infTnp2 = new TFile("systematics/EffCounting_8rap9pt2gev_NPMCpythia_Pbp_useCtErr_1_useDataDriven_1_useZvtxStep1_0_Step2_1_GTrack_PAMu3_probeMulti.root");
+
+  TH2D* hTnp2Var = (TH2D*)infTnp2->Get("h2D_Eff_pt_y");
+  hTnp2Var->SetName("tnp2Var");
+  TH2D* hTnp2Var_sys = compareTwo2D(hTnp2Var,hNominal,"Tnp2 Var VS Nominal");
 
 
 
@@ -76,8 +76,10 @@ void compileSysUnc(bool isPrompt=1){
   cout << "Data/MC spectra reweighting for Acceptance"  << endl;
   quadSum2D(tot_sys,hTrackEffVar_sys);                    // 2. TnP Tracking
   cout << "Tracking efficiency sys." << endl;
-  quadSum2D(tot_sys,hTnpVar_sys);                         // 3. TnP MuonID+Trigger
-  cout << "MuonID and Trigger efficiency sys." << endl;
+  quadSum2D(tot_sys,hTnp1Var_sys);                         // 3. TnP MuonID+Trigger
+  cout << "T&P 1 (signal shape variation) efficiency sys." << endl;
+  quadSum2D(tot_sys,hTnp2Var_sys);                         // 3. TnP MuonID+Trigger
+  cout << "T&P 2 (multiplicity variation) efficiency sys." << endl;
   
     
   TCanvas* c=  new TCanvas("cTot","", 500,500);
