@@ -31,7 +31,7 @@
 #include <TPaveStats.h>
 
 /////// main func. ///////
-int make2Droot_total_ethf(char *dirName = "6rap3pt", char *dateName = "no"){
+int make2Droot_total_ethf_noWeight(char *dirName = "6rap3pt", char *dateName = "no"){
 
   using namespace std;
 
@@ -39,8 +39,8 @@ int make2Droot_total_ethf(char *dirName = "6rap3pt", char *dateName = "no"){
 
 	////////////////////////////////////////////////
 	////// read in Acceptance file
-	TFile *fAccPR = new TFile("../001_Acceptance_weight_8rap9pt2gev/AccAna_isPrompt1_Pbp_6rap3pt_kyo01.root");
-	TFile *fAccNP = new TFile("../001_Acceptance_weight_8rap9pt2gev/AccAna_isPrompt0_Pbp_6rap3pt_kyo01.root");
+	TFile *fAccPR = new TFile("../001_Acceptance/AccAna_6rap3pt_PRMC_boosted.root");
+	TFile *fAccNP = new TFile("../001_Acceptance/AccAna_6rap3pt_NPMC_boosted.root");
 	
 	TH2D* h2D_Acc_pt_y_PRMC_Pbp[nET];
 	TH2D* h2D_Acc_pt_y_PRMC_pPb[nET];
@@ -58,8 +58,8 @@ int make2Droot_total_ethf(char *dirName = "6rap3pt", char *dateName = "no"){
 	for (int iet=0; iet<nET; iet++) {
 		h2D_Acc_pt_y_PRMC_Pbp[iet] = (TH2D*)fAccPR->Get("h2D_Acc_pt_y_Pbp");
 		h2D_Acc_pt_y_PRMC_pPb[iet] = (TH2D*)fAccPR->Get("h2D_Acc_pt_y_pPb");
-		h2D_Acc_pt_y_NPMC_Pbp[iet] = (TH2D*)fAccNP->Get("h2D_Acc_noWeight_pt_y_Pbp");
-		h2D_Acc_pt_y_NPMC_pPb[iet] = (TH2D*)fAccNP->Get("h2D_Acc_noWeight_pt_y_pPb");
+		h2D_Acc_pt_y_NPMC_Pbp[iet] = (TH2D*)fAccNP->Get("h2D_Acc_pt_y_Pbp");
+		h2D_Acc_pt_y_NPMC_pPb[iet] = (TH2D*)fAccNP->Get("h2D_Acc_pt_y_pPb");
 		h2D_Acc_pt_y_PRMC_Pbp[iet]->SetName(Form("h2D_Acc_pt_y_PRMC_Pbp_%d",iet));
 		h2D_Acc_pt_y_PRMC_pPb[iet]->SetName(Form("h2D_Acc_pt_y_PRMC_pPb_%d",iet));
 		h2D_Acc_pt_y_NPMC_Pbp[iet]->SetName(Form("h2D_Acc_pt_y_NPMC_Pbp_%d",iet));
@@ -107,20 +107,18 @@ int make2Droot_total_ethf(char *dirName = "6rap3pt", char *dateName = "no"){
 	TH2D* h2D_Eff_Num_pt_y_NPMC_pPb[nET];
 	
 	for (int iet=0; iet<nET; iet++) {
-/*
+//		fEffPRPbp[iet] = new TFile(Form("../002_Efficiency_zVtx_embedded/EffCounting_6rap3pt_PRMCpythia_Pbp_useCtErr_1_useDataDriven_0_useZvtxStep1_0_Step2_1_bin%d.root",iet+1));
+//		fEffPRpPb[iet] = new TFile(Form("../002_Efficiency_zVtx_embedded/EffCounting_6rap3pt_PRMCpythia_pPb_useCtErr_1_useDataDriven_0_useZvtxStep1_0_Step2_1_bin%d.root",iet+1));
+//		fEffNPPbp[iet] = new TFile(Form("../002_Efficiency_zVtx_embedded/EffCounting_6rap3pt_NPMCpythia_Pbp_useCtErr_1_useDataDriven_0_useZvtxStep1_0_Step2_1_bin%d.root",iet+1));
+//		fEffNPpPb[iet] = new TFile(Form("../002_Efficiency_zVtx_embedded/EffCounting_6rap3pt_NPMCpythia_pPb_useCtErr_1_useDataDriven_0_useZvtxStep1_0_Step2_1_bin%d.root",iet+1));
 		fEffPRPbp[iet] = new TFile(Form("../002_Efficiency_zVtx_embedded/EffCounting_6rap3pt_PRMCpythia_Pbp_useCtErr_1_useDataDriven_1_useZvtxStep1_0_Step2_1_bin%d.root",iet+1));
 		fEffPRpPb[iet] = new TFile(Form("../002_Efficiency_zVtx_embedded/EffCounting_6rap3pt_PRMCpythia_pPb_useCtErr_1_useDataDriven_1_useZvtxStep1_0_Step2_1_bin%d.root",iet+1));
 		fEffNPPbp[iet] = new TFile(Form("../002_Efficiency_zVtx_embedded/EffCounting_6rap3pt_NPMCpythia_Pbp_useCtErr_1_useDataDriven_1_useZvtxStep1_0_Step2_1_bin%d.root",iet+1));
 		fEffNPpPb[iet] = new TFile(Form("../002_Efficiency_zVtx_embedded/EffCounting_6rap3pt_NPMCpythia_pPb_useCtErr_1_useDataDriven_1_useZvtxStep1_0_Step2_1_bin%d.root",iet+1));
-*/
-		fEffPRPbp[iet] = new TFile(Form("../001_Acceptance_weight_8rap9pt2gev/EffCounting_6rap3pt_PRMCpythia_Pbp_useCtErr_1_useDataDriven_1_useZvtxStep1_0_Step2_1_bin%d_kyo01.root",iet+1));
-		fEffPRpPb[iet] = new TFile(Form("../001_Acceptance_weight_8rap9pt2gev/EffCounting_6rap3pt_PRMCpythia_pPb_useCtErr_1_useDataDriven_1_useZvtxStep1_0_Step2_1_bin%d_kyo01.root",iet+1));
-		fEffNPPbp[iet] = new TFile(Form("../001_Acceptance_weight_8rap9pt2gev/EffCounting_6rap3pt_NPMCpythia_Pbp_useCtErr_1_useDataDriven_1_useZvtxStep1_0_Step2_1_bin%d_kyo01.root",iet+1));
-		fEffNPpPb[iet] = new TFile(Form("../001_Acceptance_weight_8rap9pt2gev/EffCounting_6rap3pt_NPMCpythia_pPb_useCtErr_1_useDataDriven_1_useZvtxStep1_0_Step2_1_bin%d_kyo01.root",iet+1));
 		h2D_Eff_pt_y_PRMC_Pbp[iet] = (TH2D*)fEffPRPbp[iet]->Get("h2D_Eff_pt_y");
 		h2D_Eff_pt_y_PRMC_pPb[iet] = (TH2D*)fEffPRpPb[iet]->Get("h2D_Eff_pt_y");
-		h2D_Eff_pt_y_NPMC_Pbp[iet] = (TH2D*)fEffNPPbp[iet]->Get("h2D_Eff_noWeight_pt_y");
-		h2D_Eff_pt_y_NPMC_pPb[iet] = (TH2D*)fEffNPpPb[iet]->Get("h2D_Eff_noWeight_pt_y");
+		h2D_Eff_pt_y_NPMC_Pbp[iet] = (TH2D*)fEffNPPbp[iet]->Get("h2D_Eff_pt_y");
+		h2D_Eff_pt_y_NPMC_pPb[iet] = (TH2D*)fEffNPpPb[iet]->Get("h2D_Eff_pt_y");
 		h2D_Eff_pt_y_PRMC_Pbp[iet]->SetName(Form("h2D_Eff_pt_y_PRMC_Pbp_%d",iet));
 		h2D_Eff_pt_y_PRMC_pPb[iet]->SetName(Form("h2D_Eff_pt_y_PRMC_pPb_%d",iet));
 		h2D_Eff_pt_y_NPMC_Pbp[iet]->SetName(Form("h2D_Eff_pt_y_NPMC_Pbp_%d",iet));
@@ -129,8 +127,8 @@ int make2Droot_total_ethf(char *dirName = "6rap3pt", char *dateName = "no"){
 	
 		h2D_Eff_Den_pt_y_PRMC_Pbp[iet] = (TH2D*)fEffPRPbp[iet]->Get("h2D_Den_pt_y");
 		h2D_Eff_Den_pt_y_PRMC_pPb[iet] = (TH2D*)fEffPRpPb[iet]->Get("h2D_Den_pt_y");
-		h2D_Eff_Den_pt_y_NPMC_Pbp[iet] = (TH2D*)fEffNPPbp[iet]->Get("h2D_Den_noWeight_pt_y");
-		h2D_Eff_Den_pt_y_NPMC_pPb[iet] = (TH2D*)fEffNPpPb[iet]->Get("h2D_Den_noWeight_pt_y");
+		h2D_Eff_Den_pt_y_NPMC_Pbp[iet] = (TH2D*)fEffNPPbp[iet]->Get("h2D_Den_pt_y");
+		h2D_Eff_Den_pt_y_NPMC_pPb[iet] = (TH2D*)fEffNPpPb[iet]->Get("h2D_Den_pt_y");
 		h2D_Eff_Den_pt_y_PRMC_Pbp[iet]->SetName(Form("h2D_Eff_Den_pt_y_PRMC_Pbp_%d",iet));
 		h2D_Eff_Den_pt_y_PRMC_pPb[iet]->SetName(Form("h2D_Eff_Den_pt_y_PRMC_pPb_%d",iet));
 		h2D_Eff_Den_pt_y_NPMC_Pbp[iet]->SetName(Form("h2D_Eff_Den_pt_y_NPMC_Pbp_%d",iet));
@@ -138,8 +136,8 @@ int make2Droot_total_ethf(char *dirName = "6rap3pt", char *dateName = "no"){
 	
 		h2D_Eff_Num_pt_y_PRMC_Pbp[iet] = (TH2D*)fEffPRPbp[iet]->Get("h2D_Num_pt_y");
 		h2D_Eff_Num_pt_y_PRMC_pPb[iet] = (TH2D*)fEffPRpPb[iet]->Get("h2D_Num_pt_y");
-		h2D_Eff_Num_pt_y_NPMC_Pbp[iet] = (TH2D*)fEffNPPbp[iet]->Get("h2D_Num_noWeight_pt_y");
-		h2D_Eff_Num_pt_y_NPMC_pPb[iet] = (TH2D*)fEffNPpPb[iet]->Get("h2D_Num_noWeight_pt_y");
+		h2D_Eff_Num_pt_y_NPMC_Pbp[iet] = (TH2D*)fEffNPPbp[iet]->Get("h2D_Num_pt_y");
+		h2D_Eff_Num_pt_y_NPMC_pPb[iet] = (TH2D*)fEffNPpPb[iet]->Get("h2D_Num_pt_y");
 		h2D_Eff_Num_pt_y_PRMC_Pbp[iet]->SetName(Form("h2D_Eff_Num_pt_y_PRMC_Pbp_%d",iet));
 		h2D_Eff_Num_pt_y_PRMC_pPb[iet]->SetName(Form("h2D_Eff_Num_pt_y_PRMC_pPb_%d",iet));
 		h2D_Eff_Num_pt_y_NPMC_Pbp[iet]->SetName(Form("h2D_Eff_Num_pt_y_NPMC_Pbp_%d",iet));
@@ -260,9 +258,9 @@ int make2Droot_total_ethf(char *dirName = "6rap3pt", char *dateName = "no"){
 	
 	////////////////////////////////////////////////
 	////// save as a root file
-	TFile *outFile = new TFile(Form("total2Dhist_%s.root",dirName),"RECREATE");
+	TFile *outFile = new TFile(Form("total2Dhist_%s_noWeight.root",dirName),"RECREATE");
 	std::cout << "dirName: " << dirName << std::endl;
-	cout << "total2Dhist_"<<dirName<<".root has been created :) " <<endl;	
+	cout << "total2Dhist_"<<dirName<<"_noWeight.root has been created :) " <<endl;	
 
 	// DIRECTORY : num, den distributions for acc & eff
 	TDirectoryFile *otherMCInfo = new TDirectoryFile("otherMCInfo","otherMCInfo");

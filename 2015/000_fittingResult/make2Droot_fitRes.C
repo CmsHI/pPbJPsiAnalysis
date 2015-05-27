@@ -36,7 +36,7 @@ void formStr(Double_t min, Double_t max, string* arr);
 
 /////// main func. ///////
 
-int make2Droot_fitRes(char *dirName = "fitRes_8rap9pt", bool is1st = false){
+int make2Droot_fitRes(char *dirName = "fitRes_8rap9pt2gev", bool is1st = false){
 
   using namespace std;
 	
@@ -57,10 +57,9 @@ int make2Droot_fitRes(char *dirName = "fitRes_8rap9pt", bool is1st = false){
 	///////////////////////////////////////////////////
 	//////// Definition of binning
 	// --- pt Bin
-//	Double_t ptBinsArr[] = {0.0, 3.0, 6.5, 7.5, 8.5, 10.0, 14.0, 30.0};
-	Double_t ptBinsArr[] = {0.0, 3.0, 4.0, 5.0, 6.5, 7.5, 8.5, 10.0, 14.0, 30.0}; // 8rap9pt
-//	Double_t ptBinsArr[] = {0.0, 1.0, 2.0, 3.0, 4.0, 5.0, 6.5, 7.5, 8.5, 10.0, 14.0, 30.0}; // finer
-	//Double_t ptBinsArr[] = {0.0, 3.0, 6.5, 10.0, 30.0}; // ntrk33
+	//Double_t ptBinsArr[] = {0.0, 3.0, 4.0, 5.0, 6.5, 7.5, 8.5, 10.0, 14.0, 30.0}; // 8rap9pt
+	//Double_t ptBinsArr[] = {0.0, 1.5, 3.0, 4.0, 5.0, 6.5, 7.5, 8.5, 10.0, 14.0, 30.0}; // 8rap10pt
+	Double_t ptBinsArr[] = {2.0, 3.0, 4.0, 5.0, 6.5, 7.5, 8.5, 10.0, 14.0, 30.0}; // 8rap9pt2gev
 	const Int_t nPtBins = sizeof(ptBinsArr)/sizeof(double)-1;
    cout << "nPtBins=" << nPtBins << endl;
 
@@ -140,27 +139,6 @@ int make2Droot_fitRes(char *dirName = "fitRes_8rap9pt", bool is1st = false){
 					ctErrmin[iy][ipt] = atof(errmin.c_str());
 					ctErrmax[iy][ipt] = atof(errmax.c_str());
 				}
-		    // Special bin setting with no ctau error ranges from txt //for Cross76!! //byHand KYO
-		    /*
-				else if ( 
-				(is1st) && 
-				(( ptrange[ipt].compare("0.0-3.0") ==0 && yrange[iy].compare("-2.4--1.97")!=0 ) || 
-				( ptrange[ipt].compare("3.0-6.5")==0 
-				&& (yrange[iy].compare("-2.4--1.97")!=0 && yrange[iy].compare("1.03-1.93")!=0 ) ) || 
-				(yrange[iy].compare("1.93-2.4")!=0) ) ){
-					ctErrmin[iy][ipt]=-532;
-					ctErrmax[iy][ipt]=532;
-				}
-				else if ( 
-				(!is1st) && 
-				(( ptrange[ipt].compare("0.0-3.0") ==0 && yrange[iy].compare("1.97-2.4")!=0 ) || 
-				( ptrange[ipt].compare("3.0-6.5")==0 
-			 	&& (yrange[iy].compare("1.97-2.4")!=0 && yrange[iy].compare("-1.93--1.03")!=0 ) ) ||
-				yrange[iy].compare("-2.4--1.93")!=0 )) { 
-					ctErrmin[iy][ipt]=-532;
-					ctErrmax[iy][ipt]=532;
-	   		}
-				*/
 	    } 
 	  }
 	} //end of while file open
