@@ -100,6 +100,19 @@ int comp_RFB_rap_LHCb(Int_t runCode=0)
 	
 	const Int_t nBin_lhcb = sizeof(lhcb_px)/sizeof(Double_t);
 	cout << "nBin_lhcb : " << nBin_lhcb << endl; 
+	///////////////////////////////////////////////////
+	///////////////////// ALICE ////////////////////////
+	///////////////////////////////////////////////////
+	Double_t alice_px[] = {(2.96+3.15)/2, (3.15+3.34)/2, (3.34+3.53)/2};
+	Double_t alice_ex[] = {0., 0., 0.};
+	Double_t alice_py[] = {0.58, 0.6, 0.61};
+	Double_t alice_ey[] = {0.03, 0.02, 0.03};
+	//Double_t alice_exsys[] = {0.04, 0.04, 0.04};
+	Double_t alice_exsys[] = {0.03, 0.03, 0.03};
+	Double_t alice_eysys[] = {0.06, 0.05, 0.06};
+	
+	const Int_t nBin_alice = sizeof(alice_px)/sizeof(Double_t);
+	cout << "nBin_alice : " << nBin_alice << endl; 
 
 	////////////////////
 	////// Draw Plots
@@ -133,6 +146,8 @@ int comp_RFB_rap_LHCb(Int_t runCode=0)
 	TGraphAsymmErrors * gRFB_lhcb_pr;
 	TGraphAsymmErrors * gRFB_lhcb_np_sys;
 	TGraphAsymmErrors * gRFB_lhcb_np;
+	TGraphAsymmErrors * gRFB_alice_sys;
+	TGraphAsymmErrors * gRFB_alice;
 
 	////////////////////////////////////////////////////////////////////////////////////
 	// prompt
@@ -170,15 +185,29 @@ int comp_RFB_rap_LHCb(Int_t runCode=0)
 	SetGraphStyle(gRFB_lhcb_pr,2,10);
 	gRFB_lhcb_pr->Draw("P");
 
+	// 3) alice
+	gRFB_alice_sys = new TGraphAsymmErrors(nBin_alice, alice_px, alice_py, alice_exsys, alice_exsys, alice_eysys, alice_eysys);	
+	gRFB_alice_sys->SetFillColor(kMagenta);
+	gRFB_alice_sys->SetLineColor(kMagenta);
+	gRFB_alice_sys->SetFillStyle(3002);
+	gRFB_alice_sys->Draw("2");
+
+	gRFB_alice = new TGraphAsymmErrors(nBin_alice, alice_px, alice_py, alice_ex, alice_ex, alice_ey, alice_ey);	
+	SetGraphStyle(gRFB_alice,2,10);
+	gRFB_alice->SetMarkerColor(kMagenta);
+	gRFB_alice->SetMarkerStyle(25);
+	gRFB_alice->Draw("P");
+
 	dashedLine(0.0,1.0,4.5,1.0,1,1);
 
 	legBL -> SetHeader("Prompt J/#psi");
 	legBL -> AddEntry(gRFB_pr_lowpt,"CMS :6.5 < p_{T} < 10 [GeV/c]","lp");
 	legBL -> AddEntry(gRFB_pr_highpt,"CMS :10 < p_{T} < 30 [GeV/c]","lp");
-	legBL -> AddEntry(gRFB_lhcb_pr,"LHCb : p_{T} < 14 ]GeV/c]","lp");
+	legBL -> AddEntry(gRFB_lhcb_pr,"LHCb : 0 < p_{T} < 14 [GeV/c]","lp");
+	legBL -> AddEntry(gRFB_alice,"ALICE : 0 < p_{T} < 15 [GeV/c] (Prompt + Non-prompt)","lp");
 	legBL -> Draw();
 	c_pr->Update();
-	c_pr->SaveAs("comparisonLHCb/comp_RFB_rap_LHCb_pr.pdf");
+	c_pr->SaveAs("comparisonLHCb/comp_RFB_rap_LHCb_pr_alice.pdf");
 	legBL->Clear();
 	//c_pr->Clear();
 

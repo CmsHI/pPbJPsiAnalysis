@@ -164,6 +164,7 @@ int comp_crossSection_pt_LHCb(Int_t runCode=0, bool isScale =false, bool isLog=f
 
 	gCross_lhcb_pr_sys = new TGraphAsymmErrors(nBin_lhcb, lhcb_px, lhcb_py_pr, lhcb_exsys, lhcb_exsys, lhcb_eysys_pr, lhcb_eysys_pr);	
 	gCross_lhcb_pr_sys->SetFillColor(kAzure-9);
+	gCross_lhcb_pr_sys->SetFillStyle(3001);
 	gCross_lhcb_pr_sys->Draw("2");
 
 	SetGraphStyle(gCross_pr_0,1,3);
@@ -224,6 +225,7 @@ int comp_crossSection_pt_LHCb(Int_t runCode=0, bool isScale =false, bool isLog=f
 
 	gCross_lhcb_np_sys = new TGraphAsymmErrors(nBin_lhcb, lhcb_px, lhcb_py_np, lhcb_exsys, lhcb_exsys, lhcb_eysys_np, lhcb_eysys_np);	
 	gCross_lhcb_np_sys->SetFillColor(kAzure-9);
+	gCross_lhcb_np_sys->SetFillStyle(3001);
 	gCross_lhcb_np_sys->Draw("2");
 
 	SetGraphStyle(gCross_np_0,1,3);

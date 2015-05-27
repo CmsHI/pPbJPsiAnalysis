@@ -87,6 +87,20 @@ int comp_RFB_pt_LHCb(Int_t runCode=0)
 	
 	const Int_t nBin_lhcb = sizeof(lhcb_px)/sizeof(Double_t);
 	cout << "nBin_lhcb : " << nBin_lhcb << endl; 
+	///////////////////////////////////////////////////
+	///////////////////// Alice ////////////////////////
+	///////////////////////////////////////////////////
+	Double_t alice_px[] = {0.5, 1.5, 2.5, 3.5, 4.5, 5.5, 6.5, 8,10,13};
+	Double_t alice_ex[] = {0., 0., 0., 0., 0., 0., 0., 0., 0., 0.};
+	Double_t alice_py[] = {0.62, 0.57, 0.57, 0.64, 0.69, 0.76, 0.81, 0.69, 0.82, 0.95};
+
+	Double_t alice_ey[] = {0.03, 0.02, 0.02, 0.03, 0.04, 0.05, 0.06, 0.05, 0.12, 0.24};
+	//Double_t alice_exsys[] = {0.4, 0.4, 0.4, 0.4, 0.4, 0.4, 0.4, 0.4, 0.4};
+	Double_t alice_exsys[] = {0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2};
+	Double_t alice_eysys[] = {0.06, 0.05, 0.05, 0.06, 0.06, 0.07, 0.07, 0.09, 0.08, 0.13};
+	
+	const Int_t nBin_alice = sizeof(alice_px)/sizeof(Double_t);
+	cout << "nBin_alice : " << nBin_alice << endl; 
 
 	////////////////////
 	////// Draw Plots
@@ -106,7 +120,7 @@ int comp_RFB_pt_LHCb(Int_t runCode=0)
 	SetLegendStyle(legBM);
 	TLegend *legMR = new TLegend(0.54, 0.34, 0.87, 0.57); //bottom left
 	SetLegendStyle(legMR);
-	TLegend *legBR = new TLegend(0.54, 0.20, 0.87, 0.37); //bottom left
+	TLegend *legBR = new TLegend(0.14, 0.20, 0.77, 0.37); //bottom left
 	SetLegendStyle(legBR);
 
 	TLatex* latex = new TLatex();
@@ -122,6 +136,8 @@ int comp_RFB_pt_LHCb(Int_t runCode=0)
 	TGraphAsymmErrors * gRFB_lhcb_pr;
 	TGraphAsymmErrors * gRFB_lhcb_np_sys;
 	TGraphAsymmErrors * gRFB_lhcb_np;
+	TGraphAsymmErrors * gRFB_alice_sys;
+	TGraphAsymmErrors * gRFB_alice;
 
 	////////////////////////////////////////////////////////////////////////////////////
 	// prompt
@@ -132,7 +148,7 @@ int comp_RFB_pt_LHCb(Int_t runCode=0)
 	gRFB_pr_sys_0->SetTitle("");
 	gRFB_pr_sys_0->GetXaxis()->SetTitle("p_{T} [GeV/c]");
 	gRFB_pr_sys_0->GetXaxis()->CenterTitle();
-	gRFB_pr_sys_0->GetXaxis()->SetLimits(0.0,20.0);
+	gRFB_pr_sys_0->GetXaxis()->SetLimits(0.0,16.0);
 	gRFB_pr_sys_0->GetYaxis()->SetTitle("R_{FB}");
 	gRFB_pr_sys_0->SetMinimum(0.0);
 	gRFB_pr_sys_0->SetMaximum(1.4);
@@ -142,21 +158,42 @@ int comp_RFB_pt_LHCb(Int_t runCode=0)
 	gRFB_lhcb_pr_sys = new TGraphAsymmErrors(nBin_lhcb, lhcb_px, lhcb_py_pr, lhcb_exsys, lhcb_exsys, lhcb_eysys_pr, lhcb_eysys_pr);	
 	gRFB_lhcb_pr_sys->SetFillColor(kAzure-9);
 	gRFB_lhcb_pr_sys->Draw("2");
+	// 3) alice
+	gRFB_alice_sys = new TGraphAsymmErrors(nBin_alice, alice_px, alice_py, alice_exsys, alice_exsys, alice_eysys, alice_eysys);	
+	gRFB_alice_sys->SetFillColor(kMagenta);
+	gRFB_alice_sys->SetFillStyle(3001);
+	gRFB_alice_sys->Draw("2");
+
+	// CMS on top
+	gRFB_pr_sys_0->Draw("2");
+
 
 	SetGraphStyle(gRFB_pr_0,0,5);
 	gRFB_pr_0->SetMarkerSize(1.9);
 	gRFB_pr_0->Draw("P");
+
 	
 	gRFB_lhcb_pr = new TGraphAsymmErrors(nBin_lhcb, lhcb_px, lhcb_py_pr, lhcb_ex, lhcb_ex, lhcb_ey_pr, lhcb_ey_pr);	
 	//SetGraphStyle(gRFB_lhcb_pr,2,0);
 	SetGraphStyle(gRFB_lhcb_pr,2,10);
 	gRFB_lhcb_pr->Draw("P");
+
+	gRFB_alice = new TGraphAsymmErrors(nBin_alice, alice_px, alice_py, alice_ex, alice_ex, alice_ey, alice_ey);	
+	SetGraphStyle(gRFB_alice,2,10);
+	gRFB_alice->SetMarkerStyle(25);
+	gRFB_alice->SetMarkerColor(kMagenta);
+	gRFB_alice->Draw("P");
+
+	// CMS on top
+	gRFB_pr_0->Draw("P");
+
 	
-	dashedLine(0.0,1.0,20.0,1.0,1,1);
+	dashedLine(0.0,1.0,16.0,1.0,1,1);
 	
 	legBR -> SetHeader("Prompt J/#psi");
 	legBR -> AddEntry(gRFB_pr_0,"CMS :1.5 < |y_{CM}| < 1.93","lp");
 	legBR -> AddEntry(gRFB_lhcb_pr,"LHCb : 2.5 <|y_{CM}| < 4.0 ","lp");
+	legBR -> AddEntry(gRFB_alice,"ALICE : 2.96 <|y_{CM}| < 3.53 (Prompt + Non-prompt)","lp");
 	legBR -> Draw();
 	c_pr->Update();
 	c_pr->SaveAs("comparisonLHCb/comp_RFB_pt_LHCb_pr.pdf");
@@ -172,7 +209,7 @@ int comp_RFB_pt_LHCb(Int_t runCode=0)
 	gRFB_np_sys_0->SetTitle("");
 	gRFB_np_sys_0->GetXaxis()->SetTitle("p_{T} [GeV/c]");
 	gRFB_np_sys_0->GetXaxis()->CenterTitle();
-	gRFB_np_sys_0->GetXaxis()->SetLimits(0.0,20.0);
+	gRFB_np_sys_0->GetXaxis()->SetLimits(0.0,16.0);
 	gRFB_np_sys_0->GetYaxis()->SetTitle("R_{FB}");
 	gRFB_np_sys_0->SetMinimum(0.0);
 	gRFB_np_sys_0->SetMaximum(1.4);
@@ -182,22 +219,31 @@ int comp_RFB_pt_LHCb(Int_t runCode=0)
 	gRFB_lhcb_np_sys = new TGraphAsymmErrors(nBin_lhcb, lhcb_px, lhcb_py_np, lhcb_exsys, lhcb_exsys, lhcb_eysys_np, lhcb_eysys_np);	
 	gRFB_lhcb_np_sys->SetFillColor(kAzure-9);
 	gRFB_lhcb_np_sys->Draw("2");
+	// CMS on top
+	gRFB_np_sys_0->Draw("2");
 
-	SetGraphStyle(gRFB_np_0,0,5);
-	gRFB_np_0->SetMarkerSize(1.9);
-	gRFB_np_0->Draw("P");
 	
 	gRFB_lhcb_np = new TGraphAsymmErrors(nBin_lhcb, lhcb_px, lhcb_py_np, lhcb_ex, lhcb_ex, lhcb_ey_np, lhcb_ey_np);	
 	//SetGraphStyle(gRFB_lhcb_np,2,0);
 	SetGraphStyle(gRFB_lhcb_np,2,10);
 	gRFB_lhcb_np->Draw("P");
+
+	//CMS on top
+	SetGraphStyle(gRFB_np_0,0,5);
+	gRFB_np_0->SetMarkerSize(1.9);
+	gRFB_np_0->Draw("P");
+
 	
-	dashedLine(0.0,1.0,20.0,1.0,1,1);
-	
+	dashedLine(0.0,1.0,16.0,1.0,1,1);
+	legBR = new TLegend(0.54, 0.20, 0.87, 0.37); //bottom left
+	SetLegendStyle(legBR);
 	legBR -> SetHeader("Non-prompt J/#psi");
 	legBR -> AddEntry(gRFB_np_0,"CMS :1.5 < |y_{CM}| < 1.93","lp");
 	legBR -> AddEntry(gRFB_lhcb_np,"LHCb : 2.5 <|y_{CM}| < 4.0 ","lp");
 	legBR -> Draw();
+
+
+
 	c_np->Update();
 	c_np->SaveAs("comparisonLHCb/comp_RFB_pt_LHCb_np.pdf");
 	legBR->Clear();
