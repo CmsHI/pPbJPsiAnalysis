@@ -30,7 +30,7 @@ void formAbsRapArr(Double_t binmin, Double_t binmax, string* arr);
 void formPtArr(Double_t binmin, Double_t binmax, string* arr);
 
 //// runCode // 0=merged, 1=1stRun, 2=2ndRun
-void draw_1D_RFB_rap(char* dirName = "8rap9pt", int runCode=0, bool isPrompt = false)
+void draw_1D_RFB_rap(char* dirName = "8rap9pt2gev", int runCode=0, bool isZoomIn = false, bool isPrompt = true)
 {
 	gROOT->Macro("./JpsiStyleForFinalResult.C");
 
@@ -63,29 +63,32 @@ void draw_1D_RFB_rap(char* dirName = "8rap9pt", int runCode=0, bool isPrompt = f
 	Double_t eytmp[ntmp]; // y point error
 	Double_t ex[ntmp]; //x error
 	Double_t exsys[ntmp]; //sys x error
+	Double_t eysysrel_lowpt[ntmp]; //sys y error
+	Double_t eysysrel_highpt[ntmp]; //sys y error
 	Double_t eysys_lowpt[ntmp]; //sys y error
 	Double_t eysys_highpt[ntmp]; //sys y error
 	ex = {0.0, 0.0, 0.0};
-	exsys = {0.04, 0.04, 0.04};
+	//exsys = {0.04, 0.04, 0.04};
+	exsys = {0.03, 0.03, 0.03};
 	if (isPrompt) {
-		eysys_lowpt = {
-		0.039700808,
-		0.03048564,
-		0.036009465};
-		eysys_highpt = {
-		0.040365942,
-		0.034592218,
-		0.055332865};
+		eysysrel_lowpt = {
+		0.099764,
+		0.098449,
+		0.061606};
+		eysysrel_highpt = {
+		0.036469,
+		0.031636,
+		0.071641};
 	}
 	else {
-		eysys_lowpt = {
-		0.053403861,
-		0.06900436,
-		0.071267586};
-		eysys_highpt = {
-		0.044216832,
-		0.040294776,
-		0.080713354};
+		eysysrel_lowpt = {
+		0.103640,
+		0.106507,
+		0.104728};
+		eysysrel_highpt = {
+		0.044544,
+		0.056572,
+		0.090894};
 	}
 			
 	
@@ -101,7 +104,8 @@ void draw_1D_RFB_rap(char* dirName = "8rap9pt", int runCode=0, bool isPrompt = f
 		cout << iy <<"th rapBinW = " << rapBinW[iy] <<endl;
 	}
 	//pt array
-	Double_t ptArrNum[] = {0.0, 3.0, 4.0, 5.0, 6.5, 7.5, 8.5, 10., 14., 30.};
+	//Double_t ptArrNum[] = {0.0, 3.0, 4.0, 5.0, 6.5, 7.5, 8.5, 10., 14., 30.};
+	Double_t ptArrNum[] = {2.0, 3.0, 4.0, 5.0, 6.5, 7.5, 8.5, 10., 14., 30.};
 	const Int_t nPt = sizeof(ptArrNum)/sizeof(Double_t)-1;
 	cout << "nPt = " << nPt << endl;
 	Double_t ptBinW[nPt];
@@ -306,28 +310,7 @@ void draw_1D_RFB_rap(char* dirName = "8rap9pt", int runCode=0, bool isPrompt = f
 
 	//////////////////////////////////////////////
 	/// convert to TGraphErrors	
-	//sys_lowpt
-	TGraphAsymmErrors* gRFB_sys_lowpt = new TGraphAsymmErrors(h1D_RFB[lowpt_init]); 
-	gRFB_sys_lowpt->SetName("gRFB_sys_lowpt");
-	for (int iy=0; iy <nRapRFB; iy ++ ){ 
-		gRFB_sys_lowpt->SetPointError(iy, exsys[iy], exsys[iy], eysys_lowpt[iy], eysys_lowpt[iy]);
-	}	
-	gRFB_sys_lowpt->GetXaxis()->SetTitle("|y_{CM}|");	
-	gRFB_sys_lowpt->GetXaxis()->CenterTitle();	
-	gRFB_sys_lowpt->GetYaxis()->SetTitle("R_{FB}");	
-	gRFB_sys_lowpt->GetXaxis()->SetLimits(0.,1.93);	
-	gRFB_sys_lowpt->SetMinimum(0.0);	
-	gRFB_sys_lowpt->SetMaximum(1.4);	
-	gRFB_sys_lowpt->SetFillColor(kRed-9);	
-	gRFB_sys_lowpt->Draw("A2");
-	//sys_highpt
-	TGraphAsymmErrors* gRFB_sys_highpt = new TGraphAsymmErrors(h1D_RFB[highpt_init]); 
-	gRFB_sys_highpt->SetName("gRFB_sys_highpt");
-	for (int iy=0; iy <nRapRFB; iy ++ ){ 
-		gRFB_sys_highpt->SetPointError(iy, exsys[iy], exsys[iy], eysys_highpt[iy], eysys_highpt[iy]);
-	}	
-	gRFB_sys_highpt->SetFillColor(kTeal+7);
-	gRFB_sys_highpt->Draw("2");
+	
 	//lowpt
 	TGraphAsymmErrors* gRFB_lowpt = new TGraphAsymmErrors(h1D_RFB[lowpt_init]); 
 	gRFB_lowpt->SetName("gRFB_lowpt");
@@ -339,9 +322,16 @@ void draw_1D_RFB_rap(char* dirName = "8rap9pt", int runCode=0, bool isPrompt = f
 		cout << "pytmp_lowpt["<<iy<<"] = " << pytmp_lowpt[iy]<<endl;
 		cout << "eytmp_lowpt["<<iy<<"] = " << eytmp[iy]<<endl;
 	}	
-	SetGraphStyle(gRFB_lowpt, 1, 3);
-	gRFB_lowpt->SetMarkerSize(1.2);
-	gRFB_lowpt->Draw("P");	
+	
+	//sys_lowpt
+	TGraphAsymmErrors* gRFB_sys_lowpt = new TGraphAsymmErrors(h1D_RFB[lowpt_init]); 
+	gRFB_sys_lowpt->SetName("gRFB_sys_lowpt");
+	for (int iy=0; iy <nRapRFB; iy ++ ){ 
+		//abs err calcul.
+		eysys_lowpt[iy]=eysysrel_lowpt[iy]*pytmp_lowpt[iy];
+		gRFB_sys_lowpt->SetPointError(iy, exsys[iy], exsys[iy], eysys_lowpt[iy], eysys_lowpt[iy]);
+	}	
+
 	//highpt
 	TGraphAsymmErrors* gRFB_highpt = new TGraphAsymmErrors(h1D_RFB[highpt_init]); 
 	gRFB_highpt->SetName("gRFB_highpt");
@@ -353,6 +343,36 @@ void draw_1D_RFB_rap(char* dirName = "8rap9pt", int runCode=0, bool isPrompt = f
 		cout << "pytmp_highpt["<<iy<<"] = " << pytmp_highpt[iy]<<endl;
 		cout << "eytmp_highpt["<<iy<<"] = " << eytmp[iy]<<endl;
 	}	
+	
+	//sys_highpt
+	TGraphAsymmErrors* gRFB_sys_highpt = new TGraphAsymmErrors(h1D_RFB[highpt_init]); 
+	gRFB_sys_highpt->SetName("gRFB_sys_highpt");
+	for (int iy=0; iy <nRapRFB; iy ++ ){ 
+		//abs err calcul.
+		eysys_highpt[iy]=eysysrel_highpt[iy]*pytmp_highpt[iy];
+		gRFB_sys_highpt->SetPointError(iy, exsys[iy], exsys[iy], eysys_highpt[iy], eysys_highpt[iy]);
+	}	
+	
+	gRFB_sys_lowpt->GetXaxis()->SetTitle("|y_{CM}|");	
+	gRFB_sys_lowpt->GetXaxis()->CenterTitle();	
+	gRFB_sys_lowpt->GetYaxis()->SetTitle("R_{FB}");	
+	gRFB_sys_lowpt->GetXaxis()->SetLimits(0.,1.93);	
+	gRFB_sys_lowpt->SetMinimum(0.0);	
+	gRFB_sys_lowpt->SetMaximum(1.4);	
+	if (isZoomIn) {
+		gRFB_sys_lowpt->SetMinimum(0.5);
+		gRFB_sys_lowpt->SetMaximum(1.25);
+	} 
+	gRFB_sys_lowpt->SetFillColor(kRed-9);	
+	gRFB_sys_lowpt->Draw("A2");
+	
+	gRFB_sys_highpt->SetFillColor(kTeal+7);
+	gRFB_sys_highpt->Draw("2");
+	
+	SetGraphStyle(gRFB_lowpt, 1, 3);
+	gRFB_lowpt->SetMarkerSize(1.2);
+	gRFB_lowpt->Draw("P");	
+	
 	SetGraphStyle(gRFB_highpt, 0, 5);
 	gRFB_highpt->SetMarkerSize(1.9);
 	gRFB_highpt->Draw("P");	

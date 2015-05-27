@@ -55,7 +55,9 @@ int comp_crossSection_pt_LHCb(Int_t runCode=0, bool isScale =false, bool isLog=f
 	lumi_mub_err = lumi_nb_err * 1000; // (nb)^{-1} -> {#mub}^{-1}
 	
 	// read our crossSection_pt graph
-	TFile *inFile = new TFile("cross_8rap9pt/crossSection_pt_isLog0_isScale0.root");
+	//TFile *inFile = new TFile("cross_8rap9pt/crossSection_pt_isLog0_isScale0.root");
+	//TFile *inFile = new TFile("cross_8rap10pt/crossSection_pt_isLog0_isScale0.root");
+	TFile *inFile = new TFile("cross_8rap9pt2gev/crossSection_pt_isLog0_isScale0.root");
 	TGraphAsymmErrors* gCross_pr_sys_0 = (TGraphAsymmErrors*)inFile->Get("gCross_pr_sys_0"); 	
 	TGraphAsymmErrors* gCross_pr_0 = (TGraphAsymmErrors*)inFile->Get("gCross_pr_0"); 	
 	TGraphAsymmErrors* gCross_np_sys_0 = (TGraphAsymmErrors*)inFile->Get("gCross_np_sys_0"); 	
@@ -154,7 +156,8 @@ int comp_crossSection_pt_LHCb(Int_t runCode=0, bool isScale =false, bool isLog=f
 	else {
 		gCross_pr_sys_0->SetMinimum(-10.0);
 		if(isPtCut) gCross_pr_sys_0->SetMaximum(150.);
-		else gCross_pr_sys_0->SetMaximum(300.);
+//		else gCross_pr_sys_0->SetMaximum(300.);
+		else gCross_pr_sys_0->SetMaximum(350.);
 	}
 	gCross_pr_sys_0->SetFillColor(kRed-9);
 	gCross_pr_sys_0->Draw("A2");

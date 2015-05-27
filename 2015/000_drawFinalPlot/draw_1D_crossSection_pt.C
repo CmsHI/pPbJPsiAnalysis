@@ -30,7 +30,7 @@ void formAbsRapArr(Double_t binmin, Double_t binmax, string* arr);
 void formPtArr(Double_t binmin, Double_t binmax, string* arr);
 
 //// runCode // 0=merged, 1=1stRun, 2=2ndRun
-void draw_1D_crossSection_pt(char* dirName = "8rap9pt", int runCode=0, bool isScale = false,bool isLog = true)
+void draw_1D_crossSection_pt(char* dirName = "8rap9pt2gev", int runCode=0, bool isScale = false,bool isLog = true)
 {
 	gROOT->Macro("./JpsiStyleForFinalResult.C");
 
@@ -62,19 +62,23 @@ void draw_1D_crossSection_pt(char* dirName = "8rap9pt", int runCode=0, bool isSc
 	Double_t eytmp[8][ntmp]; //y point error
 	Double_t ex[ntmp]; // x error
 	Double_t exsys[ntmp]; //sys x error
-	Double_t eysys_pr[8][ntmp]; //sys y error
-	Double_t eysys_np[8][ntmp]; //sys y error
-	px[0] = {1.80888, 3.48529, 4.47275, 5.68792, 6.9644, 7.96271, 9.1754, 11.5315, 17.7588}; 
+	Double_t eysysrel_pr[8][ntmp]; //relative sys y error
+	Double_t eysysrel_np[8][ntmp]; //relative sys y error
+	Double_t eysys_pr[8][ntmp]; //absolute sys y error
+	Double_t eysys_np[8][ntmp]; //absolute sys y error
+	//px[0] = {1.80888, 3.48529, 4.47275, 5.68792, 6.9644, 7.96271, 9.1754, 11.5315, 17.7588}; 
+	px[0] = {2.49530, 3.48529, 4.47275, 5.68792, 6.9644, 7.96271, 9.1754, 11.5315, 17.7588}; 
 	px[1] = {0.00000, 3.53123, 4.5027, 5.71709, 6.96523, 7.9693, 9.17314, 11.4952, 17.6927}; 
 	px[2] = {0.00000, 0.00000, 0.00000, 0.00000, 7.01977, 7.99712, 9.19936, 11.5743, 17.7732}; 
 	px[3] = {0.00000, 0.00000, 0.00000, 0.00000, 7.12292, 8.01305, 9.22816, 11.6279, 17.8879}; 
 	px[4] = {0.00000, 0.00000, 0.00000, 0.00000, 7.05476, 8.00208, 9.21589, 11.5645, 17.7176}; 
 	px[5] = {0.00000, 0.00000, 0.00000, 5.82095, 6.97886, 7.96732, 9.18979, 11.5158, 17.4116}; 
 	px[6] = {0.00000, 3.52893, 4.48328, 5.69351, 6.96188, 7.95707, 9.14886, 11.4747, 17.231}; 
-	px[7] = {1.78552, 3.47853, 4.46938, 5.6761, 6.96419, 7.97702, 9.16158, 11.5077, 17.3061}; 
+	px[7] = {2.49481, 3.47853, 4.46938, 5.6761, 6.96419, 7.97702, 9.16158, 11.5077, 17.3061}; 
 	ex = {0,0,0,0,0,0,0,0,0};
 	exsys = {0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4};
 	//exsys = {1.,1.,1.,1.,1.,1.,1.,1.,1.};
+/*
 	eysys_pr[0] = {
 	26.81041405,
 	5.383938169,
@@ -234,7 +238,8 @@ void draw_1D_crossSection_pt(char* dirName = "8rap9pt", int runCode=0, bool isSc
 	0.05225028,
 	0.015704499,
 	0.002130154};
-	
+*/	
+
 	//rap array in yCM (from forward to backward)
 	Double_t rapArrNumFB[] = {1.93, 1.5, 0.9, 0., -0.9, -1.5, -1.93, -2.4, -2.87};// for pt dist.
 	//Double_t rapArrNumBF[] = {-2.87, -2.4, -1.93, -1.5, -0.9, 0., 0.9, 1.5, 1.93};// for rap dist.
@@ -246,7 +251,8 @@ void draw_1D_crossSection_pt(char* dirName = "8rap9pt", int runCode=0, bool isSc
 		cout << iy <<"th rapBinW = " << rapBinW[iy] <<endl;
 	}
 	//pt array
-	Double_t ptArrNum[] = {0.0, 3.0, 4.0, 5.0, 6.5, 7.5, 8.5, 10., 14., 30.};
+	//Double_t ptArrNum[] = {0.0, 3.0, 4.0, 5.0, 6.5, 7.5, 8.5, 10., 14., 30.}; //8rap9pt
+	Double_t ptArrNum[] = {2.0, 3.0, 4.0, 5.0, 6.5, 7.5, 8.5, 10., 14., 30.}; //8rap9pt2gev
 	const Int_t nPt = sizeof(ptArrNum)/sizeof(Double_t)-1;
 	cout << "nPt = " << nPt << endl;
 	Double_t ptBinW[nPt];
@@ -266,8 +272,17 @@ void draw_1D_crossSection_pt(char* dirName = "8rap9pt", int runCode=0, bool isSc
 		formPtArr(ptArrNum[ipt], ptArrNum[ipt+1], &ptArr[ipt]);
 		cout << ipt <<"th ptArr = " << ptArr[ipt] << endl;
 	}
-	
-	// --- read-in file
+
+	//////////////////////////////////////////////////////////////	
+	// ----read-in sys. file 
+	TFile * fSys = new TFile(Form("../010_totalSys/TotSys_%s.root",dirName));
+	TH2D* hTotalPR = (TH2D*)fSys->Get("hTotalPR");
+	TH2D* hTotalNP = (TH2D*)fSys->Get("hTotalNP");
+	cout << " hTotalPR = " <<  hTotalPR << endl;	
+	cout << " hTotalNP = " <<  hTotalNP << endl;	
+
+	//////////////////////////////////////////////////////////////	
+	// --- read-in corr-yield file
 	TFile * f2D = new TFile(Form("../000_fittingResult/total2Dhist_%s.root",dirName));
 	cout << "dirName = " << dirName << endl;
 	cout << "runCode = " << runCode << ", runstring = " << runstring.c_str() << endl;
@@ -293,10 +308,16 @@ void draw_1D_crossSection_pt(char* dirName = "8rap9pt", int runCode=0, bool isSc
 	TH1D* h1D_corrY_NP_Pbp[nbinsX]; 
 	TH1D* h1D_corrY_PR_pPb[nbinsX]; 
 	TH1D* h1D_corrY_NP_pPb[nbinsX]; 
+	TH1D* h1D_syserr_PR[nbinsX];
+	TH1D* h1D_syserr_NP[nbinsX];
 	// iy=0 refers to forwards !!! (ordering here)
 	for (Int_t iy = 0; iy < nbinsX; iy++) {
+		//for 1st run
 		h1D_corrY_PR_Pbp[iy] = h2D_corrY_PR_Pbp->ProjectionY(Form("h1D_corrY_PR_Pbp_%d",iy),iy+1,iy+1);
 		h1D_corrY_NP_Pbp[iy] = h2D_corrY_NP_Pbp->ProjectionY(Form("h1D_corrY_NP_Pbp_%d",iy),iy+1,iy+1);
+		//for sys.err (same order with 1st run)
+		h1D_syserr_PR[iy] = hTotalPR->ProjectionY(Form("h1D_syserr_PR_%d",iy),iy+1,iy+1);
+		h1D_syserr_NP[iy] = hTotalNP->ProjectionY(Form("h1D_syserr_NP_%d",iy),iy+1,iy+1);
 		//for 2nd run
 		h1D_corrY_PR_pPb[iy] = h2D_corrY_PR_pPb->ProjectionY(Form("h1D_corrY_PR_pPb_%d",iy),nbinsX-iy,nbinsX-iy);
 		h1D_corrY_NP_pPb[iy] = h2D_corrY_NP_pPb->ProjectionY(Form("h1D_corrY_NP_pPb_%d",iy),nbinsX-iy,nbinsX-iy);
@@ -304,7 +325,17 @@ void draw_1D_crossSection_pt(char* dirName = "8rap9pt", int runCode=0, bool isSc
 	
 	//////////////////////////////////////////////////////////////////////////////////////
 	//////////////////////////////////////////////////////////////////////////////////////
-
+	for (Int_t iy = 0; iy < nbinsX; iy++) {
+		for (int ipt=0; ipt <nbinsY; ipt ++ ){ 
+			eysysrel_pr[iy][ipt] = h1D_syserr_PR[iy]->GetBinContent(ipt+1);
+			eysysrel_np[iy][ipt] = h1D_syserr_NP[iy]->GetBinContent(ipt+1);
+			cout <<iy<<"th "<<ipt<<"th eysysrel_pr = "<<eysysrel_pr[iy][ipt]<<endl;
+			cout <<iy<<"th "<<ipt<<"th eysysrel_np = "<<eysysrel_np[iy][ipt]<<endl;
+		}
+	}
+	
+	//////////////////////////////////////////////////////////////////////////////////////
+	//////////////////////////////////////////////////////////////////////////////////////
 	// 1) merge Pbp+pPb corrected yield
 	// 2) calcualte cross-section = corrY/(dPt*dY*lumi*branching)
 	TH1D* h1D_cross_PR_tot[nbinsX]; 
@@ -408,29 +439,37 @@ void draw_1D_crossSection_pt(char* dirName = "8rap9pt", int runCode=0, bool isSc
 		for (Int_t ipt=0; ipt<nPt; ipt++ ){
 			gCross_pr_sys[iy]->GetPoint(ipt, pxtmp[iy][ipt], pytmp[iy][ipt]);
 			gCross_pr_sys[iy]->SetPoint(ipt, px[iy][ipt], pytmp[iy][ipt]);
+			//absolute error calculation 
+			eysys_pr[iy][ipt]=eysysrel_pr[iy][ipt]*pytmp[iy][ipt];
 			gCross_pr_sys[iy]->SetPointError(ipt, exsys[ipt], exsys[ipt], eysys_pr[iy][ipt], eysys_pr[iy][ipt]);
 			gCross_pr[iy]->GetPoint(ipt, pxtmp[iy][ipt], pytmp[iy][ipt]);
-//			eytmp[iy][ipt] = gCross_pr[iy]-> GetErrorYhigh(ipt);
-//			eytmp[iy][ipt] = gCross_pr[iy]-> GetErrorYlow(ipt);
 			eytmp[iy][ipt] = gCross_pr[iy]-> GetErrorY(ipt);
-			//cout << "pr : pytmp["<<iy<<"]["<<ipt<<"] = " << pytmp[iy][ipt]<<endl;
-			//cout << "pr : eytmp["<<iy<<"]["<<ipt<<"] = " << eytmp[iy][ipt]<<endl;
+			cout << "pr : pytmp["<<iy<<"]["<<ipt<<"] = " << pytmp[iy][ipt]<<endl;
+			cout << "pr : eytmp["<<iy<<"]["<<ipt<<"] = " << eytmp[iy][ipt]<<endl;
 			gCross_pr[iy]->SetPoint(ipt, px[iy][ipt], pytmp[iy][ipt]);
 			gCross_pr[iy]->SetPointEXlow(ipt, ex[ipt]);
 			gCross_pr[iy]->SetPointEXhigh(ipt, ex[ipt]);
 			
 			gCross_np_sys[iy]->GetPoint(ipt, pxtmp[iy][ipt], pytmp[iy][ipt]);
 			gCross_np_sys[iy]->SetPoint(ipt, px[iy][ipt], pytmp[iy][ipt]);
+			//absolute error calculation 
+			eysys_np[iy][ipt]=eysysrel_np[iy][ipt]*pytmp[iy][ipt];
 			gCross_np_sys[iy]->SetPointError(ipt, exsys[ipt], exsys[ipt], eysys_np[iy][ipt], eysys_np[iy][ipt]);
 			gCross_np[iy]->GetPoint(ipt, pxtmp[iy][ipt], pytmp[iy][ipt]);
 			eytmp[iy][ipt] = gCross_np[iy]-> GetErrorY(ipt);
-			cout << "np : pytmp["<<iy<<"]["<<ipt<<"] = " << pytmp[iy][ipt]<<endl;
-			cout << "np : eytmp["<<iy<<"]["<<ipt<<"] = " << eytmp[iy][ipt]<<endl;
+			//cout << "np : pytmp["<<iy<<"]["<<ipt<<"] = " << pytmp[iy][ipt]<<endl;
+			//cout << "np : eytmp["<<iy<<"]["<<ipt<<"] = " << eytmp[iy][ipt]<<endl;
 			gCross_np[iy]->SetPoint(ipt, px[iy][ipt], pytmp[iy][ipt]);
 			gCross_np[iy]->SetPointEXlow(ipt, ex[ipt]);
 			gCross_np[iy]->SetPointEXhigh(ipt, ex[ipt]);
 		}
 	}
+	
+	//////////////////////////////////////////////////////////////////////////////////////
+	//////////////////////////////////////////////////////////////////////////////////////
+	////Draw
+	//////////////////////////////////////////////////////////////////////////////////////
+	//////////////////////////////////////////////////////////////////////////////////////
 	
 	////prompt fw
 	TCanvas* c_pr_fw = new TCanvas("c_pr_fw","c_pr_fw",200,10,800,600);
@@ -694,10 +733,6 @@ void draw_1D_crossSection_pt(char* dirName = "8rap9pt", int runCode=0, bool isSc
 		gCross_np[iy]->Write();	
 	}
 	outFile->Close();
-	
-	
-	
-	
 	
 	return;
 

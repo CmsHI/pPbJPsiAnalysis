@@ -55,8 +55,8 @@ int comp_RFB_pt_LHCb(Int_t runCode=0)
 	lumi_mub_err = lumi_nb_err * 1000; // (nb)^{-1} -> {#mub}^{-1}
 	
 	// read our RFB_pt graph
-	TFile *inFile_pr = new TFile("RFB_8rap9pt/RFB_pt_isPrompt1.root");
-	TFile *inFile_np = new TFile("RFB_8rap9pt/RFB_pt_isPrompt0.root");
+	TFile *inFile_pr = new TFile("RFB_8rap9pt2gev/RFB_pt_isPrompt1.root");
+	TFile *inFile_np = new TFile("RFB_8rap9pt2gev/RFB_pt_isPrompt0.root");
 	TGraphAsymmErrors* gRFB_pr_sys_0 = (TGraphAsymmErrors*)inFile_pr->Get("gRFB_sys_0"); 	
 	TGraphAsymmErrors* gRFB_pr_0 = (TGraphAsymmErrors*)inFile_pr->Get("gRFB_0"); 	
 	TGraphAsymmErrors* gRFB_np_sys_0 = (TGraphAsymmErrors*)inFile_np->Get("gRFB_sys_0"); 	
@@ -80,7 +80,8 @@ int comp_RFB_pt_LHCb(Int_t runCode=0)
 
 	Double_t lhcb_ey_pr[] = {0.06, 0.04, 0.04, 0.04, 0.06, 0.07, 0.08, 0.11, 0.10};
 	Double_t lhcb_ey_np[] = {0.18, 0.15, 0.12, 0.14, 0.16, 0.16, 0.22, 0.27, 0.19};
-	Double_t lhcb_exsys[] = {0.4, 0.4, 0.4, 0.4, 0.4, 0.4, 0.4, 0.4, 0.4};
+	//Double_t lhcb_exsys[] = {0.4, 0.4, 0.4, 0.4, 0.4, 0.4, 0.4, 0.4, 0.4};
+	Double_t lhcb_exsys[] = {0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2};
 	Double_t lhcb_eysys_pr[] = {0.04, 0.04, 0.04, 0.04, 0.05, 0.05, 0.05, 0.06, 0.05};
 	Double_t lhcb_eysys_np[] = {0.07, 0.16, 0.15, 0.12, 0.14, 0.06, 0.15, 0.11, 0.06};
 	
@@ -135,14 +136,15 @@ int comp_RFB_pt_LHCb(Int_t runCode=0)
 	gRFB_pr_sys_0->GetYaxis()->SetTitle("R_{FB}");
 	gRFB_pr_sys_0->SetMinimum(0.0);
 	gRFB_pr_sys_0->SetMaximum(1.4);
-	gRFB_pr_sys_0->SetFillColor(kRed-9);
+	gRFB_pr_sys_0->SetFillColor(kTeal+7);
 	gRFB_pr_sys_0->Draw("A2");
 	// 2) lhcb
 	gRFB_lhcb_pr_sys = new TGraphAsymmErrors(nBin_lhcb, lhcb_px, lhcb_py_pr, lhcb_exsys, lhcb_exsys, lhcb_eysys_pr, lhcb_eysys_pr);	
 	gRFB_lhcb_pr_sys->SetFillColor(kAzure-9);
 	gRFB_lhcb_pr_sys->Draw("2");
 
-	SetGraphStyle(gRFB_pr_0,1,3);
+	SetGraphStyle(gRFB_pr_0,0,5);
+	gRFB_pr_0->SetMarkerSize(1.9);
 	gRFB_pr_0->Draw("P");
 	
 	gRFB_lhcb_pr = new TGraphAsymmErrors(nBin_lhcb, lhcb_px, lhcb_py_pr, lhcb_ex, lhcb_ex, lhcb_ey_pr, lhcb_ey_pr);	
@@ -174,14 +176,15 @@ int comp_RFB_pt_LHCb(Int_t runCode=0)
 	gRFB_np_sys_0->GetYaxis()->SetTitle("R_{FB}");
 	gRFB_np_sys_0->SetMinimum(0.0);
 	gRFB_np_sys_0->SetMaximum(1.4);
-	gRFB_np_sys_0->SetFillColor(kRed-9);
+	gRFB_np_sys_0->SetFillColor(kTeal+7);
 	gRFB_np_sys_0->Draw("A2");
 	// 2) lhcb
 	gRFB_lhcb_np_sys = new TGraphAsymmErrors(nBin_lhcb, lhcb_px, lhcb_py_np, lhcb_exsys, lhcb_exsys, lhcb_eysys_np, lhcb_eysys_np);	
 	gRFB_lhcb_np_sys->SetFillColor(kAzure-9);
 	gRFB_lhcb_np_sys->Draw("2");
 
-	SetGraphStyle(gRFB_np_0,1,3);
+	SetGraphStyle(gRFB_np_0,0,5);
+	gRFB_np_0->SetMarkerSize(1.9);
 	gRFB_np_0->Draw("P");
 	
 	gRFB_lhcb_np = new TGraphAsymmErrors(nBin_lhcb, lhcb_px, lhcb_py_np, lhcb_ex, lhcb_ex, lhcb_ey_np, lhcb_ey_np);	

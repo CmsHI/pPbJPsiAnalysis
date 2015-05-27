@@ -30,7 +30,7 @@ void formAbsRapArr(Double_t binmin, Double_t binmax, string* arr);
 void formPtArr(Double_t binmin, Double_t binmax, string* arr);
 
 //// runCode // 0=merged, 1=1stRun, 2=2ndRun
-void draw_1D_RFB_pt(char* dirName = "8rap9pt", int runCode=0, bool isZoomIn = true, bool isPrompt=false)
+void draw_1D_RFB_pt(char* dirName = "8rap9pt2gev", int runCode=0, bool isZoomIn = true, bool isPrompt=true)
 {
 	gROOT->Macro("./JpsiStyleForFinalResult.C");
 
@@ -63,45 +63,47 @@ void draw_1D_RFB_pt(char* dirName = "8rap9pt", int runCode=0, bool isZoomIn = tr
 	Double_t eytmp[3][ntmp]; //y point error
 	Double_t ex[ntmp]; // x error
 	Double_t exsys[ntmp]; //sys x error
+	Double_t eysysrel[3][ntmp]; //sysrel y error
 	Double_t eysys[3][ntmp]; //sys y error
 	px[0] = {5.740347, 7.90416, 13.21239}; // 1.5-1.93
 	px[1] = {-531, 7.95946, 13.31027}; //0.9-1.5
 	px[2] = {-531, 8.25131, 13.61970}; //0.0-0.9
 	ex = {0.,0.,0.};
-	exsys = {0.4,0.4,0.4};
+	//exsys = {0.4,0.4,0.4};
+	exsys = {0.2,0.2,0.2};
 	if (isPrompt) {
 		//1.5-1.93
-		eysys[0] = {
-		0.026101147,
-		0.035871392,
-		0.055155744};
+		eysysrel[0] = {
+		0.088030,
+		0.061606,
+		0.071641};
 		//0.9-1.5
-		eysys[1] = {
+		eysysrel[1] = {
 		0.00,
-		0.03050345,
-		0.034713623};
+		0.098449,
+		0.031616};
 		//0.0-0.9
-		eysys[2] = {
+		eysysrel[2] = {
 		0.00, 
-		0.03971931,
-		0.040430809};
+		0.099764,
+		0.036469};
 	}
 	else {
 		//1.5-1.93
-		eysys[0] = {
-		0.056049769,
-		0.07101411,
-		0.080530222};
+		eysysrel[0] = {
+		0.100963,
+		0.104728,
+		0.090894};
 		//0.9-1.5
-		eysys[1] = {
+		eysysrel[1] = {
 		0.00,
-		0.069039457,
-		0.04044452};
+		0.106507,
+		0.056572};
 		//0.0-0.9
-		eysys[2] = {
+		eysysrel[2] = {
 		0.00, 
-		0.053426749,
-		0.044291073};
+		0.103640,
+		0.044544};
 	}	
 
 	//rap array in yCM (from forward to backward)
@@ -115,7 +117,8 @@ void draw_1D_RFB_pt(char* dirName = "8rap9pt", int runCode=0, bool isZoomIn = tr
 		cout << iy <<"th rapBinW = " << rapBinW[iy] <<endl;
 	}
 	//pt array
-	Double_t ptArrNum[] = {0.0, 3.0, 4.0, 5.0, 6.5, 7.5, 8.5, 10., 14., 30.};
+	//Double_t ptArrNum[] = {0.0, 3.0, 4.0, 5.0, 6.5, 7.5, 8.5, 10., 14., 30.};
+	Double_t ptArrNum[] = {2.0, 3.0, 4.0, 5.0, 6.5, 7.5, 8.5, 10., 14., 30.};
 	const Int_t nPt = sizeof(ptArrNum)/sizeof(Double_t)-1;
 	cout << "nPt = " << nPt << endl;
 	Double_t ptBinW[nPt];
@@ -233,7 +236,7 @@ void draw_1D_RFB_pt(char* dirName = "8rap9pt", int runCode=0, bool isZoomIn = tr
 		tmpPRval01=h1D_corrY_tot[iy]->GetBinContent(5);	
 		tmpPRerr01=h1D_corrY_tot[iy]->GetBinError(5);	
 		tmpPRval02=h1D_corrY_tot[iy]->GetBinContent(6);	
-		tmpPRerr02=h1D_corrY_tot[iy]->GetBinError(7);	
+		tmpPRerr02=h1D_corrY_tot[iy]->GetBinError(6);	
 		tmpPRval03=h1D_corrY_tot[iy]->GetBinContent(7);	
 		tmpPRerr03=h1D_corrY_tot[iy]->GetBinError(7);	
 		actPRval02=tmpPRval01+tmpPRval02+tmpPRval03;
@@ -293,6 +296,8 @@ void draw_1D_RFB_pt(char* dirName = "8rap9pt", int runCode=0, bool isZoomIn = tr
 		for (int ipt=0; ipt<nPtRFB; ipt++){
 			gRFB_sys[iy]->GetPoint(ipt, pxtmp[iy][ipt], pytmp[iy][ipt]);
 			gRFB_sys[iy]->SetPoint(ipt, px[iy][ipt], pytmp[iy][ipt]);
+			//abs err calcul.
+			eysys[iy][ipt]=eysysrel[iy][ipt]*pytmp[iy][ipt];
 			gRFB_sys[iy]->SetPointError(ipt, exsys[ipt], exsys[ipt], eysys[iy][ipt], eysys[iy][ipt]);
 		}
 	}

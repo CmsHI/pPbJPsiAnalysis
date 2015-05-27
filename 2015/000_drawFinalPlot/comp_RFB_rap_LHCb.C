@@ -55,8 +55,8 @@ int comp_RFB_rap_LHCb(Int_t runCode=0)
 	lumi_mub_err = lumi_nb_err * 1000; // (nb)^{-1} -> {#mub}^{-1}
 	
 	// read our RFB_rap graph
-	TFile *inFile_pr = new TFile("RFB_8rap9pt/RFB_rap_isPrompt1.root");
-	TFile *inFile_np = new TFile("RFB_8rap9pt/RFB_rap_isPrompt0.root");
+	TFile *inFile_pr = new TFile("RFB_8rap9pt2gev/RFB_rap_isPrompt1.root");
+	TFile *inFile_np = new TFile("RFB_8rap9pt2gev/RFB_rap_isPrompt0.root");
 	TGraphAsymmErrors* gRFB_pr_sys_lowpt = (TGraphAsymmErrors*)inFile_pr->Get("gRFB_sys_lowpt"); 	
 	TGraphAsymmErrors* gRFB_pr_lowpt = (TGraphAsymmErrors*)inFile_pr->Get("gRFB_lowpt"); 	
 	TGraphAsymmErrors* gRFB_pr_sys_highpt = (TGraphAsymmErrors*)inFile_pr->Get("gRFB_sys_highpt"); 	
@@ -93,7 +93,8 @@ int comp_RFB_rap_LHCb(Int_t runCode=0)
 
 	Double_t lhcb_ey_pr[] = { 0.05, 0.03, 0.04};
 	Double_t lhcb_ey_np[] = {0.11, 0.08, 0.09};
-	Double_t lhcb_exsys[] = {0.04, 0.04, 0.04};
+	//Double_t lhcb_exsys[] = {0.04, 0.04, 0.04};
+	Double_t lhcb_exsys[] = {0.03, 0.03, 0.03};
 	Double_t lhcb_eysys_pr[] = {0.07, 0.04, 0.04};
 	Double_t lhcb_eysys_np[] = {0.09, 0.08, 0.07};
 	
