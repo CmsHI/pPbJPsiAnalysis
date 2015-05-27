@@ -207,7 +207,7 @@ int comp_RFB_rap_LHCb(Int_t runCode=0)
 	legBL -> AddEntry(gRFB_alice,"ALICE : 0 < p_{T} < 15 [GeV/c] (Prompt + Non-prompt)","lp");
 	legBL -> Draw();
 	c_pr->Update();
-	c_pr->SaveAs("comparisonLHCb/comp_RFB_rap_LHCb_pr_alice.pdf");
+	c_pr->SaveAs("comparisonLHCb/comp_RFB_rap_LHCb_pr.pdf");
 	legBL->Clear();
 	//c_pr->Clear();
 
