@@ -76,7 +76,8 @@ void draw_1D_crossSection_pt(char* dirName = "8rap9pt2gev", int runCode=0, bool 
 	px[6] = {0.00000, 3.52893, 4.48328, 5.69351, 6.96188, 7.95707, 9.14886, 11.4747, 17.231}; 
 	px[7] = {2.49481, 3.47853, 4.46938, 5.6761, 6.96419, 7.97702, 9.16158, 11.5077, 17.3061}; 
 	ex = {0,0,0,0,0,0,0,0,0};
-	exsys = {0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4};
+	//exsys = {0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4};
+	exsys = {0.2,0.2,0.2,0.2,0.2,0.2,0.2,0.2,0.2};
 	//exsys = {1.,1.,1.,1.,1.,1.,1.,1.,1.};
 /*
 	eysys_pr[0] = {
@@ -444,8 +445,9 @@ void draw_1D_crossSection_pt(char* dirName = "8rap9pt2gev", int runCode=0, bool 
 			gCross_pr_sys[iy]->SetPointError(ipt, exsys[ipt], exsys[ipt], eysys_pr[iy][ipt], eysys_pr[iy][ipt]);
 			gCross_pr[iy]->GetPoint(ipt, pxtmp[iy][ipt], pytmp[iy][ipt]);
 			eytmp[iy][ipt] = gCross_pr[iy]-> GetErrorY(ipt);
-			cout << "pr : pytmp["<<iy<<"]["<<ipt<<"] = " << pytmp[iy][ipt]<<endl;
-			cout << "pr : eytmp["<<iy<<"]["<<ipt<<"] = " << eytmp[iy][ipt]<<endl;
+			//cout << "pr : pytmp["<<iy<<"]["<<ipt<<"] = " << pytmp[iy][ipt]<<endl;
+			//cout << "pr : eytmp["<<iy<<"]["<<ipt<<"] = " << eytmp[iy][ipt]<<endl;
+			//cout << "pr : eysys_pr["<<iy<<"]["<<ipt<<"] = " << eysys_pr[iy][ipt]<<endl;
 			gCross_pr[iy]->SetPoint(ipt, px[iy][ipt], pytmp[iy][ipt]);
 			gCross_pr[iy]->SetPointEXlow(ipt, ex[ipt]);
 			gCross_pr[iy]->SetPointEXhigh(ipt, ex[ipt]);
@@ -457,8 +459,9 @@ void draw_1D_crossSection_pt(char* dirName = "8rap9pt2gev", int runCode=0, bool 
 			gCross_np_sys[iy]->SetPointError(ipt, exsys[ipt], exsys[ipt], eysys_np[iy][ipt], eysys_np[iy][ipt]);
 			gCross_np[iy]->GetPoint(ipt, pxtmp[iy][ipt], pytmp[iy][ipt]);
 			eytmp[iy][ipt] = gCross_np[iy]-> GetErrorY(ipt);
-			//cout << "np : pytmp["<<iy<<"]["<<ipt<<"] = " << pytmp[iy][ipt]<<endl;
-			//cout << "np : eytmp["<<iy<<"]["<<ipt<<"] = " << eytmp[iy][ipt]<<endl;
+			cout << "np : pytmp["<<iy<<"]["<<ipt<<"] = " << pytmp[iy][ipt]<<endl;
+			cout << "np : eytmp["<<iy<<"]["<<ipt<<"] = " << eytmp[iy][ipt]<<endl;
+			cout << "np : eysys_np["<<iy<<"]["<<ipt<<"] = " << eysys_np[iy][ipt]<<endl;
 			gCross_np[iy]->SetPoint(ipt, px[iy][ipt], pytmp[iy][ipt]);
 			gCross_np[iy]->SetPointEXlow(ipt, ex[ipt]);
 			gCross_np[iy]->SetPointEXhigh(ipt, ex[ipt]);

@@ -319,8 +319,6 @@ void draw_1D_RFB_rap(char* dirName = "8rap9pt2gev", int runCode=0, bool isZoomIn
 		gRFB_lowpt->	SetPointEXhigh(iy, ex[iy]);
 		gRFB_lowpt->GetPoint(iy, pxtmp_lowpt[iy], pytmp_lowpt[iy]);
 		eytmp[iy] = gRFB_lowpt-> GetErrorY(iy);
-		cout << "pytmp_lowpt["<<iy<<"] = " << pytmp_lowpt[iy]<<endl;
-		cout << "eytmp_lowpt["<<iy<<"] = " << eytmp[iy]<<endl;
 	}	
 	
 	//sys_lowpt
@@ -330,6 +328,9 @@ void draw_1D_RFB_rap(char* dirName = "8rap9pt2gev", int runCode=0, bool isZoomIn
 		//abs err calcul.
 		eysys_lowpt[iy]=eysysrel_lowpt[iy]*pytmp_lowpt[iy];
 		gRFB_sys_lowpt->SetPointError(iy, exsys[iy], exsys[iy], eysys_lowpt[iy], eysys_lowpt[iy]);
+		cout << "pytmp_lowpt["<<iy<<"] = " << pytmp_lowpt[iy]<<endl;
+		cout << "eytmp_lowpt["<<iy<<"] = " << eytmp[iy]<<endl;
+		cout << "eysys_lowpt["<<iy<<"] = " << eysys_lowpt[iy]<<endl;
 	}	
 
 	//highpt
@@ -340,8 +341,6 @@ void draw_1D_RFB_rap(char* dirName = "8rap9pt2gev", int runCode=0, bool isZoomIn
 		gRFB_highpt->	SetPointEXhigh(iy, ex[iy]);
 		gRFB_highpt->GetPoint(iy, pxtmp_highpt[iy], pytmp_highpt[iy]);
 		eytmp[iy] = gRFB_highpt-> GetErrorY(iy);
-		cout << "pytmp_highpt["<<iy<<"] = " << pytmp_highpt[iy]<<endl;
-		cout << "eytmp_highpt["<<iy<<"] = " << eytmp[iy]<<endl;
 	}	
 	
 	//sys_highpt
@@ -351,6 +350,9 @@ void draw_1D_RFB_rap(char* dirName = "8rap9pt2gev", int runCode=0, bool isZoomIn
 		//abs err calcul.
 		eysys_highpt[iy]=eysysrel_highpt[iy]*pytmp_highpt[iy];
 		gRFB_sys_highpt->SetPointError(iy, exsys[iy], exsys[iy], eysys_highpt[iy], eysys_highpt[iy]);
+		cout << "pytmp_highpt["<<iy<<"] = " << pytmp_highpt[iy]<<endl;
+		cout << "eytmp_highpt["<<iy<<"] = " << eytmp[iy]<<endl;
+		cout << "eysys_highpt["<<iy<<"] = " << eysys_highpt[iy]<<endl;
 	}	
 	
 	gRFB_sys_lowpt->GetXaxis()->SetTitle("|y_{CM}|");	

@@ -78,7 +78,8 @@ int comp_crossSection_pt_LHCb(Int_t runCode=0, bool isScale =false, bool isLog=f
 
 	Double_t lhcb_ey_pr[] = {7.7, 11.9, 9.9, 7.0, 4.5, 3.0, 1.9, 0.2};
 	Double_t lhcb_ey_np[] = {2.7, 2.7, 2.9, 2.4, 1.6, 1.2, 0.8, 0.1};
-	Double_t lhcb_exsys[] = {0.4, 0.4, 0.4, 0.4, 0.4, 0.4, 0.4, 0.4};
+	//Double_t lhcb_exsys[] = {0.4, 0.4, 0.4, 0.4, 0.4, 0.4, 0.4, 0.4};
+	Double_t lhcb_exsys[] = {0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2};
 	Double_t lhcb_eysys01_pr[] = {3.7, 12.4, 10.0, 7.6, 4.0, 0.9, 0.6, 0.1};
 	Double_t lhcb_eysys02_pr[] = {3.1, 7.3, 6.3, 3.9, 2.7, 1.5, 0.8, 0.1};
 	Double_t lhcb_eysys01_np[] = {2.4, 2.7, 1.9, 1.3, 0.8, 0.3, 0.4, 0.0};
@@ -159,7 +160,8 @@ int comp_crossSection_pt_LHCb(Int_t runCode=0, bool isScale =false, bool isLog=f
 //		else gCross_pr_sys_0->SetMaximum(300.);
 		else gCross_pr_sys_0->SetMaximum(350.);
 	}
-	gCross_pr_sys_0->SetFillColor(kRed-9);
+	//gCross_pr_sys_0->SetFillColor(kRed-9);
+	gCross_pr_sys_0->SetFillColor(kViolet-9);
 	gCross_pr_sys_0->Draw("A2");
 
 	gCross_lhcb_pr_sys = new TGraphAsymmErrors(nBin_lhcb, lhcb_px, lhcb_py_pr, lhcb_exsys, lhcb_exsys, lhcb_eysys_pr, lhcb_eysys_pr);	
@@ -167,7 +169,9 @@ int comp_crossSection_pt_LHCb(Int_t runCode=0, bool isScale =false, bool isLog=f
 	gCross_lhcb_pr_sys->SetFillStyle(3001);
 	gCross_lhcb_pr_sys->Draw("2");
 
-	SetGraphStyle(gCross_pr_0,1,3);
+	//SetGraphStyle(gCross_pr_0,1,3);
+	SetGraphStyle(gCross_pr_0,8,12);
+	gCross_pr_0->SetMarkerSize(1.3);
 	gCross_pr_0->Draw("P");
 
 	gCross_lhcb_pr = new TGraphAsymmErrors(nBin_lhcb, lhcb_px, lhcb_py_pr, lhcb_ex, lhcb_ex, lhcb_ey_pr, lhcb_ey_pr);	
@@ -220,7 +224,7 @@ int comp_crossSection_pt_LHCb(Int_t runCode=0, bool isScale =false, bool isLog=f
 		if (isPtCut) gCross_np_sys_0->SetMaximum(25.);
 		else gCross_np_sys_0->SetMaximum(50.);
 	}
-	gCross_np_sys_0->SetFillColor(kRed-9);
+	gCross_np_sys_0->SetFillColor(kViolet-9);
 	gCross_np_sys_0->Draw("A2");
 
 	gCross_lhcb_np_sys = new TGraphAsymmErrors(nBin_lhcb, lhcb_px, lhcb_py_np, lhcb_exsys, lhcb_exsys, lhcb_eysys_np, lhcb_eysys_np);	
@@ -228,7 +232,8 @@ int comp_crossSection_pt_LHCb(Int_t runCode=0, bool isScale =false, bool isLog=f
 	gCross_lhcb_np_sys->SetFillStyle(3001);
 	gCross_lhcb_np_sys->Draw("2");
 
-	SetGraphStyle(gCross_np_0,1,3);
+	SetGraphStyle(gCross_np_0,8,12);
+	gCross_np_0->SetMarkerSize(1.3);
 	gCross_np_0->Draw("P");
 
 	gCross_lhcb_np = new TGraphAsymmErrors(nBin_lhcb, lhcb_px, lhcb_py_np, lhcb_ex, lhcb_ex, lhcb_ey_np, lhcb_ey_np);	

@@ -73,7 +73,8 @@ void draw_1D_crossSection_rap(char* dirName = "8rap9pt2gev", int runCode=0, bool
 	Double_t eysys_np_lowpt[ntmp]; //sys y error
 	Double_t eysys_np_highpt[ntmp]; //sys y error
 	ex = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
-	exsys = {0.08, 0.08, 0.08, 0.08, 0.08, 0.08, 0.08, 0.08};
+	//exsys = {0.08, 0.08, 0.08, 0.08, 0.08, 0.08, 0.08, 0.08};
+	exsys = {0.06, 0.06, 0.06, 0.06, 0.06, 0.06, 0.06, 0.06};
 
 /*	
 	eysys_pr_lowpt = {

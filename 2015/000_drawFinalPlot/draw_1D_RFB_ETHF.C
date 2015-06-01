@@ -32,9 +32,12 @@ void formPtArr(Double_t binmin, Double_t binmax, string* arr);
 void formEtArr(Double_t min, Double_t max, string* arr);
 
 //// runCode // 0=merged, 1=1stRun, 2=2ndRun
-void draw_1D_RFB_ETHF(char* dirName = "6rap3pt", int runCode=0, bool isPrompt=true)
+void draw_1D_RFB_ETHF(char* dirName = "6rap3pt", int runCode=0, bool isPrompt=false)
 {
 	gROOT->Macro("./JpsiStyleForFinalResult.C");
+
+	//double pxshift = 0.5;
+	double pxshift = 1.;
 
 	// set info.
 	const Double_t br = 0.0593 ;
@@ -68,37 +71,47 @@ void draw_1D_RFB_ETHF(char* dirName = "6rap3pt", int runCode=0, bool isPrompt=tr
 	Double_t eytmp[4][ntmp]; //y point error
 	Double_t ex[ntmp]; // x error
 	Double_t exsys[ntmp]; //sys x error
+	Double_t eysysrel[4][ntmp]; //sysrel y error
 	Double_t eysys[4][ntmp]; //sys y error
 	px = {9.4, 24.3, 37.2}; 
 	ex = {0.,0.,0.};
-	exsys = {1.0,1.0,1.0};
+	//exsys = {1.0,1.0,1.0};
+	exsys = {0.5, 0.5, 0.5};
 	if (isPrompt) {
-		eysys[0] = {0.024966391,
-		0.020452587,
-		0.024167557}; //1.5-1.93 low
-		eysys[1] = {0.060315512,
-		0.051766382,
-		0.059315558}; //1.5-1.93
-		eysys[2] = {0.034289468,
-		0.033121073,
-		0.033001869}; //0.9-1.5
-		eysys[3] = {0.03615479,
-		0.038642297,
-		0.038111265}; //0.0-0.9
+		eysysrel[0] = {
+		0.086820,
+		0.089360,
+		0.096121}; //1.5-1.93 low
+		eysysrel[1] = {
+		0.066106,
+		0.066767,
+		0.072642}; //1.5-1.93
+		eysysrel[2] = {
+		0.095349,
+		0.099675,
+		0.097660}; //0.9-1.5
+		eysysrel[3] = {
+		0.100730,
+		0.101185,
+		0.104937}; //0.0-0.9
 	}
 	else {
-		eysys[0] = {0.072574644,
-		0.061929006,
-		0.095699801}; // 1.5-1.93 low
-		eysys[1] = {0.083839006,
-		0.082056209,
-		0.084226544}; //0.5-1.93
-		eysys[2] = {0.051212653,
-		0.063088028,
-		0.056589627}; //0.9-1.5
-		eysys[3] = {0.068937782,
-		0.074606187,
-		0.082299452}; //0.0-0.9
+		eysysrel[0] = {
+		0.094355,
+		0.096697,
+		0.102977}; // 1.5-1.93 low
+		eysysrel[1] = {
+		0.048986,
+		0.054263,
+		0.055642}; //0.5-1.93
+		eysysrel[2] = {
+		0.092592,
+		0.097041,
+		0.094970}; //0.9-1.5
+		eysysrel[3] = {
+		0.101263,
+		0.101715,
+		0.105448}; //0.0-0.9
 	}	
 
 	//rap array in yCM (from forward to backward)
@@ -306,6 +319,21 @@ void draw_1D_RFB_ETHF(char* dirName = "6rap3pt", int runCode=0, bool isPrompt=tr
 	latex->SetTextSize(0.04);
 
 	// convert to TGraphAsymErrors
+	//RFB
+	TGraphAsymmErrors*gRFB[nHist]; 
+	for (int in=0; in< nHist; in++){
+		gRFB[in] = new TGraphAsymmErrors(h1D_RFB_ETHF[in]);
+		gRFB[in]->SetName(Form("gRFB_%d",in));
+		for (int iet=0; iet<nEtBins;iet++){
+			gRFB[in]->GetPoint(iet, pxtmp[in][iet], pytmp[in][iet]);
+			eytmp[in][iet] = gRFB[in] -> GetErrorY(iet);
+//			gRFB[in]->SetPoint(iet, px[iet], pytmp[in][iet]);
+			gRFB[in]->SetPoint(iet, px[iet]+pxshift*in, pytmp[in][iet]);
+			gRFB[in]->SetPointEXlow(iet, ex[in]);
+			gRFB[in]->SetPointEXhigh(iet, ex[in]);
+		}
+	}
+
 	//sys
 	TGraphAsymmErrors* gRFB_sys[nHist];
 	for (int in=0; in< nHist; in++){
@@ -313,10 +341,18 @@ void draw_1D_RFB_ETHF(char* dirName = "6rap3pt", int runCode=0, bool isPrompt=tr
 		gRFB_sys[in]->SetName(Form("gRFB_sys_%d",in));
 		for (int iet=0; iet<nEtBins;iet++){
 			gRFB_sys[in]->GetPoint(iet, pxtmp[in][iet], pytmp[in][iet]);
-			gRFB_sys[in]->SetPoint(iet, px[iet], pytmp[in][iet]);
+			//abs err calcul.
+			eysys[in][iet] = eysysrel[in][iet]*pytmp[in][iet];
+			//gRFB_sys[in]->SetPoint(iet, px[iet], pytmp[in][iet]);
+			gRFB_sys[in]->SetPoint(iet, px[iet]+pxshift*in, pytmp[in][iet]);
 			gRFB_sys[in]->SetPointError(iet, exsys[iet], exsys[iet], eysys[in][iet], eysys[in][iet]);
+			cout << "" << endl;
+			cout << "pytmp["<<in<<"]["<<iet<<"] = " << pytmp[in][iet]<<endl;
+			cout << "eytmp["<<in<<"]["<<iet<<"] = " << eytmp[in][iet]<<endl;
+			cout << "eysys["<<in<<"]["<<iet<<"] = " << eysys[in][iet]<<endl;
 		}
 	}
+	
 	gRFB_sys[0]->GetXaxis()->SetTitle("E_{T}^{HF |#eta|>4} [GeV]");
 	gRFB_sys[0]->GetXaxis()->CenterTitle();
 	gRFB_sys[0]->GetYaxis()->SetTitle("R_{FB}");
@@ -332,21 +368,6 @@ void draw_1D_RFB_ETHF(char* dirName = "6rap3pt", int runCode=0, bool isPrompt=tr
 	gRFB_sys[3]->SetFillColor(kAzure-9);
 	gRFB_sys[3]->Draw("2");
 
-	//RFB
-	TGraphAsymmErrors*gRFB[nHist]; 
-	for (int in=0; in< nHist; in++){
-		gRFB[in] = new TGraphAsymmErrors(h1D_RFB_ETHF[in]);
-		gRFB[in]->SetName(Form("gRFB_%d",in));
-		for (int iet=0; iet<nEtBins;iet++){
-			gRFB[in]->GetPoint(iet, pxtmp[in][iet], pytmp[in][iet]);
-			eytmp[in][iet] = gRFB[in] -> GetErrorY(iet);
-			cout << "pytmp["<<in<<"]["<<iet<<"] = " << pytmp[in][iet]<<endl;
-			cout << "eytmp["<<in<<"]["<<iet<<"] = " << eytmp[in][iet]<<endl;
-			gRFB[in]->SetPoint(iet, px[iet], pytmp[in][iet]);
-			gRFB[in]->SetPointEXlow(iet, ex[in]);
-			gRFB[in]->SetPointEXhigh(iet, ex[in]);
-		}
-	}
 	SetGraphStyle(gRFB[0], 8, 2); //1.5-1.93 low
 	SetGraphStyle(gRFB[1], 0, 5); //1.5-1.93
 	SetGraphStyle(gRFB[2], 1, 3); //0.9-1.5
