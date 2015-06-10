@@ -34,8 +34,16 @@ void formPtArr(Double_t binmin, Double_t binmax, string* arr);
 
 int comp_crossSection_pt_LHCb(Int_t runCode=0, bool isScale =false, bool isLog=false, bool isPtCut = false)
 {
-	gROOT->Macro("./JpsiStyleForFinalResult.C");
-
+	//gROOT->Macro("./JpsiStyleForFinalResult.C");
+	gROOT->Macro("./tdrstyle_kyo.C");
+	gStyle->SetTitleSize(0.046, "XYZ");
+  gStyle->SetEndErrorSize(0);
+// Margins:
+//  gStyle->SetPadTopMargin(0.05);
+  gStyle->SetPadBottomMargin(0.132); //KYO
+  gStyle->SetPadLeftMargin(0.132); //KYO
+  //gStyle->SetPadRightMargin(0.04);
+	
 	// set info.
 	const Double_t br = 0.0593 ;
 	const Double_t brErr = 0.0006;
@@ -108,9 +116,8 @@ int comp_crossSection_pt_LHCb(Int_t runCode=0, bool isScale =false, bool isLog=f
 	////// Draw Plots
 	////////////////////
 
-	//TLegend *legUR = new TLegend(0.52, 0.55, 0.85, 0.92); //upper left
-//	TLegend *legUR = new TLegend(0.52, 0.55, 0.86, 0.92); //upper left
-	TLegend *legUR = new TLegend(0.52, 0.63, 0.86, 0.92); //upper left
+//	TLegend *legUR = new TLegend(0.52, 0.63, 0.86, 0.92); //upper left
+	TLegend *legUR = new TLegend(0.40, 0.71, 0.83, 0.88); //upper left
 	SetLegendStyle(legUR);
 	TLegend *legUL = new TLegend(0.20, 0.73, 0.40, 0.92); //upper left
 	SetLegendStyle(legUL);
@@ -126,7 +133,10 @@ int comp_crossSection_pt_LHCb(Int_t runCode=0, bool isScale =false, bool isLog=f
 	TLatex* latex = new TLatex();
 	latex->SetNDC();
 	latex->SetTextAlign(12);
-	latex->SetTextSize(0.04);
+	//latex->SetTextSize(0.04);
+  latex->SetTextFont(42);
+	//latex->SetTextSize(0.035);
+	latex->SetTextSize(0.040);
 
 	TBox * globalbox = new TBox(0.5, 6.4, 1.5, 13.6);
 	globalbox->SetFillColor(kYellow);
@@ -184,17 +194,21 @@ int comp_crossSection_pt_LHCb(Int_t runCode=0, bool isScale =false, bool isLog=f
 	}
 		
 	legUR -> SetHeader("Prompt J/#psi");
-	legUR -> AddEntry(gCross_pr_0,"CMS :1.5 < y_{CM} < 1.93","lp");
+	legUR -> AddEntry(gCross_pr_0,"CMS preliminary :1.5 < y_{CM} < 1.93","lp");
 	legUR -> AddEntry(gCross_lhcb_pr,"LHCb : 1.5 < y_{CM} < 2","lp");
 	legUR -> Draw();
-	/*
-	latex->SetTextSize(0.04);
-	latex->DrawLatex(0.56, 0.71, lumistring.c_str());
-	latex->SetTextSize(0.04);
-	latex->DrawLatex(0.56, 0.78, beamstring.c_str());
-	latex->SetTextSize(0.05);
-	latex->DrawLatex(0.55, 0.86, cmsstring.c_str());
-	*/
+	
+	//latex->SetTextSize(0.04);
+	//latex->DrawLatex(0.56, 0.71, lumistring.c_str());
+	if (isLog) {
+		latex->DrawLatex(0.20, 0.25, beamstring.c_str());
+	}
+	else {
+		latex->DrawLatex(0.62, 0.25, beamstring.c_str());
+	}
+	//latex->SetTextSize(0.05);
+	//latex->DrawLatex(0.55, 0.86, cmsstring.c_str());
+	
 	c_pr->Update();
 	c_pr->SaveAs(Form("comparisonLHCb/comp_crossSection_pt_LHCb_pr_isLog%d_isPtCut_%d.pdf",(int)isLog,(int)isPtCut));
 	legUR->Clear();
@@ -220,9 +234,9 @@ int comp_crossSection_pt_LHCb(Int_t runCode=0, bool isScale =false, bool isLog=f
 		else gCross_np_sys_0->SetMaximum(500.);
 	}
 	else {
-		gCross_np_sys_0->SetMinimum(-3.0);
+		gCross_np_sys_0->SetMinimum(-1.0);
 		if (isPtCut) gCross_np_sys_0->SetMaximum(25.);
-		else gCross_np_sys_0->SetMaximum(50.);
+		else gCross_np_sys_0->SetMaximum(40.);
 	}
 	gCross_np_sys_0->SetFillColor(kViolet-9);
 	gCross_np_sys_0->Draw("A2");
@@ -246,17 +260,20 @@ int comp_crossSection_pt_LHCb(Int_t runCode=0, bool isScale =false, bool isLog=f
 	}
 
 	legUR -> SetHeader("Non-prompt J/#psi");
-	legUR -> AddEntry(gCross_np_0,"CMS :1.5 < y_{CM} < 1.93","lp");
+	legUR -> AddEntry(gCross_np_0,"CMS preliminary :1.5 < y_{CM} < 1.93","lp");
 	legUR -> AddEntry(gCross_lhcb_np,"LHCb : 1.5 < y_{CM} < 2","lp");
 	legUR -> Draw();
-	/*
-	latex->SetTextSize(0.04);
-	latex->DrawLatex(0.56, 0.71, lumistring.c_str());
-	latex->SetTextSize(0.04);
-	latex->DrawLatex(0.56, 0.78, beamstring.c_str());
-	latex->SetTextSize(0.05);
-	latex->DrawLatex(0.55, 0.86, cmsstring.c_str());
-	*/
+//	latex->SetTextSize(0.04);
+//	latex->DrawLatex(0.56, 0.71, lumistring.c_str());
+//	latex->SetTextSize(0.04);
+	if (isLog) {
+		latex->DrawLatex(0.20, 0.25, beamstring.c_str());
+	}
+	else {
+		latex->DrawLatex(0.62, 0.25, beamstring.c_str());
+	}
+//	latex->SetTextSize(0.05);
+//	latex->DrawLatex(0.55, 0.86, cmsstring.c_str());
 	c_np->Update();
 	c_np->SaveAs(Form("comparisonLHCb/comp_crossSection_pt_LHCb_np_isLog%d_isPtCut_%d.pdf",(int)isLog,(int)isPtCut));
 	//legUR->Clear();
