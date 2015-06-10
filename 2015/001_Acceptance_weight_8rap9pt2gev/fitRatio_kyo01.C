@@ -133,7 +133,16 @@ void fitRatio_kyo01(bool isPrompt=false, bool isPbp=true, char* dirName="8rap9pt
                 //func[iy]->FixParameter(3,3.55470e+00 );
                 //func[iy]->FixParameter(4,1.11672e+01 );
 #endif
-            } else if (isPrompt==0 && isPbp==1 && iy==7) {
+            }
+            else if(isPrompt==1 && isPbp==1 && iy==0) { 
+                //func[iy]->FixParameter(0,-5.17167e+01 );
+                func[iy]->FixParameter(1,2.06705e+00 );
+                func[iy]->FixParameter(2,3.72512e-01 );
+                func[iy]->FixParameter(3,3.11521e+00 );
+                //func[iy]->FixParameter(4,1.11672e+01 );
+            }
+           
+            else if (isPrompt==0 && isPbp==1 && iy==7) {
                 func[iy]->FixParameter(0, -3.40711e+02);
                 func[iy]->FixParameter(1, 3.20176e+00); 
                 func[iy]->FixParameter(2, 1.09760e+00);
