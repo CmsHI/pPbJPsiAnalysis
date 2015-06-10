@@ -465,14 +465,14 @@ int rootAna_efficiency_counting_weight_kyo01(char *strBinning = "8rap9pt2gev", b
     if(is1st) run_st = "Pbp"; else run_st = "pPb";
 
     //TFile* toyFile = new TFile(Form("../001_Acceptance_weight/ToyGaussian_isPrompt%d_%s.root",(int)isPrompt,run_st.Data()));
-    TFile* toyFile = new TFile(Form("../001_Acceptance_weight_8rap9pt2gev/fitRatio_isPrompt%d_%s_kyo01.root",(int)isPrompt,run_st.Data()));
-    TH1D* hWeight[nYBins];
-    TF1* Func[nYBins];
+    //TFile* toyFile = new TFile(Form("../001_Acceptance_weight_8rap9pt2gev/fitRatio_isPrompt%d_%s_kyo01.root",(int)isPrompt,run_st.Data()));
+    //TH1D* hWeight[nYBins];
+    //TF1* Func[nYBins];
 
-    for(int iy=0;iy<nYBins;iy++){
+    //for(int iy=0;iy<nYBins;iy++){
         //hWeight[iy]=(TH1D*) toyFile->Get(Form("hWeight_%s_%d",run_st.Data(),iy));
-        Func[iy]=(TF1*) toyFile->Get(Form("func_%d",iy));
-    }
+    //    Func[iy]=(TF1*) toyFile->Get(Form("func_%d",iy));
+    //}
 	////////////////////////////////////////////////////////////////////////////////////////////////
 
 	float theZvtx;
