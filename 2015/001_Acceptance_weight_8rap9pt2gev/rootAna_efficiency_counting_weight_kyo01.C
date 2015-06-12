@@ -50,10 +50,13 @@ struct Condition {
 
 //read TNP plots for useDataDrivenEff
 //TFile* fTnpRate = new TFile("./tagAndProbe/tnpRate_V17_eff_fit_expo_ZV.root");
-TFile* fTnpRate = new TFile("./tagAndProbe/tnpRate_V16_eff_fit_GTrack_CBGauss_expo_40bin_PAMu3_lowpt5_fine_v2_2sqrtxfit_v1.root");
+//TFile* fTnpRate = new TFile("./tagAndProbe/tnpRate_V16_eff_fit_GTrack_CBGauss_expo_40bin_PAMu3_lowpt5_fine_v2_2sqrtxfit_v1.root");
+TFile* fTnpRate = new TFile("./tagAndProbe/tnpRate_nominal_fitRatio_5etaBin.root");
 TF1* hTnpRateEtaBin1 = (TF1*)fTnpRate->Get("ferrScale_ieta1");
 TF1* hTnpRateEtaBin2 = (TF1*)fTnpRate->Get("ferrScale_ieta2");
 TF1* hTnpRateEtaBin3 = (TF1*)fTnpRate->Get("ferrScale_ieta3");
+TF1* hTnpRateEtaBin4 = (TF1*)fTnpRate->Get("ferrScale_ieta4");
+TF1* hTnpRateEtaBin5 = (TF1*)fTnpRate->Get("ferrScale_ieta5");
 
 ///////// read DataRecoRatio weight func. from Yeonju // KYO
 //TFile* toyFile = new TFile(Form("ToyGaussian_isPrompt%d_%s_kyo01.root",(int)isPrompt,runstring.c_str()));
@@ -696,15 +699,19 @@ float getEffWeight(float mupt1, float mueta1, float mupt2, float mueta2) {
 
   TF1* hw1;
   TF1* hw2;
-	if (  TMath::Abs(mueta1) < 1.2 )      hw1 = hTnpRateEtaBin1;
-	else if ( TMath::Abs(mueta1) < 1.6 )  hw1 = hTnpRateEtaBin2;
-	else                                  hw1 = hTnpRateEtaBin3;
+  if (  TMath::Abs(mueta1) < 0.6 )      hw1 = hTnpRateEtaBin1;
+  else if ( TMath::Abs(mueta1) < 1.3 )  hw1 = hTnpRateEtaBin2;
+  else if ( TMath::Abs(mueta1) < 1.8 )  hw1 = hTnpRateEtaBin3;
+  else if ( TMath::Abs(mueta1) < 2.2 )  hw1 = hTnpRateEtaBin4;
+  else                                  hw1 = hTnpRateEtaBin5;
 
-	if (  TMath::Abs(mueta2) < 1.2 )      hw2 = hTnpRateEtaBin1;
-	else if ( TMath::Abs(mueta2) < 1.6 )  hw2 = hTnpRateEtaBin2;
-	else                                  hw2 = hTnpRateEtaBin3;
+  if (  TMath::Abs(mueta2) < 0.6 )      hw2 = hTnpRateEtaBin1;
+  else if ( TMath::Abs(mueta2) < 1.3 )  hw2 = hTnpRateEtaBin2;
+  else if ( TMath::Abs(mueta2) < 1.8 )  hw2 = hTnpRateEtaBin3;
+  else if ( TMath::Abs(mueta2) < 2.2 )  hw2 = hTnpRateEtaBin4;
+  else                                  hw2 = hTnpRateEtaBin5;
 
-	/*   // in case the weight is TH1 formet
+  /*   // in case the weight is TH1 formet
      int bin1 = hw1->FindBin(mupt1);
 		 int bin2 = hw2->FindBin(mupt2);
      float effWeight1 = hw1->GetBinContent(bin1);
