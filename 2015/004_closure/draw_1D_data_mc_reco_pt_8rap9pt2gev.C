@@ -29,7 +29,7 @@ void formRapArr(Double_t binmin, Double_t binmax, string* arr);
 void formAbsRapArr(Double_t binmin, Double_t binmax, string* arr);
 void formPtArr(Double_t binmin, Double_t binmax, string* arr);
 
-void draw_1D_data_mc_reco_pt_8rap9pt2gev(char* dirName = "8rap9pt2gev", bool isPrompt=false, bool isLog=false)
+void draw_1D_data_mc_reco_pt_8rap9pt2gev(char* dirName = "8rap9pt2gev", bool isPrompt=true, bool isLog=false)
 {
 	gROOT->Macro("./JpsiStyle.C");
 

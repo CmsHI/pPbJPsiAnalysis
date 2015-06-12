@@ -37,8 +37,10 @@ int make2Droot_total(char *dirName = "8rap9pt2gev", char *dateName = "no"){
 
 	////////////////////////////////////////////////
 	////// read in Acceptance file
+	// *** without pt weight
 	//TFile *fAccPR = new TFile("../001_Acceptance/AccAna_8rap9pt2gev_PRMC_boosted.root");
 	//TFile *fAccNP = new TFile("../001_Acceptance/AccAna_8rap9pt2gev_NPMC_boosted.root");
+	// *** with pt weight
 	TFile *fAccPR = new TFile("../001_Acceptance_weight_8rap9pt2gev/AccAna_isPrompt1_Pbp_kyo01.root");
 	TFile *fAccNP = new TFile("../001_Acceptance_weight_8rap9pt2gev/AccAna_isPrompt0_Pbp_kyo01.root");
 	TH2D* h2D_Acc_pt_y_PRMC_Pbp = (TH2D*)fAccPR->Get("h2D_Acc_pt_y_Pbp"); //weighted!
@@ -72,13 +74,14 @@ int make2Droot_total(char *dirName = "8rap9pt2gev", char *dateName = "no"){
 
 	////////////////////////////////////////////////
 	////// read in Efficiency file
-	//with TNP
-	/*
+/*
+	// *** without pt weight
 	TFile *fEffPRPbp = new TFile("../002_Efficiency_zVtx_embedded/EffCounting_8rap9pt2gev_PRMCpythia_Pbp_useCtErr_1_useDataDriven_1_useZvtxStep1_0_Step2_1.root");
 	TFile *fEffPRpPb = new TFile("../002_Efficiency_zVtx_embedded/EffCounting_8rap9pt2gev_PRMCpythia_pPb_useCtErr_1_useDataDriven_1_useZvtxStep1_0_Step2_1.root");
 	TFile *fEffNPPbp = new TFile("../002_Efficiency_zVtx_embedded/EffCounting_8rap9pt2gev_NPMCpythia_Pbp_useCtErr_1_useDataDriven_1_useZvtxStep1_0_Step2_1.root");
 	TFile *fEffNPpPb = new TFile("../002_Efficiency_zVtx_embedded/EffCounting_8rap9pt2gev_NPMCpythia_pPb_useCtErr_1_useDataDriven_1_useZvtxStep1_0_Step2_1.root");
-	*/
+*/
+	/// *** with pt weight
 	TFile *fEffPRPbp = new TFile("../001_Acceptance_weight_8rap9pt2gev/EffCounting_8rap9pt2gev_PRMCpythia_Pbp_useCtErr_1_useDataDriven_1_useZvtxStep1_0_Step2_1_kyo01.root");
 	TFile *fEffPRpPb = new TFile("../001_Acceptance_weight_8rap9pt2gev/EffCounting_8rap9pt2gev_PRMCpythia_pPb_useCtErr_1_useDataDriven_1_useZvtxStep1_0_Step2_1_kyo01.root");
 	TFile *fEffNPPbp = new TFile("../001_Acceptance_weight_8rap9pt2gev/EffCounting_8rap9pt2gev_NPMCpythia_Pbp_useCtErr_1_useDataDriven_1_useZvtxStep1_0_Step2_1_kyo01.root");
@@ -112,8 +115,6 @@ int make2Droot_total(char *dirName = "8rap9pt2gev", char *dateName = "no"){
 	
 	////////////////////////////////////////////////
 	////// read in fromfit file
-//	TFile* fFitPbp = new TFile("./2Dhist_fitRes_8rap10pt_Pbp.root");
-//	TFile* fFitpPb = new TFile("./2Dhist_fitRes_8rap10pt_pPb.root");
 	TFile* fFitPbp = new TFile("./2Dhist_fitRes_8rap9pt2gev_Pbp.root");
 	TFile* fFitpPb = new TFile("./2Dhist_fitRes_8rap9pt2gev_pPb.root");
 	TH2D* h2D_fit_pt_y_PR_Pbp = (TH2D*)fFitPbp->Get("h2D_nPrompt");	

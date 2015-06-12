@@ -40,11 +40,13 @@ Double_t rapArrNumFB[] = {1.93, 1.5, 0.9, 0., -0.9, -1.5, -1.93, -2.4, -2.87};//
 //Double_t rapArrNumBF[] = {-2.87, -2.4, -1.93, -1.5, -0.9, 0., 0.9, 1.5, 1.93};// for rap dist.
 const Int_t nRap = sizeof(rapArrNumFB)/sizeof(Double_t)-1;
 
+Double_t minPt[] = {2, 3, 6.5, 6.5, 6.5, 5, 3, 2.};
+
 double fitHevi(double *x, double *par);
 double fitExp(double *x, double *par);
 void formRapArr(Double_t binmin, Double_t binmax, string* arr);
 
-void fitRatio_kyo01(bool isPrompt=false, bool isPbp=true, char* dirName="8rap9pt2gev"){
+void fitRatio_kyo01(bool isPrompt=true, bool isPbp=true, char* dirName="8rap9pt2gev"){
     gRandom->SetSeed(time(0));
 		gROOT->Macro("./JpsiStyle.C");
 
@@ -224,6 +226,10 @@ void fitRatio_kyo01(bool isPrompt=false, bool isPbp=true, char* dirName="8rap9pt
             //cout << iy+1 << "th rapidity, "<< ifpt<<"th fine ptbin, mean = "<< mean <<", sigma = "<<sigma<<endl;
         }
 				*/
+			
+				cout << " **** " <<iy<< "th rap, values at min pT = " <<func[iy]->Eval(minPt[iy])<<endl;	
+				cout << endl;
+
     }
     c1 -> Update();
 

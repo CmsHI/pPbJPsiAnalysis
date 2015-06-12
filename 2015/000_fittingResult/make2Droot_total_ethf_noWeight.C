@@ -107,10 +107,6 @@ int make2Droot_total_ethf_noWeight(char *dirName = "6rap3pt", char *dateName = "
 	TH2D* h2D_Eff_Num_pt_y_NPMC_pPb[nET];
 	
 	for (int iet=0; iet<nET; iet++) {
-//		fEffPRPbp[iet] = new TFile(Form("../002_Efficiency_zVtx_embedded/EffCounting_6rap3pt_PRMCpythia_Pbp_useCtErr_1_useDataDriven_0_useZvtxStep1_0_Step2_1_bin%d.root",iet+1));
-//		fEffPRpPb[iet] = new TFile(Form("../002_Efficiency_zVtx_embedded/EffCounting_6rap3pt_PRMCpythia_pPb_useCtErr_1_useDataDriven_0_useZvtxStep1_0_Step2_1_bin%d.root",iet+1));
-//		fEffNPPbp[iet] = new TFile(Form("../002_Efficiency_zVtx_embedded/EffCounting_6rap3pt_NPMCpythia_Pbp_useCtErr_1_useDataDriven_0_useZvtxStep1_0_Step2_1_bin%d.root",iet+1));
-//		fEffNPpPb[iet] = new TFile(Form("../002_Efficiency_zVtx_embedded/EffCounting_6rap3pt_NPMCpythia_pPb_useCtErr_1_useDataDriven_0_useZvtxStep1_0_Step2_1_bin%d.root",iet+1));
 		fEffPRPbp[iet] = new TFile(Form("../002_Efficiency_zVtx_embedded/EffCounting_6rap3pt_PRMCpythia_Pbp_useCtErr_1_useDataDriven_1_useZvtxStep1_0_Step2_1_bin%d.root",iet+1));
 		fEffPRpPb[iet] = new TFile(Form("../002_Efficiency_zVtx_embedded/EffCounting_6rap3pt_PRMCpythia_pPb_useCtErr_1_useDataDriven_1_useZvtxStep1_0_Step2_1_bin%d.root",iet+1));
 		fEffNPPbp[iet] = new TFile(Form("../002_Efficiency_zVtx_embedded/EffCounting_6rap3pt_NPMCpythia_Pbp_useCtErr_1_useDataDriven_1_useZvtxStep1_0_Step2_1_bin%d.root",iet+1));
@@ -165,8 +161,6 @@ int make2Droot_total_ethf_noWeight(char *dirName = "6rap3pt", char *dateName = "
 	TH2D* h2D_fit_pt_y_ctErrmax_pPb[nET];
 	
 	for (int iet=0; iet<nET; iet++) {
-//		fFitPbp[iet] = new TFile(Form("../000_fittingResult/2Dhist_fitRes_6rap3pt_%s_Pbp_bin%d.root",dateName,iet+1));	
-//		fFitpPb[iet] = new TFile(Form("../000_fittingResult/2Dhist_fitRes_6rap3pt_%s_pPb_bin%d.root",dateName,iet+1));	
 		fFitPbp[iet] = new TFile(Form("../000_fittingResult/2Dhist_fitRes_6rap3pt_Pbp_bin%d.root",iet+1));	
 		fFitpPb[iet] = new TFile(Form("../000_fittingResult/2Dhist_fitRes_6rap3pt_pPb_bin%d.root",iet+1));	
 		h2D_fit_pt_y_PR_Pbp[iet] = (TH2D*)fFitPbp[iet]->Get("h2D_nPrompt");	

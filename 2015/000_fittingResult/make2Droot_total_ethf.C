@@ -39,6 +39,10 @@ int make2Droot_total_ethf(char *dirName = "6rap3pt", char *dateName = "no"){
 
 	////////////////////////////////////////////////
 	////// read in Acceptance file
+	// *** without pt weight
+	TFile *fAccPR = new TFile("../001_Acceptance/AccAna_6rap3pt_PRMC_boosted.root");
+	TFile *fAccNP = new TFile("../001_Acceptance/AccAna_6rap3pt_NPMC_boosted.root");
+	// *** with pt weight
 	TFile *fAccPR = new TFile("../001_Acceptance_weight_8rap9pt2gev/AccAna_isPrompt1_Pbp_6rap3pt_kyo01.root");
 	TFile *fAccNP = new TFile("../001_Acceptance_weight_8rap9pt2gev/AccAna_isPrompt0_Pbp_6rap3pt_kyo01.root");
 	
@@ -107,12 +111,14 @@ int make2Droot_total_ethf(char *dirName = "6rap3pt", char *dateName = "no"){
 	TH2D* h2D_Eff_Num_pt_y_NPMC_pPb[nET];
 	
 	for (int iet=0; iet<nET; iet++) {
+		// *** without pt weight
 /*
 		fEffPRPbp[iet] = new TFile(Form("../002_Efficiency_zVtx_embedded/EffCounting_6rap3pt_PRMCpythia_Pbp_useCtErr_1_useDataDriven_1_useZvtxStep1_0_Step2_1_bin%d.root",iet+1));
 		fEffPRpPb[iet] = new TFile(Form("../002_Efficiency_zVtx_embedded/EffCounting_6rap3pt_PRMCpythia_pPb_useCtErr_1_useDataDriven_1_useZvtxStep1_0_Step2_1_bin%d.root",iet+1));
 		fEffNPPbp[iet] = new TFile(Form("../002_Efficiency_zVtx_embedded/EffCounting_6rap3pt_NPMCpythia_Pbp_useCtErr_1_useDataDriven_1_useZvtxStep1_0_Step2_1_bin%d.root",iet+1));
 		fEffNPpPb[iet] = new TFile(Form("../002_Efficiency_zVtx_embedded/EffCounting_6rap3pt_NPMCpythia_pPb_useCtErr_1_useDataDriven_1_useZvtxStep1_0_Step2_1_bin%d.root",iet+1));
 */
+		// *** with pt weight
 		fEffPRPbp[iet] = new TFile(Form("../001_Acceptance_weight_8rap9pt2gev/EffCounting_6rap3pt_PRMCpythia_Pbp_useCtErr_1_useDataDriven_1_useZvtxStep1_0_Step2_1_bin%d_kyo01.root",iet+1));
 		fEffPRpPb[iet] = new TFile(Form("../001_Acceptance_weight_8rap9pt2gev/EffCounting_6rap3pt_PRMCpythia_pPb_useCtErr_1_useDataDriven_1_useZvtxStep1_0_Step2_1_bin%d_kyo01.root",iet+1));
 		fEffNPPbp[iet] = new TFile(Form("../001_Acceptance_weight_8rap9pt2gev/EffCounting_6rap3pt_NPMCpythia_Pbp_useCtErr_1_useDataDriven_1_useZvtxStep1_0_Step2_1_bin%d_kyo01.root",iet+1));
