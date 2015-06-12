@@ -48,7 +48,9 @@ struct Condition {
 } ;
 
 //read TNP plots for useDataDrivenEff
-TFile* fTnpRate = new TFile("./tagAndProbe/tnpRate_V16_eff_fit_expo.root");
+//TFile* fTnpRate = new TFile("./tagAndProbe/tnpRate_V16_eff_fit_expo.root");
+//TFile* fTnpRate = new TFile("./tagAndProbe/tnpRate_V17_eff_fit_expo_ZV.root");
+TFile* fTnpRate = new TFile("./tagAndProbe/tnpRate_V16_eff_fit_GTrack_CBGauss_expo_40bin_PAMu3_lowpt5_fine_v2_2sqrtxfit_v1.root");
 TF1* hTnpRateEtaBin1 = (TF1*)fTnpRate->Get("ferrScale_ieta1");
 TF1* hTnpRateEtaBin2 = (TF1*)fTnpRate->Get("ferrScale_ieta2");
 TF1* hTnpRateEtaBin3 = (TF1*)fTnpRate->Get("ferrScale_ieta3");
@@ -81,34 +83,7 @@ int rootAna_efficiency_counting_ethf_bin1(char *strBinning = "6rap3pt", bool isP
 	//// Step2 : pythia -> data
 	TFile* fZvtx = new TFile("zVtxFit/zVtxFit_20141007.root");
 	TF1* gRatio = (TF1*)fZvtx->Get("gRatio");
-/*
-	TCanvas* c0 = new TCanvas("c0","",900,400);
-	c0->Divide(3,1);
-	c0->cd(1);
-	hEffCorr1st1->Draw();
-	c0->cd(2);
-	hEffCorr1st2->Draw();
-	c0->cd(3);
-	hEffCorr1st3->Draw();
-	//c0->SaveAs("weight1st.gif");
-	TCanvas* c00 = new TCanvas("c00","",900,400);
-	c00->Divide(3,1);
-	c00->cd(1);
-	hEffCorr2nd1->Draw();
-	c00->cd(2);
-	hEffCorr2nd2->Draw();
-	c00->cd(3);
-	hEffCorr2nd3->Draw();
-	//c00->SaveAs("weight2nd.gif");
-
-	TCanvas* c000 = new TCanvas("c000","",800,400);
-	c000->Divide(2,1);
-	c000->cd(1);
-	hRatio->Draw();
-	c000->cd(2);
-	gRatio->Draw();
-	//c000->SaveAs(Form("zVtxRatio_is1st%d_isEmbd%d_isPr%d.gif",(int)is1st,(int)isEmbedded,(int)isPrompt));
-*/		
+	
 	TFile *f1;
 	char* sampleName;
 	double minylab =-2.4;
@@ -176,7 +151,8 @@ int rootAna_efficiency_counting_ethf_bin1(char *strBinning = "6rap3pt", bool isP
 	if(is1st) runName = "Pbp";
 	else runName = "pPb";	
 	//char * dirName = "fitRes_8rap9pt_20150106"; //8rap9pt
-	char * dirName = "fitRes_6rap3pt"; //8rap9pt
+	//char * dirName = "fitRes_6rap3pt"; //
+	char * dirName = Form("fitRes_%s",strBinning);
 	std::ifstream fctau(Form("./%s/summary_%s/fit_ctauErrorRange",dirName,runName),std::ios::in);
 	if(!fctau.is_open()) { cout << "Warning : can NOT open the fit_ctauErrorRange file!"<<endl; }
 
@@ -651,8 +627,10 @@ float getEffWeight(float mupt1, float mueta1, float mupt2, float mueta2) {
 	float effWeight2 = hw2->Eval(mupt2);
 
 	// special setting for 1.2< |eta| <1.6 	
-	if (TMath::Abs(mueta1) >= 1.2 && TMath::Abs(mueta1) < 1.6 && TMath::Abs(mupt1) < 2.3) {effWeight1=0.886417;}
-	if (TMath::Abs(mueta2) >= 1.2 && TMath::Abs(mueta2) < 1.6 && TMath::Abs(mupt2) < 2.3) {effWeight2=0.886417;}
+	//if (TMath::Abs(mueta1) >= 1.2 && TMath::Abs(mueta1) < 1.6 && TMath::Abs(mupt1) < 2.3) {effWeight1=0.886417;}
+	//if (TMath::Abs(mueta2) >= 1.2 && TMath::Abs(mueta2) < 1.6 && TMath::Abs(mupt2) < 2.3) {effWeight2=0.886417;}
+	//if (TMath::Abs(mueta1) >= 1.2 && TMath::Abs(mueta1) < 1.6 && TMath::Abs(mupt1) < 2.3) {effWeight1=0.89122018;}
+	//if (TMath::Abs(mueta2) >= 1.2 && TMath::Abs(mueta2) < 1.6 && TMath::Abs(mupt2) < 2.3) {effWeight2=0.89122018;}
 
 	return effWeight1 * effWeight2;
 }

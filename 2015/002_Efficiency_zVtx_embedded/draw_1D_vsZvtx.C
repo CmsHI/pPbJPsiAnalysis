@@ -50,9 +50,7 @@ void draw_1D_vsZvtx(bool isPrompt = false, bool is1st = true, bool isEmbedded = 
 	const char* sampleName = Form("%s%s_%s",strPrompt,strEmbd,str1st);
 	cout << "sampleName = " << sampleName << endl;
 	
-	f2D = new TFile(Form("vsZvtx_EffCounting_8rap9pt_%s_useCtErr_%d_useDataDriven_%d_useZvtxStep1_%d_Step2_%d.root",sampleName,(int)useCtErrRangeEff,(int)useDataDrivenEff,(int)useZvtxWeightStep1,(int)useZvtxWeightStep2));
-	//f2D = new TFile(Form("EffCounting_8rap9pt_%s_useCtErr_%d_useDataDriven_%d_useZvtxStep1_%d_Step2_%d.root",sampleName,(int)useCtErrRangeEff,(int)useDataDrivenEff,(int)useZvtxWeightStep1,(int)useZvtxWeightStep2));
-	//f2D = new TFile(Form("EffGenmatching_8rap9pt_%s_useCtErr_%d_useDataDriven_%d_useZvtxStep1_%d_Step2_%d.root",sampleName,(int)useCtErrRangeEff,(int)useDataDrivenEff,(int)useZvtxWeightStep1,(int)useZvtxWeightStep2));
+	f2D = new TFile(Form("vsZvtx_EffCounting_8rap9pt2gev_%s_useCtErr_%d_useDataDriven_%d_useZvtxStep1_%d_Step2_%d.root",sampleName,(int)useCtErrRangeEff,(int)useDataDrivenEff,(int)useZvtxWeightStep1,(int)useZvtxWeightStep2));
 
 	const int nYBins = 8;
 	TH1D* h1D_EffvsZvtx[nYBins];
@@ -64,8 +62,10 @@ void draw_1D_vsZvtx(bool isPrompt = false, bool is1st = true, bool isEmbedded = 
 	}
 	
 	Double_t ptLimit[nYBins];
-	if (is1st) ptLimit= {0.0, 3.0, 6.5, 6.5, 6.5, 5.0, 3.0, 0.};
-	else ptLimit = {0.0, 3.0, 5.0, 6.5, 6.5, 6.5, 3.0, 0.};
+	//if (is1st) ptLimit= {0.0, 3.0, 6.5, 6.5, 6.5, 5.0, 3.0, 0.};
+	//else ptLimit = {0.0, 3.0, 5.0, 6.5, 6.5, 6.5, 3.0, 0.};
+	if (is1st) ptLimit= {2.0, 3.0, 6.5, 6.5, 6.5, 5.0, 3.0, 2.0};
+	else ptLimit = {2.0, 3.0, 5.0, 6.5, 6.5, 6.5, 3.0, 2.0};
 	for (Int_t i=0; i<nYBins; i++){	
 		cout << i <<"th ptLimit = " << ptLimit[i] <<endl;
 	}
@@ -113,19 +113,16 @@ void draw_1D_vsZvtx(bool isPrompt = false, bool is1st = true, bool isEmbedded = 
 	}
 
 	c1->SaveAs(Form("%s/vsZvtx_%s.pdf",dirName,sampleName));
-/*	
+
 	// root file
-	cout << "sampleName = " << sampleName << endl;
-	//TFile *fOut = new TFile(Form("%s/%s_EffPt.root",dirName,sampleName),"RECREATE");
-	//TFile *fOut = new TFile(Form("%s/%s_sf%d_EffPt.root",dirName,sampleName,(int)useDataDrivenEff),"RECREATE");
-	TFile *fOut = new TFile(Form("%s/1Dhist_EffCounting_8rap9pt_%s_useCtErr_%d_useDataDriven_%d_useZvtxStep1_%d_Step2_%d.root",dirName,sampleName,(int)useCtErrRangeEff,(int)useDataDrivenEff,(int)useZvtxWeightStep1,(int)useZvtxWeightStep2),"RECREATE");
+	TFile* fOut = new TFile(Form("%s/vsZvtx_%s.root",dirName,sampleName),"RECREATE");
 	fOut->cd();
-	for (Int_t iy = 0; iy < nbinsX; iy++) {
+	for (Int_t iy = 0; iy < nYBins; iy++) {
 		h1D_EffvsZvtx[iy]->Write();
 	}
-	tRap->Write();
 	fOut->Close();
-*/
+	cout << "vsZvtx_"<<sampleName<<".root has been created :)" << endl;
+
 	return;
 
 }

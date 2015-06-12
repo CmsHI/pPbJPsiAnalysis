@@ -78,7 +78,7 @@ int rootAna_zVtxFit(char *stringA = "20141007", bool isBoosted = true){
 	const double maxbin[] = {+30};
 	TString histName[] = {"zVtx"};
 //	TString histTitle[] = {"mass (GeV/c^{2})", "p_{T} (GeV/c)", "y_{CM}", "#phi (rad)", "primary vertex Z (cm)"};
-	TString histTitle[] = {"primary vertex Z (cm)"};
+	TString histTitle[] = {"primary vertex Z"};
 	const int nHist = sizeof(nbin)/sizeof(int);
 	cout << "nHist = "<<nHist<<endl;
 	TH1D *h01[nHist];
@@ -193,11 +193,12 @@ int rootAna_zVtxFit(char *stringA = "20141007", bool isBoosted = true){
 	hRatio[i] = (TH1D*)h01[i]->Clone(Form("hRatio_%d",i));
 	hRatio[i]->Divide(h02[i]);
 	hRatio[i]->GetYaxis()->SetRangeUser(0.,2.0);
-	hRatio[i]->GetYaxis()->SetTitle("Ratio = Data_1st/promptMC_1st");
+	hRatio[i]->GetYaxis()->SetTitle("Ratio = Data/promptMC");
 	SetHistStyle(hRatio[i],1,0);
-	hRatio[i]->SetMarkerColor(kWhite);
+	//hRatio[i]->SetMarkerColor(kWhite);
+	hRatio[i]->SetMarkerColor(kBlack);
 	hRatio[i]->Draw("pe");
-	
+/*	
 	//just cross check w/ gaussian : fit the ratio itself
 	hRatio[i]->Fit("gCommon", "N");
 	gCommon->GetParameters(&parC[0]);
@@ -209,8 +210,8 @@ int rootAna_zVtxFit(char *stringA = "20141007", bool isBoosted = true){
 	g3->GetParameters(&par03[0]);
 	//latex->DrawLatex(0.20, 0.77, Form("mean : %.2f",par03[1]));	
 	//latex->DrawLatex(0.20, 0.71, Form("sigma : %.2f",par03[2]));
-
-	//g3->Draw("same");
+	g3->Draw("same");
+*/
 	gRatio->Draw("same");
 	
 	dashedLine(minbin[i],1.,maxbin[i],1.,1,1);

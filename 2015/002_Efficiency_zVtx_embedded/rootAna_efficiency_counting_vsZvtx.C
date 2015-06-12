@@ -71,7 +71,7 @@ TH1D* hEffCorr2nd3 = (TH1D*)fEffWeight2nd3->Get("hWF");
 
 /////// main func. ///////
 
-int rootAna_efficiency_counting_vsZvtx(char *strBinning = "8rap9pt", bool isPrompt = false, bool is1st = true, bool isEmbedded = false, bool useCtErrRangeEff =false, bool useDataDrivenEff=false, bool useZvtxWeightStep1 = false, bool useZvtxWeightStep2=false){
+int rootAna_efficiency_counting_vsZvtx(char *strBinning = "8rap9pt2gev", bool isPrompt = false, bool is1st = true, bool isEmbedded = false, bool useCtErrRangeEff =false, bool useDataDrivenEff=false, bool useZvtxWeightStep1 = false, bool useZvtxWeightStep2=false){
 
   using namespace std;
   
@@ -213,7 +213,8 @@ int rootAna_efficiency_counting_vsZvtx(char *strBinning = "8rap9pt", bool isProm
 	///////////////////////////////////////////////////
 	//////// Definition of binning
 	// --- pt Bin
-	Double_t ptBinsArr[] = {0.0, 3.0, 4.0, 5.0, 6.5, 7.5, 8.5, 10.0, 14.0, 30.0}; // 8rap9pt
+	//Double_t ptBinsArr[] = {0.0, 3.0, 4.0, 5.0, 6.5, 7.5, 8.5, 10.0, 14.0, 30.0}; // 8rap9pt
+	Double_t ptBinsArr[] = {2.0, 3.0, 4.0, 5.0, 6.5, 7.5, 8.5, 10.0, 14.0, 30.0}; // 8rap9pt
 	const Int_t nPtBins = sizeof(ptBinsArr)/sizeof(double)-1;
    cout << "nPtBins=" << nPtBins << endl;
 

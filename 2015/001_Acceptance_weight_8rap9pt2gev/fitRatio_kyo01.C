@@ -226,14 +226,14 @@ void fitRatio_kyo01(bool isPrompt=true, bool isPbp=true, char* dirName="8rap9pt2
             //cout << iy+1 << "th rapidity, "<< ifpt<<"th fine ptbin, mean = "<< mean <<", sigma = "<<sigma<<endl;
         }
 				*/
-			
-				cout << " **** " <<iy<< "th rap, values at min pT = " <<func[iy]->Eval(minPt[iy])<<endl;	
-				cout << endl;
-
     }
     c1 -> Update();
 
-    fout->cd();	
+    for(int iy=0;iy<nRap;iy++){
+				cout << " **** " <<iy<< "th rap, values at min pT = " <<func[iy]->Eval(minPt[iy])<<endl;	
+    }
+    
+		fout->cd();	
     for(int iy=0;iy<nRap;iy++){
         //hWeight[iy]->Write();
         gRatio[iy]->Write();

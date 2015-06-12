@@ -26,7 +26,7 @@
 #include "KYOcommonOpt.h"
 
 
-void draw_1D(bool isPrompt = true, bool is1st = true, bool isEmbedded = false, bool useCtErrRangeEff =true, bool useDataDrivenEff=true,  bool useZvtxWeightStep1 = false, bool useZvtxWeightStep2=true,char* dirName = "draw_1D_vertex")
+void draw_1D(bool isPrompt = true, bool is1st = true, bool isEmbedded = false, bool useCtErrRangeEff =true, bool useDataDrivenEff=true,  bool useZvtxWeightStep1 = false, bool useZvtxWeightStep2=true,char* dirName = "draw_1D_tnpV17")
 {
 	gROOT->Macro("./JpsiStyle.C");
 	//gStyle->SetOptStat(0);
@@ -50,8 +50,7 @@ void draw_1D(bool isPrompt = true, bool is1st = true, bool isEmbedded = false, b
 	const char* sampleName = Form("%s%s_%s",strPrompt,strEmbd,str1st);
 	cout << "sampleName = " << sampleName << endl;
 	
-	f2D = new TFile(Form("EffCounting_8rap9pt_%s_useCtErr_%d_useDataDriven_%d_useZvtxStep1_%d_Step2_%d.root",sampleName,(int)useCtErrRangeEff,(int)useDataDrivenEff,(int)useZvtxWeightStep1,(int)useZvtxWeightStep2));
-	//f2D = new TFile(Form("EffGenmatching_8rap9pt_%s_useCtErr_%d_useDataDriven_%d_useZvtxStep1_%d_Step2_%d.root",sampleName,(int)useCtErrRangeEff,(int)useDataDrivenEff,(int)useZvtxWeightStep1,(int)useZvtxWeightStep2));
+	f2D = new TFile(Form("EffCounting_8rap9pt2gev_%s_useCtErr_%d_useDataDriven_%d_useZvtxStep1_%d_Step2_%d.root",sampleName,(int)useCtErrRangeEff,(int)useDataDrivenEff,(int)useZvtxWeightStep1,(int)useZvtxWeightStep2));
 
 	// --- read-in 2D hist
 	TH2D* h2D_Eff = (TH2D*)f2D->Get("h2D_Eff_pt_y");
@@ -116,7 +115,7 @@ void draw_1D(bool isPrompt = true, bool is1st = true, bool isEmbedded = false, b
 	cout << "sampleName = " << sampleName << endl;
 	//TFile *fOut = new TFile(Form("%s/%s_EffPt.root",dirName,sampleName),"RECREATE");
 	//TFile *fOut = new TFile(Form("%s/%s_sf%d_EffPt.root",dirName,sampleName,(int)useDataDrivenEff),"RECREATE");
-	TFile *fOut = new TFile(Form("%s/1Dhist_EffCounting_8rap9pt_%s_useCtErr_%d_useDataDriven_%d_useZvtxStep1_%d_Step2_%d.root",dirName,sampleName,(int)useCtErrRangeEff,(int)useDataDrivenEff,(int)useZvtxWeightStep1,(int)useZvtxWeightStep2),"RECREATE");
+	TFile *fOut = new TFile(Form("%s/1Dhist_EffCounting_8rap9pt2gev_%s_useCtErr_%d_useDataDriven_%d_useZvtxStep1_%d_Step2_%d.root",dirName,sampleName,(int)useCtErrRangeEff,(int)useDataDrivenEff,(int)useZvtxWeightStep1,(int)useZvtxWeightStep2),"RECREATE");
 	fOut->cd();
 	for (Int_t iy = 0; iy < nbinsX; iy++) {
 		h1D_EffPt[iy]->Write();

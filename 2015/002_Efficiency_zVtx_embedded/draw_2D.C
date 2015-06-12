@@ -27,7 +27,7 @@
 #include "KYOcommonOpt.h"
 
 
-void draw_2D(bool isPrompt = false, bool is8rap9pt = true)
+void draw_2D(bool isPrompt = true, bool is8rap9pt2gev = true)
 {
 	gROOT->Macro("./JpsiStyle2D.C");
 	gStyle->SetPaintTextFormat(".3f");
@@ -40,10 +40,11 @@ void draw_2D(bool isPrompt = false, bool is8rap9pt = true)
 
 	if (isPrompt) { strPrompt = "PRMC";}
 	else { strPrompt = "NPMC";}
-	if (is8rap9pt) { strBin = "8rap9pt";}
+	if (is8rap9pt2gev) { strBin = "8rap9pt2gev";}
 	else { strBin = "6rap3pt";}
 
-	f2D = new TFile(Form("./EffCounting_%s_%spythia_Pbp_useCtErr_1_useDataDriven_1_useZvtxStep1_0_Step2_1.root",strBin,strPrompt));
+//	f2D = new TFile(Form("./EffCounting_%s_%spythia_Pbp_useCtErr_1_useDataDriven_1_useZvtxStep1_0_Step2_1.root",strBin,strPrompt));
+	f2D = new TFile(Form("./EffCounting_%s_%spythia_Pbp_useCtErr_1_useDataDriven_0_useZvtxStep1_0_Step2_1.root",strBin,strPrompt));
 	
 	sampleName = Form("%s_%s",strBin,strPrompt);
 	cout << "sampleName = " << sampleName << endl;
@@ -99,9 +100,9 @@ void draw_2D(bool isPrompt = false, bool is8rap9pt = true)
 	pal->SetX2NDC(0.92);
 	c1->Modified();
 	c1->Update();
-	if (is8rap9pt) {
-		dashedLine(-2.4,0.0,-1.97,0.0,1,4);
-		dashedLine(-1.97,0.0,-1.97,3.0,1,4);
+	if (is8rap9pt2gev) {
+		dashedLine(-2.4,2.0,-1.97,2.0,1,4);
+		dashedLine(-1.97,2.0,-1.97,3.0,1,4);
 		dashedLine(-1.97,3.0,-1.37,3.0,1,4);
 		dashedLine(-1.37,3.0,-1.37,6.5,1,4);
 		dashedLine(-1.37,6.5,1.03,6.5,1,4);
@@ -109,11 +110,11 @@ void draw_2D(bool isPrompt = false, bool is8rap9pt = true)
 		dashedLine(1.03,5.0,1.46,5.0,1,4);
 		dashedLine(1.46,3.0,1.46,5.0,1,4);
 		dashedLine(1.46,3.0,1.93,3.0,1,4);
-		dashedLine(1.93,0.0,1.93,3.0,1,4);
-		dashedLine(1.93,0.0,2.4,0.0,1,4);
-		dashedLine(2.4,0.0,2.4,30.0,1,4);
+		dashedLine(1.93,2.0,1.93,3.0,1,4);
+		dashedLine(1.93,2.0,2.4,2.0,1,4);
+		dashedLine(2.4,2.0,2.4,30.0,1,4);
 		dashedLine(-2.4,30.0,2.4,30.0,1,4);
-		dashedLine(-2.4,0.0,-2.4,30.0,1,4);
+		dashedLine(-2.4,2.0,-2.4,30.0,1,4);
 	}
 	else {
 		dashedLine(-2.4,5.0,-1.97,5.0,1,4);

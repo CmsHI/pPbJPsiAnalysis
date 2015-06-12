@@ -26,25 +26,36 @@
 #include "KYOcommonOpt.h"
 
 // no ordering in rap (just y_lab)
-void draw_compRatio(bool isPrompt = false, bool is1st = true, char* dirName = "draw_1D_vertex", char* dirName02 = "draw_compRatio_vertex", bool isNoError=true)
+void draw_compRatio(bool isPrompt = true, bool is1st = true, char* dirName = "draw_1D_vertex", char* dirName02 = "draw_compRatio_vertex", bool isNoError=true)
 {
 	gROOT->Macro("./JpsiStyle.C");
 
 	// --- read-in file
+	// hRatio = f01 / f02
 	TFile * f01;
 	TFile * f02;
-	//char* f01name="with SF";
-	//char* f02name="without SF";
-	char* f01name="z vtx weight";
-	char* f02name="no weight";
-	//char* f01name="reco pt filled";
-	//char* f02name="gen pt filled";
+	////////////////////// pythia vs embedded ----- 1st run only
+	//char* f01name="pythia";
+	//char* f02name="embedded";
+	/////////////////////// TNP weight ----- noErr
+	char* f01name="with SF";
+	char* f02name="without SF";
+	/////////////////////// z vtx weight ----- noErr ----- 1st run only
+	//char* f01name="z vtx weight";
+	//char* f02name="no weight";
 	
 	//char* sampleName;
+	////////////////////// pythia vs embedded
+	//double ratiomin=0.5; 
 	//double ratiomin=0.8; 
+	//double ratiomax=1.5; 
+	/////////////////////// TNP weight
+	double ratiomin=0.85; 
+	//double ratiomax=1.25; 
+	double ratiomax=1.45; 
+	/////////////////////// z vtx weight
+	//double ratiomin=0.9; 
 	//double ratiomax=1.2; 
-	double ratiomin=0.7; 
-	double ratiomax=1.3; 
 
 	char* strPrompt;
 	char* str1st;
@@ -53,55 +64,18 @@ void draw_compRatio(bool isPrompt = false, bool is1st = true, char* dirName = "d
 	if (is1st) str1st = "Pbp";
 	else str1st = "pPb";
 
-	//const char* sampleName = Form("%s%s_%s",strPrompt,strEmbd,str1st);
 	const char* sampleName = Form("%spythia_%s",strPrompt,str1st);
 	cout << "sampleName = " << sampleName << endl;
 
-	f01 = new TFile(Form("%s/1Dhist_EffCounting_8rap9pt_%s_useCtErr_1_useDataDriven_1_useZvtxStep1_0_Step2_1.root",dirName,sampleName));
-	f02 = new TFile(Form("%s/1Dhist_EffCounting_8rap9pt_%s_useCtErr_1_useDataDriven_1_useZvtxStep1_0_Step2_0.root",dirName,sampleName));
-
-/*
-	if (is1st) {
-		if (isPrompt) {
-			//f01 = new TFile(Form("%s/PRMCpythia_Pbp_sf1_EffPt.root",dirName));
-			//f02 = new TFile(Form("%s/PRMCpythia_Pbp_sf0_EffPt.root",dirName));
-			//f01 = new TFile(Form("%s/PRMCpythia_Pbp_weight_EffPt.root",dirName));
-			//f02 = new TFile(Form("%s/PRMCpythia_Pbp_noweight_EffPt.root",dirName));
-			f01 = new TFile(Form("%s/PRMCpythia_Pbp_sf1_EffPt.root",dirName));
-			f02 = new TFile(Form("%s/PRMCpythia_Pbp_EffPt.root",dirName));
-			sampleName = "PRMC_Pbp";
-		}
-		else {
-			//f01 = new TFile(Form("%s/NPMCpythia_Pbp_sf1_EffPt.root",dirName));
-			//f02 = new TFile(Form("%s/NPMCpythia_Pbp_sf0_EffPt.root",dirName));
-			//f01 = new TFile(Form("%s/NPMCpythia_Pbp_weight_EffPt.root",dirName));
-			//f02 = new TFile(Form("%s/NPMCpythia_Pbp_noweight_EffPt.root",dirName));
-			f01 = new TFile(Form("%s/NPMCpythia_Pbp_sf1_EffPt.root",dirName));
-			f02 = new TFile(Form("%s/NPMCpythia_Pbp_EffPt.root",dirName));
-			sampleName = "NPMC_Pbp";
-		}	 
-	}
-	else {
-		if (isPrompt) {
-			//f01 = new TFile(Form("%s/PRMCpythia_pPb_sf1_EffPt.root",dirName));
-			//f02 = new TFile(Form("%s/PRMCpythia_pPb_sf0_EffPt.root",dirName));
-			//f01 = new TFile(Form("%s/PRMCpythia_pPb_EffPt.root",dirName));
-			//f02 = new TFile(Form("%s/PRMCembedded_pPb_EffPt.root",dirName));
-			f01 = new TFile(Form("%s/PRMCpythia_pPb_sf1_EffPt.root",dirName));
-			f02 = new TFile(Form("%s/PRMCpythia_pPb_EffPt.root",dirName));
-			sampleName = "PRMC_pPb";
-		}
-		else {
-			//f01 = new TFile(Form("%s/NPMCpythia_pPb_sf1_EffPt.root",dirName));
-			//f02 = new TFile(Form("%s/NPMCpythia_pPb_sf0_EffPt.root",dirName));
-			//f01 = new TFile(Form("%s/NPMCpythia_pPb_EffPt.root",dirName));
-			//f02 = new TFile(Form("%s/NPMCembedded_pPb_EffPt.root",dirName));
-			f01 = new TFile(Form("%s/NPMCpythia_pPb_sf1_EffPt.root",dirName));
-			f02 = new TFile(Form("%s/NPMCpythia_pPb_EffPt.root",dirName));
-			sampleName = "NPMC_pPb";
-		}	 
-	}
-*/
+	////////////////////// pythia vs embedded
+//	f01 = new TFile(Form("%s/1Dhist_EffCounting_8rap9pt2gev_%s_useCtErr_1_useDataDriven_0_useZvtxStep1_0_Step2_1.root",dirName,sampleName));
+//	f02 = new TFile(Form("%s/1Dhist_EffCounting_8rap9pt2gev_%sembedded_%s_useCtErr_1_useDataDriven_0_useZvtxStep1_1_Step2_1.root",dirName,strPrompt,str1st));
+	/////////////////////// TNP weight
+	f01 = new TFile(Form("%s/1Dhist_EffCounting_8rap9pt2gev_%s_useCtErr_1_useDataDriven_1_useZvtxStep1_0_Step2_1.root",dirName,sampleName));
+	f02 = new TFile(Form("%s/1Dhist_EffCounting_8rap9pt2gev_%s_useCtErr_1_useDataDriven_0_useZvtxStep1_0_Step2_1.root",dirName,sampleName));
+	/////////////////////// z vtx weight (no TNP)
+	//f01 = new TFile(Form("%s/1Dhist_EffCounting_8rap9pt2gev_%s_useCtErr_1_useDataDriven_0_useZvtxStep1_0_Step2_1.root",dirName,sampleName));
+	//f02 = new TFile(Form("%s/1Dhist_EffCounting_8rap9pt2gev_%s_useCtErr_1_useDataDriven_0_useZvtxStep1_0_Step2_0.root",dirName,sampleName));
 
 	cout << "sampleName = " << sampleName << endl;
 
@@ -168,20 +142,24 @@ void draw_compRatio(bool isPrompt = false, bool is1st = true, char* dirName = "d
 		//c1->cd();
 		c1->cd(iy+1);
 		SetHistStyle(h1D_EffPt01[iy],3,0);
-		SetHistStyle(h1D_EffPt02[iy],4,0);
+		//SetHistStyle(h1D_EffPt02[iy],4,0);
+		SetHistStyle(h1D_EffPt02[iy],4,10);
 		h1D_EffPt01[iy]->GetXaxis()->SetTitle("p_{T} (GeV)");
 		h1D_EffPt01[iy]->GetYaxis()->SetTitle("Efficiency");
 		h1D_EffPt01[iy]->SetMinimum(0.);
 		h1D_EffPt01[iy]->SetMaximum(1.);
+		h1D_EffPt01[iy]->GetXaxis()->SetRangeUser(0., 30.);
 		h1D_EffPt01[iy]->Draw("pe");
 		h1D_EffPt02[iy]->Draw("pe same");
 		if (is1st) {
-			if (iy==1 || iy==6) dashedLine (3.,0.,3.,1.,2,.8);
+			if (iy==0 || iy==7) dashedLine (2.,0.,2.,1.,2,.8);
+			else if (iy==1 || iy==6) dashedLine (3.,0.,3.,1.,2,.8);
 			else if (iy==5)  dashedLine (5.,0.,5.,1.,2,.8);
 			else if (iy==2 || iy==3 || iy==4)  dashedLine (6.5,0.,6.5,1.,2,.8);
 		}
 		else {
-			if (iy==1 || iy==6) dashedLine (3.,0.,3.,1.,2,.8);
+			if (iy==0 || iy==7) dashedLine (2.,0.,2.,1.,2,.8);
+			else if (iy==1 || iy==6) dashedLine (3.,0.,3.,1.,2,.8);
 			else if (iy==2)  dashedLine (5.,0.,5.,1.,2,.8);
 			else if (iy==3 || iy==4 || iy==5)  dashedLine (6.5,0.,6.5,1.,2,.8);
 		}
@@ -204,6 +182,7 @@ void draw_compRatio(bool isPrompt = false, bool is1st = true, char* dirName = "d
 		hRatio[iy]->GetYaxis()->SetTitle(Form("[ %s ]/[ %s ]",f01name,f02name));
 		hRatio[iy]->SetMinimum(ratiomin);
 		hRatio[iy]->SetMaximum(ratiomax);
+		hRatio[iy]->GetXaxis()->SetRangeUser(0.,30.);
 		if (isNoError) {
 			for (int ipt=0; ipt<9; ipt++) {
 				hRatio[iy]->SetBinError(ipt+1,0.);
@@ -212,12 +191,14 @@ void draw_compRatio(bool isPrompt = false, bool is1st = true, char* dirName = "d
 		hRatio[iy]->Draw("pe");
 		dashedLine(0.,1.,30.,1.,1,.8);
 		if (is1st) {
-			if (iy==1 || iy==6) dashedLine (3.,ratiomin,3.,ratiomax,2,.8);
+			if (iy==0 || iy==7) dashedLine (2.,ratiomin,2.,ratiomax,2,.8);
+			else if (iy==1 || iy==6) dashedLine (3.,ratiomin,3.,ratiomax,2,.8);
 			else if (iy==5)  dashedLine (5.,ratiomin,5.,ratiomax,2,.8);
 			else if (iy==2 || iy==3 || iy==4)  dashedLine (6.5,ratiomin,6.5,ratiomax,2,.8);
 		}
 		else {
-			if (iy==1 || iy==6) dashedLine (3.,ratiomin,3.,ratiomax,2,.8);
+			if (iy==0 || iy==7) dashedLine (2.,ratiomin,2.,ratiomax,2,.8);
+			else if (iy==1 || iy==6) dashedLine (3.,ratiomin,3.,ratiomax,2,.8);
 			else if (iy==2)  dashedLine (5.,ratiomin,5.,ratiomax,2,.8);
 			else if (iy==3 || iy==4 || iy==5)  dashedLine (6.5,ratiomin,6.5,ratiomax,2,.8);
 		}
