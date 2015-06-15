@@ -25,8 +25,8 @@ void compileSysUnc(bool isPrompt=1){
   TH1::SetDefaultSumw2();
 
   TFile *inf1;  // Kisoo's nominal
-  if (isPrompt)  inf1 = new TFile("systematics/EffCounting_8rap9pt2gev_PRMCpythia_Pbp_useCtErr_1_useDataDriven_1_useZvtxStep1_0_Step2_1_GTrack_PAMu3_expo_fine.root");
-  else           inf1 = new TFile("systematics/EffCounting_8rap9pt2gev_NPMCpythia_Pbp_useCtErr_1_useDataDriven_1_useZvtxStep1_0_Step2_1_GTrack_PAMu3_expo_fine.root");
+  if (isPrompt)  inf1 = new TFile("systematics/EffCounting_8rap9pt2gev_PRMCpythia_Pbp_useCtErr_1_useDataDriven_1_useZvtxStep1_0_Step2_1_Calo_PAMu3_expo_nopairpt_widemass_finelowpt_nominal.root");
+  else           inf1 = new TFile("systematics/EffCounting_8rap9pt2gev_NPMCpythia_Pbp_useCtErr_1_useDataDriven_1_useZvtxStep1_0_Step2_1_Calo_PAMu3_expo_nopairpt_widemass_finelowpt_nominal.root");
 
   TH2D* hNominal = (TH2D*)inf1->Get("h2D_Eff_pt_y");
 
@@ -35,30 +35,30 @@ void compileSysUnc(bool isPrompt=1){
   else           inf2 = new TFile("../001_Acceptance_weight_8rap9pt2gev/EffCounting_8rap9pt2gev_NPMCpythia_Pbp_useCtErr_1_useDataDriven_1_useZvtxStep1_0_Step2_1_kyo01.root");
 
   TH2D* hNominal1 = (TH2D*)inf2->Get("h2D_Eff_noWeight_pt_y");
-  hNominal1->SetName("spectraVar");
-  TH2D* hNominal1_sys = compareTwo2D(hNominal1,hNominal,"Nominal_y VS Nominal");
+  hNominal1->SetName("Nominal_y");
+
 
   TH2D* hSpecWgt = (TH2D*)inf2->Get("h2D_Eff_pt_y");
   hSpecWgt->SetName("hSpecWgt");
-  TH2D* hSpecWgt_sys = compareTwo2D(hSpecWgt,hNominal,"Spectra Reweighted");
+  TH2D* hSpecWgt_sys = compareTwo2D(hSpecWgt,hNominal1,"Spectra Reweighted");
   
 
-  TH2D* hTrackerEffVar = (TH2D*)hNominal->Clone("hTrackEffVar");
+  TH2D* hTrackerEffVar = (TH2D*)hNominal1->Clone("hTrackEffVar");
   for ( int ix=1 ; ix<=hTrackerEffVar->GetNbinsX(); ix++) {
     for ( int iy=1 ; iy<=hTrackerEffVar->GetNbinsY(); iy++) {
       hTrackerEffVar->SetBinContent(ix,iy, hTrackerEffVar->GetBinContent(ix,iy) * 1.02);
     }
   }
-  TH2D* hTrackEffVar_sys = compareTwo2D(hTrackerEffVar, hNominal,"Tracking eff. sys.");
+  TH2D* hTrackEffVar_sys = compareTwo2D(hTrackerEffVar, hNominal1,"Tracking sys.");
   
 
   TFile *infTnp1;
-  if (isPrompt)   infTnp1 = new TFile("systematics/EffCounting_8rap9pt2gev_PRMCpythia_Pbp_useCtErr_1_useDataDriven_1_useZvtxStep1_0_Step2_1_GTrack_PAMu3_Gversion_v2.root");
-  else            infTnp1 = new TFile("systematics/EffCounting_8rap9pt2gev_NPMCpythia_Pbp_useCtErr_1_useDataDriven_1_useZvtxStep1_0_Step2_1_GTrack_PAMu3_Gversion_v2.root");
+  if (isPrompt)   infTnp1 = new TFile("systematics/Stat_Err_PRMCpythia_Pbp_RMS_5eta.root");
+  else            infTnp1 = new TFile("systematics/Stat_Err_NPMCpythia_Pbp_RMS_5eta.root");
 
-  TH2D* hTnp1Var = (TH2D*)infTnp1->Get("h2D_Eff_pt_y");
-  hTnp1Var->SetName("tnp1Var");
-  TH2D* hTnp1Var_sys = compareTwo2D(hTnp1Var,hNominal,"Tnp1 Var VS Nominal");
+  //  TH2D* hTnp1Var = (TH2D*)infTnp1->Get("h2D_Eff_pt_y");  in infTnp1 file, the histogram is already the relative uncertainty
+  //  hTnp1Var->SetName("tnp1Var");
+  TH2D* hTnp1Var_sys = (TH2D*)infTnp1->Get("h2Dtoy");
 
   /*
   TFile *infTnp2;
@@ -67,18 +67,22 @@ void compileSysUnc(bool isPrompt=1){
 
   TH2D* hTnp2Var = (TH2D*)infTnp2->Get("h2D_Eff_pt_y");
   hTnp2Var->SetName("tnp2Var");
-  TH2D* hTnp2Var_sys = compareTwo2D(hTnp2Var,hNominal,"Tnp2 Var VS Nominal");
+  TH2D* hTnp2Var_sys = compareTwo2D(hTnp2Var,hNominal1,"Tnp2 Var VS Nominal");
   */
 
 
+  cout << "Data/MC spectra reweighting for Acceptance"  << endl;
   TH2D* tot_sys = (TH2D*)hSpecWgt_sys->Clone("tot_sys");  // 1. Data/MC spectra
   if (isPrompt)       tot_sys->SetName("totEffSys_prompt");
   else                tot_sys->SetName("totEffSys_nonprompt");
-  cout << "Data/MC spectra reweighting for Acceptance"  << endl;
-  quadSum2D(tot_sys,hTrackEffVar_sys);                    // 2. TnP Tracking
+
+
   cout << "Tracking efficiency sys." << endl;
-  quadSum2D(tot_sys,hTnp1Var_sys);                         // 3. TnP MuonID+Trigger
+  quadSum2D(tot_sys,hTrackEffVar_sys);                    // 2. TnP Tracking
+
+
   cout << "T&P" << endl;
+  quadSum2D(tot_sys,hTnp1Var_sys);                         // 3. TnP MuonID+Trigger
   
     
   TCanvas* c=  new TCanvas("cTot","", 500,500);
@@ -91,7 +95,7 @@ void compileSysUnc(bool isPrompt=1){
     cout << endl << " x bin : " << tot_sys->GetXaxis()->GetBinLowEdge(ix) << endl;
     for ( int iy=1 ; iy<=tot_sys->GetNbinsY(); iy++) {
       cout << "    y bin : " << tot_sys->GetYaxis()->GetBinLowEdge(iy) << "   : ";
-      cout << hNominal->GetBinContent(ix,iy) << " $\pm$"<< hNominal->GetBinError(ix,iy) << "  ";
+      cout << hNominal1->GetBinContent(ix,iy) << " $\pm$"<< hNominal1->GetBinError(ix,iy) << "  ";
       cout << tot_sys->GetBinContent(ix,iy) * 100 << endl;
     }
   }
