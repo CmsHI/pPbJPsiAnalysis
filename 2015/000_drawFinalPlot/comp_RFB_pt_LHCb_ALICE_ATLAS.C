@@ -38,9 +38,22 @@ int comp_RFB_pt_LHCb_ALICE_ATLAS(Int_t runCode=0)
   //
   //gROOT->Macro("./JpsiStyleForFinalResult.C");
 
-  gROOT->LoadMacro("tdrstyle.C");
-  setTDRStyle();  
+  //gROOT->LoadMacro("tdrstyle.C");
+  gROOT->LoadMacro("tdrstyle_kyo.C");
+  //setTDRStyle();  
   gROOT->LoadMacro("CMS_lumi.C");
+	
+	gStyle->SetOptTitle(0);
+	gStyle->SetOptStat(0);
+  gStyle->SetPadTopMargin(0.075);
+  gStyle->SetPadBottomMargin(0.13); //KYO
+  gStyle->SetPadLeftMargin(0.13); //KYO
+  gStyle->SetPadRightMargin(0.075);
+	gStyle->SetTitleXOffset(1.15);
+	gStyle->SetTitleYOffset(1.22);
+  //gStyle->SetTitleFontSize(0.03); // KYO
+  gStyle->SetTitleSize(0.05, "XYZ");
+	
 
 	// set info.
 	const Double_t br = 0.0593 ;
@@ -62,8 +75,10 @@ int comp_RFB_pt_LHCb_ALICE_ATLAS(Int_t runCode=0)
 	
 	// read our RFB_pt graph
 	///////////////////////////////////////
-	TFile *inFile_pr = new TFile("/afs/cern.ch/work/k/kyolee/public/forLamia/RFB_8rap9pt2gev/RFB_pt_isPrompt1.root");
-	TFile *inFile_np = new TFile("/afs/cern.ch/work/k/kyolee/public/forLamia/RFB_8rap9pt2gev/RFB_pt_isPrompt0.root");
+//	TFile *inFile_pr = new TFile("/afs/cern.ch/work/k/kyolee/public/forLamia/RFB_8rap9pt2gev/RFB_pt_isPrompt1.root");
+//	TFile *inFile_np = new TFile("/afs/cern.ch/work/k/kyolee/public/forLamia/RFB_8rap9pt2gev/RFB_pt_isPrompt0.root");
+	TFile *inFile_pr = new TFile("./RFB_8rap9pt2gev/RFB_pt_isPrompt1.root");
+	TFile *inFile_np = new TFile("./RFB_8rap9pt2gev/RFB_pt_isPrompt0.root");
 	TGraphAsymmErrors* gRFB_pr_sys_0 = (TGraphAsymmErrors*)inFile_pr->Get("gRFB_sys_0"); 	
 	TGraphAsymmErrors* gRFB_pr_0 = (TGraphAsymmErrors*)inFile_pr->Get("gRFB_0"); 	
 	TGraphAsymmErrors* gRFB_np_sys_0 = (TGraphAsymmErrors*)inFile_np->Get("gRFB_sys_0"); 	
@@ -79,8 +94,18 @@ int comp_RFB_pt_LHCb_ALICE_ATLAS(Int_t runCode=0)
 
 	TLatex* latex = new TLatex();
 	latex->SetNDC();
-	latex->SetTextAlign(12);
+	//latex->SetTextAlign(12);
+	latex->SetTextAlign(32);
 	latex->SetTextSize(0.04);
+	
+	//globtex box for beam, rapidity, pT info
+	TLatex* globtex = new TLatex();
+	globtex->SetNDC();
+	//globtex->SetTextAlign(12); //1:left, 2:vertical center
+  globtex->SetTextAlign(32); //3:right 2:vertical center
+  globtex->SetTextFont(42);
+	globtex->SetTextSize(0.04);
+
 
 	///////////////////////////////////////////////////
 	///////////////////// LHCb ////////////////////////
@@ -99,10 +124,6 @@ int comp_RFB_pt_LHCb_ALICE_ATLAS(Int_t runCode=0)
 	const Int_t nBin_lhcb = sizeof(lhcb_px)/sizeof(Double_t);
 	cout << "nBin_lhcb : " << nBin_lhcb << endl; 
 
-
-
-
-
 	///////////////////////////////////////////////////
 	///////////////////// ALICE ////////////////////////
 	///////////////////////////////////////////////////
@@ -119,7 +140,6 @@ int comp_RFB_pt_LHCb_ALICE_ATLAS(Int_t runCode=0)
 
 	const Int_t nBin_alice = sizeof(alice_px)/sizeof(Double_t);
 	cout << "nBin_alice : " << nBin_alice << endl; 
-
 
 	///////////////////////////////////////////////////
 	///////////////////// ATLAS ////////////////////////
@@ -146,27 +166,16 @@ int comp_RFB_pt_LHCb_ALICE_ATLAS(Int_t runCode=0)
 	////// Draw Plots
 	////////////////////
 
-	//TLegend *legUR = new TLegend(0.52, 0.55, 0.85, 0.92); //upper left
-	TLegend *legUR = new TLegend(0.40, 0.75, 0.86, 0.92); //upper left
+	//TLegend *legUR = new TLegend(0.40, 0.75, 0.86, 0.92); //upper left
+	TLegend *legUR = new TLegend(0.44, 0.71, 0.86, 0.85); //upper left
 	SetLegendStyle(legUR);
-	TLegend *legUL = new TLegend(0.19, 0.73, 0.40, 0.92); //upper left
+	//TLegend *legUL = new TLegend(0.19, 0.73, 0.40, 0.92); //upper left
+	TLegend *legUL = new TLegend(0.165, 0.73, 0.40, 0.91); //upper left
 	SetLegendStyle(legUL);
-	TLegend *legUM = new TLegend(0.40, 0.75, 0.58, 0.90); //upper middle
-	SetLegendStyle(legUM);
-//	TLegend *legBL = new TLegend(0.20, 0.20, 0.48, 0.37); //bottom left
-	TLegend *legBL = new TLegend(0.18, 0.18, 0.48, 0.48); //bottom left
-	SetLegendStyle(legBL);
-	TLegend *legBM = new TLegend(0.40, 0.20, 0.58, 0.37); //bottom middle
-	SetLegendStyle(legBM);
-	TLegend *legMR = new TLegend(0.54, 0.34, 0.87, 0.57); //bottom left
-	SetLegendStyle(legMR);
-	TLegend *legBR = new TLegend(0.54, 0.20, 0.87, 0.37); //bottom left
-	SetLegendStyle(legBR);
-
-// 	TLatex* latex = new TLatex();
-// 	latex->SetNDC();
-// 	latex->SetTextAlign(12);
-// 	latex->SetTextSize(0.01);
+	legUR->SetTextSize(0.037);
+	legUL->SetTextSize(0.037);
+  legUR->SetTextFont(42);
+  legUL->SetTextFont(42);
 
 	TBox * globalbox = new TBox(0.5, 6.4, 1.5, 13.6);
 	//globalbox->SetFillColor(kYellow);
@@ -190,23 +199,11 @@ int comp_RFB_pt_LHCb_ALICE_ATLAS(Int_t runCode=0)
 
 	////////////////////////////////////////////////////////////////////////////////////
 	// prompt
-	TCanvas *c_pr = new TCanvas("c_pr","", 200, 10, 800, 600);
-
-//   TLatex latex;
-//   latex.SetNDC();
-//   latex.SetTextAngle(0);
-//   latex.SetTextColor(kBlack);    
-
-//   float extraTextSize = extraOverCmsTextSize*cmsTextSize;
-
-//   latex.SetTextFont(42);
-//   latex.SetTextAlign(31); 
-//   latex.SetTextSize(lumiTextSize*t);    
-//   latex.DrawLatex(1-r,1-t+lumiTextOffset*t,lumiText);
+	//TCanvas *c_pr = new TCanvas("c_pr","", 200, 10, 800, 600);
+	TCanvas *c_pr = new TCanvas("c_pr","", 200, 10, 600, 600);
 
 	c_pr->cd();
 	gPad->SetLogy(0);
-
 
 	TH1D *dummy = new TH1D("","",50,0.,400.);
 	dummy->SetMinimum(0.5);
@@ -216,11 +213,6 @@ int comp_RFB_pt_LHCb_ALICE_ATLAS(Int_t runCode=0)
 	dummy->SetXTitle("p_{T} [GeV/c]");
 	dummy->SetYTitle("R_{FB}");
 	dummy->Draw();
-
-
-
-
-
 
 	// 2) lhcb
 	gRFB_lhcb_pr_sys = new TGraphAsymmErrors(nBin_lhcb, lhcb_px, lhcb_py_pr, lhcb_exsys, lhcb_exsys, lhcb_eysys_pr, lhcb_eysys_pr);	
@@ -234,19 +226,15 @@ int comp_RFB_pt_LHCb_ALICE_ATLAS(Int_t runCode=0)
 	gRFB_lhcb_pr->SetLineColor(1);
 	gRFB_lhcb_pr->SetMarkerColor(1);
 	gRFB_lhcb_pr->SetMarkerSize(1.5);
-	gRFB_lhcb_pr->SetMarkerStyle(20);
+	//gRFB_lhcb_pr->SetMarkerStyle(20);
 	gRFB_lhcb_pr->Draw("PSAME");
-	
-
 
 	//3) ALICE
 	gRFB_alice = new TGraphAsymmErrors(nBin_alice, alice_px, alice_RFB, alice_ex, alice_ex, alice_ey_stat, alice_ey_stat);	
 	gRFB_alice->SetMarkerSize(1.5);
-// 	gRFB_alice->SetLineColor(kOrange+7);
-// 	gRFB_alice->SetMarkerColor(kOrange+7);
 	gRFB_alice->SetLineColor(1);
 	gRFB_alice->SetMarkerColor(1);
-	gRFB_alice->SetMarkerStyle(4);
+	gRFB_alice->SetMarkerStyle(kOpenTriangleUp);
 
 
 
@@ -276,6 +264,7 @@ int comp_RFB_pt_LHCb_ALICE_ATLAS(Int_t runCode=0)
 	//	gRFB_atlas_sys_pr->SetFillColor(kMagenta-10);
 	gRFB_atlas_sys_pr->SetFillColor(kGray);
 	gRFB_atlas_sys_pr->SetFillStyle(3001);
+	//gRFB_atlas_sys_pr->SetFillStyle(3003);
 	gRFB_atlas_sys_pr->SetMarkerSize(0);
 	gRFB_atlas_sys_pr->SetLineColor(1);
 	gRFB_atlas_sys_pr->SetLineWidth(1);
@@ -288,7 +277,8 @@ int comp_RFB_pt_LHCb_ALICE_ATLAS(Int_t runCode=0)
 	gRFB_pr_sys_0->SetFillStyle(3001);
 	gRFB_pr_0->SetMarkerSize(1.5);
 	gRFB_pr_0->SetMarkerColor(kGreen-2);
-	gRFB_pr_0->SetMarkerStyle(25);
+	//gRFB_pr_0->SetMarkerStyle(25);
+	gRFB_pr_0->SetMarkerStyle(kFullSquare);
 	gRFB_pr_0->SetLineColor(kGreen-2);
 	gRFB_pr_sys_0->Draw("2SAME");
 	gRFB_pr_0->Draw("PSAME");
@@ -296,15 +286,21 @@ int comp_RFB_pt_LHCb_ALICE_ATLAS(Int_t runCode=0)
 	dashedLine(0.0,1.0,30.0,1.0,1,1);
 	//	TLegend *leg = new TLegend(0.3517588,0.1660839,0.5527638,0.4265734); //bottom left
 	//SetLegendStyle(leg);
-	legUL->SetHeader("Prompt J/#psi");
-	legUL->AddEntry(gRFB_pr_0,"CMS Preliminary: 1.5 < |y_{CM}| < 1.93","lp");
+	//legUL->SetHeader("Prompt J/#psi");
+	//legUL->AddEntry(gRFB_pr_0,"CMS Preliminary: 1.5 < |y_{CM}| < 1.93","lp");
+	legUL->AddEntry(gRFB_pr_0,"CMS : 1.5 < |y_{CM}| < 1.93","lp");
 	legUL->AddEntry(gRFB_atlas_pr,"ATLAS: |y_{CM}| < 1.94","lp");
 	legUL->AddEntry(gRFB_lhcb_pr,"LHCb: 2.5 <|y_{CM}| < 4.0 ","lp");
 	legUL->AddEntry(gRFB_alice,"ALICE (inclusive  J/#psi): 2.96 <|y_{CM}| < 3.53 ","lp");
 	legUL->Draw("SAME");
 	
+	globtex->SetTextSize(0.045);
+	globtex->SetTextFont(62);
+	globtex->DrawLatex(0.88, 0.88, "Prompt J/#psi");
+	
 	latex->SetTextSize(0.04);
-	latex->DrawLatex(0.7, 0.2, beamstring.c_str());
+	latex->DrawLatex(0.89, 0.25, "Preliminary");
+	latex->DrawLatex(0.89, 0.19, Form("%s",beamstring.c_str()));
 
 	c_pr->Update();
 	c_pr->SaveAs("comparisonLHCb/comp_RFB_pt_LHCb_ALICE_ATLAS_pr.pdf");
@@ -319,7 +315,8 @@ int comp_RFB_pt_LHCb_ALICE_ATLAS(Int_t runCode=0)
 	////////////////////////////////////////////////////////////////////////////////////
 	// non-prompt
 	
-	TCanvas *c_np = new TCanvas("c_np","", 200, 10, 800, 600);
+	//TCanvas *c_np = new TCanvas("c_np","", 200, 10, 800, 600);
+	TCanvas *c_np = new TCanvas("c_np","", 200, 10, 600, 600);
 	c_np->cd();
 	gPad->SetLogy(0);
 
@@ -337,7 +334,8 @@ int comp_RFB_pt_LHCb_ALICE_ATLAS(Int_t runCode=0)
 	gRFB_np_sys_0->SetFillStyle(3001);
 	gRFB_np_0->SetMarkerSize(1.5);
 	gRFB_np_0->SetMarkerColor(kGreen-2);
-	gRFB_np_0->SetMarkerStyle(25);
+	//gRFB_np_0->SetMarkerStyle(25);
+	gRFB_np_0->SetMarkerStyle(kFullSquare);
 	gRFB_np_0->SetLineColor(kGreen-2);
 	gRFB_np_sys_0->Draw("2SAME");
 	gRFB_np_0->Draw("PSAME");
@@ -354,7 +352,7 @@ int comp_RFB_pt_LHCb_ALICE_ATLAS(Int_t runCode=0)
 	gRFB_lhcb_np = new TGraphAsymmErrors(nBin_lhcb, lhcb_px, lhcb_py_np, lhcb_ex, lhcb_ex, lhcb_ey_np, lhcb_ey_np);	
 	SetGraphStyle(gRFB_lhcb_np,2,10);
 	gRFB_lhcb_np->SetMarkerSize(1.5);
-	gRFB_lhcb_np->SetMarkerStyle(20);
+	//gRFB_lhcb_np->SetMarkerStyle(20);
 	gRFB_lhcb_np->SetLineColor(1);
 	gRFB_lhcb_np->SetMarkerColor(1);
 	gRFB_lhcb_np->Draw("PSAME");
@@ -380,14 +378,19 @@ int comp_RFB_pt_LHCb_ALICE_ATLAS(Int_t runCode=0)
 
 	dashedLine(0.0,1.0,30.0,1.0,1,1);
 	
-	legUR -> SetHeader("Non-prompt J/#psi");
-	legUR -> AddEntry(gRFB_np_0,"CMS Preliminary: 1.5 < |y_{CM}| < 1.93","lp");
+	//legUR -> SetHeader("Non-prompt J/#psi");
+	legUR -> AddEntry(gRFB_np_0,"CMS : 1.5 < |y_{CM}| < 1.93","lp");
 	legUR -> AddEntry(gRFB_atlas_np,"ATLAS: |y_{CM}| < 1.94","lp");
 	legUR -> AddEntry(gRFB_lhcb_np,"LHCb: 2.5 <|y_{CM}| < 4.0 ","lp");
 	legUR -> Draw();
 
+	globtex->SetTextSize(0.045);
+	globtex->SetTextFont(62);
+	globtex->DrawLatex(0.88, 0.88, "Non-prompt J/#psi");
+	
 	latex->SetTextSize(0.04);
-	latex->DrawLatex(0.7, 0.2, beamstring.c_str());
+	latex->DrawLatex(0.89, 0.25, "Preliminary");
+	latex->DrawLatex(0.89, 0.19, Form("%s",beamstring.c_str()));
 
 	c_np->Update();
 	c_np->SaveAs("comparisonLHCb/comp_RFB_pt_LHCb_ATLAS_np.pdf");

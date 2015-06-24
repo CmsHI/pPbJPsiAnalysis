@@ -35,11 +35,23 @@ void formPtArr(Double_t binmin, Double_t binmax, string* arr);
 int comp_RFB_rap_LHCb_ALICE_ATLAS(Int_t runCode=0)
 {
 
-  gROOT->LoadMacro("tdrstyle.C");
-  setTDRStyle();
+  //gROOT->LoadMacro("tdrstyle.C");
+  //setTDRStyle();
+  gROOT->LoadMacro("tdrstyle_kyo.C");
   
   gROOT->LoadMacro("CMS_lumi.C");
   //	gROOT->Macro("./JpsiStyleForFinalResult.C");
+	
+	gStyle->SetOptTitle(0);
+	gStyle->SetOptStat(0);
+  gStyle->SetPadTopMargin(0.075);
+  gStyle->SetPadBottomMargin(0.13); //KYO
+  gStyle->SetPadLeftMargin(0.13); //KYO
+  gStyle->SetPadRightMargin(0.075);
+	gStyle->SetTitleXOffset(1.15);
+	gStyle->SetTitleYOffset(1.22);
+  //gStyle->SetTitleFontSize(0.03); // KYO
+  gStyle->SetTitleSize(0.05, "XYZ");
   
   // set info.
   const Double_t br = 0.0593 ;
@@ -60,11 +72,10 @@ int comp_RFB_rap_LHCb_ALICE_ATLAS(Int_t runCode=0)
 	lumi_mub_err = lumi_nb_err * 1000; // (nb)^{-1} -> {#mub}^{-1}
 	
 	// read our RFB_rap graph
-	//TFile *inFile_pr = new TFile("/afs/cern.ch/work/k/kyolee/public/forLamia/RFB_8rap9pt2gev/RFB_rap_isPrompt1.root");
+ 	//TFile *inFile_pr = new TFile("/afs/cern.ch/work/k/kyolee/public/forLamia/RFB_8rap9pt2gev/RFB_rap_isPrompt1.root");
 	//TFile *inFile_np = new TFile("/afs/cern.ch/work/k/kyolee/public/forLamia/RFB_8rap9pt2gev/RFB_rap_isPrompt0.root");
-
- 	TFile *inFile_pr = new TFile("/afs/cern.ch/work/k/kyolee/public/forLamia/RFB_8rap9pt2gev/RFB_rap_isPrompt1.root");
-	TFile *inFile_np = new TFile("/afs/cern.ch/work/k/kyolee/public/forLamia/RFB_8rap9pt2gev/RFB_rap_isPrompt0.root");
+ 	TFile *inFile_pr = new TFile("./RFB_8rap9pt2gev/RFB_rap_isPrompt1.root");
+	TFile *inFile_np = new TFile("./RFB_8rap9pt2gev/RFB_rap_isPrompt0.root");
        
 	TGraphAsymmErrors* gRFB_pr_sys_lowpt = (TGraphAsymmErrors*)inFile_pr->Get("gRFB_sys_lowpt"); 	
 	TGraphAsymmErrors* gRFB_pr_lowpt = (TGraphAsymmErrors*)inFile_pr->Get("gRFB_lowpt"); 	
@@ -150,25 +161,27 @@ int comp_RFB_rap_LHCb_ALICE_ATLAS(Int_t runCode=0)
 	////// Draw Plots
 	////////////////////
 
-	//TLegend *legUR = new TLegend(0.52, 0.55, 0.85, 0.92); //upper left
-	TLegend *legUR = new TLegend(0.42, 0.65, 0.86, 0.92); //upper left
+	//TLegend *legUR = new TLegend(0.42, 0.65, 0.86, 0.92);
+	TLegend *legUR = new TLegend(0.435, 0.62, 0.86, 0.855); 
 	SetLegendStyle(legUR);
-	TLegend *legUL = new TLegend(0.20, 0.73, 0.40, 0.92); //upper left
-	SetLegendStyle(legUL);
-	TLegend *legUM = new TLegend(0.40, 0.75, 0.58, 0.90); //upper middle
-	SetLegendStyle(legUM);
-//	TLegend *legBL = new TLegend(0.20, 0.20, 0.48, 0.37); //bottom left
-	TLegend *legBL = new TLegend(0.18, 0.18, 0.48, 0.48); //bottom left
-	SetLegendStyle(legBL);
-	TLegend *legBM = new TLegend(0.40, 0.20, 0.58, 0.37); //bottom middle
-	SetLegendStyle(legBM);
-	TLegend *legMR = new TLegend(0.54, 0.34, 0.87, 0.57); //bottom left
-	SetLegendStyle(legMR);
+	TLegend *legUR02 = new TLegend(0.435, 0.625, 0.86, 0.855); // for prompt
+	SetLegendStyle(legUR02);
 
 	TLatex* latex = new TLatex();
 	latex->SetNDC();
 	latex->SetTextAlign(12);
+	//latex->SetTextAlign(32);
 	latex->SetTextSize(0.04);
+	
+	//globtex box for beam, rapidity, pT info
+	TLatex* globtex = new TLatex();
+	globtex->SetNDC();
+	//globtex->SetTextAlign(12); //1:left, 2:vertical center
+  globtex->SetTextAlign(32); //3:right 2:vertical center
+  globtex->SetTextFont(42);
+	globtex->SetTextSize(0.04);
+
+
 
 	TBox * globalbox = new TBox(0.5, 6.4, 1.5, 13.6);
 	globalbox->SetFillColor(kYellow);
@@ -190,7 +203,7 @@ int comp_RFB_rap_LHCb_ALICE_ATLAS(Int_t runCode=0)
 	TGraphAsymmErrors * gRFB_atlas_sys_np; 	
 ////////////////////////////////////////////////////////////////////////////////////
 	// prompt
-	TCanvas *c_pr = new TCanvas("c_pr","", 200, 10, 800, 600);
+	TCanvas *c_pr = new TCanvas("c_pr","", 200, 10, 600, 600);
 	c_pr->cd();
 	gPad->SetLogy(0);
 	// 1) lowpt
@@ -245,7 +258,8 @@ int comp_RFB_rap_LHCb_ALICE_ATLAS(Int_t runCode=0)
 // 	gRFB_alice->SetMarkerColor(kOrange+7);
 	gRFB_alice->SetLineColor(1);
 	gRFB_alice->SetMarkerColor(1);
-	gRFB_alice->SetMarkerStyle(20);
+	//gRFB_alice->SetMarkerStyle(20);
+	gRFB_alice->SetMarkerStyle(kOpenTriangleUp);
 
 	gRFB_alice_sys = new TGraphAsymmErrors(nBin_alice, alice_px, alice_RFB, alice_exsys, alice_exsys, alice_eysys, alice_eysys);	
 	//gRFB_alice_sys->SetFillColor(kOrange-4);
@@ -272,25 +286,37 @@ int comp_RFB_rap_LHCb_ALICE_ATLAS(Int_t runCode=0)
 	gRFB_atlas_sys_pr = new TGraphAsymmErrors(nBin_atlas, atlas_px, atlas_RFB_pr, atlas_exsys, atlas_exsys, atlas_eysys_pr, atlas_eysys_pr);	
 	//gRFB_atlas_sys_pr->SetFillColor(kMagenta-10);
 	gRFB_atlas_sys_pr->SetFillColor(kGray);
+	gRFB_atlas_sys_pr->SetFillStyle(3001);
 	gRFB_atlas_sys_pr->SetMarkerSize(0);
 	gRFB_atlas_sys_pr->SetLineColor(1);
 	gRFB_atlas_sys_pr->SetLineWidth(1);
 	gRFB_atlas_sys_pr->Draw("2SAME");
 	gRFB_atlas_pr->Draw("PSAME");
 
-	legUR -> SetHeader("Prompt J/#psi");
-	legUR -> AddEntry(gRFB_pr_lowpt,"CMS Preliminary : 6.5 < p_{T} < 10 GeV","lp");
-	legUR -> AddEntry(gRFB_pr_highpt,"CMS Preliminary : 10 < p_{T} < 30 GeV","lp");
-	legUR -> AddEntry(gRFB_atlas_pr,"ATLAS : 8 < p_{T} < 30 GeV","lp");
-	legUR -> AddEntry(gRFB_lhcb_pr,"LHCb : p_{T} < 14 GeV","lp");
-	legUR -> AddEntry(gRFB_alice,"ALICE (inclusive  J/#psi) : p_{T} < 14 GeV","lp");
-	legUR -> Draw();
+//	legUR02 -> SetHeader("Prompt J/#psi");
+	legUR02 -> AddEntry(gRFB_pr_lowpt,"CMS : 6.5 < p_{T} < 10 GeV","lp");
+	legUR02 -> AddEntry(gRFB_pr_highpt,"CMS : 10 < p_{T} < 30 GeV","lp");
+	legUR02 -> AddEntry(gRFB_atlas_pr,"ATLAS : 8 < p_{T} < 30 GeV","lp");
+	legUR02 -> AddEntry(gRFB_lhcb_pr,"LHCb : p_{T} < 14 GeV","lp");
+	//legUR02 -> AddEntry(gRFB_alice,"ALICE (inclusive  J/#psi) : p_{T} < 14 GeV","lp");
+	legUR02 -> AddEntry(gRFB_alice,"ALICE (inclusive  J/#psi)","lp");
+	globtex->SetTextSize(0.037);
+	globtex->SetTextFont(42);
+	globtex->DrawLatex(0.83, 0.60, ": p_{T} < 14 GeV");
+	legUR02 -> Draw();
+	globtex->SetTextSize(0.045);
+	globtex->SetTextFont(62);
+//	globtex->DrawLatex(0.88, 0.86, "Prompt J/#psi");
+	globtex->DrawLatex(0.88, 0.88, "Prompt J/#psi");
+	
 	latex->SetTextSize(0.04);
-	latex->DrawLatex(0.2, 0.2, beamstring.c_str());
+	latex->DrawLatex(0.19, 0.25, "Preliminary");
+	latex->DrawLatex(0.19, 0.19, Form("%s",beamstring.c_str()));
+
 	c_pr->Update();
 	c_pr->SaveAs("comparisonLHCb/comp_RFB_rap_LHCb_ALICE_ATLAS_pr.pdf");
 	c_pr->SaveAs("comparisonLHCb/comp_RFB_rap_LHCb_ALICE_ATLAS_pr.png");
-	legUR->Clear();
+	legUR02->Clear();
 	//c_pr->Clear();
 
 
@@ -299,7 +325,7 @@ int comp_RFB_rap_LHCb_ALICE_ATLAS(Int_t runCode=0)
 
 	////////////////////////////////////////////////////////////////////////////////////
 	// non-prompt
-	TCanvas *c_np = new TCanvas("c_np","", 200, 10, 800, 600);
+	TCanvas *c_np = new TCanvas("c_np","", 200, 10, 600, 600);
 	c_np->cd();
 	gPad->SetLogy(0);
 	// 1) lowpt
@@ -362,14 +388,20 @@ int comp_RFB_rap_LHCb_ALICE_ATLAS(Int_t runCode=0)
 
 	dashedLine(0.0,1.0,4.5,1.0,1,1);
 
-	legUR -> SetHeader("Non-prompt J/#psi");
-	legUR -> AddEntry(gRFB_np_lowpt,"CMS Preliminary :6.5 < p_{T} < 10 GeV","lp");
-	legUR -> AddEntry(gRFB_np_highpt,"CMS Preliminary :10 < p_{T} < 30 GeV","lp");
-	legUR -> AddEntry(gRFB_atlas_np,"ATLAS :8 < p_{T} < 30 GeV","lp");
+//	legUR -> SetHeader("Non-prompt J/#psi");
+	legUR -> AddEntry(gRFB_np_lowpt,"CMS : 6.5 < p_{T} < 10 GeV","lp");
+	legUR -> AddEntry(gRFB_np_highpt,"CMS : 10 < p_{T} < 30 GeV","lp");
+	legUR -> AddEntry(gRFB_atlas_np,"ATLAS : 8 < p_{T} < 30 GeV","lp");
 	legUR -> AddEntry(gRFB_lhcb_np,"LHCb : p_{T} < 14 GeV","lp");
 	legUR -> Draw();
+	globtex->SetTextSize(0.045);
+	globtex->SetTextFont(62);
+	globtex->DrawLatex(0.88, 0.88, "Non-prompt J/#psi");
+	
 	latex->SetTextSize(0.04);
-	latex->DrawLatex(0.2, 0.2, beamstring.c_str());
+	latex->DrawLatex(0.19, 0.25, "Preliminary");
+	latex->DrawLatex(0.19, 0.19, Form("%s",beamstring.c_str()));
+
 	c_np->Update();
 	c_np->SaveAs("comparisonLHCb/comp_RFB_rap_LHCb_ATLAS_np.pdf");
 	c_np->SaveAs("comparisonLHCb/comp_RFB_rap_LHCb_ATLAS_np.png");

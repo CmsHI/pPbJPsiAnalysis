@@ -1,9 +1,5 @@
 #include "TStyle.h"
 
-void tdrGrid(bool gridOn);
-void fixOverlay();
-void setTDRStyle();
-
 // tdrGrid: Turns the grid lines on (true) or off (false)
 
 void tdrGrid(bool gridOn) {
