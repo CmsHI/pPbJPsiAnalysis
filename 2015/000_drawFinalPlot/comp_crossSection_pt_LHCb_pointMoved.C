@@ -242,7 +242,7 @@ int comp_crossSection_pt_LHCb_pointMoved(bool shifted=true, Int_t runCode=0, boo
 	//latex->DrawLatex(0.55, 0.86, cmsstring.c_str());
 	
 	c_pr->Update();
-	c_pr->SaveAs(Form("comparisonLHCb/comp_crossSection_pt_LHCb_pr_isLog%d_isPtCut_%d.pdf",(int)isLog,(int)isPtCut));
+	c_pr->SaveAs(Form("comparisonLHCb/comp_crossSection_pt_LHCb_pr_isLog%d_isPtCut_%d_shifted_%d.pdf",(int)isLog,(int)isPtCut,(int)shifted));
 	legUR->Clear();
 	//c_pr->Clear();
 
@@ -327,7 +327,7 @@ int comp_crossSection_pt_LHCb_pointMoved(bool shifted=true, Int_t runCode=0, boo
 //	latex->SetTextSize(0.05);
 //	latex->DrawLatex(0.55, 0.86, cmsstring.c_str());
 	c_np->Update();
-	c_np->SaveAs(Form("comparisonLHCb/comp_crossSection_pt_LHCb_np_isLog%d_isPtCut_%d.pdf",(int)isLog,(int)isPtCut));
+	c_np->SaveAs(Form("comparisonLHCb/comp_crossSection_pt_LHCb_np_isLog%d_isPtCut_%d_shifted_%d.pdf",(int)isLog,(int)isPtCut,(int)shifted));
 	//legUR->Clear();
 	//c_np->Clear();
 

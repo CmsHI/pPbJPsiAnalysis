@@ -28,7 +28,7 @@
 
 using namespace std;
 
-	const int nAtlasBin = 5;
+const int nAtlasBin = 5;
 
 void formRapArr(Double_t binmin, Double_t binmax, string* arr);
 void formAbsRapArr(Double_t binmin, Double_t binmax, string* arr);
@@ -353,8 +353,8 @@ int comp_crossSection_pt_ATLAS_pointMoved(bool shifted=false, Int_t runCode=0, b
 	}
 
 	c_pr->Update();
-	c_pr->SaveAs(Form("comparisonLHCb/comp_crossSection_pt_ATLAS_pr_isLog%d_%d.pdf",(int)isLog,(int)isPtCut));
-	c_pr->SaveAs(Form("comparisonLHCb/comp_crossSection_pt_ATLAS_pr_isLog%d_%d.png",(int)isLog,(int)isPtCut));
+	c_pr->SaveAs(Form("comparisonLHCb/comp_crossSection_pt_ATLAS_pr_isLog%d_%d_shifted_%d.pdf",(int)isLog,(int)isPtCut,(int)shifted));
+	c_pr->SaveAs(Form("comparisonLHCb/comp_crossSection_pt_ATLAS_pr_isLog%d_%d_shifted_%d.png",(int)isLog,(int)isPtCut,(int)shifted));
 	legUR1->Clear();
 	//c_pr->Clear();
 
@@ -573,8 +573,8 @@ int comp_crossSection_pt_ATLAS_pointMoved(bool shifted=false, Int_t runCode=0, b
 	latex->DrawLatex(0.55, 0.86, cmsstring.c_str());
 	*/
 	c_np->Update();
-	c_np->SaveAs(Form("comparisonLHCb/comp_crossSection_pt_ATLAS_np_isLog%d_%d.pdf",(int)isLog,(int)isPtCut));
-	c_np->SaveAs(Form("comparisonLHCb/comp_crossSection_pt_ATLAS_np_isLog%d_%d.png",(int)isLog,(int)isPtCut));
+	c_np->SaveAs(Form("comparisonLHCb/comp_crossSection_pt_ATLAS_np_isLog%d_%d_shifted_%d.pdf",(int)isLog,(int)isPtCut,(int)shifted));
+	c_np->SaveAs(Form("comparisonLHCb/comp_crossSection_pt_ATLAS_np_isLog%d_%d_shifted_%d.png",(int)isLog,(int)isPtCut,(int)shifted));
 	legUR2->Clear();
 	//c_np->Clear();
 
