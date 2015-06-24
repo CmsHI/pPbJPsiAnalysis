@@ -23,16 +23,44 @@
 #include <sstream>
 #include <string>
 
+#include "CMS_lumi.h"
 #include "KYOcommonOptFinal.h"
 
 void formRapArr(Double_t binmin, Double_t binmax, string* arr);
 void formAbsRapArr(Double_t binmin, Double_t binmax, string* arr);
 void formPtArr(Double_t binmin, Double_t binmax, string* arr);
 
+void CMS_lumi( TPad* pad, int iPeriod, int iPosX );
+
 //// runCode // 0=merged, 1=1stRun, 2=2ndRun
-void draw_1D_RFB_rap(char* dirName = "8rap9pt2gev", int runCode=0, bool isZoomIn = false, bool isPrompt = true)
+void draw_1D_RFB_rap(char* dirName = "8rap9pt2gev", int runCode=0, bool isZoomIn = true, bool isPrompt = false)
 {
-	gROOT->Macro("./JpsiStyleForFinalResult.C");
+	//gROOT->Macro("./JpsiStyleForFinalResult.C");
+	gROOT->Macro("./tdrstyle_kyo.C");
+	gStyle->SetTitleSize(0.046, "XYZ");
+  gStyle->SetEndErrorSize(0);
+// Margins:
+/*
+//  gStyle->SetPadTopMargin(0.05);
+  gStyle->SetPadBottomMargin(0.132); //KYO
+  gStyle->SetPadLeftMargin(0.132); //KYO
+  //gStyle->SetPadRightMargin(0.04);
+*/	
+	gStyle->SetOptTitle(0);
+  gStyle->SetPadTopMargin(0.075);
+  gStyle->SetPadBottomMargin(0.13); //KYO
+  gStyle->SetPadLeftMargin(0.13); //KYO
+  gStyle->SetPadRightMargin(0.075);
+	gStyle->SetTitleXOffset(1.15);
+	gStyle->SetTitleYOffset(1.22);
+	
+	writeExtraText = true;
+	extraText  = "Preliminary";
+	lumi_502TeV  = "34.6 nb^{-1}";
+	int iPeriod = 0; 
+	int iPos=0;
+
+	double pxshift = 0.06;
 
 	// set info.
 	const Double_t br = 0.0593 ;
@@ -72,23 +100,23 @@ void draw_1D_RFB_rap(char* dirName = "8rap9pt2gev", int runCode=0, bool isZoomIn
 	exsys = {0.03, 0.03, 0.03};
 	if (isPrompt) {
 		eysysrel_lowpt = {
-		0.099764,
-		0.098449,
-		0.061606};
+		0.04694, //0-0.9
+		0.04245, //0.9-1.5
+		0.04795}; //1.5-1.93
 		eysysrel_highpt = {
-		0.036469,
-		0.031636,
-		0.071641};
+		0.03705,
+		0.03360,
+		0.06486};
 	}
 	else {
 		eysysrel_lowpt = {
-		0.103640,
-		0.106507,
-		0.104728};
+		0.07412,
+		0.06288,
+		0.10487};
 		eysysrel_highpt = {
-		0.044544,
-		0.056572,
-		0.090894};
+		0.04483,
+		0.05592,
+		0.09280};
 	}
 			
 	
@@ -252,19 +280,25 @@ void draw_1D_RFB_rap(char* dirName = "8rap9pt2gev", int runCode=0, bool isZoomIn
 	
 	//////////////////////////////////////////////////////////////////
 
-	//TLegend *legUR = new TLegend(0.52, 0.55, 0.86, 0.92); //upper left
 	TLegend *legUR = new TLegend(0.52, 0.75, 0.86, 0.92); //upper left
-	//TLegend *legBL = new TLegend(0.17,0.20,0.51,0.42,NULL,"brNDC");
+	TLegend *legUL = new TLegend(0.16, 0.75, 0.45, 0.94, NULL, "brNDC");
 	//TLegend *legBL = new TLegend(0.17,0.17,0.42,0.38,NULL,"brNDC");
 	TLegend *legBL = new TLegend(0.16,0.17,0.42,0.38,NULL,"brNDC");
+//	TLegend *legBR = new TLegend(0.54, 0.17, 0.87, 0.39); //upper left
+	TLegend *legBR = new TLegend(0.51, 0.17, 0.85, 0.37); //upper left
 	SetLegendStyle(legUR);
+	SetLegendStyle(legUL);
 	SetLegendStyle(legBL);
+	SetLegendStyle(legBR);
+	legBR->SetTextSize(0.037);
 	 	
-	//latex box for beam, rapidity, pT info
-	TLatex* latex = new TLatex();
-	latex->SetNDC();
-	latex->SetTextAlign(12);
-	latex->SetTextSize(0.04);
+	//globtex box for beam, rapidity, pT info
+	TLatex* globtex = new TLatex();
+	globtex->SetNDC();
+	//globtex->SetTextAlign(12); //1:left, 2:vertical center
+  globtex->SetTextAlign(32); //3:right 2:vertical center
+  globtex->SetTextFont(42);
+	globtex->SetTextSize(0.04);
 
 	// --- Draw histograms
 		
@@ -280,34 +314,6 @@ void draw_1D_RFB_rap(char* dirName = "8rap9pt2gev", int runCode=0, bool isZoomIn
 	formPtArr(ptArrNum[lowpt_init], ptArrNum[highpt_init], &ptArr_lowpt);
 	formPtArr(ptArrNum[highpt_init], ptArrNum[nbinsY], &ptArr_highpt);
 	
-	// draw hist
-	/*
-	gPad->SetLogy(0);
-	SetHistStyle(h1D_RFB[lowpt_init],lowpt_init,0);
-	SetHistStyle(h1D_RFB[highpt_init],highpt_init,0);
-	h1D_RFB[lowpt_init]->GetXaxis()->SetTitle("|y_{CM}|");
-	h1D_RFB[lowpt_init]->GetXaxis()->CenterTitle();
-	h1D_RFB[lowpt_init]->GetYaxis()->SetTitle("R_{FB}");
-	h1D_RFB[lowpt_init]->GetYaxis()->SetRangeUser(0.,1.3);
-	h1D_RFB[lowpt_init]->Draw("pe");
-	h1D_RFB[highpt_init]->Draw("pe same");
-	dashedLine(0.,1.,1.93,1.,1,1);
-	if (isPrompt) legBL -> SetHeader("Prompt J/ #psi");
-	else legBL -> SetHeader("Non-prompt J/ #psi");
-	legBL -> AddEntry(h1D_RFB[lowpt_init],Form("%s",ptArr_lowpt.c_str()));
-	legBL -> AddEntry(h1D_RFB[highpt_init],Form("%s",ptArr_highpt.c_str()));
-	legBL->Draw();
-	latex->SetTextSize(0.04);
-	latex->DrawLatex(0.57, 0.34, lumistring.c_str());
-	latex->SetTextSize(0.04);
-	latex->DrawLatex(0.57, 0.27, beamstring.c_str());
-	latex->SetTextSize(0.05);
-	latex->DrawLatex(0.57, 0.19, cmsstring.c_str());	
-
-	c1->SaveAs(Form("RFB_%s/RFB_rap_isPrompt%d_%s.pdf",dirName,(int)isPrompt,runstring.c_str()));
-	legBL->Clear();
-	*/
-
 	//////////////////////////////////////////////
 	/// convert to TGraphErrors	
 	
@@ -340,6 +346,7 @@ void draw_1D_RFB_rap(char* dirName = "8rap9pt2gev", int runCode=0, bool isZoomIn
 		gRFB_highpt->	SetPointEXlow(iy, ex[iy]);
 		gRFB_highpt->	SetPointEXhigh(iy, ex[iy]);
 		gRFB_highpt->GetPoint(iy, pxtmp_highpt[iy], pytmp_highpt[iy]);
+		gRFB_highpt->SetPoint(iy, pxtmp_highpt[iy]+pxshift, pytmp_highpt[iy]);
 		eytmp[iy] = gRFB_highpt-> GetErrorY(iy);
 	}	
 	
@@ -349,6 +356,8 @@ void draw_1D_RFB_rap(char* dirName = "8rap9pt2gev", int runCode=0, bool isZoomIn
 	for (int iy=0; iy <nRapRFB; iy ++ ){ 
 		//abs err calcul.
 		eysys_highpt[iy]=eysysrel_highpt[iy]*pytmp_highpt[iy];
+		gRFB_sys_highpt->GetPoint(iy, pxtmp_highpt[iy], pytmp_highpt[iy]);
+		gRFB_sys_highpt->SetPoint(iy, pxtmp_highpt[iy]+pxshift, pytmp_highpt[iy]);
 		gRFB_sys_highpt->SetPointError(iy, exsys[iy], exsys[iy], eysys_highpt[iy], eysys_highpt[iy]);
 		cout << "pytmp_highpt["<<iy<<"] = " << pytmp_highpt[iy]<<endl;
 		cout << "eytmp_highpt["<<iy<<"] = " << eytmp[iy]<<endl;
@@ -358,17 +367,20 @@ void draw_1D_RFB_rap(char* dirName = "8rap9pt2gev", int runCode=0, bool isZoomIn
 	gRFB_sys_lowpt->GetXaxis()->SetTitle("|y_{CM}|");	
 	gRFB_sys_lowpt->GetXaxis()->CenterTitle();	
 	gRFB_sys_lowpt->GetYaxis()->SetTitle("R_{FB}");	
-	gRFB_sys_lowpt->GetXaxis()->SetLimits(0.,1.93);	
+//	gRFB_sys_lowpt->GetXaxis()->SetLimits(0.,1.93);	
+	gRFB_sys_lowpt->GetXaxis()->SetLimits(0.,2.2);	
 	gRFB_sys_lowpt->SetMinimum(0.0);	
 	gRFB_sys_lowpt->SetMaximum(1.4);	
 	if (isZoomIn) {
-		gRFB_sys_lowpt->SetMinimum(0.5);
-		gRFB_sys_lowpt->SetMaximum(1.25);
+		gRFB_sys_lowpt->SetMinimum(0.4);
+		gRFB_sys_lowpt->SetMaximum(1.15);
 	} 
 	gRFB_sys_lowpt->SetFillColor(kRed-9);	
+	//gRFB_sys_lowpt->SetFillStyle(3001);
 	gRFB_sys_lowpt->Draw("A2");
 	
 	gRFB_sys_highpt->SetFillColor(kTeal+7);
+	//gRFB_sys_highpt->SetFillStyle(3001);
 	gRFB_sys_highpt->Draw("2");
 	
 	SetGraphStyle(gRFB_lowpt, 1, 3);
@@ -379,21 +391,27 @@ void draw_1D_RFB_rap(char* dirName = "8rap9pt2gev", int runCode=0, bool isZoomIn
 	gRFB_highpt->SetMarkerSize(1.9);
 	gRFB_highpt->Draw("P");	
 	
-	dashedLine(0.,1.,1.93,1.,1,1);
-	if (isPrompt) legBL -> SetHeader("Prompt J/#psi");
-	else legBL -> SetHeader("Non-prompt J/#psi");
-	legBL->SetTextSize(0.037);
-	legBL -> AddEntry(gRFB_lowpt,Form("%s",ptArr_lowpt.c_str()));
-	legBL -> AddEntry(gRFB_highpt,Form("%s",ptArr_highpt.c_str()));
-	legBL->Draw();
-	latex->SetTextSize(0.05);
-	latex->DrawLatex(0.54, 0.35, cmsstring.c_str());	
-	latex->SetTextSize(0.04);
-	latex->DrawLatex(0.56, 0.27, beamstring.c_str());
-	latex->SetTextSize(0.04);
-	latex->DrawLatex(0.56, 0.20, lumistring.c_str());
-
+//	dashedLine(0.,1.,1.93,1.,1,1);
+	dashedLine(0.,1.,2.2,1.,1,1);
+	//if (isPrompt) legBR -> SetHeader("Prompt J/#psi");
+	//else legBR -> SetHeader("Non-prompt J/#psi");
+	legBR -> AddEntry(gRFB_lowpt,Form("%s",ptArr_lowpt.c_str()));
+	legBR -> AddEntry(gRFB_highpt,Form("%s",ptArr_highpt.c_str()));
+	legBR->Draw();
+//	latex->SetTextSize(0.05);
+//	latex->DrawLatex(0.54, 0.35, cmsstring.c_str());	
+//	latex->SetTextSize(0.04);
+//	latex->DrawLatex(0.56, 0.27, beamstring.c_str());
+//	latex->SetTextSize(0.04);
+//	latex->DrawLatex(0.56, 0.20, lumistring.c_str());
+	globtex->SetTextSize(0.045);
+	globtex->SetTextFont(62);
+	if (isPrompt) globtex->DrawLatex(0.88, 0.86, "Prompt J/#psi");
+	else globtex->DrawLatex(0.88, 0.86, "Non-prompt J/#psi");
+	CMS_lumi( c1, iPeriod, iPos );
+	c1->Update();
 	c1->SaveAs(Form("RFB_%s/RFB_rap_isPrompt%d_%s.pdf",dirName,(int)isPrompt,runstring.c_str()));
+	c1->SaveAs(Form("RFB_%s/RFB_rap_isPrompt%d_%s.png",dirName,(int)isPrompt,runstring.c_str()));
 	
 	///////////////////////////////////////////////////////////////////
 	// save as a root file
@@ -445,14 +463,143 @@ void formPtArr(Double_t binmin, Double_t binmax, string* arr) {
 	Double_t fracMin = modf(binmin, &intMin);
 	Double_t fracMax = modf(binmax, &intMax);
 	if ( fracMin == 0 && fracMax == 0 ) {
-		*arr = Form("%.0f < p_{T} < %.0f [GeV/c]", binmin, binmax);
+		*arr = Form("%.0f < p_{T} < %.0f GeV/c", binmin, binmax);
 	} else if ( fracMin != 0 && fracMax == 0 ) {
-		*arr = Form("%.1f < p_{T} < %.0f [GeV/c]", binmin, binmax);
+		*arr = Form("%.1f < p_{T} < %.0f GeV/c", binmin, binmax);
 	} else if ( fracMin == 0 && fracMax != 0 ) {
-		*arr = Form("%.0f < p_{T} < %.1f [GeV/c]", binmin, binmax);
+		*arr = Form("%.0f < p_{T} < %.1f GeV/c", binmin, binmax);
 	} else {
-		*arr = Form("%.1f < p_{T} < %.1f [GeV/c]", binmin, binmax);
+		*arr = Form("%.1f < p_{T} < %.1f GeV/c", binmin, binmax);
 	}
 }
+
+
+void CMS_lumi( TPad* pad, int iPeriod, int iPosX )
+{            
+  bool outOfFrame    = false;
+  if( iPosX/10==0 ) 
+    {
+      outOfFrame = true;
+    }
+  int alignY_=3;
+  int alignX_=2;
+  if( iPosX/10==0 ) alignX_=1;
+  if( iPosX==0    ) alignX_=1;
+  if( iPosX==0    ) alignY_=1;
+  if( iPosX/10==1 ) alignX_=1;
+  if( iPosX/10==2 ) alignX_=2;
+  if( iPosX/10==3 ) alignX_=3;
+  //if( iPosX == 0  ) relPosX = 0.12;
+  if( iPosX == 0  ) relPosX = 0.15; // KYO
+  int align_ = 10*alignX_ + alignY_;
+
+  float H = pad->GetWh();
+  float W = pad->GetWw();
+  float l = pad->GetLeftMargin();
+  float t = pad->GetTopMargin();
+  float r = pad->GetRightMargin();
+  float b = pad->GetBottomMargin();
+  //  float e = 0.025;
+
+  pad->cd();
+
+  TString lumiText;
+  if( iPeriod==0 )
+    {
+      lumiText += lumi_502TeV;
+      lumiText += " (pPb 5.02 TeV)";
+    }
+   
+  cout << lumiText << endl;
+
+  TLatex latex;
+  latex.SetNDC();
+  latex.SetTextAngle(0);
+  latex.SetTextColor(kBlack);    
+
+  float extraTextSize = extraOverCmsTextSize*cmsTextSize;
+
+  latex.SetTextFont(42);
+  latex.SetTextAlign(31); 
+  latex.SetTextSize(lumiTextSize*t);    
+  latex.DrawLatex(1-r,1-t+lumiTextOffset*t,lumiText);
+
+  if( outOfFrame )
+    {
+      latex.SetTextFont(cmsTextFont);
+      latex.SetTextAlign(11); 
+      latex.SetTextSize(cmsTextSize*t);    
+      latex.DrawLatex(l,1-t+lumiTextOffset*t,cmsText);
+    }
+  
+  pad->cd();
+
+  float posX_=0;
+  if( iPosX%10<=1 )
+    {
+      posX_ =   l + relPosX*(1-l-r);
+    }
+  else if( iPosX%10==2 )
+    {
+      posX_ =  l + 0.5*(1-l-r);
+    }
+  else if( iPosX%10==3 )
+    {
+      posX_ =  1-r - relPosX*(1-l-r);
+    }
+  float posY_ = 1-t - relPosY*(1-t-b);
+  if( !outOfFrame )
+    {
+      if( drawLogo )
+	{
+	  posX_ =   l + 0.045*(1-l-r)*W/H;
+	  posY_ = 1-t - 0.045*(1-t-b);
+	  float xl_0 = posX_;
+	  float yl_0 = posY_ - 0.15;
+	  float xl_1 = posX_ + 0.15*H/W;
+	  float yl_1 = posY_;
+	  TASImage* CMS_logo = new TASImage("CMS-BW-label.png");
+	  TPad* pad_logo = new TPad("logo","logo", xl_0, yl_0, xl_1, yl_1 );
+	  pad_logo->Draw();
+	  pad_logo->cd();
+	  CMS_logo->Draw("X");
+	  pad_logo->Modified();
+	  pad->cd();
+	}
+      else
+	{
+	  latex.SetTextFont(cmsTextFont);
+	  latex.SetTextSize(cmsTextSize*t);
+	  latex.SetTextAlign(align_);
+	  latex.DrawLatex(posX_, posY_, cmsText);
+	  if( writeExtraText ) 
+	    {
+	      latex.SetTextFont(extraTextFont);
+	      latex.SetTextAlign(align_);
+	      latex.SetTextSize(extraTextSize*t);
+	      latex.DrawLatex(posX_, posY_- relExtraDY*cmsTextSize*t, extraText);
+	    }
+	}
+    }
+  else if( writeExtraText )
+    {
+      if( iPosX==0) 
+	{
+	  posX_ =   l +  relPosX*(1-l-r);
+	  posY_ =   1-t+lumiTextOffset*t;
+	}
+      latex.SetTextFont(extraTextFont);
+      latex.SetTextSize(extraTextSize*t);
+      latex.SetTextAlign(align_);
+      latex.DrawLatex(posX_, posY_, extraText);      
+    }
+  return;
+}
+
+
+
+
+
+
 
 

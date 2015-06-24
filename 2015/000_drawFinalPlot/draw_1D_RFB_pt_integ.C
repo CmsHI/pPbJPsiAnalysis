@@ -30,7 +30,7 @@ void formAbsRapArr(Double_t binmin, Double_t binmax, string* arr);
 void formPtArr(Double_t binmin, Double_t binmax, string* arr);
 
 //// runCode // 0=merged, 1=1stRun, 2=2ndRun
-void draw_1D_RFB_pt_fineBinTest(char* dirName = "8rap9pt2gev", int runCode=0, bool isZoomIn = true, bool isPrompt=false)
+void draw_1D_RFB_pt_integ(char* dirName = "8rap9pt2gev", int runCode=0, bool isZoomIn = true, bool isPrompt=false)
 {
 	gROOT->Macro("./JpsiStyleForFinalResult.C");
 
@@ -56,74 +56,54 @@ void draw_1D_RFB_pt_fineBinTest(char* dirName = "8rap9pt2gev", int runCode=0, bo
 	/////////////////////////////////////////////////////////////////////////
 	// bin center & systematic uncertainties by hand
 	// for 1.5 - 1.93 
-	const int ntmp = 6; //pTbin
+	const int ntmp = 3;
 	Double_t px[3][ntmp]; //x point
 	Double_t pxtmp[3][ntmp]; //x point
 	Double_t pytmp[3][ntmp]; //y point
 	Double_t eytmp[3][ntmp]; //y point error
 	Double_t ex[ntmp]; // x error
 	Double_t exsys[ntmp]; //sys x error
+	Double_t eysysrel[3][ntmp]; //sysrel y error
 	Double_t eysys[3][ntmp]; //sys y error
-//	px[0] = {5.740347, 7.90416, 13.21239}; // 1.5-1.93
-//	px[1] = {-531, 7.95946, 13.31027}; //0.9-1.5
-//	px[2] = {-531, 8.25131, 13.61970}; //0.0-0.9
-	px[0] = {5.740347, 7, 8, 9, 11, 15}; // 1.5-1.93
-	px[1] = {-531, 7, 8, 9, 11, 15}; //0.9-1.5
-	px[2] = {-531, 7, 8, 9, 11, 15}; //0.0-0.9
-	ex = {0.,0.,0., 0., 0., 0.};
-	ex = {0.,0.,0., 0., 0., 0.};
-	exsys = {0.4,0.4,0.4, 0.4, 0.4, 0.4};
+	px[0] = {5.740347, 7.90416, 13.21239}; // 1.5-1.93
+	px[1] = {-531, 7.95946, 13.31027}; //0.9-1.5
+	px[2] = {-531, 8.25131, 13.61970}; //0.0-0.9
+	ex = {0.,0.,0.};
+	//exsys = {0.4,0.4,0.4};
+	exsys = {0.2,0.2,0.2};
 	if (isPrompt) {
 		//1.5-1.93
-		eysys[0] = {
-		0.026101147,
-		0.035871392,
-		0.035871392,
-		0.035871392,
-		0.035871392,
-		0.055155744};
+		eysysrel[0] = {
+		0.088030,
+		0.061606,
+		0.071641};
 		//0.9-1.5
-		eysys[1] = {
+		eysysrel[1] = {
 		0.00,
-		0.03050345,
-		0.03050345,
-		0.03050345,
-		0.03050345,
-		0.034713623};
+		0.098449,
+		0.031616};
 		//0.0-0.9
-		eysys[2] = {
+		eysysrel[2] = {
 		0.00, 
-		0.03971931,
-		0.03971931,
-		0.03971931,
-		0.03971931,
-		0.040430809};
+		0.099764,
+		0.036469};
 	}
 	else {
 		//1.5-1.93
-		eysys[0] = {
-		0.056049769,
-		0.07101411,
-		0.07101411,
-		0.07101411,
-		0.07101411,
-		0.080530222};
+		eysysrel[0] = {
+		0.100963,
+		0.104728,
+		0.090894};
 		//0.9-1.5
-		eysys[1] = {
+		eysysrel[1] = {
 		0.00,
-		0.069039457,
-		0.069039457,
-		0.069039457,
-		0.069039457,
-		0.04044452};
+		0.106507,
+		0.056572};
 		//0.0-0.9
-		eysys[2] = {
+		eysysrel[2] = {
 		0.00, 
-		0.053426749,
-		0.053426749,
-		0.053426749,
-		0.053426749,
-		0.044291073};
+		0.103640,
+		0.044544};
 	}	
 
 	//rap array in yCM (from forward to backward)
@@ -214,9 +194,8 @@ void draw_1D_RFB_pt_fineBinTest(char* dirName = "8rap9pt2gev", int runCode=0, bo
 			cout << ipt <<"th pt" << endl;
 			cout << "h1D_corrY_tot = " << h1D_corrY_tot[iy]->GetBinContent(ipt+1)<<endl; 
 		}
-		if (iy==2) h1D_corrY_tot[iy]->Draw("pe");
 	}
-
+	
 	//////////////////////////////////////////////////////////////////
 	/////////// calculate RFB
 
@@ -230,31 +209,10 @@ void draw_1D_RFB_pt_fineBinTest(char* dirName = "8rap9pt2gev", int runCode=0, bo
 		formAbsRapArr(rapArrNumFB[iy+1], rapArrNumFB[iy], &rapAbsArr[iy]);
 		cout << iy <<"th rapAbsArr = " << rapAbsArr[iy] << endl;
 	}
-	Double_t ptArrRFBNum[] = {5.0, 6.5, 7.5, 8.5, 10., 14., 30.};
+	Double_t ptArrRFBNum[] = {5.0, 6.5, 10., 30.};
 	const Int_t nPtRFB = sizeof(ptArrRFBNum)/sizeof(Double_t)-1;
 	cout << "nPtRFB = " << nPtRFB << endl;
-	
-	double tmpPRval01, tmpPRerr01;
-	double actPRval01, actPRerr01;
-	
-	for (int iy=0; iy<nRapRFB*2; iy++){
-		h1D_RFB_tmp[iy]= new TH1D(Form("h1D_RFB_tmp_%d",iy),Form("h1D_RFB_tmp_%d",iy),nPtRFB,ptArrRFBNum);
-		h1D_RFB_tmp[iy]->Sumw2();
-		for (int ipt=0; ipt<nPtRFB; ipt++ ){
-			tmpPRval01=0; tmpPRerr01=0; 
-			actPRval01=0; actPRerr01=0; 
-			actPRval01=h1D_corrY_tot[iy]->GetBinContent(ipt+4);	
-			actPRerr01=h1D_corrY_tot[iy]->GetBinError(ipt+4);	
-			h1D_RFB_tmp[iy]->SetBinContent(ipt+1,actPRval01);
-			h1D_RFB_tmp[iy]->SetBinError(ipt+1,actPRerr01);
-		}
-		if (! (iy==0 || iy==nRapRFB*2-1) ){
-			h1D_RFB_tmp[iy]->SetBinContent(1,0.);
-			h1D_RFB_tmp[iy]->SetBinError(1,0.);
-		}
-	}
 
-/*
 	// merging pT bins (KYO - byHand)
 	double tmpPRval01, tmpPRerr01, tmpPRval02, tmpPRerr02, tmpPRval03, tmpPRerr03;
 	double actPRval01, actPRerr01, actPRval02, actPRerr02, actPRval03, actPRerr03;
@@ -300,16 +258,13 @@ void draw_1D_RFB_pt_fineBinTest(char* dirName = "8rap9pt2gev", int runCode=0, bo
 		}
 		cout << "h1D_RFB_tmp[iy] = "<<h1D_RFB_tmp[iy]<<endl;
 	}
+	
+	// merging rapidity bins (KYO - byHand) for ATLAS!!
 
+
+	
 	//////////////////////////////////////////////////////////////////
 	// actual RFB calculation	
-	for (int iy=0; iy<nRapRFB; iy++){
-		h1D_RFB[iy] = (TH1D*)h1D_RFB_tmp[iy]->Clone(Form("h1D_RFB_%d",iy));
-		h1D_RFB[iy]->Divide(h1D_RFB_tmp[2*nRapRFB-iy-1]); 
-		cout << "h1D_RFB[iy] = "<<h1D_RFB[iy]<<endl;
-	}
-*/	
-	
 	for (int iy=0; iy<nRapRFB; iy++){
 		h1D_RFB[iy] = (TH1D*)h1D_RFB_tmp[iy]->Clone(Form("h1D_RFB_%d",iy));
 		h1D_RFB[iy]->Divide(h1D_RFB_tmp[2*nRapRFB-iy-1]); 
@@ -345,6 +300,8 @@ void draw_1D_RFB_pt_fineBinTest(char* dirName = "8rap9pt2gev", int runCode=0, bo
 		for (int ipt=0; ipt<nPtRFB; ipt++){
 			gRFB_sys[iy]->GetPoint(ipt, pxtmp[iy][ipt], pytmp[iy][ipt]);
 			gRFB_sys[iy]->SetPoint(ipt, px[iy][ipt], pytmp[iy][ipt]);
+			//abs err calcul.
+			eysys[iy][ipt]=eysysrel[iy][ipt]*pytmp[iy][ipt];
 			gRFB_sys[iy]->SetPointError(ipt, exsys[ipt], exsys[ipt], eysys[iy][ipt], eysys[iy][ipt]);
 		}
 	}
@@ -361,7 +318,6 @@ void draw_1D_RFB_pt_fineBinTest(char* dirName = "8rap9pt2gev", int runCode=0, bo
 		gRFB_sys[0]->SetMaximum(1.4);
 	}
 	gRFB_sys[0]->SetFillColor(kTeal+7);
-//	gRFB_sys[0]->SetFillColor(0);
 	gRFB_sys[0]->Draw("A2");
 	gRFB_sys[1]->SetFillColor(kRed-9);
 	gRFB_sys[1]->Draw("2");
@@ -378,6 +334,7 @@ void draw_1D_RFB_pt_fineBinTest(char* dirName = "8rap9pt2gev", int runCode=0, bo
 			eytmp[iy][ipt] = gRFB[iy]-> GetErrorY(ipt);
 			cout << "pytmp["<<iy<<"]["<<ipt<<"] = " << pytmp[iy][ipt]<<endl;
 			cout << "eytmp["<<iy<<"]["<<ipt<<"] = " << eytmp[iy][ipt]<<endl;
+			cout << "eysys["<<iy<<"]["<<ipt<<"] = " << eysys[iy][ipt]<<endl;
 			gRFB[iy]->SetPoint(ipt, px[iy][ipt], pytmp[iy][ipt]);
 			gRFB[iy]->SetPointEXlow(ipt, ex[iy]);
 			gRFB[iy]->SetPointEXhigh(ipt, ex[iy]);
@@ -418,11 +375,11 @@ void draw_1D_RFB_pt_fineBinTest(char* dirName = "8rap9pt2gev", int runCode=0, bo
 	latex->SetTextSize(0.04);
 	latex->DrawLatex(0.55, 0.20, lumistring.c_str());
 
-	c1->SaveAs(Form("RFB_%s_fineBinTest/RFB_pt_isPrompt%d_%s.pdf",dirName,(int)isPrompt,runstring.c_str()));
+	c1->SaveAs(Form("RFB_%s/RFB_pt_isPrompt%d_%s.pdf",dirName,(int)isPrompt,runstring.c_str()));
 	
 	///////////////////////////////////////////////////////////////////
 	// save as a root file
-	TFile *outFile = new TFile(Form("RFB_%s_fineBinTest/RFB_pt_isPrompt%d.root",dirName,(int)isPrompt),"RECREATE");
+	TFile *outFile = new TFile(Form("RFB_%s/RFB_pt_isPrompt%d.root",dirName,(int)isPrompt),"RECREATE");
 	outFile->cd();
 	for (int iy=0; iy<nRapRFB; iy++){
 		gRFB_sys[iy]->Write();	
@@ -431,6 +388,7 @@ void draw_1D_RFB_pt_fineBinTest(char* dirName = "8rap9pt2gev", int runCode=0, bo
 	outFile->Close();
 	
 	
+
 
 
 

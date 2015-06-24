@@ -33,11 +33,12 @@ void formPtArr(Double_t binmin, Double_t binmax, string* arr);
 void CMS_lumi( TPad* pad, int iPeriod, int iPosX );
 
 //// runCode // 0=merged, 1=1stRun, 2=2ndRun
-void draw_1D_crossSection_pt(char* dirName = "8rap9pt2gev", int runCode=0, bool isScale = true,bool isLog = true)
+void draw_1D_crossSection_pt_middle(char* dirName = "8rap9pt2gev", int runCode=0, bool isScale = false,bool isLog = false)
 {
 	gROOT->Macro("./tdrstyle_kyo.C");
 	gStyle->SetTitleSize(0.046, "XYZ");
   gStyle->SetEndErrorSize(0);
+// Margins:
 /*
 //  gStyle->SetPadTopMargin(0.05);
   gStyle->SetPadBottomMargin(0.132); //KYO
@@ -67,7 +68,7 @@ void draw_1D_crossSection_pt(char* dirName = "8rap9pt2gev", int runCode=0, bool 
 
 	// zvtx correction!!
 	const Double_t zvtxCor = 1.064;
-
+	
 	// set info.
 	const Double_t br = 0.0593 ;
 	const Double_t brErr = 0.0006;
@@ -100,6 +101,7 @@ void draw_1D_crossSection_pt(char* dirName = "8rap9pt2gev", int runCode=0, bool 
 	Double_t eysysrel_np[8][ntmp]; //relative sys y error
 	Double_t eysys_pr[8][ntmp]; //absolute sys y error
 	Double_t eysys_np[8][ntmp]; //absolute sys y error
+	/*
 	px[0] = {2.49530, 3.48529, 4.47275, 5.68792, 6.9644, 7.96271, 9.1754, 11.5315, 17.7588}; 
 	px[1] = {0.00000, 3.53123, 4.5027, 5.71709, 6.96523, 7.9693, 9.17314, 11.4952, 17.6927}; 
 	px[2] = {0.00000, 0.00000, 0.00000, 0.00000, 7.01977, 7.99712, 9.19936, 11.5743, 17.7732}; 
@@ -108,19 +110,18 @@ void draw_1D_crossSection_pt(char* dirName = "8rap9pt2gev", int runCode=0, bool 
 	px[5] = {0.00000, 0.00000, 0.00000, 5.82095, 6.97886, 7.96732, 9.18979, 11.5158, 17.4116}; 
 	px[6] = {0.00000, 3.52893, 4.48328, 5.69351, 6.96188, 7.95707, 9.14886, 11.4747, 17.231}; 
 	px[7] = {2.49481, 3.47853, 4.46938, 5.6761, 6.96419, 7.97702, 9.16158, 11.5077, 17.3061}; 
-	ex = {0,0,0,0,0,0,0,0,0};
-	//exsys = {0.2,0.2,0.2,0.2,0.2,0.2,0.2,0.2,0.2};
-	exsys = {0.3,0.3,0.3,0.3,0.3,0.3,0.3,0.3,0.3};
+	*/
+	px[0] = {2.5, 3.5, 4.5, 5.75, 7, 8, 9.25, 12., 22}; 
+	px[1] = {0., 3.5, 4.5, 5.75, 7, 8, 9.25, 12., 22}; 
+	px[2] = {0., 0., 0., 0., 7, 8, 9.25, 12., 22}; 
+	px[3] = {0., 0., 0., 0., 7, 8, 9.25, 12., 22}; 
+	px[4] = {0., 0., 0., 0., 7, 8, 9.25, 12., 22}; 
+	px[5] = {0., 0., 0., 5.75, 7, 8, 9.25, 12., 22}; 
+	px[6] = {0., 3.5, 4.5, 5.75, 7, 8, 9.25, 12., 22}; 
+	px[7] = {2.5, 3.5, 4.5, 5.75, 7, 8, 9.25, 12., 22}; 
 
-	// scaling for drawing
-	double scaleF[8];
-	//if (isScale) { scaleF = {1., 10., 100., 1., 10., 100., 1000., 10000.}; }
-	if (isScale) { scaleF = {100., 10., 1., 1., 10., 100., 1000., 10000.}; }
-	else { scaleF = {1., 1., 1., 1., 1., 1., 1., 1.}; }
-	cout << " *** isScale = " << (int)isScale << endl;	
-	for (int itmp=0; itmp<8; itmp++){
-		cout << "scaleF = " << scaleF[itmp] << endl;	
-	}
+	ex = {0,0,0,0,0,0,0,0,0};
+	exsys = {0.2,0.2,0.2,0.2,0.2,0.2,0.2,0.2,0.2};
 
 	//rap array in yCM (from forward to backward)
 	Double_t rapArrNumFB[] = {1.93, 1.5, 0.9, 0., -0.9, -1.5, -1.93, -2.4, -2.87};// for pt dist.
@@ -248,17 +249,21 @@ void draw_1D_crossSection_pt(char* dirName = "8rap9pt2gev", int runCode=0, bool 
 		// --- norm. (lumi*br)
 		h1D_cross_PR_tot[iy]->Scale(1./lumi_mub);
 		h1D_cross_NP_tot[iy]->Scale(1./lumi_mub);
-		//h1D_cross_PR_tot[iy]->Scale(1./br);
-		//h1D_cross_NP_tot[iy]->Scale(1./br);
+		h1D_cross_PR_tot[iy]->Scale(1./br);
+		h1D_cross_NP_tot[iy]->Scale(1./br);
 		// --- pile-up correction
 		h1D_cross_PR_tot[iy]->Scale(pileReg);	
 		h1D_cross_NP_tot[iy]->Scale(pileReg);	
 		// --- zvtx correction
 		h1D_cross_PR_tot[iy]->Scale(zvtxCor);	
 		h1D_cross_NP_tot[iy]->Scale(zvtxCor);	
-		// ---- scaling for drawing
-		h1D_cross_PR_tot[iy]->Scale(scaleF[iy]);
-		h1D_cross_NP_tot[iy]->Scale(scaleF[iy]);
+		
+		//cout <<" *** c) cross-section  *** "<<endl;
+		for (int ipt=0; ipt <nbinsY; ipt ++ ){ 
+			//cout << ipt <<"th pt" << endl;
+			//cout << "h1D_cross_PR_tot = " << h1D_cross_PR_tot[iy]->GetBinContent(ipt+1)<<endl; 
+			//cout << "h1D_cross_NP_tot = " << h1D_cross_NP_tot[iy]->GetBinContent(ipt+1)<<endl; 
+		}
 	}
 		
 	// set values as zero for unused bins
@@ -290,15 +295,12 @@ void draw_1D_crossSection_pt(char* dirName = "8rap9pt2gev", int runCode=0, bool 
 
 //	TLegend *legUR = new TLegend(0.52, 0.55, 0.86, 0.92); //upper left
 	TLegend *legUR = new TLegend(0.59, 0.55, 0.86, 0.92); //upper left
-//	TLegend *legBL = new TLegend(0.16, 0.18, 0.45, 0.44); //upper left
-	TLegend *legBL = new TLegend(0.15, 0.165, 0.43, 0.415); //upper left
-	TLegend *legBLFW = new TLegend(0.15, 0.165, 0.43, 0.315); //upper left
+	TLegend *legBL = new TLegend(0.16, 0.18, 0.45, 0.44); //upper left
+	//TLegend *legBL = new TLegend(0.16, 0.23, 0.45, 0.47); //upper left
 	SetLegendStyle(legUR);
 	SetLegendStyle(legBL);
-	SetLegendStyle(legBLFW);
 	legUR->SetTextSize(0.037); 
 	legBL->SetTextSize(0.037); 
-	legBLFW->SetTextSize(0.037); 
 	 	
 	//latex box for beam, rapidity, pT info
 	TLatex* globtex = new TLatex();
@@ -379,49 +381,47 @@ void draw_1D_crossSection_pt(char* dirName = "8rap9pt2gev", int runCode=0, bool 
 	gCross_pr_sys[0]->GetXaxis()->CenterTitle("");
 	gCross_pr_sys[0]->GetYaxis()->SetTitle("B x d^{2}#sigma/dp_{T}dy [#mub/(GeV/c)]");
 	if (isLog) {
+		gCross_pr_sys[0]->SetMinimum(0.01);
 //		gCross_pr_sys[0]->SetMinimum(0.001);
-//		gCross_pr_sys[0]->SetMinimum(0.0001);
-		gCross_pr_sys[0]->SetMinimum(0.00001);
+		gCross_pr_sys[0]->SetMaximum(700.);
 //		gCross_pr_sys[0]->SetMaximum(35.);
-//		gCross_pr_sys[0]->SetMaximum(350000.);
-		gCross_pr_sys[0]->SetMaximum(1000000.);
 	}
 	else {
 		gCross_pr_sys[0]->SetMinimum(0.0);
-//		gCross_pr_sys[0]->SetMaximum(350.);
-		gCross_pr_sys[0]->SetMaximum(2.);
+		gCross_pr_sys[0]->SetMaximum(350.);
+//		gCross_pr_sys[0]->SetMaximum(2.);
 	}
-	gCross_pr_sys[0]->GetXaxis()->SetLimits(0.0, 20.);
-	gCross_pr_sys[0]->SetFillColor(kTeal+7);
+	gCross_pr_sys[0]->GetXaxis()->SetLimits(0.0, 23.);
+	gCross_pr_sys[0]->SetFillColor(kViolet-9);
 	gCross_pr_sys[0]->Draw("A2");
-	gCross_pr_sys[1]->SetFillColor(kRed-9);
+	gCross_pr_sys[1]->SetFillColor(kTeal+7);
 	gCross_pr_sys[1]->Draw("2");
-	gCross_pr_sys[2]->SetFillColor(kAzure-9);
+	gCross_pr_sys[2]->SetFillColor(kRed-9);
 	gCross_pr_sys[2]->Draw("2");
 	//value
-	SetGraphStyle(gCross_pr[0],	0,5);
-	SetGraphStyle(gCross_pr[1],	1,3);
-	SetGraphStyle(gCross_pr[2],	2,0);
-	gCross_pr[0]->SetMarkerSize(2.1);
+	SetGraphStyle(gCross_pr[0],	8,12);
+	SetGraphStyle(gCross_pr[1],	0,15);
+	SetGraphStyle(gCross_pr[2],	1,13);
+	gCross_pr[0]->SetMarkerSize(1.5);
 	gCross_pr[0]->Draw("P");
+	gCross_pr[1]->SetMarkerSize(2.0);
 	gCross_pr[1]->Draw("P");
 	gCross_pr[2]->Draw("P");
+//	legBL -> SetHeader("Prompt J/#psi");
 	for (Int_t iy = fw_init; iy < bw_init; iy++) {
-		if (isScale && scaleF[iy]!=1.) legBLFW -> AddEntry(gCross_pr[iy],Form("%s (x%.0f)",rapArr[iy].c_str(),scaleF[iy]),"lp");
-		else legBLFW -> AddEntry(gCross_pr[iy],Form("%s",rapArr[iy].c_str()),"lp");
+		legBL -> AddEntry(gCross_pr[iy],Form("%s",rapArr[iy].c_str()),"lp");
 	}
-	if (isLog) legBLFW->Draw();
+	if (isLog) legBL->Draw();
 	globtex->SetTextSize(0.045);
 	globtex->SetTextFont(62);
 	globtex->DrawLatex(0.89, 0.86, "Prompt J/#psi");
 	globtex->SetTextSize(0.032);
 	globtex->SetTextFont(42);
-	globtex->DrawLatex(0.89, 0.80, "Global uncertainty : 3.5 \%");
+	globtex->DrawLatex(0.89, 0.80, "Global uncertainty : 3.6 \%");
 	CMS_lumi( c_pr_fw, iPeriod, iPos );
 	c_pr_fw->Update();
-	c_pr_fw->SaveAs(Form("cross_%s/crossSection_pt_pr_fw_isLog%d_isScale%d.pdf",dirName,(int)isLog,(int)isScale));
-	c_pr_fw->SaveAs(Form("cross_%s/crossSection_pt_pr_fw_isLog%d_isScale%d.png",dirName,(int)isLog,(int)isScale));
-	legBLFW->Clear();
+	c_pr_fw->SaveAs(Form("cross_%s/crossSection_pt_middle_pr_fw_isLog%d_isScale%d.pdf",dirName,(int)isLog,(int)isScale));
+	legBL->Clear();
 	
 	////prompt bw
 	TCanvas* c_pr_bw = new TCanvas("c_pr_bw","c_pr_bw",200,10,600,600);
@@ -433,45 +433,42 @@ void draw_1D_crossSection_pt(char* dirName = "8rap9pt2gev", int runCode=0, bool 
 	gCross_pr_sys[3]->GetXaxis()->CenterTitle("");
 	gCross_pr_sys[3]->GetYaxis()->SetTitle("B x d^{2}#sigma/dp_{T}dy [#mub/(GeV/c)]");
 	if (isLog) {
-		//gCross_pr_sys[3]->SetMinimum(0.0001);
-		//gCross_pr_sys[3]->SetMaximum(500000.);
-		gCross_pr_sys[3]->SetMinimum(0.00001);
-		gCross_pr_sys[3]->SetMaximum(1000000.);
+		gCross_pr_sys[3]->SetMinimum(0.01);
+		gCross_pr_sys[3]->SetMaximum(700.);
 	}
 	else {
 		gCross_pr_sys[3]->SetMinimum(0.0);
-		gCross_pr_sys[3]->SetMaximum(2.);
+		gCross_pr_sys[3]->SetMaximum(350.);
 	}
-	gCross_pr_sys[3]->GetXaxis()->SetLimits(0.0, 20.);
-	gCross_pr_sys[3]->SetFillColor(kAzure-9);
+	gCross_pr_sys[3]->GetXaxis()->SetLimits(0.0, 23.);
+	gCross_pr_sys[3]->SetFillColor(kViolet-9);
 	gCross_pr_sys[3]->Draw("A2");
-	gCross_pr_sys[4]->SetFillColor(kRed-9);
+	gCross_pr_sys[4]->SetFillColor(kTeal+7);
 	gCross_pr_sys[4]->Draw("2");
-	gCross_pr_sys[5]->SetFillColor(kTeal+7);
+	gCross_pr_sys[5]->SetFillColor(kRed-9);
 	gCross_pr_sys[5]->Draw("2");
-	gCross_pr_sys[6]->SetFillColor(kViolet-9);
+	gCross_pr_sys[6]->SetFillColor(kAzure-9);
 	gCross_pr_sys[6]->Draw("2");
-	//gCross_pr_sys[7]->SetFillColor(kOrange-9);
-	gCross_pr_sys[7]->SetFillColor(kGray);
+	//gCross_pr_sys[7]->SetFillColor(kOrange-4);
+	gCross_pr_sys[7]->SetFillColor(kOrange-9);
 	gCross_pr_sys[7]->Draw("2");
 	//value
-	SetGraphStyle(gCross_pr[3],	2,0);
-	SetGraphStyle(gCross_pr[4],	1,3);
-	SetGraphStyle(gCross_pr[5],	0,5);
-	SetGraphStyle(gCross_pr[6],	8,2);
-	SetGraphStyle(gCross_pr[7],	9,1);
+	SetGraphStyle(gCross_pr[3],	8,12);
+	SetGraphStyle(gCross_pr[4],	0,15);
+	SetGraphStyle(gCross_pr[5],	1,13);
+	SetGraphStyle(gCross_pr[6],	2,10);
+	SetGraphStyle(gCross_pr[7],	5,11);
+	gCross_pr[3]->SetMarkerSize(1.5);
 	gCross_pr[3]->Draw("P");
+	gCross_pr[4]->SetMarkerSize(2.0);
 	gCross_pr[4]->Draw("P");
-	gCross_pr[5]->SetMarkerSize(2.1);
 	gCross_pr[5]->Draw("P");
-	gCross_pr[6]->SetMarkerSize(1.6);
 	gCross_pr[6]->Draw("P");
-	gCross_pr[7]->SetMarkerSize(1.6);
+	gCross_pr[7]->SetMarkerSize(1.5);
 	gCross_pr[7]->Draw("P");
 //	legBL -> SetHeader("Prompt J/#psi");
 	for (Int_t iy = bw_init; iy < nbinsX; iy++) {
-		if (isScale && scaleF[iy]!=1.) legBL -> AddEntry(gCross_pr[iy],Form("%s (x%.0f)",rapArr[iy].c_str(),scaleF[iy]),"lp");
-		else legBL -> AddEntry(gCross_pr[iy],Form("%s",rapArr[iy].c_str()),"lp");
+		legBL -> AddEntry(gCross_pr[iy],Form("%s",rapArr[iy].c_str()),"lp");
 	}
 	if (isLog) legBL->Draw();
 	globtex->SetTextSize(0.045);
@@ -479,11 +476,10 @@ void draw_1D_crossSection_pt(char* dirName = "8rap9pt2gev", int runCode=0, bool 
 	globtex->DrawLatex(0.89, 0.86, "Prompt J/#psi");
 	globtex->SetTextSize(0.032);
 	globtex->SetTextFont(42);
-	globtex->DrawLatex(0.89, 0.80, "Global uncertainty : 3.5 \%");
+	globtex->DrawLatex(0.89, 0.80, "Global uncertainty : 3.6 \%");
 	CMS_lumi( c_pr_bw, iPeriod, iPos );
 	c_pr_fw->Update();
-	c_pr_bw->SaveAs(Form("cross_%s/crossSection_pt_pr_bw_isLog%d_isScale%d.pdf",dirName,(int)isLog,(int)isScale));
-	c_pr_bw->SaveAs(Form("cross_%s/crossSection_pt_pr_bw_isLog%d_isScale%d.png",dirName,(int)isLog,(int)isScale));
+	c_pr_bw->SaveAs(Form("cross_%s/crossSection_pt_middle_pr_bw_isLog%d_isScale%d.pdf",dirName,(int)isLog,(int)isScale));
 	legBL->Clear();
 	
 	//return;
@@ -498,44 +494,44 @@ void draw_1D_crossSection_pt(char* dirName = "8rap9pt2gev", int runCode=0, bool 
 	gCross_np_sys[0]->GetXaxis()->CenterTitle("");
 	gCross_np_sys[0]->GetYaxis()->SetTitle("B x d^{2}#sigma/dp_{T}dy [#mub/(GeV/c)]");
 	if (isLog) {
-		gCross_np_sys[0]->SetMinimum(0.00001);
-		gCross_np_sys[0]->SetMaximum(100000.);
+		gCross_np_sys[0]->SetMinimum(0.01);
+		gCross_np_sys[0]->SetMaximum(130.);
 	}
 	else {
 		gCross_np_sys[0]->SetMinimum(0.0);
-		gCross_np_sys[0]->SetMaximum(3.);
+		gCross_np_sys[0]->SetMaximum(65.);
 	}
-	gCross_np_sys[0]->GetXaxis()->SetLimits(0.0, 20.);
-	gCross_np_sys[0]->SetFillColor(kTeal+7);
+	gCross_np_sys[0]->GetXaxis()->SetLimits(0.0, 23.);
+	gCross_np_sys[0]->SetFillColor(kViolet-9);
 	gCross_np_sys[0]->Draw("A2");
-	gCross_np_sys[1]->SetFillColor(kRed-9);
+	gCross_np_sys[1]->SetFillColor(kTeal+7);
 	gCross_np_sys[1]->Draw("2");
-	gCross_np_sys[2]->SetFillColor(kAzure-9);
+	gCross_np_sys[2]->SetFillColor(kRed-9);
 	gCross_np_sys[2]->Draw("2");
 	//value
-	SetGraphStyle(gCross_np[0],	0,5);
-	SetGraphStyle(gCross_np[1],	1,3);
-	SetGraphStyle(gCross_np[2],	2,0);
-	gCross_np[0]->SetMarkerSize(2.1);
+	SetGraphStyle(gCross_np[0],	8,12);
+	SetGraphStyle(gCross_np[1],	0,15);
+	SetGraphStyle(gCross_np[2],	1,13);
+	gCross_np[0]->SetMarkerSize(1.5);
 	gCross_np[0]->Draw("P");
+	gCross_np[1]->SetMarkerSize(2.0);
 	gCross_np[1]->Draw("P");
 	gCross_np[2]->Draw("P");
+	//legBL -> SetHeader("Non-prompt J/#psi");
 	for (Int_t iy = fw_init; iy < bw_init; iy++) {
-		if (isScale && scaleF[iy]!=1.) legBLFW -> AddEntry(gCross_np[iy],Form("%s (x%.0f)",rapArr[iy].c_str(),scaleF[iy]),"lp");
-		else legBLFW -> AddEntry(gCross_np[iy],Form("%s",rapArr[iy].c_str()),"lp");
+		legBL -> AddEntry(gCross_np[iy],Form("%s",rapArr[iy].c_str()),"lp");
 	}
-	if (isLog) legBLFW->Draw();
+	if (isLog) legBL->Draw();
 	globtex->SetTextSize(0.045);
 	globtex->SetTextFont(62);
 	globtex->DrawLatex(0.89, 0.86, "Non-prompt J/#psi");
 	globtex->SetTextSize(0.032);
 	globtex->SetTextFont(42);
-	globtex->DrawLatex(0.89, 0.80, "Global uncertainty : 3.5 \%");
+	globtex->DrawLatex(0.89, 0.80, "Global uncertainty : 3.6 \%");
 	CMS_lumi( c_np_fw, iPeriod, iPos );
 	c_pr_fw->Update();
-	c_np_fw->SaveAs(Form("cross_%s/crossSection_pt_np_fw_isLog%d_isScale%d.pdf",dirName,(int)isLog,(int)isScale));
-	c_np_fw->SaveAs(Form("cross_%s/crossSection_pt_np_fw_isLog%d_isScale%d.png",dirName,(int)isLog,(int)isScale));
-	legBLFW->Clear();
+	c_np_fw->SaveAs(Form("cross_%s/crossSection_pt_middle_np_fw_isLog%d_isScale%d.pdf",dirName,(int)isLog,(int)isScale));
+	legBL->Clear();
 	
 
 
@@ -550,43 +546,42 @@ void draw_1D_crossSection_pt(char* dirName = "8rap9pt2gev", int runCode=0, bool 
 	gCross_np_sys[3]->GetXaxis()->CenterTitle("");
 	gCross_np_sys[3]->GetYaxis()->SetTitle("B x d^{2}#sigma/dp_{T}dy [#mub/(GeV/c)]");
 	if (isLog) {
-		gCross_np_sys[3]->SetMinimum(0.00001);
-		gCross_np_sys[3]->SetMaximum(100000.);
+		gCross_np_sys[3]->SetMinimum(0.01);
+		gCross_np_sys[3]->SetMaximum(130.);
 	}
 	else {
 		gCross_np_sys[3]->SetMinimum(0.0);
-		gCross_np_sys[3]->SetMaximum(3.);
+		gCross_np_sys[3]->SetMaximum(65.);
 	}
-	gCross_np_sys[3]->GetXaxis()->SetLimits(0.0, 20.);
-	gCross_np_sys[3]->SetFillColor(kAzure-9);
+	gCross_np_sys[3]->GetXaxis()->SetLimits(0.0, 23.);
+	gCross_np_sys[3]->SetFillColor(kViolet-9);
 	gCross_np_sys[3]->Draw("A2");
-	gCross_np_sys[4]->SetFillColor(kRed-9);
+	gCross_np_sys[4]->SetFillColor(kTeal+7);
 	gCross_np_sys[4]->Draw("2");
-	gCross_np_sys[5]->SetFillColor(kTeal+7);
+	gCross_np_sys[5]->SetFillColor(kRed-9);
 	gCross_np_sys[5]->Draw("2");
-	gCross_np_sys[6]->SetFillColor(kViolet-9);
+	gCross_np_sys[6]->SetFillColor(kAzure-9);
 	gCross_np_sys[6]->Draw("2");
-	//gCross_np_sys[7]->SetFillColor(kOrange-9);
-	gCross_np_sys[7]->SetFillColor(kGray);
+	//gCross_np_sys[7]->SetFillColor(kOrange-4);
+	gCross_np_sys[7]->SetFillColor(kOrange-9);
 	gCross_np_sys[7]->Draw("2");
 	//value
-	SetGraphStyle(gCross_np[3],	2,0);
-	SetGraphStyle(gCross_np[4],	1,3);
-	SetGraphStyle(gCross_np[5],	0,5);
-	SetGraphStyle(gCross_np[6],	8,2);
-	SetGraphStyle(gCross_np[7],	9,1);
+	SetGraphStyle(gCross_np[3],	8,12);
+	SetGraphStyle(gCross_np[4],	0,15);
+	SetGraphStyle(gCross_np[5],	1,13);
+	SetGraphStyle(gCross_np[6],	2,10);
+	SetGraphStyle(gCross_np[7],	5,11);
+	gCross_np[3]->SetMarkerSize(1.5);
 	gCross_np[3]->Draw("P");
+	gCross_np[4]->SetMarkerSize(2.0);
 	gCross_np[4]->Draw("P");
-	gCross_np[5]->SetMarkerSize(2.1);
 	gCross_np[5]->Draw("P");
-	gCross_np[6]->SetMarkerSize(1.6);
 	gCross_np[6]->Draw("P");
-	gCross_np[7]->SetMarkerSize(1.6);
+	gCross_np[7]->SetMarkerSize(1.5);
 	gCross_np[7]->Draw("P");
 	//legBL -> SetHeader("Non-prompt J/#psi");
 	for (Int_t iy = bw_init; iy < nbinsX; iy++) {
-		if (isScale && scaleF[iy]!=1.) legBL -> AddEntry(gCross_np[iy],Form("%s (x%.0f)",rapArr[iy].c_str(),scaleF[iy]),"lp");
-		else legBL -> AddEntry(gCross_np[iy],Form("%s",rapArr[iy].c_str()),"lp");
+		legBL -> AddEntry(gCross_np[iy],Form("%s",rapArr[iy].c_str()),"lp");
 	}
 	if (isLog) legBL->Draw();
 	globtex->SetTextSize(0.045);
@@ -594,18 +589,17 @@ void draw_1D_crossSection_pt(char* dirName = "8rap9pt2gev", int runCode=0, bool 
 	globtex->DrawLatex(0.89, 0.86, "Non-prompt J/#psi");
 	globtex->SetTextSize(0.032);
 	globtex->SetTextFont(42);
-	globtex->DrawLatex(0.89, 0.80, "Global uncertainty : 3.5 \%");
+	globtex->DrawLatex(0.89, 0.80, "Global uncertainty : 3.6 \%");
 	CMS_lumi( c_np_bw, iPeriod, iPos );
 	c_np_bw->Update();
-	c_np_bw->SaveAs(Form("cross_%s/crossSection_pt_np_bw_isLog%d_isScale%d.pdf",dirName,(int)isLog,(int)isScale));
-	c_np_bw->SaveAs(Form("cross_%s/crossSection_pt_np_bw_isLog%d_isScale%d.png",dirName,(int)isLog,(int)isScale));
+	c_np_bw->SaveAs(Form("cross_%s/crossSection_pt_middle_np_bw_isLog%d_isScale%d.pdf",dirName,(int)isLog,(int)isScale));
 	legBL->Clear();
 	
 
 
 	///////////////////////////////////////////////////////////////////
 	// save as a root file
-	TFile *outFile = new TFile(Form("cross_%s/crossSection_pt_isLog%d_isScale%d.root",dirName,(int)isLog,(int)isScale),"RECREATE");
+	TFile *outFile = new TFile(Form("cross_%s/crossSection_pt_middle_isLog%d_isScale%d.root",dirName,(int)isLog,(int)isScale),"RECREATE");
 	outFile->cd();
 	for (Int_t iy = 0; iy < nRap; iy++) {
 		gCross_pr_sys[iy]->Write();	
@@ -680,7 +674,7 @@ void CMS_lumi( TPad* pad, int iPeriod, int iPosX )
   if( iPosX/10==2 ) alignX_=2;
   if( iPosX/10==3 ) alignX_=3;
   //if( iPosX == 0  ) relPosX = 0.12;
-  if( iPosX == 0  ) relPosX = 0.15; // KYO
+  if( iPosX == 0  ) relPosX = 0.16; // KYO
   int align_ = 10*alignX_ + alignY_;
 
   float H = pad->GetWh();
