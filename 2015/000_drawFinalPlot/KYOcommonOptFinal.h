@@ -85,14 +85,15 @@ void SetHistStyle(TH1* h, Int_t c, Int_t m) {
 void SetGraphStyle(TGraph* gr, Int_t c, Int_t m) {
 	//Int_t colorArr[] = { kGray+3, kRed-4, kBlue, kOrange+7, kGreen+3, kAzure+9, kViolet-4, kGreen+1, kBlack };
 	//Int_t colorArr[] = { kGreen+3, kPink-6, kBlue-3, kRed-4, kBlue, kOrange+8, kGreen+3, kAzure+9, kViolet-6, kGreen+1, kBlack };
-	Int_t colorArr[] = { kGreen+3, kPink-6, kBlue-3, kRed-4, kBlue, kOrange+8, kGreen+3, kAzure+9, kViolet-6, kGray+2 };
+	Int_t colorArr[] = { kGreen+3, kPink-6, kBlue-3, kRed-4, kBlue, kOrange+8, kGreen+3, kAzure+9, kViolet-6, kBlack };
 	Int_t markerFullArr[] = {kFullCircle, kFullTriangleUp, kFullTriangleDown, kFullSquare, kFullStar, kFullDiamond};
 	Int_t markerOpenArr[] = {kOpenCircle, kOpenTriangleUp, kOpenTriangleDown, kOpenSquare, kOpenStar, kOpenDiamond};
 
 	gr-> SetMarkerColor(colorArr[c]);
 	if(m<10) gr-> SetMarkerStyle(markerFullArr[m]);
 	else gr-> SetMarkerStyle(markerOpenArr[m-10]);
-	gr-> SetMarkerSize(1.2);
+	//gr-> SetMarkerSize(1.2);
+	gr-> SetMarkerSize(1.4);
 	gr-> SetLineColor(colorArr[c]);
 	gr-> SetLineWidth(0.8);
 }

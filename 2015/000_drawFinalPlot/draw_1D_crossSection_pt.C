@@ -110,7 +110,7 @@ void draw_1D_crossSection_pt(char* dirName = "8rap9pt2gev", int runCode=0, bool 
 	px[7] = {2.49481, 3.47853, 4.46938, 5.6761, 6.96419, 7.97702, 9.16158, 11.5077, 17.3061}; 
 	ex = {0,0,0,0,0,0,0,0,0};
 	//exsys = {0.2,0.2,0.2,0.2,0.2,0.2,0.2,0.2,0.2};
-	exsys = {0.3,0.3,0.3,0.3,0.3,0.3,0.3,0.3,0.3};
+	exsys = {0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4};
 
 	// scaling for drawing
 	double scaleF[8];
@@ -392,7 +392,7 @@ void draw_1D_crossSection_pt(char* dirName = "8rap9pt2gev", int runCode=0, bool 
 		gCross_pr_sys[0]->SetMaximum(2.);
 	}
 	gCross_pr_sys[0]->GetXaxis()->SetLimits(0.0, 20.);
-	gCross_pr_sys[0]->SetFillColor(kTeal+7);
+	gCross_pr_sys[0]->SetFillColor(kTeal-9);
 	gCross_pr_sys[0]->Draw("A2");
 	gCross_pr_sys[1]->SetFillColor(kRed-9);
 	gCross_pr_sys[1]->Draw("2");
@@ -447,7 +447,7 @@ void draw_1D_crossSection_pt(char* dirName = "8rap9pt2gev", int runCode=0, bool 
 	gCross_pr_sys[3]->Draw("A2");
 	gCross_pr_sys[4]->SetFillColor(kRed-9);
 	gCross_pr_sys[4]->Draw("2");
-	gCross_pr_sys[5]->SetFillColor(kTeal+7);
+	gCross_pr_sys[5]->SetFillColor(kTeal-9);
 	gCross_pr_sys[5]->Draw("2");
 	gCross_pr_sys[6]->SetFillColor(kViolet-9);
 	gCross_pr_sys[6]->Draw("2");
@@ -506,7 +506,7 @@ void draw_1D_crossSection_pt(char* dirName = "8rap9pt2gev", int runCode=0, bool 
 		gCross_np_sys[0]->SetMaximum(3.);
 	}
 	gCross_np_sys[0]->GetXaxis()->SetLimits(0.0, 20.);
-	gCross_np_sys[0]->SetFillColor(kTeal+7);
+	gCross_np_sys[0]->SetFillColor(kTeal-9);
 	gCross_np_sys[0]->Draw("A2");
 	gCross_np_sys[1]->SetFillColor(kRed-9);
 	gCross_np_sys[1]->Draw("2");
@@ -562,7 +562,7 @@ void draw_1D_crossSection_pt(char* dirName = "8rap9pt2gev", int runCode=0, bool 
 	gCross_np_sys[3]->Draw("A2");
 	gCross_np_sys[4]->SetFillColor(kRed-9);
 	gCross_np_sys[4]->Draw("2");
-	gCross_np_sys[5]->SetFillColor(kTeal+7);
+	gCross_np_sys[5]->SetFillColor(kTeal-9);
 	gCross_np_sys[5]->Draw("2");
 	gCross_np_sys[6]->SetFillColor(kViolet-9);
 	gCross_np_sys[6]->Draw("2");

@@ -30,7 +30,7 @@ void formAbsRapArr(Double_t binmin, Double_t binmax, string* arr);
 void formPtArr(Double_t binmin, Double_t binmax, string* arr);
 
 //// runCode // 0=merged, 1=1stRun, 2=2ndRun
-void draw_1D_crossSection_pt_integ(char* dirName = "8rap9pt2gev", int runCode=0, bool isScale = false,bool isLog = true)
+void draw_1D_crossSection_pt_integ(char* dirName = "8rap9pt2gev", int runCode=0, bool isScale = false,bool isLog = false)
 {
 	gROOT->Macro("./JpsiStyleForFinalResult.C");
 
@@ -216,11 +216,11 @@ void draw_1D_crossSection_pt_integ(char* dirName = "8rap9pt2gev", int runCode=0,
 		h1D_cross_PR_tot[iy]->Scale(1./1.93);
 		h1D_cross_NP_tot[iy]->Scale(1./1.93);
 		// --- norm. (lumi*br)
-//		h1D_cross_PR_tot[iy]->Scale(1./lumi_mub);
-//		h1D_cross_NP_tot[iy]->Scale(1./lumi_mub);
+		h1D_cross_PR_tot[iy]->Scale(1./lumi_mub);
+		h1D_cross_NP_tot[iy]->Scale(1./lumi_mub);
 		// nb for ATLAS !!
-		h1D_cross_PR_tot[iy]->Scale(1./lumi_nb);
-		h1D_cross_NP_tot[iy]->Scale(1./lumi_nb);
+//		h1D_cross_PR_tot[iy]->Scale(1./lumi_nb);
+//		h1D_cross_NP_tot[iy]->Scale(1./lumi_nb);
 		// no br for ATLAS!!!
 //		h1D_cross_PR_tot[iy]->Scale(1./br);
 //		h1D_cross_NP_tot[iy]->Scale(1./br);
@@ -364,7 +364,8 @@ void draw_1D_crossSection_pt_integ(char* dirName = "8rap9pt2gev", int runCode=0,
 	//sys
 	gCross_pr_sys[fwrap_init]->GetXaxis()->SetTitle("p_{T} [GeV/c]");
 	gCross_pr_sys[fwrap_init]->GetXaxis()->CenterTitle("");
-	gCross_pr_sys[fwrap_init]->GetYaxis()->SetTitle("d^{2}#sigma/dp_{T}dy x BR(J/#psi #rightarrow #mu#mu) [nb/(GeV/c)]");
+//	gCross_pr_sys[fwrap_init]->GetYaxis()->SetTitle("d^{2}#sigma/dp_{T}dy x BR(J/#psi #rightarrow #mu#mu) [nb/(GeV/c)]");
+	gCross_pr_sys[fwrap_init]->GetYaxis()->SetTitle("B x d^{2}#sigma/dp_{T}dy [#mub/(GeV/c)]");
 	if (isLog) {
 		gCross_pr_sys[fwrap_init]->SetMinimum(0.01);
 //		gCross_pr_sys[fwrap_init]->SetMaximum(700.);
@@ -418,7 +419,7 @@ void draw_1D_crossSection_pt_integ(char* dirName = "8rap9pt2gev", int runCode=0,
 	//sys
 	gCross_pr_sys[bwrap_init]->GetXaxis()->SetTitle("p_{T} [GeV/c]");
 	gCross_pr_sys[bwrap_init]->GetXaxis()->CenterTitle("");
-	gCross_pr_sys[bwrap_init]->GetYaxis()->SetTitle("d^{2}#sigma/dp_{T}dy x BR(J/#psi #rightarrow #mu#mu) [nb/(GeV/c)]");
+	gCross_pr_sys[bwrap_init]->GetYaxis()->SetTitle("B x d^{2}#sigma/dp_{T}dy [mub/(GeV/c)]");
 	if (isLog) {
 		gCross_pr_sys[bwrap_init]->SetMinimum(0.01);
 //		gCross_pr_sys[bwrap_init]->SetMaximum(700.);
@@ -474,7 +475,8 @@ void draw_1D_crossSection_pt_integ(char* dirName = "8rap9pt2gev", int runCode=0,
 	//sys
 	gCross_np_sys[fwrap_init]->GetXaxis()->SetTitle("p_{T} [GeV/c]");
 	gCross_np_sys[fwrap_init]->GetXaxis()->CenterTitle("");
-	gCross_np_sys[fwrap_init]->GetYaxis()->SetTitle("d^{2}#sigma/dp_{T}dy x BR(J/#psi #rightarrow #mu#mu) [nb/(GeV/c)]");
+//	gCross_np_sys[fwrap_init]->GetYaxis()->SetTitle("d^{2}#sigma/dp_{T}dy x BR(J/#psi #rightarrow #mu#mu) [nb/(GeV/c)]");
+	gCross_np_sys[fwrap_init]->GetYaxis()->SetTitle("B x d^{2}#sigma/dp_{T}dy [#mub/(GeV/c)]");
 	if (isLog) {
 		gCross_np_sys[fwrap_init]->SetMinimum(0.01);
 		gCross_np_sys[fwrap_init]->SetMaximum(2000.);
@@ -540,7 +542,7 @@ void draw_1D_crossSection_pt_integ(char* dirName = "8rap9pt2gev", int runCode=0,
 	//sys
 	gCross_np_sys[bwrap_init]->GetXaxis()->SetTitle("p_{T} [GeV/c]");
 	gCross_np_sys[bwrap_init]->GetXaxis()->CenterTitle("");
-	gCross_np_sys[bwrap_init]->GetYaxis()->SetTitle("d^{2}#sigma/dp_{T}dy x BR(J/#psi #rightarrow #mu#mu) [nb/(GeV/c)]");
+	gCross_np_sys[bwrap_init]->GetYaxis()->SetTitle("B x d^{2}#sigma/dp_{T}dy [#mub/(GeV/c)]");
 	if (isLog) {
 		gCross_np_sys[bwrap_init]->SetMinimum(0.01);
 		gCross_np_sys[bwrap_init]->SetMaximum(2000.);

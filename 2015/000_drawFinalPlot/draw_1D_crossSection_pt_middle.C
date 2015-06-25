@@ -249,8 +249,8 @@ void draw_1D_crossSection_pt_middle(char* dirName = "8rap9pt2gev", int runCode=0
 		// --- norm. (lumi*br)
 		h1D_cross_PR_tot[iy]->Scale(1./lumi_mub);
 		h1D_cross_NP_tot[iy]->Scale(1./lumi_mub);
-		h1D_cross_PR_tot[iy]->Scale(1./br);
-		h1D_cross_NP_tot[iy]->Scale(1./br);
+//		h1D_cross_PR_tot[iy]->Scale(1./br);
+//		h1D_cross_NP_tot[iy]->Scale(1./br);
 		// --- pile-up correction
 		h1D_cross_PR_tot[iy]->Scale(pileReg);	
 		h1D_cross_NP_tot[iy]->Scale(pileReg);	

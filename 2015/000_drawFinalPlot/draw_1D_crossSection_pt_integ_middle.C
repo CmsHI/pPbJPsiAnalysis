@@ -226,11 +226,11 @@ void draw_1D_crossSection_pt_integ_middle(char* dirName = "8rap9pt2gev", int run
 		h1D_cross_PR_tot[iy]->Scale(1./1.93);
 		h1D_cross_NP_tot[iy]->Scale(1./1.93);
 		// --- norm. (lumi*br)
-//		h1D_cross_PR_tot[iy]->Scale(1./lumi_mub);
-//		h1D_cross_NP_tot[iy]->Scale(1./lumi_mub);
+		h1D_cross_PR_tot[iy]->Scale(1./lumi_mub);
+		h1D_cross_NP_tot[iy]->Scale(1./lumi_mub);
 		// nb for ATLAS !!
-		h1D_cross_PR_tot[iy]->Scale(1./lumi_nb);
-		h1D_cross_NP_tot[iy]->Scale(1./lumi_nb);
+//		h1D_cross_PR_tot[iy]->Scale(1./lumi_nb);
+//		h1D_cross_NP_tot[iy]->Scale(1./lumi_nb);
 		// no br for ATLAS!!!
 //		h1D_cross_PR_tot[iy]->Scale(1./br);
 //		h1D_cross_NP_tot[iy]->Scale(1./br);

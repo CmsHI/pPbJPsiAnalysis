@@ -489,7 +489,7 @@ void draw_1D_crossSection_rap(char* dirName = "8rap9pt2gev", int runCode=0, bool
 	//gCross_pr_sys_lowpt->SetFillStyle(3001);	
 	gCross_pr_sys_lowpt->Draw("A2");
 
-	gCross_pr_sys_highpt->SetFillColor(kTeal+7);	
+	gCross_pr_sys_highpt->SetFillColor(kTeal-9);	
 	gCross_pr_sys_highpt->Draw("2");
 
 	SetGraphStyle(gCross_pr_lowpt,1,3);
@@ -582,7 +582,7 @@ void draw_1D_crossSection_rap(char* dirName = "8rap9pt2gev", int runCode=0, bool
 	gCross_np_sys_lowpt->SetFillColor(kRed-9);	
 	gCross_np_sys_lowpt->Draw("A2");
 	
-	gCross_np_sys_highpt->SetFillColor(kTeal+7);	
+	gCross_np_sys_highpt->SetFillColor(kTeal-9);	
 	gCross_np_sys_highpt->Draw("2");
 	
 	SetGraphStyle(gCross_np_lowpt,1,3);
