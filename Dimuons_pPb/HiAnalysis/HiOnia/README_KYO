@@ -1,0 +1,9 @@
+
+only change in test/effanalyzer_cfg.py file
+
+# pure pythia MC
+genParticles = cms.InputTag("genParticles")
+# embedded MC
+genParticles = cms.InputTag("hiGenParticles")
+
+
