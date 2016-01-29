@@ -1,0 +1,11 @@
+#root -l -b -q 'rootAna_acceptance.C+(89,1)'
+#root -l -b -q 'rootAna_acceptance.C+(89,0)'
+#root -l -b -q 'rootAna_acceptance.C+(83,1)'
+#root -l -b -q 'rootAna_acceptance.C+(83,0)'
+#root -l -b -q 'rootAna_acceptance.C+(63,1)'
+#root -l -b -q 'rootAna_acceptance.C+(63,0)'
+#root -l -b -q 'rootAna_acceptance.C+(62,1)'
+#root -l -b -q 'rootAna_acceptance.C+(62,0)'
+### PAS (old cut)
+root -l -b -q 'rootAna_acceptance_PAS.C+(89,1)'
+root -l -b -q 'rootAna_acceptance_PAS.C+(89,0)'

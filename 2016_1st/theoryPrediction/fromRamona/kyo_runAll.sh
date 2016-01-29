@@ -1,0 +1,10 @@
+#root -l kyo_eloss_rfb_pt_y045.C	 
+#root -l kyo_eloss_rfb_pt_y120.C	 
+#root -l kyo_eloss_rfb_pt_y171.C	 
+root -l kyo_eps09NLO_rfb_pt_y045.C	 
+root -l kyo_eps09NLO_rfb_pt_y120.C	 
+root -l kyo_eps09NLO_rfb_pt_y171.C	 
+root -l kyo_eps09NLO_rfb_y.C	 
+#root -l kyo_two_rfb_pt_y045.C	 
+#root -l kyo_two_rfb_pt_y120.C	 
+#root -l kyo_two_rfb_pt_y171.C	 

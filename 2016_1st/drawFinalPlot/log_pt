@@ -1,0 +1,298 @@
+
+Processing draw_1D_crossSection_pt.C+...
+nRap = 8
+0th rapBinW = 0.43
+1th rapBinW = 0.6
+2th rapBinW = 0.9
+3th rapBinW = 0.9
+4th rapBinW = 0.6
+5th rapBinW = 0.43
+6th rapBinW = 0.47
+7th rapBinW = 0.47
+nPt = 9
+0th ptBinW = 3
+1th ptBinW = 1
+2th ptBinW = 1
+3th ptBinW = 1.5
+4th ptBinW = 1
+5th ptBinW = 1
+6th ptBinW = 1.5
+7th ptBinW = 4
+8th ptBinW = 16
+0th rapArr = 1.50 < y_{CM} < 1.93
+1th rapArr = 0.90 < y_{CM} < 1.50
+2th rapArr = 0 < y_{CM} < 0.90
+3th rapArr = -0.90 < y_{CM} < 0
+4th rapArr = -1.50 < y_{CM} < -0.90
+5th rapArr = -1.93 < y_{CM} < -1.50
+6th rapArr = -2.40 < y_{CM} < -1.93
+7th rapArr = -2.87 < y_{CM} < -2.40
+0th ptArr = 0 < p_{T} < 3 GeV/c
+1th ptArr = 3 < p_{T} < 4 GeV/c
+2th ptArr = 4 < p_{T} < 5 GeV/c
+3th ptArr = 5 < p_{T} < 6.5 GeV/c
+4th ptArr = 6.5 < p_{T} < 7.5 GeV/c
+5th ptArr = 7.5 < p_{T} < 8.5 GeV/c
+6th ptArr = 8.5 < p_{T} < 10 GeV/c
+7th ptArr = 10 < p_{T} < 14 GeV/c
+8th ptArr = 14 < p_{T} < 30 GeV/c
+dirName = 8rap9pt
+runCode = 0, runstring = All
+h2D_corrY_PR_Pbp = 0x7fc4ebcc18c0
+h2D_corrY_NP_Pbp = 0x7fc4ebd18fe0
+h2D_corrY_PR_pPb = 0x7fc4ebd19c60
+h2D_corrY_NP_pPb = 0x7fc4ebd1a8e0
+nbinsX = 8
+nbinsY = 9
+ 
+0th rap !!!
+ *** b) corrYield/(dPt*dRap)  *** 
+ *** c) cross-section  *** 
+0th pt
+h1D_corrY_PR_tot = 255.812
+h1D_corrY_NP_tot = 33.7397
+1th pt
+h1D_corrY_PR_tot = 136.348
+h1D_corrY_NP_tot = 20.0081
+2th pt
+h1D_corrY_PR_tot = 74.2291
+h1D_corrY_NP_tot = 14.8393
+3th pt
+h1D_corrY_PR_tot = 32.8122
+h1D_corrY_NP_tot = 7.44936
+4th pt
+h1D_corrY_PR_tot = 15.5322
+h1D_corrY_NP_tot = 3.74649
+5th pt
+h1D_corrY_PR_tot = 8.66612
+h1D_corrY_NP_tot = 2.13649
+6th pt
+h1D_corrY_PR_tot = 3.35777
+h1D_corrY_NP_tot = 1.48361
+7th pt
+h1D_corrY_PR_tot = 1.07223
+h1D_corrY_NP_tot = 0.489874
+8th pt
+h1D_corrY_PR_tot = 0.0616715
+h1D_corrY_NP_tot = 0.0532456
+ 
+1th rap !!!
+ *** b) corrYield/(dPt*dRap)  *** 
+ *** c) cross-section  *** 
+0th pt
+h1D_corrY_PR_tot = 269.38
+h1D_corrY_NP_tot = 82.6063
+1th pt
+h1D_corrY_PR_tot = 174.112
+h1D_corrY_NP_tot = 31.351
+2th pt
+h1D_corrY_PR_tot = 90.3034
+h1D_corrY_NP_tot = 16.3369
+3th pt
+h1D_corrY_PR_tot = 40.6866
+h1D_corrY_NP_tot = 8.61661
+4th pt
+h1D_corrY_PR_tot = 17.5487
+h1D_corrY_NP_tot = 4.75694
+5th pt
+h1D_corrY_PR_tot = 8.81263
+h1D_corrY_NP_tot = 2.71419
+6th pt
+h1D_corrY_PR_tot = 4.65496
+h1D_corrY_NP_tot = 1.56838
+7th pt
+h1D_corrY_PR_tot = 1.31488
+h1D_corrY_NP_tot = 0.62778
+8th pt
+h1D_corrY_PR_tot = 0.0822536
+h1D_corrY_NP_tot = 0.065852
+ 
+2th rap !!!
+ *** b) corrYield/(dPt*dRap)  *** 
+ *** c) cross-section  *** 
+0th pt
+h1D_corrY_PR_tot = 0
+h1D_corrY_NP_tot = 0
+1th pt
+h1D_corrY_PR_tot = 0
+h1D_corrY_NP_tot = 133.103
+2th pt
+h1D_corrY_PR_tot = 156.118
+h1D_corrY_NP_tot = 38.1014
+3th pt
+h1D_corrY_PR_tot = 51.1756
+h1D_corrY_NP_tot = 10.6621
+4th pt
+h1D_corrY_PR_tot = 22.054
+h1D_corrY_NP_tot = 5.63978
+5th pt
+h1D_corrY_PR_tot = 10.6429
+h1D_corrY_NP_tot = 3.32431
+6th pt
+h1D_corrY_PR_tot = 4.97293
+h1D_corrY_NP_tot = 2.10749
+7th pt
+h1D_corrY_PR_tot = 1.44798
+h1D_corrY_NP_tot = 0.632124
+8th pt
+h1D_corrY_PR_tot = 0.0894664
+h1D_corrY_NP_tot = 0.0727891
+ 
+3th rap !!!
+ *** b) corrYield/(dPt*dRap)  *** 
+ *** c) cross-section  *** 
+0th pt
+h1D_corrY_PR_tot = 0
+h1D_corrY_NP_tot = 0
+1th pt
+h1D_corrY_PR_tot = 0
+h1D_corrY_NP_tot = 0
+2th pt
+h1D_corrY_PR_tot = 0
+h1D_corrY_NP_tot = 0
+3th pt
+h1D_corrY_PR_tot = 144.403
+h1D_corrY_NP_tot = 23.314
+4th pt
+h1D_corrY_PR_tot = 25.1188
+h1D_corrY_NP_tot = 7.47201
+5th pt
+h1D_corrY_PR_tot = 11.596
+h1D_corrY_NP_tot = 3.88449
+6th pt
+h1D_corrY_PR_tot = 5.41785
+h1D_corrY_NP_tot = 1.77051
+7th pt
+h1D_corrY_PR_tot = 1.43469
+h1D_corrY_NP_tot = 0.670167
+8th pt
+h1D_corrY_PR_tot = 0.0976896
+h1D_corrY_NP_tot = 0.065734
+ 
+4th rap !!!
+ *** b) corrYield/(dPt*dRap)  *** 
+ *** c) cross-section  *** 
+0th pt
+h1D_corrY_PR_tot = 0
+h1D_corrY_NP_tot = 0
+1th pt
+h1D_corrY_PR_tot = 0
+h1D_corrY_NP_tot = 0
+2th pt
+h1D_corrY_PR_tot = 0
+h1D_corrY_NP_tot = 0
+3th pt
+h1D_corrY_PR_tot = 56.6484
+h1D_corrY_NP_tot = 10.5013
+4th pt
+h1D_corrY_PR_tot = 23.687
+h1D_corrY_NP_tot = 6.02938
+5th pt
+h1D_corrY_PR_tot = 12.6574
+h1D_corrY_NP_tot = 3.79823
+6th pt
+h1D_corrY_PR_tot = 5.06312
+h1D_corrY_NP_tot = 1.75287
+7th pt
+h1D_corrY_PR_tot = 1.41858
+h1D_corrY_NP_tot = 0.66963
+8th pt
+h1D_corrY_PR_tot = 0.0801128
+h1D_corrY_NP_tot = 0.0687696
+ 
+5th rap !!!
+ *** b) corrYield/(dPt*dRap)  *** 
+ *** c) cross-section  *** 
+0th pt
+h1D_corrY_PR_tot = 0
+h1D_corrY_NP_tot = 0
+1th pt
+h1D_corrY_PR_tot = 206.381
+h1D_corrY_NP_tot = 64.3034
+2th pt
+h1D_corrY_PR_tot = 127.95
+h1D_corrY_NP_tot = 21.5919
+3th pt
+h1D_corrY_PR_tot = 52.0744
+h1D_corrY_NP_tot = 10.9376
+4th pt
+h1D_corrY_PR_tot = 18.7826
+h1D_corrY_NP_tot = 5.04035
+5th pt
+h1D_corrY_PR_tot = 9.92874
+h1D_corrY_NP_tot = 2.89339
+6th pt
+h1D_corrY_PR_tot = 4.81038
+h1D_corrY_NP_tot = 1.27994
+7th pt
+h1D_corrY_PR_tot = 1.2119
+h1D_corrY_NP_tot = 0.481449
+8th pt
+h1D_corrY_PR_tot = 0.0703512
+h1D_corrY_NP_tot = 0.0514277
+ 
+6th rap !!!
+ *** b) corrYield/(dPt*dRap)  *** 
+ *** c) cross-section  *** 
+0th pt
+h1D_corrY_PR_tot = 304.659
+h1D_corrY_NP_tot = 41.5338
+1th pt
+h1D_corrY_PR_tot = 173.524
+h1D_corrY_NP_tot = 28.7076
+2th pt
+h1D_corrY_PR_tot = 94.5864
+h1D_corrY_NP_tot = 15.3709
+3th pt
+h1D_corrY_PR_tot = 38.5811
+h1D_corrY_NP_tot = 7.51693
+4th pt
+h1D_corrY_PR_tot = 15.7936
+h1D_corrY_NP_tot = 3.63543
+5th pt
+h1D_corrY_PR_tot = 8.10031
+h1D_corrY_NP_tot = 2.00145
+6th pt
+h1D_corrY_PR_tot = 3.80658
+h1D_corrY_NP_tot = 1.16963
+7th pt
+h1D_corrY_PR_tot = 0.992395
+h1D_corrY_NP_tot = 0.426087
+8th pt
+h1D_corrY_PR_tot = 0.0659394
+h1D_corrY_NP_tot = 0.0379355
+ 
+7th rap !!!
+ *** b) corrYield/(dPt*dRap)  *** 
+ *** c) cross-section  *** 
+0th pt
+h1D_corrY_PR_tot = 275.441
+h1D_corrY_NP_tot = 53.1506
+1th pt
+h1D_corrY_PR_tot = 147.815
+h1D_corrY_NP_tot = 20.9762
+2th pt
+h1D_corrY_PR_tot = 72.4692
+h1D_corrY_NP_tot = 11.3647
+3th pt
+h1D_corrY_PR_tot = 30.7791
+h1D_corrY_NP_tot = 5.04493
+4th pt
+h1D_corrY_PR_tot = 12.7733
+h1D_corrY_NP_tot = 3.01603
+5th pt
+h1D_corrY_PR_tot = 6.4105
+h1D_corrY_NP_tot = 1.57758
+6th pt
+h1D_corrY_PR_tot = 2.9583
+h1D_corrY_NP_tot = 0.93909
+7th pt
+h1D_corrY_PR_tot = 0.75704
+h1D_corrY_NP_tot = 0.283209
+8th pt
+h1D_corrY_PR_tot = 0.0350043
+h1D_corrY_NP_tot = 0.0238864
+Info in <TCanvas::Print>: pdf file crossSection_pt_pr_fw_isLog1_isScale0.pdf has been created
+Info in <TCanvas::Print>: pdf file crossSection_pt_pr_bw_isLog1_isScale0.pdf has been created
+Info in <TCanvas::Print>: pdf file crossSection_pt_np_fw_isLog1_isScale0.pdf has been created
+Info in <TCanvas::Print>: pdf file crossSection_pt_np_bw_isLog1_isScale0.pdf has been created

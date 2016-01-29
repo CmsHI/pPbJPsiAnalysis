@@ -1,0 +1,6 @@
+Info in <TUnixSystem::ACLiC>: creating shared library /home/songkyo/kyo/2015_2nd/006_meanPtData/cndr_rootAna_meanPt_wBkg_5_C.so
+Error in <TGClient::TGClient>: can't open display "localhost:10.0", switching to batch mode...
+ In case you run from a remote ssh session, reconnect with ssh -Y
+/home/songkyo/kyo/2015_2nd/006_meanPtData/cndr_rootAna_meanPt_wBkg_5_C_ACLiC_dict.cxx: In function ‘int G__cndr_rootAna_meanPt_wBkg_5_C_ACLiC_dict__0_2127(G__value*, const char*, G__param*, int)’:
+/home/songkyo/kyo/2015_2nd/006_meanPtData/cndr_rootAna_meanPt_wBkg_5_C_ACLiC_dict.cxx:119: warning: deprecated conversion from string constant to ‘char*’
+Info in <TCanvas::Print>: pdf file dir_meanPt_n20_PAS/meanPt_PAS_0_0_wBkg_5.pdf has been created

@@ -1,0 +1,79 @@
+  *******************************************
+  *                                         *
+  *        W E L C O M E  to  R O O T       *
+  *                                         *
+  *   Version   5.34/21  9 September 2014   *
+  *                                         *
+  *  You are welcome to visit our Web site  *
+  *          http://root.cern.ch            *
+  *                                         *
+  *******************************************
+
+ROOT 5.34/21 (v5-34-21@v5-34-21, 10월 06 2014, 15:15:06 on linuxx8664gcc)
+
+CINT/ROOT C/C++ Interpreter version 5.18.00, July 2, 2010
+Type ? for help. Commands must be C++ statements.
+Enclose multiple statements between { }.
+
+Processing /home/songkyo/kyo/2015_2nd/006_meanPtData/cndr_rootAna_meanPt_wBkg_3.C+...
+nPt=9
+nRap=1
+rap string arr = -0.90 < y_{CM} < 0
+nEt=1
+et string arr = 0 < E_{T}^{HF} < 120 GeV
+ptRange = Reco_QQ_4mom.Pt()>2.0 && Reco_QQ_4mom.Pt()<3.0
+rapRangePbp = -0.47-1.*Reco_QQ_4mom.Rapidity()>-0.90 && -0.47-1.*Reco_QQ_4mom.Rapidity()<0.00
+rapRangepPb = -0.47+Reco_QQ_4mom.Rapidity()>-0.90 && -0.47+Reco_QQ_4mom.Rapidity()<0.00
+ptRange = Reco_QQ_4mom.Pt()>3.0 && Reco_QQ_4mom.Pt()<4.0
+rapRangePbp = -0.47-1.*Reco_QQ_4mom.Rapidity()>-0.90 && -0.47-1.*Reco_QQ_4mom.Rapidity()<0.00
+rapRangepPb = -0.47+Reco_QQ_4mom.Rapidity()>-0.90 && -0.47+Reco_QQ_4mom.Rapidity()<0.00
+ptRange = Reco_QQ_4mom.Pt()>4.0 && Reco_QQ_4mom.Pt()<5.0
+rapRangePbp = -0.47-1.*Reco_QQ_4mom.Rapidity()>-0.90 && -0.47-1.*Reco_QQ_4mom.Rapidity()<0.00
+rapRangepPb = -0.47+Reco_QQ_4mom.Rapidity()>-0.90 && -0.47+Reco_QQ_4mom.Rapidity()<0.00
+ptRange = Reco_QQ_4mom.Pt()>5.0 && Reco_QQ_4mom.Pt()<6.5
+rapRangePbp = -0.47-1.*Reco_QQ_4mom.Rapidity()>-0.90 && -0.47-1.*Reco_QQ_4mom.Rapidity()<0.00
+rapRangepPb = -0.47+Reco_QQ_4mom.Rapidity()>-0.90 && -0.47+Reco_QQ_4mom.Rapidity()<0.00
+ptRange = Reco_QQ_4mom.Pt()>6.5 && Reco_QQ_4mom.Pt()<7.5
+rapRangePbp = -0.47-1.*Reco_QQ_4mom.Rapidity()>-0.90 && -0.47-1.*Reco_QQ_4mom.Rapidity()<0.00
+rapRangepPb = -0.47+Reco_QQ_4mom.Rapidity()>-0.90 && -0.47+Reco_QQ_4mom.Rapidity()<0.00
+ptRange = Reco_QQ_4mom.Pt()>7.5 && Reco_QQ_4mom.Pt()<8.5
+rapRangePbp = -0.47-1.*Reco_QQ_4mom.Rapidity()>-0.90 && -0.47-1.*Reco_QQ_4mom.Rapidity()<0.00
+rapRangepPb = -0.47+Reco_QQ_4mom.Rapidity()>-0.90 && -0.47+Reco_QQ_4mom.Rapidity()<0.00
+ptRange = Reco_QQ_4mom.Pt()>8.5 && Reco_QQ_4mom.Pt()<10.0
+rapRangePbp = -0.47-1.*Reco_QQ_4mom.Rapidity()>-0.90 && -0.47-1.*Reco_QQ_4mom.Rapidity()<0.00
+rapRangepPb = -0.47+Reco_QQ_4mom.Rapidity()>-0.90 && -0.47+Reco_QQ_4mom.Rapidity()<0.00
+ptRange = Reco_QQ_4mom.Pt()>10.0 && Reco_QQ_4mom.Pt()<14.0
+rapRangePbp = -0.47-1.*Reco_QQ_4mom.Rapidity()>-0.90 && -0.47-1.*Reco_QQ_4mom.Rapidity()<0.00
+rapRangepPb = -0.47+Reco_QQ_4mom.Rapidity()>-0.90 && -0.47+Reco_QQ_4mom.Rapidity()<0.00
+ptRange = Reco_QQ_4mom.Pt()>14.0 && Reco_QQ_4mom.Pt()<30.0
+rapRangePbp = -0.47-1.*Reco_QQ_4mom.Rapidity()>-0.90 && -0.47-1.*Reco_QQ_4mom.Rapidity()<0.00
+rapRangepPb = -0.47+Reco_QQ_4mom.Rapidity()>-0.90 && -0.47+Reco_QQ_4mom.Rapidity()<0.00
+hMeanPt_0_0_0 : entries = 0
+ Cand <p_{T}> = 0
+ Bkg <p_{T}> = 0
+hMeanPt_0_0_1 : entries = 0
+ Cand <p_{T}> = 0
+ Bkg <p_{T}> = 0
+hMeanPt_0_0_2 : entries = 0
+ Cand <p_{T}> = 0
+ Bkg <p_{T}> = 0
+hMeanPt_0_0_3 : entries = 77
+ Cand <p_{T}> = 6.35387
+ Bkg <p_{T}> = 6.19863
+hMeanPt_0_0_4 : entries = 1352
+ Cand <p_{T}> = 7.1242
+ Bkg <p_{T}> = 7.12859
+hMeanPt_0_0_5 : entries = 2665
+ Cand <p_{T}> = 8.01342
+ Bkg <p_{T}> = 7.99895
+hMeanPt_0_0_6 : entries = 3758
+ Cand <p_{T}> = 9.22929
+ Bkg <p_{T}> = 9.21956
+hMeanPt_0_0_7 : entries = 5333
+ Cand <p_{T}> = 11.6291
+ Bkg <p_{T}> = 11.6124
+hMeanPt_0_0_8 : entries = 2615
+ Cand <p_{T}> = 17.8439
+ Bkg <p_{T}> = 18.2498
+strBin : PAS
+(int)0
