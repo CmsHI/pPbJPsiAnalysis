@@ -23,7 +23,7 @@ bool kineCut(double muPt, double muEta, double muP);
 bool massCut(double lv_dimu_mass);
 
 //// select m rapidity and n pt binning : (MN) = (89, 83, 63, 62)
-void rootAna_acceptance(int mrapnpt=89, bool isPrompt=true){
+void rootAna_acceptance_PAS(int mrapnpt=89, bool isPrompt=true){
 	
 	using namespace std;
 	char* sampleName;
@@ -209,7 +209,7 @@ void rootAna_acceptance(int mrapnpt=89, bool isPrompt=true){
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////	
 	//// Save the data as an root file
-	TFile *outFile = new TFile(Form("AccAna_%s.root",strName),"RECREATE");
+	TFile *outFile = new TFile(Form("AccAna_%s_PAS.root",strName),"RECREATE");
 	std::cout << "strName: " << strName << std::endl;
 	outFile->cd();
 	h2D_Den_pt_y_Pbp->Write();
@@ -235,18 +235,18 @@ bool dimuCut(int lv_dmom0_Id, int lv_dkid0_ch, int lv_dkid1_ch) {
 }
 
 bool kineCut(double muPt, double muEta, double muP) {
-/*
 	//// ---------- old cut (2015PAS)		
 		return ( TMath::Abs(muEta) < 2.4 &&
 						((TMath::Abs(muEta) < 1.3 && muPt >=3.3) ||
 						 (1.3 <= TMath::Abs(muEta) && TMath::Abs(muEta) < 2.2 && muP >=2.9) ||
 						 (2.2 <= TMath::Abs(muEta) && muPt >= 0.8)));
-*/
+/*
 	//// ---------- new cut (cutG)
 	return ( TMath::Abs(muEta) < 2.4 &&
 				((TMath::Abs(muEta) < 1.2 && muPt >=3.3) ||
 				(1.2 <= TMath::Abs(muEta) && TMath::Abs(muEta) < 2.1 && muPt >= -(1.0/0.9)*TMath::Abs(muEta)+(1.2*(1.0/0.9)+2.6)) ||
 				(2.1 <= TMath::Abs(muEta) && muPt >= 1.3)));
+*/
 
 }
 
