@@ -1,0 +1,14 @@
+#!/bin/bash
+
+pwddir=$(pwd)
+echo $pwddir
+
+cd $CMSSW_BASE/src
+source  /afs/cern.ch/cms/cmsset_default.sh
+eval `scram runtime -sh`
+curl  -s   https://raw.githubusercontent.com/CmsHI/pPbJPsiAnalysis/master/MCConfigs/Configuration/GenProduction/python/HI/PYTHIA6_inclBtoPsiMuMu_5TeV02_nofilter_cff.py --retry 2 --create-dirs -o  Configuration/GenProduction/python/HI/PYTHIA6_inclBtoPsiMuMu_5TeV02_nofilter_cff.py
+
+scram b
+cd $pwddir
+cmsDriver.py Configuration/GenProduction/python/HI/PYTHIA6_inclBtoPsiMuMu_5TeV02_nofilter_cff.py --fileout file:HIN-pAWinter13-inclBtoPsiMuMu_5TeV02_1st_nofilter.root --mc --eventcontent RAWSIM --pileup NoPileUp --datatier GEN --conditions STARTHI53_V27::All --beamspot Realistic5TeVPPbBoost --step GEN --datamix NODATAMIXER --python_filename HIN-pAWinter13-inclBtoPsiMuMu_5TeV02_1st_nofilter_cfg.py --no_exec --customise Configuration/DataProcessing/Utils.addMonitoring,GeneratorInterface/HiGenCommon/customiseSwapVtxSmearAndProdFilter_cfi.customiseSwapVtxSmearAndProdFilter -n 100
+
