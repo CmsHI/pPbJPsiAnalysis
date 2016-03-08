@@ -11,6 +11,7 @@
 #include <TROOT.h>
 #include <TFile.h>
 #include <TTree.h>
+#include <TChain.h>
 #include <TDirectory.h>
 #include <TSystem.h>
 #include <TStyle.h>
@@ -28,6 +29,11 @@
 #include <TCut.h>
 #include <TMath.h>
 #include <math.h>
+
+#include <TLorentzVector.h>
+#include <TClonesArray.h>
+#include <TLorentzRotation.h>
+#include <TVector3.h>
 
 ////// calculation with error propagation
 
@@ -97,7 +103,7 @@ void SetGraphStyle(TGraph* gr, Int_t c, Int_t m) {
 	else gr-> SetMarkerStyle(markerOpenArr[m-10]);
 	gr-> SetMarkerSize(1.2);
 	gr-> SetLineColor(colorArr[c]);
-	gr-> SetLineWidth(0.8);
+	gr-> SetLineWidth(1);
 }
 
 void SetLegendStyle(TLegend* l) {
