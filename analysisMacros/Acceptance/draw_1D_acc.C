@@ -1,28 +1,31 @@
 #include "SONGKYO.h"
 
 //// for acceptance, use Pbp only
-void draw_1D_acc(int MrapNpt=89, int isPA = 0, bool isPrompt=true, char* szDir="dir_acc")
+int draw_1D_acc(int MrapNpt=89, int isPA = 0, bool isPrompt=false, int accCutType =2, char* szDir="dir_acc")
 {
 	gROOT->Macro("./Style.C");
-
-	char* szSample;
-	if (isPA==0) {
-		if (isPrompt) szSample = "pp_PR";
-		else szSample = "pp_NP";
-	} else {
-		if (isPrompt) szSample = "pA_PR";
-		else szSample = "pA_NP";
-	}
-	char* szBinning;
-	if (MrapNpt==89) szBinning = "8rap9pt";
-	else if (MrapNpt==83) szBinning = "8rap3pt";
-	else if (MrapNpt==63) szBinning = "6rap3pt";
-	else if (MrapNpt==62) szBinning = "6rap2pt";
-	else {cout << "select among MrapNpt = 89, 83, 63, or 62"<< endl; return; }
 	
-	char* szName = Form("%s_%s",szBinning,szSample);	
-	cout << "szName = " << szName << endl;
-	TFile * f2D = new TFile(Form("AccAna_%s.root",szName));
+	char* szBinning;
+	if (MrapNpt==89)  {szBinning = "8rap9pt"; }
+	else if (MrapNpt==83) { szBinning = "8rap3pt"; }
+	else if (MrapNpt==63) { szBinning = "6rap3pt"; }
+	else if (MrapNpt==62) { szBinning = "6rap2pt"; }
+	else {cout << "select among MrapNpt = 89, 83, 63, or 62"<< endl; return 0; }
+  char* szPA;
+  if (isPA==0) szPA="pp";
+  else if (isPA==1) szPA="pA";
+  else {cout << "select among isPA = 0 or 1 only (pA instead of Pbp or pPb) "<< endl; return 0; }
+  char* szAccCut;
+  if (accCutType==1) szAccCut="oldcut";
+  else if (accCutType==2) szAccCut="newcut";
+  else {cout << "select among accCutType = 1 or 2"<< endl; return 0; }	
+	char* szPrompt;
+  if (isPrompt) szPrompt = "PR";
+  else szPrompt = "NP";	
+	const char* szFinal = Form("%s_%s_%s_%s",szBinning,szPA,szPrompt,szAccCut);
+	std::cout << "szFinal: " << szFinal << std::endl;
+
+	TFile * f2D = new TFile(Form("AccAna_%s.root",szFinal));
 
 	TH2D* h2D_Acc;
 	if (isPA==0) h2D_Acc = (TH2D*)f2D->Get("h2D_Acc_pt_y");
@@ -72,15 +75,15 @@ void draw_1D_acc(int MrapNpt=89, int isPA = 0, bool isPrompt=true, char* szDir="
 		else if (iy==1 || iy==6) dashedLine (3.,0.,3.,1.,1,1);
 		else if (iy==5)  dashedLine (5.,0.,5.,1.,1,1);
 		else if (iy==2 || iy==3 || iy==4)  dashedLine (6.5,0.,6.5,1.,1,1);
-		latex->DrawLatex(0.50,0.31,Form("%s",szSample));
+		latex->DrawLatex(0.50,0.31,Form("%s",szFinal));
 		latex->DrawLatex(0.50,0.25,Form("%.2f < y_{lab} < %.2f",rapEdge[iy],rapEdge[iy+1]));
-		latex->DrawLatex(0.50,0.21,Form("%.1f < y_{CM} < %.1f",-1*rapEdge[iy+1]-0.47,-1*rapEdge[iy]-0.47));
+		//latex->DrawLatex(0.50,0.21,Form("%.2f < y_{CM} < %.2f",-1*rapEdge[iy+1]-0.47,-1*rapEdge[iy]-0.47));
 	}
-	c1->SaveAs(Form("%s/%s_AccPt.pdf",szDir,szName));
+	c1->SaveAs(Form("%s/%s_AccPt.pdf",szDir,szFinal));
 	
 	//// save as a root file
-	cout << "szName = " << szName << endl;
-	TFile *fOut = new TFile(Form("%s/%s_AccPt.root",szDir,szName),"RECREATE");
+	cout << "szFinal = " << szFinal << endl;
+	TFile *fOut = new TFile(Form("%s/%s_AccPt.root",szDir,szFinal),"RECREATE");
 	fOut->cd();
 	for (Int_t iy = 0; iy < nRap; iy++) {
 		h1D_AccPt[iy]->Write();
@@ -88,6 +91,6 @@ void draw_1D_acc(int MrapNpt=89, int isPA = 0, bool isPrompt=true, char* szDir="
 	tRap->Write();
 	fOut->Close();
 
-	return;
+	return 0;
 
 }
