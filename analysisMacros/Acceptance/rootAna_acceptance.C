@@ -5,8 +5,8 @@ bool massCutWide(double t_dimu_M);
 
 ////////////////////////////////////////////////////////////////////////////////	
 //// MrapNpt (M rapidity and N pt bins) : (MN) = (89, 83, 63, 62)
-//// isPA : 0=pp, 1=Pbp (and pPb automatically)
-//// iaccCutType : 1=oldcut, 2=newcut
+//// isPA : 0=pp, 1=PA (Pbp and pPb together)
+//// accCutType : 1=oldcut, 2=newcut
 //// isPrompt : true=PR, false=NP
 ////////////////////////////////////////////////////////////////////////////////	
 
@@ -17,35 +17,40 @@ int rootAna_acceptance(int MrapNpt=89, int isPA = 0, int accCutType =2, bool isP
 	int nevt = -1; //all
 	//int nevt = 5000;
 	  
-	char* szSample;
 	char* szBinning;
 	if (MrapNpt==89)  {szBinning = "8rap9pt"; }
 	else if (MrapNpt==83) { szBinning = "8rap3pt"; }
 	else if (MrapNpt==63) { szBinning = "6rap3pt"; }
 	else if (MrapNpt==62) { szBinning = "6rap2pt"; }
 	else {cout << "select among MrapNpt = 89, 83, 63, or 62"<< endl; return 0; }
-	
+  char* szPA;
+  if (isPA==0) szPA="pp";
+  else if (isPA==1) szPA="pA";
+  else {cout << "select among isPA = 0 or 1 only (pA instead of Pbp or pPb) "<< endl; return 0; }
+  char* szAccCut;
+  if (accCutType==1) szAccCut="oldcut";
+  else if (accCutType==2) szAccCut="newcut";
+  else {cout << "select among accCutType = 1 or 2"<< endl; return 0; }	
+	char* szPrompt;
+  if (isPrompt) szPrompt = "PR";
+  else szPrompt = "NP";	
+	const char* szFinal = Form("%s_%s_%s_%s",szBinning,szPA,szPrompt,szAccCut);
+	std::cout << "szFinal: " << szFinal << std::endl;
+
 	TFile* f1;
 	if (isPA==0) {	// for pp
 		if (isPrompt){
-			szSample="pp_PR";
-			f1 = new TFile("/home/samba/Onia5TeV/ppMC/OniaTree_JpsiMM_pp5p02TeV_TuneCUETP8M1_GENONLY.root");
+			f1 = new TFile("/home/songkyo/kyo/ppDataSample/AcceptanceSample/OniaTree_JpsiMM_pp5p02TeV_TuneCUETP8M1_GENONLY.root");
 		} else	{ 
-			szSample="pp_NP";
-			f1 = new TFile("/home/samba/Onia5TeV/ppMC/OniaTree_JpsiMM_pp5p02TeV_TuneCUETP8M1_GENONLY.root");
+			f1 = new TFile("/home/songkyo/kyo/ppDataSample/AcceptanceSample/OniaTree_BJpsiMM_pp5p02TeV_TuneCUETP8M1_GENONLY.root");
 		}
 	} else { //for Pbp and pPb
 		if (isPrompt){
-			szSample="pA_PR";
-			f1 = new TFile("/home/samba/Onia5TeV/ppMC/OniaTree_JpsiMM_pp5p02TeV_TuneCUETP8M1_GENONLY.root");
+			f1 = new TFile("");
 		} else {
-			szSample="pA_NP";
-			f1 = new TFile("/home/samba/Onia5TeV/ppMC/OniaTree_JpsiMM_pp5p02TeV_TuneCUETP8M1_GENONLY.root");
+			f1 = new TFile("");
 		}
 	}
-	const char* szName = Form("%s_%s",szBinning,szSample);
-	std::cout << "szName: " << szName << std::endl;
-
 	TTree * myTree;
 	if (isPA==0) { myTree = (TTree*)f1->Get("hionia/myTree"); }
 	else { myTree = (TTree*)f1->Get("myTree"); }
@@ -54,13 +59,11 @@ int rootAna_acceptance(int MrapNpt=89, int isPA = 0, int accCutType =2, bool isP
 	//// 1) muons (pdg 13, +-pairs, and status==1 already)
 	//// 2) J/psi (pdg 443 already)
   Int_t           Gen_QQ_size;
-  Int_t           Gen_QQ_type[3];  //[Gen_QQ_size] : for MC PR=0 / NP=1
   TClonesArray    *Gen_QQ_4mom;
   TClonesArray    *Gen_QQ_mupl_4mom;
   TClonesArray    *Gen_QQ_mumi_4mom;
 
   TBranch        *b_Gen_QQ_size;   //!
-  TBranch        *b_Gen_QQ_type;
   TBranch        *b_Gen_QQ_4mom;   //!
   TBranch        *b_Gen_QQ_mupl_4mom;   //!
   TBranch        *b_Gen_QQ_mumi_4mom;   //!
@@ -71,7 +74,6 @@ int rootAna_acceptance(int MrapNpt=89, int isPA = 0, int accCutType =2, bool isP
 	Gen_QQ_mumi_4mom = 0;
 
   myTree->SetBranchAddress("Gen_QQ_size", &Gen_QQ_size, &b_Gen_QQ_size);
-  myTree->SetBranchAddress("Gen_QQ_type", Gen_QQ_type, &b_Gen_QQ_type);
   myTree->SetBranchAddress("Gen_QQ_4mom", &Gen_QQ_4mom, &b_Gen_QQ_4mom);
   myTree->SetBranchAddress("Gen_QQ_mupl_4mom", &Gen_QQ_mupl_4mom, &b_Gen_QQ_mupl_4mom);
   myTree->SetBranchAddress("Gen_QQ_mumi_4mom", &Gen_QQ_mumi_4mom, &b_Gen_QQ_mumi_4mom);
@@ -130,9 +132,9 @@ int rootAna_acceptance(int MrapNpt=89, int isPA = 0, int accCutType =2, bool isP
 	h2D_Num_pt_y->Sumw2();
 	h2D_Acc_pt_y->Sumw2();
 	////fine-grained bins for plots in AN (for 8rap9pt only)
-	TH2D *h2D_Den_pt_y_fine = new TH2D("h2D_Den_pt_y_fine",";y_{lab};p_{T} (GeV);",100,-2.5,2.5,100,0,30);
-	TH2D *h2D_Num_pt_y_fine = new TH2D("h2D_Num_pt_y_fine",";y_{lab};p_{T} (GeV);",100,-2.5,2.5,100,0,30);
-	TH2D *h2D_Acc_pt_y_fine = new TH2D("h2D_Acc_pt_y_fine",";y_{lab};p_{T} (GeV);",100,-2.5,2.5,100,0,30);
+	TH2D *h2D_Den_pt_y_fine = new TH2D("h2D_Den_pt_y_fine",";y_{lab};p_{T} (GeV);",100,-2.5,2.5,100,0.,30.);
+	TH2D *h2D_Num_pt_y_fine = new TH2D("h2D_Num_pt_y_fine",";y_{lab};p_{T} (GeV);",100,-2.5,2.5,100,0.,30.);
+	TH2D *h2D_Acc_pt_y_fine = new TH2D("h2D_Acc_pt_y_fine",";y_{lab};p_{T} (GeV);",100,-2.5,2.5,100,0.,30.);
 	h2D_Den_pt_y_fine->Sumw2();
 	h2D_Num_pt_y_fine->Sumw2();
 	h2D_Acc_pt_y_fine->Sumw2();
@@ -145,9 +147,10 @@ int rootAna_acceptance(int MrapNpt=89, int isPA = 0, int accCutType =2, bool isP
 	////////////////////////////////////////////////////////////////////////////////	
 	cout << "Entries of tree : " << myTree->GetEntries() << endl;
 	if(nevt == -1) { nevt = myTree->GetEntries(); }
-	//// event loop Start!
+	
+	//// event loop start!
 	for(int iev=0; iev<nevt; iev++){
-		if(iev%100000==0) cout << ">>>>> EVENT " << iev << " / " << myTree->GetEntries() <<  endl;
+		if(iev%100000==0) cout << ">>>>> EVENT " << iev << " / " << myTree->GetEntries() << " ("<<(int)(100.*iev/myTree->GetEntries()) << "%)" << endl;
 		myTree->GetEntry(iev);
 	
 		//// Gen_QQ_size loop
@@ -227,7 +230,7 @@ int rootAna_acceptance(int MrapNpt=89, int isPA = 0, int accCutType =2, bool isP
 		h2D_Den_pt_y->SetName("h2D_Den_pt_y_Pbp");
 	}
 
-	TFile *outFile = new TFile(Form("AccAna_%s.root",szName),"RECREATE");
+	TFile *outFile = new TFile(Form("AccAna_%s.root",szFinal),"RECREATE");
 	outFile->cd();
 	h2D_Den_Jpsi_pt_y->Write();
 	h2D_Den_pt_y->Write();
@@ -244,7 +247,7 @@ int rootAna_acceptance(int MrapNpt=89, int isPA = 0, int accCutType =2, bool isP
 		h2D_Acc_pt_y_fine->Write();
 	}
 	outFile->Close();
-	std::cout << "szName: " << szName << std::endl;
+	std::cout << "szFinal: " << szFinal << std::endl;
 	return 0;
 } // end of main func
 
