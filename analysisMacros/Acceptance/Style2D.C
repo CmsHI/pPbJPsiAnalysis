@@ -10,9 +10,9 @@
   gStyle->SetTitleFillColor(0);
   gStyle->SetStatColor(0);
 
-	gStyle->SetPaintTextFormat(".3f");
+  gStyle->SetPaintTextFormat(".3f");
   
-	gStyle->SetFrameBorderMode(0);
+  gStyle->SetFrameBorderMode(0);
   gStyle->SetFrameFillColor(0);
   gStyle->SetFrameLineColor(kBlack);
 

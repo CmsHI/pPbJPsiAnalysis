@@ -17,38 +17,38 @@ int rootAna_acceptance(int MrapNpt=89, int isPA = 0, int accCutType =2, bool isP
   int nevt = -1; //all
   //int nevt = 5000;
     
-  char* szBinning;
+  TString szBinning;
   if (MrapNpt==89)  {szBinning = "8rap9pt"; }
   else if (MrapNpt==83) { szBinning = "8rap3pt"; }
   else if (MrapNpt==63) { szBinning = "6rap3pt"; }
   else if (MrapNpt==62) { szBinning = "6rap2pt"; }
   else {cout << "select among MrapNpt = 89, 83, 63, or 62"<< endl; return 0; }
-  char* szPA;
+  TString szPA;
   if (isPA==0) szPA="pp";
   else if (isPA==1) szPA="pA";
   else {cout << "select among isPA = 0 or 1 only (pA instead of Pbp or pPb) "<< endl; return 0; }
-  char* szAccCut;
+  TString szAccCut;
   if (accCutType==1) szAccCut="oldcut";
   else if (accCutType==2) szAccCut="newcut";
   else {cout << "select among accCutType = 1 or 2"<< endl; return 0; }  
-  char* szPrompt;
+  TString szPrompt;
   if (isPrompt) szPrompt = "PR";
   else szPrompt = "NP"; 
-  const char* szFinal = Form("%s_%s_%s_%s",szBinning,szPA,szPrompt,szAccCut);
+  const TString szFinal = Form("%s_%s_%s_%s",szBinning.Data(),szPA.Data(),szPrompt.Data(),szAccCut.Data());
   std::cout << "szFinal: " << szFinal << std::endl;
 
   TFile* f1;
   if (isPA==0) {  // for pp
     if (isPrompt){
-      f1 = new TFile("/home/songkyo/kyo/ppDataSample/AcceptanceSample/OniaTree_JpsiMM_pp5p02TeV_TuneCUETP8M1_GENONLY.root");
+      f1 = new TFile("/storage/OniaTree/Onia5TeV/ppOfficialMC/OniaTree_JpsiMM_5p02TeV_TuneCUETP8M1_nofilter_pp502Fall15-MCRUN2_71_V1-v1_GENONLY.root");
     } else  { 
-      f1 = new TFile("/home/songkyo/kyo/ppDataSample/AcceptanceSample/OniaTree_BJpsiMM_pp5p02TeV_TuneCUETP8M1_GENONLY.root");
+      f1 = new TFile("/storage/OniaTree/Onia5TeV/ppOfficialMC/OniaTree_BJpsiMM_5p02TeV_TuneCUETP8M1_nofilter_pp502Fall15-MCRUN2_71_V1-v1_GENONLY.root");
     }
   } else { //for Pbp and pPb
     if (isPrompt){
-      f1 = new TFile("");
+      f1 = new TFile("/home/songkyo/kyo/pPbDataSample/AcceptanceSample/MCJPsiWithFSR_pa_1st_run_STARTHI53_V27_GENONLY.root");
     } else {
-      f1 = new TFile("");
+      f1 = new TFile("/home/songkyo/kyo/pPbDataSample/AcceptanceSample/MCinclBtoJPsiMuMu_pa_1st_run_STARTHI53_V27_GENONLY.root");
     }
   }
   TTree * myTree;
@@ -124,7 +124,6 @@ int rootAna_acceptance(int MrapNpt=89, int isPA = 0, int accCutType =2, bool isP
 
   ////////////////////////////////////////////////////////////////////////////////  
   //// define 2D hist
-  TH2D *h2D_Den_Jpsi_pt_y = new TH2D("h2D_Den_Jpsi_pt_y",";y_{lab};p_{T} (GeV);",nRap,rapArr,nPt,ptArr);
   TH2D *h2D_Den_pt_y = new TH2D("h2D_Den_pt_y",";y_{lab};p_{T} (GeV);",nRap,rapArr,nPt,ptArr);
   TH2D *h2D_Num_pt_y = new TH2D("h2D_Num_pt_y",";y_{lab};p_{T} (GeV);",nRap,rapArr,nPt,ptArr);
   TH2D *h2D_Acc_pt_y = new TH2D("h2D_Acc_pt_y",";y_{lab};p_{T} (GeV);",nRap,rapArr,nPt,ptArr);
@@ -132,15 +131,15 @@ int rootAna_acceptance(int MrapNpt=89, int isPA = 0, int accCutType =2, bool isP
   h2D_Num_pt_y->Sumw2();
   h2D_Acc_pt_y->Sumw2();
   ////fine-grained bins for plots in AN (for 8rap9pt only)
-  TH2D *h2D_Den_pt_y_fine = new TH2D("h2D_Den_pt_y_fine",";y_{lab};p_{T} (GeV);",100,-2.5,2.5,100,0.,30.);
-  TH2D *h2D_Num_pt_y_fine = new TH2D("h2D_Num_pt_y_fine",";y_{lab};p_{T} (GeV);",100,-2.5,2.5,100,0.,30.);
-  TH2D *h2D_Acc_pt_y_fine = new TH2D("h2D_Acc_pt_y_fine",";y_{lab};p_{T} (GeV);",100,-2.5,2.5,100,0.,30.);
+  TH2D *h2D_Den_pt_y_fine = new TH2D("h2D_Den_pt_y_fine",";y_{lab};p_{T} (GeV);",100,-2.4,2.4,100,0.,30.);
+  TH2D *h2D_Num_pt_y_fine = new TH2D("h2D_Num_pt_y_fine",";y_{lab};p_{T} (GeV);",100,-2.4,2.4,100,0.,30.);
+  TH2D *h2D_Acc_pt_y_fine = new TH2D("h2D_Acc_pt_y_fine",";y_{lab};p_{T} (GeV);",100,-2.4,2.4,100,0.,30.);
   h2D_Den_pt_y_fine->Sumw2();
   h2D_Num_pt_y_fine->Sumw2();
   h2D_Acc_pt_y_fine->Sumw2();
 
-  TLorentzVector* jpsi_GEN = new TLorentzVector;
-  TLorentzVector* dimu_GEN = new TLorentzVector;
+  TLorentzVector* jpsi_GEN = new TLorentzVector; //gen jpsi
+  TLorentzVector* dimu_GEN = new TLorentzVector; //gen dimuon (not used)
   TLorentzVector* mupl_GEN = new TLorentzVector;
   TLorentzVector* mumi_GEN = new TLorentzVector;
   
@@ -159,20 +158,21 @@ int rootAna_acceptance(int MrapNpt=89, int isPA = 0, int accCutType =2, bool isP
       
       mupl_GEN = (TLorentzVector*) Gen_QQ_mupl_4mom->At(igqq);
       mumi_GEN = (TLorentzVector*) Gen_QQ_mumi_4mom->At(igqq);
-      jpsi_GEN = (TLorentzVector*) Gen_QQ_4mom->At(igqq); // Gen Jpsi (to check)
-      *dimu_GEN = *mupl_GEN +  *mumi_GEN; // Gen dimuon pairs (actual)
+      jpsi_GEN = (TLorentzVector*) Gen_QQ_4mom->At(igqq);
+      *dimu_GEN = *mupl_GEN +  *mumi_GEN;
 
       //// 1) Denominator
-      h2D_Den_Jpsi_pt_y->Fill(jpsi_GEN->Rapidity(),jpsi_GEN->Pt()); // Gen Jpsi
-      h2D_Den_pt_y->Fill(dimu_GEN->Rapidity(),dimu_GEN->Pt()); // Gen dimuon
-      if (MrapNpt==89) h2D_Den_pt_y_fine->Fill(dimu_GEN->Rapidity(),dimu_GEN->Pt());
+      h2D_Den_pt_y->Fill(jpsi_GEN->Rapidity(),jpsi_GEN->Pt());
+      if (MrapNpt==89) h2D_Den_pt_y_fine->Fill(jpsi_GEN->Rapidity(),jpsi_GEN->Pt());
       
       //// 2) Numerator
-      if ( massCutWide(dimu_GEN->M())
-      && kineCut(mupl_GEN, accCutType)
-      && kineCut(mumi_GEN, accCutType)) {
-        h2D_Num_pt_y->Fill(dimu_GEN->Rapidity(),dimu_GEN->Pt());
-        if (MrapNpt==89) { h2D_Num_pt_y_fine->Fill(dimu_GEN->Rapidity(),dimu_GEN->Pt()); }
+      if ( 
+      //massCutWide(dimu_GEN->M()) &&
+      massCutWide(jpsi_GEN->M()) &&
+      kineCut(mupl_GEN, accCutType) &&
+      kineCut(mumi_GEN, accCutType)) {
+        h2D_Num_pt_y->Fill(jpsi_GEN->Rapidity(),jpsi_GEN->Pt());
+        if (MrapNpt==89) { h2D_Num_pt_y_fine->Fill(jpsi_GEN->Rapidity(),jpsi_GEN->Pt()); }
       }
     } //end of Gen_QQ_size loop
   }// end of event loop
@@ -224,15 +224,13 @@ int rootAna_acceptance(int MrapNpt=89, int isPA = 0, int accCutType =2, bool isP
   ////////////////////////////////////////////////////////////////////////////////////////////////////  
   //// Save the data as an root file
   if (isPA==1) {
-    h2D_Den_Jpsi_pt_y->SetName("h2D_Den_Jpsi_pt_y_Pbp");
     h2D_Den_pt_y->SetName("h2D_Den_pt_y_Pbp");
     h2D_Num_pt_y->SetName("h2D_Num_pt_y_Pbp");
-    h2D_Den_pt_y->SetName("h2D_Den_pt_y_Pbp");
+    h2D_Acc_pt_y->SetName("h2D_Acc_pt_y_Pbp");
   }
 
-  TFile *outFile = new TFile(Form("AccAna_%s.root",szFinal),"RECREATE");
+  TFile *outFile = new TFile(Form("AccAna_%s.root",szFinal.Data()),"RECREATE");
   outFile->cd();
-  h2D_Den_Jpsi_pt_y->Write();
   h2D_Den_pt_y->Write();
   h2D_Num_pt_y->Write();
   h2D_Acc_pt_y->Write();
@@ -257,31 +255,31 @@ int rootAna_acceptance(int MrapNpt=89, int isPA = 0, int accCutType =2, bool isP
 bool kineCut(const TLorentzVector* Mu, int accCutType){
   if (accCutType == 1) { //old cut
     return (
-      (fabs(Mu->Eta())<1.3 && Mu->Pt()>=3.3) ||
-      (1.3<=fabs(Mu->Eta()) && fabs(Mu->Eta())<2.2 && Mu->P()>=2.9) ||
-      (2.2<=fabs(Mu->Eta()) && fabs(Mu->Eta())<2.4 && Mu->Pt()>=0.8)
+      (TMath::Abs(Mu->Eta())<1.3 && Mu->Pt()>=3.3) ||
+      (1.3<=TMath::Abs(Mu->Eta()) && TMath::Abs(Mu->Eta())<2.2 && Mu->P()>=2.9) ||
+      (2.2<=TMath::Abs(Mu->Eta()) && TMath::Abs(Mu->Eta())<2.4 && Mu->Pt()>=0.8)
     );
   }
   else if (accCutType == 2) { // new cut
     return (
-      (fabs(Mu->Eta())<1.2 && Mu->Pt()>=3.3) ||
-      (1.2<=fabs(Mu->Eta()) && fabs(Mu->Eta())<2.1 && Mu->Pt()>=3.93-1.11*fabs(Mu->Eta())) ||
-      (2.1<=fabs(Mu->Eta()) && fabs(Mu->Eta())<2.4 && Mu->Pt()>=1.3)
+      (TMath::Abs(Mu->Eta())<1.2 && Mu->Pt()>=3.3) ||
+      (1.2<=TMath::Abs(Mu->Eta()) && TMath::Abs(Mu->Eta())<2.1 && Mu->Pt()>=3.93-1.11*TMath::Abs(Mu->Eta())) ||
+      (2.1<=TMath::Abs(Mu->Eta()) && TMath::Abs(Mu->Eta())<2.4 && Mu->Pt()>=1.3)
     );
   }
   else if (accCutType == 3) { //pre-loose cut A on pA data
     return (
-      (fabs(Mu->Eta())<1.2 && Mu->Pt()>=3.3) ||
-      (1.2<=fabs(Mu->Eta()) && fabs(Mu->Eta())<1.6 && Mu->Pt() >= 6.8-3.5*fabs(Mu->Eta())) ||
-      (1.6<=fabs(Mu->Eta()) && fabs(Mu->Eta())<2.1 && Mu->Pt() >= 2.48-0.8*fabs(Mu->Eta())) ||
-      (2.1<=fabs(Mu->Eta()) && fabs(Mu->Eta())<2.4 && Mu->Pt() >= 0.8)
+      (TMath::Abs(Mu->Eta())<1.2 && Mu->Pt()>=3.3) ||
+      (1.2<=TMath::Abs(Mu->Eta()) && TMath::Abs(Mu->Eta())<1.6 && Mu->Pt() >= 6.8-3.5*TMath::Abs(Mu->Eta())) ||
+      (1.6<=TMath::Abs(Mu->Eta()) && TMath::Abs(Mu->Eta())<2.1 && Mu->Pt() >= 2.48-0.8*TMath::Abs(Mu->Eta())) ||
+      (2.1<=TMath::Abs(Mu->Eta()) && TMath::Abs(Mu->Eta())<2.4 && Mu->Pt() >= 0.8)
     );
   }
   else if (accCutType == 4) { // 2015 PbPb GlbTrk muons
     return (
-      (fabs(Mu->Eta())<1.2 && Mu->Pt() >=3.5) ||
-      (1.2<=fabs(Mu->Eta()) && fabs(Mu->Eta())<2.1 && Mu->Pt()>=5.77-(1.89)*fabs(Mu->Eta())) ||
-      (2.1<=fabs(Mu->Eta()) && fabs(Mu->Eta())<2.4 && Mu->Pt()>=1.8)
+      (TMath::Abs(Mu->Eta())<1.2 && Mu->Pt() >=3.5) ||
+      (1.2<=TMath::Abs(Mu->Eta()) && TMath::Abs(Mu->Eta())<2.1 && Mu->Pt()>=5.77-(1.89)*TMath::Abs(Mu->Eta())) ||
+      (2.1<=TMath::Abs(Mu->Eta()) && TMath::Abs(Mu->Eta())<2.4 && Mu->Pt()>=1.8)
     );
   }
   else {
