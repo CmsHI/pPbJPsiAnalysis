@@ -5,7 +5,7 @@
 # Calculate Acceptance for J/psi (pT-y)
 - [shell_rootAna.sh] : shell script to run [rootAna_acceptance.C] and [rootAna_acceptance_PAS.C]
 - [rootAna_acceptance.C] : calculate acceptance from oniaTrees
-- [rootAna_acceptance_nonOnia_pA.C] : calculate acceptance from non-oniaTrees (pA only, not used now)
+- [rootAna_acceptance_nonOnia.C] : calculate acceptance from non-oniaTrees (pA only, not used now)
     - Pbp and pPb are obtained at the same time (isPA==1)
 
 # Draw 1D and 2D plots
