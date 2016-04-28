@@ -4,11 +4,11 @@
   gStyle->SetOptTitle(0);
   gStyle->SetOptStat(0);
   gStyle->SetOptFit(0);
-	
-	gStyle->SetTitleFillColor(0);
+  
+  gStyle->SetTitleFillColor(0);
   gStyle->SetStatColor(0);
-	
-	gStyle->SetPaintTextFormat(".3f");
+  
+  gStyle->SetPaintTextFormat(".3f");
 
   gStyle->SetFrameBorderMode(0);
   gStyle->SetFrameFillColor(0);
@@ -30,7 +30,7 @@
   gStyle->SetTitleSize(0.048,"xyz");
   gStyle->SetPadTopMargin(0.03);
   //gStyle->SetPadTopMargin(0.075); //KYO
-	gStyle->SetPadBottomMargin(0.12);
+  gStyle->SetPadBottomMargin(0.12);
   gStyle->SetPadRightMargin(0.04); //KYO
   //gStyle->SetPadRightMargin(0.07);
   //gStyle->SetPadLeftMargin(0.17); //KYO
