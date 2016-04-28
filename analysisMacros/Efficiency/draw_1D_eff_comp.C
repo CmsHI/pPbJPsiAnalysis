@@ -1,23 +1,34 @@
 #include "SONGKYO.h"
 
 // no ordering in rap (just y_lab)
-void draw_1D_eff_comp(char* szDir = "dir_eff_comp", bool isNoErr=false)
+void draw_1D_eff_comp(TString szDir = "dir_eff_comp", bool isNoErr=false)
 {
 	gROOT->Macro("./Style.C");
 
 	//// read-in file (ratio would be f01/f02 )
-	int isPA =0; //0:pp, 1:Pbp, 2:pPb for drawing dashed line at low pT limit
-	TFile* f01 = new TFile("./dir_eff/8rap9pt_pp_PR_newcut_Zvtx0_SF0_EffPt.root");
-	TFile* f02 = new TFile("./dir_eff/8rap9pt_pp_PR_newcut_Zvtx1_SF0_EffPt.root");
-	char* szF01="pp";
-	char* szF02="pA";
-	double ratiomin=0.7; 
-	double ratiomax=1.3; 
+	/*
+  int isPA =0; //0:pp, 1:Pbp, 2:pPb for drawing dashed line at low pT limit
+	TFile* f01 = new TFile("./dir_eff/8rap9pt_pp_PR_newcut_Zvtx1_SF0_EffPt.root");
+	TFile* f02 = new TFile("./dir_eff/8rap9pt_pp_PR_newcut_Zvtx0_SF0_EffPt.root");
+	TString szF01="ppPRZvtx1";
+	TString szF02="ppPRZvtx0";
+	*/
+  
+	int isPA =1; //0:pp, 1:Pbp, 2:pPb for drawing dashed line at low pT limit
+	TFile* f01 = new TFile("./dir_eff/8rap9pt_Pbp_PR_newcut_Zvtx1_SF0_EffPt.root");
+	TFile* f02 = new TFile("./dir_eff/8rap9pt_Pbp_PR_newcut_Zvtx0_SF0_EffPt.root");
+	TString szF01="PbpPRZvtx1";
+	TString szF02="PbpPRZvtx0";
+	
+	//double ratiomin=0.98; 
+	//double ratiomax=1.02; 
+	double ratiomin=0.9; 
+	double ratiomax=1.1; 
 	//double ratiomin=0.; 
 	//double ratiomax=1.2; 
 	//// end of "to-be-modified" region
 
-	const char* szFinal = Form("%s_%s",szF01,szF02);
+	const TString szFinal = Form("%s_%s",szF01.Data(),szF02.Data());
 	cout << "szFinal = " << szFinal << endl;
 
 	//// read-in tree
@@ -77,13 +88,12 @@ void draw_1D_eff_comp(char* szDir = "dir_eff_comp", bool isNoErr=false)
 		h1D_01[iy]->GetXaxis()->SetRangeUser(0., 30.);
 		h1D_01[iy]->Draw("pe");
 		h1D_02[iy]->Draw("pe same");
-		//// draw line at lot pT limit
-		if (isPA==0) {
-			if (iy==1) dashedLine (2.,0.,2.,1.,2,1);
-			else if (iy ==2 || iy==7) dashedLine (3.,0.,3.,1.,2,1);
-			else if (iy==3)  dashedLine (5.,0.,5.,1.,2,1);
-			else if (iy==4 || iy==5 || iy==6)  dashedLine (6.5,0.,6.5,1.,2,1);
-		}
+		//// draw line at low pT limit
+    if (isPA==0) {
+      if (iy==0 || iy==7) dashedLine (2.,0.,2.,1.,2,1);
+      else if (iy ==1 || iy==6) dashedLine (3.,0.,3.,1.,2,1);
+      else if (iy ==2 || iy==3 || iy==4 || iy==5)  dashedLine (6.5,0.,6.5,1.,2,1);
+    }
 		else if (isPA==1) {
 			if (iy==0 || iy==7) dashedLine (2.,0.,2.,1.,2,1);
 			else if (iy==1 || iy==6) dashedLine (3.,0.,3.,1.,2,1);
@@ -96,19 +106,19 @@ void draw_1D_eff_comp(char* szDir = "dir_eff_comp", bool isNoErr=false)
 			else if (iy==2)  dashedLine (5.,0.,5.,1.,2,1);
 			else if (iy==3 || iy==4 || iy==5)  dashedLine (6.5,0.,6.5,1.,2,1);
 		}
-		latex->DrawLatex(0.53,0.25,szFinal);
+		//latex->DrawLatex(0.53,0.25,szFinal.Data());
 		latex->DrawLatex(0.53,0.19,Form("%.2f < y_{lab} < %.2f",rapEdge[iy],rapEdge[iy+1]));
 		if (iy==0) {
-			legBR->AddEntry(h1D_01[iy],szF01,"lp");
-			legBR->AddEntry(h1D_02[iy],szF02,"lp");
-			//legBR->Draw();
+			legBR->AddEntry(h1D_01[iy],szF01.Data(),"lp");
+			legBR->AddEntry(h1D_02[iy],szF02.Data(),"lp");
+			legBR->Draw();
 		}
 		
 		//// 2) ratio f01/f02
 		c2->cd(iy+1);
 		SetHistStyle(hRatio[iy],5,0);
 		hRatio[iy]->GetXaxis()->SetTitle("p_{T} (GeV)");
-		hRatio[iy]->GetYaxis()->SetTitle(Form("[ %s ]/[ %s ]",szF01,szF02));
+		hRatio[iy]->GetYaxis()->SetTitle(Form("[ %s ]/[ %s ]",szF01.Data(),szF02.Data()));
 		hRatio[iy]->SetMinimum(ratiomin);
 		hRatio[iy]->SetMaximum(ratiomax);
 		hRatio[iy]->GetXaxis()->SetRangeUser(0.,30.);
@@ -122,10 +132,9 @@ void draw_1D_eff_comp(char* szDir = "dir_eff_comp", bool isNoErr=false)
 		
 		//// draw line at lot pT limit
 		if (isPA==0) {
-			if (iy==1) dashedLine (2.,ratiomin,2.,ratiomax,2,1);
-			else if (iy ==2 || iy==7) dashedLine (3.,ratiomin,3.,ratiomax,2,1);
-			else if (iy==3)  dashedLine (5.,ratiomin,5.,ratiomax,2,1);
-			else if (iy==4 || iy==5 || iy==6)  dashedLine (6.5,ratiomin,6.5,ratiomax,2,1);
+      if (iy==0 || iy==7) dashedLine (2.,ratiomin,2.,ratiomax,2,1);
+      else if (iy ==1 || iy==6) dashedLine (3.,ratiomin,3.,ratiomax,2,1);
+      else if (iy ==2 || iy==3 || iy==4 || iy==5)  dashedLine (6.5,ratiomin,6.5,ratiomax,2,1);
 		}
 		else if (isPA==1) {
 			if (iy==0 || iy==7) dashedLine (2.,ratiomin,2.,ratiomax,2,1);
@@ -139,13 +148,13 @@ void draw_1D_eff_comp(char* szDir = "dir_eff_comp", bool isNoErr=false)
 			else if (iy==2)  dashedLine (5.,ratiomin,5.,ratiomax,2,1);
 			else if (iy==3 || iy==4 || iy==5)  dashedLine (6.5,ratiomin,6.5,ratiomax,2,1);
 		}
-		latex->DrawLatex(0.53,0.25,szFinal);
+		latex->DrawLatex(0.53,0.25,szFinal.Data());
 		latex->DrawLatex(0.53,0.19,Form("%.2f < y_{lab} < %.2f",rapEdge[iy],rapEdge[iy+1]));
 
 	}
 
-	c1->SaveAs(Form("%s/comp_eff_%s.pdf",szDir,szFinal));
-	c2->SaveAs(Form("%s/ratio_eff_%s.pdf",szDir,szFinal));
+	c1->SaveAs(Form("%s/comp_eff_%s.pdf",szDir.Data(),szFinal.Data()));
+	c2->SaveAs(Form("%s/ratio_eff_%s.pdf",szDir.Data(),szFinal.Data()));
 
 	return;
 

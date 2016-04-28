@@ -70,24 +70,24 @@ int draw_1D_acc(int MrapNpt=89, int isPA = 0, bool isPrompt=false, int accCutTyp
     h1D_AccPt[iy]->SetMinimum(0.);
     h1D_AccPt[iy]->SetMaximum(1.);
     h1D_AccPt[iy]->Draw("pe");
-		//// draw line at low pT limit
-		if (isPA==0) {
+    //// draw line at low pT limit
+    if (isPA==0) {
       if (iy==0 || iy==7) dashedLine (2.,0.,2.,1.,2,1);
       else if (iy ==1 || iy==6) dashedLine (3.,0.,3.,1.,2,1);
       else if (iy ==2 || iy==3 || iy==4 || iy==5)  dashedLine (6.5,0.,6.5,1.,2,1);
-		}
-		else if (isPA==1) {
-			if (iy==0 || iy==7) dashedLine (2.,0.,2.,1.,2,1);
-			else if (iy==1 || iy==6) dashedLine (3.,0.,3.,1.,2,1);
-			else if (iy==2 || iy==3 || iy==4)  dashedLine (6.5,0.,6.5,1.,2,1);
-			else if (iy==5)  dashedLine (5.,0.,5.,1.,2,1);
-		}
-		else if (isPA==2){
-			if (iy==0 || iy==7) dashedLine (2.,0.,2.,1.,2,1);
-			else if (iy==1 || iy==6) dashedLine (3.,0.,3.,1.,2,1);
-			else if (iy==2)  dashedLine (5.,0.,5.,1.,2,1);
-			else if (iy==3 || iy==4 || iy==5)  dashedLine (6.5,0.,6.5,1.,2,1);
-		}
+    }
+    else if (isPA==1) {
+      if (iy==0 || iy==7) dashedLine (2.,0.,2.,1.,2,1);
+      else if (iy==1 || iy==6) dashedLine (3.,0.,3.,1.,2,1);
+      else if (iy==2 || iy==3 || iy==4)  dashedLine (6.5,0.,6.5,1.,2,1);
+      else if (iy==5)  dashedLine (5.,0.,5.,1.,2,1);
+    }
+    else if (isPA==2){
+      if (iy==0 || iy==7) dashedLine (2.,0.,2.,1.,2,1);
+      else if (iy==1 || iy==6) dashedLine (3.,0.,3.,1.,2,1);
+      else if (iy==2)  dashedLine (5.,0.,5.,1.,2,1);
+      else if (iy==3 || iy==4 || iy==5)  dashedLine (6.5,0.,6.5,1.,2,1);
+    }
     latex->DrawLatex(0.50,0.31,Form("%s",szFinal.Data()));
     latex->DrawLatex(0.50,0.25,Form("%.2f < y_{lab} < %.2f",rapEdge[iy],rapEdge[iy+1]));
     //latex->DrawLatex(0.50,0.21,Form("%.2f < y_{CM} < %.2f",-1*rapEdge[iy+1]-0.47,-1*rapEdge[iy]-0.47));

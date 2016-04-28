@@ -16,8 +16,10 @@
 #include <TSystem.h>
 #include <TStyle.h>
 #include <TCanvas.h>
+#include <TF1.h>
 #include <TGraph.h>
 #include <TGraphErrors.h>
+#include "TGraphAsymmErrors.h"
 #include <TH1.h>
 #include <TH2.h>
 #include <TH3.h>

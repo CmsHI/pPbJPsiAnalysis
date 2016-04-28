@@ -16,8 +16,10 @@
 #include <TSystem.h>
 #include <TStyle.h>
 #include <TCanvas.h>
+#include <TF1.h>
 #include <TGraph.h>
 #include <TGraphErrors.h>
+#include "TGraphAsymmErrors.h"
 #include <TH1.h>
 #include <TH2.h>
 #include <TH3.h>
@@ -27,6 +29,7 @@
 #include <TLatex.h>
 #include "TPaletteAxis.h"
 #include <TCut.h>
+#include <TString.h>
 #include <TMath.h>
 #include <math.h>
 
@@ -38,23 +41,23 @@
 ////// calculation with error propagation
 
 void DivideValue(Double_t num, Double_t numErr, Double_t den, Double_t denErr, Double_t* frac, Double_t* fracErr){
-	*frac = num/den;
-	*fracErr = (*frac) * TMath::Sqrt( TMath::Power(numErr/num,2) + TMath::Power(denErr/den,2) );
+  *frac = num/den;
+  *fracErr = (*frac) * TMath::Sqrt( TMath::Power(numErr/num,2) + TMath::Power(denErr/den,2) );
 }
 
 void MultiplyValue(Double_t a, Double_t aErr, Double_t b, Double_t bErr, Double_t* res, Double_t* resErr){
-	*res = a*b;
-	*resErr = (*res) * TMath::Sqrt( TMath::Power(aErr/a,2) + TMath::Power(bErr/b,2) );
+  *res = a*b;
+  *resErr = (*res) * TMath::Sqrt( TMath::Power(aErr/a,2) + TMath::Power(bErr/b,2) );
 }
 
 void AddValue(Double_t a, Double_t aErr, Double_t b, Double_t bErr, Double_t* res, Double_t* resErr){
-	*res = a+b;
-	*resErr = 1 * TMath::Sqrt( TMath::Power(aErr,2) + TMath::Power(bErr,2) );
+  *res = a+b;
+  *resErr = 1 * TMath::Sqrt( TMath::Power(aErr,2) + TMath::Power(bErr,2) );
 }
 
 void SubtractValue(Double_t a, Double_t aErr, Double_t b, Double_t bErr, Double_t* res, Double_t* resErr){
-	*res = a-b;
-	*resErr = 1 * TMath::Sqrt( TMath::Power(aErr,2) + TMath::Power(bErr,2) );
+  *res = a-b;
+  *resErr = 1 * TMath::Sqrt( TMath::Power(aErr,2) + TMath::Power(bErr,2) );
 }
 
 ////// draw lines
@@ -80,46 +83,46 @@ void solidLine(Double_t x1=0,Double_t y1=0,Double_t x2=1,Double_t y2=1,Int_t col
 ////// SetStyle
 
 void SetHistStyle(TH1* h, Int_t c, Int_t m) {
-	Int_t colorArr[] = { kGray+3, kRed+2, kBlue+1, kOrange+7, kGreen+3, kAzure+9, kViolet-1, kGreen+1,kBlack };
-	Int_t markerFullArr[] = {kFullCircle, kFullTriangleUp, kFullTriangleDown, kFullSquare, kFullStar, kFullDiamond};
-	Int_t markerOpenArr[] = {kOpenCircle, kOpenTriangleUp, kOpenTriangleDown, kOpenSquare, kOpenStar, kOpenDiamond};
-	h-> SetMarkerColor(colorArr[c]);
-	if(m<10) h-> SetMarkerStyle(markerFullArr[m]);
-	else h-> SetMarkerStyle(markerOpenArr[m-10]);
-	h-> SetMarkerSize(1.2);
-	h-> SetLineColor(colorArr[c]);
-	h-> SetLineWidth(1.);
-	h-> GetXaxis()->CenterTitle();
-	h-> GetYaxis()->CenterTitle();
+  Int_t colorArr[] = { kGray+3, kRed+2, kBlue+1, kOrange+7, kGreen+3, kAzure+9, kViolet-1, kGreen+1,kBlack };
+  Int_t markerFullArr[] = {kFullCircle, kFullTriangleUp, kFullTriangleDown, kFullSquare, kFullStar, kFullDiamond};
+  Int_t markerOpenArr[] = {kOpenCircle, kOpenTriangleUp, kOpenTriangleDown, kOpenSquare, kOpenStar, kOpenDiamond};
+  h-> SetMarkerColor(colorArr[c]);
+  if(m<10) h-> SetMarkerStyle(markerFullArr[m]);
+  else h-> SetMarkerStyle(markerOpenArr[m-10]);
+  h-> SetMarkerSize(1.2);
+  h-> SetLineColor(colorArr[c]);
+  h-> SetLineWidth(1.);
+  h-> GetXaxis()->CenterTitle();
+  h-> GetYaxis()->CenterTitle();
 }
 
 void SetGraphStyle(TGraph* gr, Int_t c, Int_t m) {
-	Int_t colorArr[] = { kGray+3, kRed+2, kBlue+1, kOrange+7, kGreen+3, kAzure+9, kViolet-4, kGreen+1, kBlack };
-	Int_t markerFullArr[] = {kFullCircle, kFullTriangleUp, kFullTriangleDown, kFullSquare, kFullStar, kFullDiamond};
-	Int_t markerOpenArr[] = {kOpenCircle, kOpenTriangleUp, kOpenTriangleDown, kOpenSquare, kOpenStar, kOpenDiamond};
+  Int_t colorArr[] = { kGray+3, kRed+2, kBlue+1, kOrange+7, kGreen+3, kAzure+9, kViolet-4, kGreen+1, kBlack };
+  Int_t markerFullArr[] = {kFullCircle, kFullTriangleUp, kFullTriangleDown, kFullSquare, kFullStar, kFullDiamond};
+  Int_t markerOpenArr[] = {kOpenCircle, kOpenTriangleUp, kOpenTriangleDown, kOpenSquare, kOpenStar, kOpenDiamond};
 
-	gr-> SetMarkerColor(colorArr[c]);
-	if(m<10) gr-> SetMarkerStyle(markerFullArr[m]);
-	else gr-> SetMarkerStyle(markerOpenArr[m-10]);
-	gr-> SetMarkerSize(1.2);
-	gr-> SetLineColor(colorArr[c]);
-	gr-> SetLineWidth(1);
+  gr-> SetMarkerColor(colorArr[c]);
+  if(m<10) gr-> SetMarkerStyle(markerFullArr[m]);
+  else gr-> SetMarkerStyle(markerOpenArr[m-10]);
+  gr-> SetMarkerSize(1.2);
+  gr-> SetLineColor(colorArr[c]);
+  gr-> SetLineWidth(1);
 }
 
 void SetLegendStyle(TLegend* l) {
-	l->SetFillColor(0);
-	l->SetFillStyle(4000);
-	l->SetBorderSize(0);
-	l->SetMargin(0.2);
-	l->SetTextSize(0.040);
+  l->SetFillColor(0);
+  l->SetFillStyle(4000);
+  l->SetBorderSize(0);
+  l->SetMargin(0.2);
+  l->SetTextSize(0.040);
 }
 
 void SetTextStyle(TPaveText* t) {
-	t->SetFillColor(0);
-	t->SetFillStyle(4000);
-	t->SetBorderSize(0);
-	t->SetMargin(0.2);
-	t->SetTextSize(0.035);
+  t->SetFillColor(0);
+  t->SetFillStyle(4000);
+  t->SetBorderSize(0);
+  t->SetMargin(0.2);
+  t->SetTextSize(0.035);
 }
 
 
