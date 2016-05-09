@@ -1,8 +1,8 @@
-#include "SONGKYO.h"
+#include "../SONGKYO.h"
 
 void zvtxCompAfterWeight(){
   
-  gROOT->Macro("./Style.C");
+  gROOT->Macro("../Style.C");
   
   ///TFile* f1 = TFile::Open("zVtx201604/zVtx_G1_pp_isPrompt1_isNewAccCut1_isOfficial1.root"); //Data
   //TFile* f2 = TFile::Open("EffAna_8rap9pt_pp_PR_newcut_Zvtx1_SF0.root"); // MC

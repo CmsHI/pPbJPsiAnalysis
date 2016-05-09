@@ -1,8 +1,8 @@
-#include "SONGKYO.h"
+#include "../SONGKYO.h"
 
 int draw_1D_eff(int MrapNpt=89, int isPA = 0, int accCutType =2, bool isPrompt = true, bool useZvtxWeight=false, bool useSF=false, TString szDir="dir_eff")
 {
-  gROOT->Macro("./Style.C");
+  gROOT->Macro("../Style.C");
   
   TString szBinning;
   if (MrapNpt==89)  {szBinning = "8rap9pt"; }
