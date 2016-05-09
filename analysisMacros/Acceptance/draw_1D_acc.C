@@ -1,9 +1,9 @@
-#include "SONGKYO.h"
+#include "../SONGKYO.h"
 
 //// for acceptance, use Pbp only
 int draw_1D_acc(int MrapNpt=89, int isPA = 0, bool isPrompt=false, int accCutType =2, TString szDir="dir_acc")
 {
-  gROOT->Macro("./Style.C");
+  gROOT->Macro("../Style.C");
   
   TString szBinning;
   if (MrapNpt==89)  {szBinning = "8rap9pt"; }

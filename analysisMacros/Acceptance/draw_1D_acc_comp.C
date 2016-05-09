@@ -1,9 +1,9 @@
-#include "SONGKYO.h"
+#include "../SONGKYO.h"
 
 // no ordering in rap (just y_lab)
 void draw_1D_acc_comp(TString szDir = "dir_acc_comp", bool isNoErr=false)
 {
-  gROOT->Macro("./Style.C");
+  gROOT->Macro("../Style.C");
 
   //// read-in file (ratio would be f01/f02 )
   int isPA =0; //0:pp, 1:Pbp, 2:pPb for drawing dashed line at low pT limit

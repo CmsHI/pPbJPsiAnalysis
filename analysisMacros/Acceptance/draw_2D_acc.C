@@ -1,9 +1,9 @@
-#include "SONGKYO.h"
+#include "../SONGKYO.h"
 
 
 void draw_2D_acc(int MrapNpt=89, bool isPrompt = false)
 {
-  gROOT->Macro("./Style2D.C");
+  gROOT->Macro("../Style2D.C");
 
   // --- read-in file
   TString szBinning;
