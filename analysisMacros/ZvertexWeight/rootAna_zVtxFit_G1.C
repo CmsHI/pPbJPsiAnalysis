@@ -1,4 +1,4 @@
-#include "SONGKYO.h"
+#include "../SONGKYO.h"
 #include <TChain.h>
 #include <TF1.h>
 
@@ -9,7 +9,7 @@ double tfLine(double *x, double *par);
 
 int rootAna_zVtxFit_G1(TString szFunction = "G1", int isPA = 1, bool isPrompt = true, bool isNewAccCut = true, bool isOfficial = true){
 
-  gROOT->Macro("./Style.C");
+  gROOT->Macro("../Style.C");
   double nbin = 60;
   double binmax = 30;
   double fitmax1 = 8;
@@ -45,7 +45,7 @@ int rootAna_zVtxFit_G1(TString szFunction = "G1", int isPA = 1, bool isPrompt = 
       tree02->Add("/home/songkyo/kyo/pPbDataSample/EfficiencySample/MCJPsiWithFSR_pa_1st_run_STARTHI53_V27_ext1_nocut.root");
     }
     else {
-      tree02->Add("");
+      tree02->Add("/home/songkyo/kyo/pPbDataSample/EfficiencySample/MCinclBtoJPsiMuMu_pa_1st_run_STARTHI53_V27_ext1_nocut.root");
     }
   }
   else if (isPA==2) { //pPb 2nd run
@@ -54,7 +54,7 @@ int rootAna_zVtxFit_G1(TString szFunction = "G1", int isPA = 1, bool isPrompt = 
       tree02->Add("/home/songkyo/kyo/pPbDataSample/EfficiencySample/MCJPsiWithFSR_pa_2nd_run_STARTHI53_V27_ext1_nocut.root");
     }
     else {
-      tree02->Add("");
+      tree02->Add("/home/songkyo/kyo/pPbDataSample/EfficiencySample/MCinclBtoJPsiMuMu_pa_2nd_run_STARTHI53_V27_ext1_nocut.root");
     }
   }
   
