@@ -87,7 +87,7 @@ void draw_2D_acc(int MrapNpt=89, bool isPrompt = false)
   c1->Update();
 
   if (isPA==0) {
-    if (MrapNpt=89) {
+    if (MrapNpt==89) {
       dashedLine(-2.4,2.0,-1.93,2.0,1,4);
       dashedLine(-1.93,2.0,-1.93,3.0,1,4);
       dashedLine(-1.93,3.0,-1.5,3.0,1,4);
@@ -105,7 +105,7 @@ void draw_2D_acc(int MrapNpt=89, bool isPrompt = false)
     }
   }
   else {
-    if (MrapNpt=89) {
+    if (MrapNpt==89) {
       dashedLine(-2.4,2.0,-1.97,2.0,1,4);
       dashedLine(-1.97,2.0,-1.97,3.0,1,4);
       dashedLine(-1.97,3.0,-1.37,3.0,1,4);
