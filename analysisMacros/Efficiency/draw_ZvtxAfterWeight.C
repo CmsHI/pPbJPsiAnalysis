@@ -1,6 +1,6 @@
 #include "../SONGKYO.h"
 
-void zvtxCompAfterWeight(){
+void draw_ZvtxAfterWeight(){
   
   gROOT->Macro("../Style.C");
   
