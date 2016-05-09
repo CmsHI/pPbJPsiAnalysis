@@ -1,4 +1,4 @@
-#include "SONGKYO.h"
+#include "../SONGKYO.h"
 
 double calculInteg( TH1 *a, double minX, double maxX);
 
@@ -10,7 +10,7 @@ int rootAna_muIDvariables(TString szPA = "pa", bool isScaled = true, bool isSmal
   //const int nEntry = 100000;
   //const int nEntry = 5000;
   const int nEntry = 100000;
-  gROOT->Macro("./Style.C");
+  gROOT->Macro("../Style.C");
 
   //// read-in root file
   TFile *fData;

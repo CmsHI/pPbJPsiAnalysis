@@ -1,11 +1,11 @@
-#include "SONGKYO.h"
+#include "../SONGKYO.h"
 
 double calculInteg( TH1 *a, double minX, double maxX);
 
 //szPA = "pp" or "pa"
 int draw_bkgSubtracted(TString szPA = "pp")
 {
-	gROOT->Macro("./Style.C");
+	gROOT->Macro("../Style.C");
 	
 	// read-in root file
 	TFile *fIn = new TFile(Form("dir_muID/%s_muIDvariables_isScaled0.root",szPA.Data()));
