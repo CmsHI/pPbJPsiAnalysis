@@ -89,26 +89,24 @@ int rootAna_efficiency(int MrapNpt = 89, int isPA =1, int accCutType = 2, bool i
   else if (isPA==1){
     if (isPrompt) {
       f1 = new TFile("/home/songkyo/kyo/pPbDataSample/EfficiencySample/MCJPsiWithFSR_pa_1st_run_STARTHI53_V27_ext1_nocut.root"); // official 8M
-      //f1 = new TFile("/home/songkyo/kyo/pPbDataSample/EfficiencySample2M/tot_JPsiWithFSR_pa_1st_run_STARTHI53_V27-v1_noAccCut_sglTrig_genMatch-v2.root"); // official 2M
       //f1 = new TFile("/home/songkyo/kyo/pPbDataSample/EfficiencySamplePrivate/tot_PromptJpsi_PYTHIAboosted_1st_STARTHI53_V27_noAccCut_sglTrig_genMatch-v2.root"); // private
     }
     else {
-      f1 = new TFile("/home/songkyo/kyo/pPbDataSample/EfficiencySample2M/tot_inclBtoJPsiMuMu_pa_1st_run_STARTHI53_V27-v1_noAccCut_sglTrig_genMatch-v2.root"); // official 2M
+      f1 = new TFile("/home/songkyo/kyo/pPbDataSample/EfficiencySample/MCinclBtoJPsiMuMu_pa_1st_run_STARTHI53_V27_ext1_nocut.root"); // official 8M
       //f1 = new TFile("/home/songkyo/kyo/pPbDataSample/EfficiencySamplePrivate/tot_B2Jpsi_PYTHIAboosted_1st_STARTHI53_V27_noAccCut_sglTrig_genMatch-v2.root"); // private
     }
   }
   else {
     if (isPrompt) {
       f1 = new TFile("/home/songkyo/kyo/pPbDataSample/EfficiencySample/MCJPsiWithFSR_pa_2nd_run_STARTHI53_V27_ext1_nocut.root"); // official 8M
-      //f1 = new TFile("/home/songkyo/kyo/pPbDataSample/EfficiencySample2M/tot_JPsiWithFSR_pa_2nd_run_STARTHI53_V27-v1_noAccCut_sglTrig_genMatch-v1.root"); // official 2M
       //f1 = new TFile("/home/songkyo/kyo/pPbDataSample/EfficiencySamplePrivate/tot_PromptJpsi_PYTHIAboosted_2nd_STARTHI53_V27_noAccCut_sglTrig_genMatch-v2.root"); // private
     }
     else {
-      f1 = new TFile("/home/songkyo/kyo/pPbDataSample/EfficiencySample2M/tot_inclBtoJPsiMuMu_pa_2nd_run_STARTHI53_V27-v1_noAccCut_sglTrig_genMatch-v1.root"); // official 2M
+      f1 = new TFile("/home/songkyo/kyo/pPbDataSample/EfficiencySample/MCinclBtoJPsiMuMu_pa_2nd_run_STARTHI53_V27_ext1_nocut.root"); // official 8M
       //f1 = new TFile("/home/songkyo/kyo/pPbDataSample/EfficiencySamplePrivate/tot_B2Jpsi_PYTHIAboosted_2nd_STARTHI53_V27_noAccCut_sglTrig_genMatch-v2.root"); // private
     }
   }
-  cout << "f1 = " << f1 <<endl;
+  cout << "f1 = " << f1->GetName() <<endl;
 
   #if 0
   ///// read in Ctau error range file
