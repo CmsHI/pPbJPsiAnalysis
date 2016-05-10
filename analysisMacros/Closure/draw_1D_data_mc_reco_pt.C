@@ -29,7 +29,7 @@ void formRapArr(Double_t binmin, Double_t binmax, string* arr);
 void formAbsRapArr(Double_t binmin, Double_t binmax, string* arr);
 void formPtArr(Double_t binmin, Double_t binmax, string* arr);
 
-void draw_1D_data_mc_reco_pt(char* dirName = "8rap9pt", bool isPrompt=false, bool isLog=false)
+void draw_1D_data_mc_reco_pt_8rap9pt2gev(char* dirName = "8rap9pt2gev", bool isPrompt=true, bool isLog=false)
 {
 	gROOT->Macro("./JpsiStyle.C");
 
@@ -39,14 +39,14 @@ void draw_1D_data_mc_reco_pt(char* dirName = "8rap9pt", bool isPrompt=false, boo
 	Double_t pytmp[8][ntmp]; //y point
 	Double_t ex[ntmp]; // x error
 	
-	px[0] = {1.80888, 3.48529, 4.47275, 5.68792, 6.9644, 7.96271, 9.1754, 11.5315, 17.7588}; 
+	px[0] = {2.49530, 3.48529, 4.47275, 5.68792, 6.9644, 7.96271, 9.1754, 11.5315, 17.7588}; 
 	px[1] = {0.00000, 3.53123, 4.5027, 5.71709, 6.96523, 7.9693, 9.17314, 11.4952, 17.6927}; 
 	px[2] = {0.00000, 0.00000, 0.00000, 0.00000, 7.01977, 7.99712, 9.19936, 11.5743, 17.7732}; 
 	px[3] = {0.00000, 0.00000, 0.00000, 0.00000, 7.12292, 8.01305, 9.22816, 11.6279, 17.8879}; 
 	px[4] = {0.00000, 0.00000, 0.00000, 0.00000, 7.05476, 8.00208, 9.21589, 11.5645, 17.7176}; 
 	px[5] = {0.00000, 0.00000, 0.00000, 5.82095, 6.97886, 7.96732, 9.18979, 11.5158, 17.4116}; 
 	px[6] = {0.00000, 3.52893, 4.48328, 5.69351, 6.96188, 7.95707, 9.14886, 11.4747, 17.231}; 
-	px[7] = {1.78552, 3.47853, 4.46938, 5.6761, 6.96419, 7.97702, 9.16158, 11.5077, 17.3061}; 
+	px[7] = {2.49481, 3.47853, 4.46938, 5.6761, 6.96419, 7.97702, 9.16158, 11.5077, 17.3061}; 
 	ex = {0,0,0,0,0,0,0,0,0};
 
 
@@ -66,7 +66,8 @@ void draw_1D_data_mc_reco_pt(char* dirName = "8rap9pt", bool isPrompt=false, boo
 		cout << iy <<"th rapBinW = " << rapBinW[iy] <<endl;
 	}
 	//pt array
-	Double_t ptArrNum[] = {0.0, 3.0, 4.0, 5.0, 6.5, 7.5, 8.5, 10., 14., 30.};
+	//Double_t ptArrNum[] = {0.0, 3.0, 4.0, 5.0, 6.5, 7.5, 8.5, 10., 14., 30.};
+	Double_t ptArrNum[] = {2.0, 3.0, 4.0, 5.0, 6.5, 7.5, 8.5, 10., 14., 30.};//8rap9pt2gev
 	const Int_t nPt = sizeof(ptArrNum)/sizeof(Double_t)-1;
 	cout << "nPt = " << nPt << endl;
 	Double_t ptBinW[nPt];
@@ -88,7 +89,8 @@ void draw_1D_data_mc_reco_pt(char* dirName = "8rap9pt", bool isPrompt=false, boo
 	}
 	
 	// --- read-in file
-	TFile * f2D = new TFile(Form("../000_fittingResult/total2Dhist_%s.root",dirName));
+	//TFile * f2D = new TFile(Form("../000_fittingResult/total2Dhist_%s.root",dirName));
+	TFile * f2D = new TFile(Form("../000_fittingResult/total2Dhist_%s_noWeight.root",dirName));
 	cout << "dirName = " << dirName << endl;
 
 	// --- read-in 2D hist for data reco dist
