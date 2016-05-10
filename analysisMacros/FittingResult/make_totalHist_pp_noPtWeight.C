@@ -1,28 +1,28 @@
 #include "../SONGKYO.h"
 
 /////// main func. ///////
-int make_totalHist_PP_noPtWeight(int MrapNpt=89, int accCutType = 2, bool useZvtxWeight=true, bool useSF = false){
+int make_totalHist_pp_noPtWeight(int MrapNpt=89, int accCutType = 2, bool useZvtxWeight=false, bool useSF = false){
   using namespace std;
   
-  char* szBinning;
+  TString szBinning;
   if (MrapNpt==89)  {szBinning = "8rap9pt"; }
   else if (MrapNpt==83) { szBinning = "8rap3pt"; }
   else if (MrapNpt==63) { szBinning = "6rap3pt"; }
   else if (MrapNpt==62) { szBinning = "6rap2pt"; }
   else {cout << "select among MrapNpt = 89, 83, 63, or 62"<< endl; return 0; }
-  char* szAccCut;
+  TString szAccCut;
   if (accCutType==1) szAccCut="oldcut";
   else if (accCutType==2) szAccCut="newcut";
   else {cout << "select among accCutType = 0 or 1"<< endl; return 0; }
-  const char* szFinal = Form("%s_%s",szBinning,szAccCut);
+  const TString szFinal = Form("%s_%s",szBinning.Data(),szAccCut.Data());
   std::cout << "szFinal: " << szFinal << std::endl;
 
   //////////////////////////////////////////////////////////////////////////////////////
   //////////////////////////////////////////////////////////////////////////////////////
   ////// read in Acceptance file
   // *** without pt weight
-  TFile *fAccPR = new TFile(Form("../Acceptance/AccAna_%s_pp_PR_%s.root",szBinning,szAccCut));
-  TFile *fAccNP = new TFile(Form("../Acceptance/AccAna_%s_pp_NP_%s.root",szBinning,szAccCut));
+  TFile *fAccPR = new TFile(Form("../Acceptance/AccAna_%s_pp_PR_%s.root",szBinning.Data(),szAccCut.Data()));
+  TFile *fAccNP = new TFile(Form("../Acceptance/AccAna_%s_pp_NP_%s.root",szBinning.Data(),szAccCut.Data()));
   TH2D* h2D_Acc_PR_pp = (TH2D*)fAccPR->Get("h2D_Acc_pt_y");
   TH2D* h2D_Acc_NP_pp = (TH2D*)fAccNP->Get("h2D_Acc_pt_y");
   h2D_Acc_PR_pp->SetName("h2D_Acc_PR_pp");
@@ -42,8 +42,8 @@ int make_totalHist_PP_noPtWeight(int MrapNpt=89, int accCutType = 2, bool useZvt
   //////////////////////////////////////////////////////////////////////////////////////
   ////// read in Efficiency file
   // *** without pt weight
-  TFile *fEffPRpp = new TFile(Form("../Efficiency/EffAna_%s_pp_PR_%s_Zvtx%d_SF%d.root",szBinning,szAccCut,(int)useZvtxWeight,(int)useSF));
-  TFile *fEffNPpp = new TFile(Form("../Efficiency/EffAna_%s_pp_NP_%s_Zvtx%d_SF%d.root",szBinning,szAccCut,(int)useZvtxWeight,(int)useSF));
+  TFile *fEffPRpp = new TFile(Form("../Efficiency/EffAna_%s_pp_PR_%s_Zvtx%d_SF%d.root",szBinning.Data(),szAccCut.Data(),(int)useZvtxWeight,(int)useSF));
+  TFile *fEffNPpp = new TFile(Form("../Efficiency/EffAna_%s_pp_NP_%s_Zvtx%d_SF%d.root",szBinning.Data(),szAccCut.Data(),(int)useZvtxWeight,(int)useSF));
   TH2D* h2D_Eff_PR_pp = (TH2D*)fEffPRpp->Get("h2D_Eff_pt_y");
   TH2D* h2D_Eff_NP_pp = (TH2D*)fEffNPpp->Get("h2D_Eff_pt_y");
   h2D_Eff_PR_pp->SetName("h2D_Eff_PR_pp");
@@ -62,7 +62,7 @@ int make_totalHist_PP_noPtWeight(int MrapNpt=89, int accCutType = 2, bool useZvt
   //////////////////////////////////////////////////////////////////////////////////////
   //////////////////////////////////////////////////////////////////////////////////////
   ////// read in from fit file
-  TFile* fFitpp = new TFile(Form("./fitResHist_%s_pp_%s.root",szBinning,szAccCut));
+  TFile* fFitpp = new TFile(Form("./fitResHist_%s_pp_%s.root",szBinning.Data(),szAccCut.Data()));
   TH2D* h2D_Fit_PR_pp = (TH2D*)fFitpp->Get("h2D_nPrompt");  
   TH2D* h2D_Fit_NP_pp = (TH2D*)fFitpp->Get("h2D_nNonPrompt"); 
   TH2D* h2D_Fit_nSig_pp = (TH2D*)fFitpp->Get("h2D_nSig"); 
@@ -119,9 +119,9 @@ int make_totalHist_PP_noPtWeight(int MrapNpt=89, int accCutType = 2, bool useZvt
   
   ////////////////////////////////////////////////
   ////// save as a root file
-  TFile *outFile = new TFile(Form("totalHist_PP_%s_Zvtx%d_SF%d_noPtWeight.root",szFinal,(int)useZvtxWeight,(int)useSF),"RECREATE");
+  TFile *outFile = new TFile(Form("totalHist_pp_%s_Zvtx%d_SF%d_noPtWeight.root",szFinal.Data(),(int)useZvtxWeight,(int)useSF),"RECREATE");
   std::cout << "szFinal: " << szFinal << std::endl;
-  cout << "totalHist_PP_"<<szFinal<<"_Zvtx"<<(int)useZvtxWeight<<"_SF"<<(int)useSF<<"_noPtWeight.root has been created :) " <<endl; 
+  cout << "totalHist_pp_"<<szFinal<<"_Zvtx"<<(int)useZvtxWeight<<"_SF"<<(int)useSF<<"_noPtWeight.root has been created :) " <<endl; 
 
   outFile->cd();
   //Acc 
