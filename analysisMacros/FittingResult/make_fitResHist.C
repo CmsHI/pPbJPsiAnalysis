@@ -4,35 +4,35 @@ void formRapStr(Double_t min, Double_t max, string* arr);
 void formStr(Double_t min, Double_t max, string* arr);
 
 /////// main func. ///////
-int make_fitResHist(int MrapNpt=89, int isPA =3, int accCutType=2){
+int make_fitResHist(int MrapNpt=89, int isPA =0, int accCutType=2){
 //  char *dirName = "fitRes_8rap9pt", bool is1st = true){
 
   using namespace std;
 
-  char* szBinning;
+  TString szBinning;
   if (MrapNpt==89)  {szBinning = "8rap9pt"; }
   else if (MrapNpt==83) { szBinning = "8rap3pt"; }
   else if (MrapNpt==63) { szBinning = "6rap3pt"; }
   else if (MrapNpt==62) { szBinning = "6rap2pt"; }
   else {cout << "select among MrapNpt = 89, 83, 63, or 62"<< endl; return 0; }
-  char* szPA;
+  TString szPA;
   if (isPA==0) szPA="pp";
   else if (isPA==1) szPA="Pbp";
   else if (isPA==2) szPA="pPb";
-  else if (isPA==3) szPA="pAMerged";
+  else if (isPA==3) szPA="pA";
   else {cout << "select among isPA = 0, 1, 2, or 3"<< endl; return 0; }
-  char* szAccCut;
+  TString szAccCut;
   if (accCutType==1) szAccCut="oldcut";
   else if (accCutType==2) szAccCut="newcut";
   else {cout << "select among accCutType = 1 or 2"<< endl; return 0; }  
 
-  const char* szFinal = Form("%s_%s_%s",szBinning,szPA,szAccCut);
+  const TString szFinal = Form("%s_%s_%s",szBinning.Data(),szPA.Data(),szAccCut.Data());
   std::cout << "szFinal: " << szFinal << std::endl;
 
   //// read-in 3 txt files
-  std::ifstream fctau(Form("./fitRes_%s/summary_%s/fit_ctauErrorRange",szBinning,szPA),std::ios::in);
+  std::ifstream fctau(Form("./fitRes/summary_%s_%s_%s_nominal/fit_ctauErrorRange",szPA.Data(),szBinning.Data(),szAccCut.Data()),std::ios::in);
   if(!fctau.is_open()) { cout << "Warning : can NOT open the fit_ctauErrorRange file!"<<endl; return 0; }
-  std::ifstream ftable(Form("./fitRes_%s/summary_%s/fit_table",szBinning,szPA),std::ios::in);
+  std::ifstream ftable(Form("./fitRes/summary_%s_%s_%s_nominal/fit_table",szPA.Data(),szBinning.Data(),szAccCut.Data()),std::ios::in);
   if(!ftable.is_open()) { cout << "Warning : can NOT open the fit_table file!"<<endl; return 0; }
   //std::ifstream fparam(Form("./fitRes_%s/summary_%s/fit_parameters",szBinning,szPA),std::ios::in);
   //if(!fparam.is_open()) { cout << "Warning : can NOT open the fit_parameters file!"<<endl; }
@@ -109,22 +109,18 @@ int make_fitResHist(int MrapNpt=89, int isPA =3, int accCutType=2){
   string* etrange = new string[nEt];
   for (Int_t i=0; i<nRap; i++){ 
     formRapStr(rapArr[i], rapArr[i+1], &yrange[i]);
-    //cout << "yrange["<<i<<"] = "<< yrange[i].c_str() << endl;
     cout << "yrange["<<i<<"] = "<< yrange[i] << endl;
   }
   for (Int_t i=0; i<nPt; i++){  
     formStr(ptArr[i], ptArr[i+1], &ptrange[i]);
-    //cout << "ptrange["<<i<<"] = "<< ptrange[i].c_str() << endl;
     cout << "ptrange["<<i<<"] = "<< ptrange[i] << endl;
   }
   for (Int_t i=0; i<nNtr; i++){ 
     formStr(ntrArr[i], ntrArr[i+1], &ntrrange[i]);
-    //cout << "ntrrange["<<i<<"] = "<< ntrrange[i].c_str() << endl;
     cout << "ntrrange["<<i<<"] = "<< ntrrange[i] << endl;
   }
   for (Int_t i=0; i<nEt; i++){  
     formStr(etArr[i], etArr[i+1], &etrange[i]);
-    //cout << "etrange["<<i<<"] = "<< etrange[i].c_str() << endl;
     cout << "etrange["<<i<<"] = "<< etrange[i] << endl;
   }
 
@@ -157,7 +153,6 @@ int make_fitResHist(int MrapNpt=89, int isPA =3, int accCutType=2){
           NoCutEntry[iy][ipt] = atoi(nocutentry.c_str());
           CutEntry[iy][ipt] = atoi(cutentry.c_str());
           CutRatio[iy][ipt] = (double)NoCutEntry[iy][ipt]/(double)CutEntry[iy][ipt];
-          cout << "yrange = " << yrange[iy] << endl;
         }
       } 
     }
@@ -267,9 +262,7 @@ int make_fitResHist(int MrapNpt=89, int isPA =3, int accCutType=2){
   ////////////////////////////////////////////////////////////////////////////////////////////////
   ////////////////////////////////////////////////////////////////////////////////////////////////
   //// Save as a root file
-
-//  TFile *outFile = new TFile(Form("EffCounting_%s_useCtErr_%d_useDataDriven_%d_useZvtxStep1_%d_Step2_%d.root",szFinal, (int)useCtErrRangeEff ,(int)useDataDrivenEff, (int)useZvtxWeightStep1, (int)useZvtxWeightStep2),"RECREATE");
-  TFile *outFile = new TFile(Form("fitResHist_%s.root",szFinal),"RECREATE");
+  TFile *outFile = new TFile(Form("fitResHist_%s.root",szFinal.Data()),"RECREATE");
   std::cout << "szFinal: " << szFinal << std::endl;
   
   outFile->cd();
