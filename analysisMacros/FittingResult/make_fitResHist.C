@@ -4,7 +4,7 @@ void formRapStr(Double_t min, Double_t max, string* arr);
 void formStr(Double_t min, Double_t max, string* arr);
 
 /////// main func. ///////
-int make_fitResHist(int MrapNpt=89, int isPA =0, int accCutType=2){
+int make_fitResHist(int MrapNpt=89, int isPA =3, int accCutType=1){
 //  char *dirName = "fitRes_8rap9pt", bool is1st = true){
 
   using namespace std;
