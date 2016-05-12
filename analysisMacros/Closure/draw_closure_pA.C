@@ -64,7 +64,7 @@ int draw_closure_pA(int MrapNpt=89, int isPA =3, int accCutType = 2, bool useZvt
   
   // --- read-in file
   //TFile * f2D = new TFile(Form("../000_fittingResult/total2Dhist_%s.root",dirName));
-  TFile * f2D = new TFile("../FittingResult/totalHist_pA_8rap9pt_newcut_Zvtx0_SF0_noPtWeight.root","READ");
+  TFile * f2D = new TFile("../FittingResult/totalHist_pA_8rap9pt_newcut_Zvtx1_SF1_noPtWeight.root","READ");
   //cout << "dirName = " << dirName << endl;
 
   // --- read-in 2D hist for MC corrected yield
