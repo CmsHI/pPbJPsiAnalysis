@@ -1,42 +1,21 @@
-#include <Riostream.h>
-#include <TROOT.h>
-#include <TFile.h>
-#include <TTree.h>
-#include <TGraph.h>
-#include <TGraphErrors.h>
-#include <TGraphAsymmErrors.h>
-#include <vector>
-#include <TSystem.h>
-#include <TCanvas.h>
-#include <TH1.h>
-#include <TH2.h>
-#include <TH1D.h>
-#include <TH2D.h>
-#include <TDirectory.h>
-#include <TLegend.h>
-#include <TPaveStats.h>
-#include <TLatex.h>
-#include "TStyle.h"
-#include "TSystem.h"
-#include <TMath.h>
-#include <math.h>
-#include <sstream>
-#include <string>
-
-#include "KYOcommonOpt.h"
+#include "../SONGKYO.h"
 
 void formRapArr(Double_t binmin, Double_t binmax, string* arr);
 void formAbsRapArr(Double_t binmin, Double_t binmax, string* arr);
 void formPtArr(Double_t binmin, Double_t binmax, string* arr);
 
-void draw_DataMCRecoPt(char* dirName = "8rap9pt", bool isPrompt=false, bool isLog=false)
+void draw_DataMCRecoPt_pA(bool isPrompt=false, bool isLog=false)
 {
-	gROOT->Macro("./JpsiStyle.C");
+	gROOT->Macro("../Style.C");
 
 	const int nRap = 8;
 	const int nPt = 9;
 	const int nRapTmp = nRap+1;
 	const int nPtTmp = nPt+1;
+  double ratiomin = 0.2;
+  double ratiomax = 1.8;
+  //double ratiomin = 0.5;
+  //double ratiomax = 1.5;
 
 	Double_t pxtmp[nRap][nPt]; //x point to fill temp
 	Double_t pytmp[nRap][nPt]; //y point to fill temp
@@ -66,20 +45,20 @@ void draw_DataMCRecoPt(char* dirName = "8rap9pt", bool isPrompt=false, bool isLo
 	Double_t ex[nPt] = {0,0,0,0,0,0,0,0,0}; // x stat error
 
 	////// y_CM array 
+	//// for_pA
 	Double_t rapArrNumFB[nRapTmp] = {1.93, 1.5, 0.9, 0., -0.9, -1.5, -1.93, -2.4, -2.87};// for pt dist.
-	//Double_t rapArrNumBF[nRapTmp] = {-2.87, -2.4, -1.93, -1.5, -0.9, 0., 0.9, 1.5, 1.93};// for rap dist.
+	//// for_pp
+  //Double_t rapArrNumFB[nRapTmp] = {2.4, 1.93, 1.5, 0.9, 0., -0.9, -1.5, -1.93, -2.4};// for pt dist.
 	Double_t rapBinW[nRap];
 	for (Int_t iy=0; iy<nRap; iy++) {
 		rapBinW[iy] = rapArrNumFB[iy]-rapArrNumFB[iy+1]; 
 		//rapBinW[iy] = rapArrNumBF[iy+1]-rapArrNumBF[iy]; 
-		cout << iy <<"th rapBinW = " << rapBinW[iy] <<endl;
 	}
 	//////// pt array
 	Double_t ptArrNum[nPtTmp] = {2.0, 3.0, 4.0, 5.0, 6.5, 7.5, 8.5, 10., 14., 30.};//8rap9pt
 	Double_t ptBinW[nPt];
 	for (Int_t ipt=0; ipt<nPt; ipt++) {
 		ptBinW[ipt] = ptArrNum[ipt+1]-ptArrNum[ipt]; 
-		cout << ipt <<"th ptBinW = " << ptBinW[ipt] <<endl;
 	}
 
 	// array string
@@ -95,72 +74,38 @@ void draw_DataMCRecoPt(char* dirName = "8rap9pt", bool isPrompt=false, bool isLo
 	}
 
 	// --- read-in file
-	//TFile * f2D = new TFile(Form("../fittingResult/total2Dhist_%s_noPtWeight.root",dirName));
-	TFile * f2D = new TFile(Form("../fittingResult/total2Dhist_%s_noPtWeight_tag5_v1_bfracControl.root",dirName));
-	cout << "dirName = " << dirName << endl;
+	TFile * f2D = new TFile("../FittingResult/totalHist_pA_8rap9pt_newcut_Zvtx1_SF1_noPtWeight.root","READ");
 
 	// --- read-in 2D hist for data reco dist
-	TH2D* h2D_fit_pt_y_Pbp;
-	TH2D* h2D_fit_pt_y_pPb;
-	if (isPrompt) {
-		h2D_fit_pt_y_Pbp = (TH2D*)f2D->Get("h2D_fit_pt_y_PR_Pbp");
-		h2D_fit_pt_y_pPb = (TH2D*)f2D->Get("h2D_fit_pt_y_PR_pPb");
-	}
-	else {
-		h2D_fit_pt_y_Pbp = (TH2D*)f2D->Get("h2D_fit_pt_y_NP_Pbp");
-		h2D_fit_pt_y_pPb = (TH2D*)f2D->Get("h2D_fit_pt_y_NP_pPb");
-	}
-	h2D_fit_pt_y_Pbp->SetName("h2D_fit_pt_y_Pbp");
-	h2D_fit_pt_y_pPb->SetName("h2D_fit_pt_y_pPb");
-	cout << "h2D_fit_pt_y_Pbp = " << h2D_fit_pt_y_Pbp << endl;
-	cout << "h2D_fit_pt_y_pPb = " << h2D_fit_pt_y_pPb << endl;
+	TH2D* h2D_Fit_pA;
+	if (isPrompt) { h2D_Fit_pA = (TH2D*)f2D->Get("h2D_Fit_PR_pA");}
+	else { h2D_Fit_pA = (TH2D*)f2D->Get("h2D_Fit_NP_pA"); }
+	h2D_Fit_pA->SetName("h2D_Fit_pA");
+	cout << "h2D_Fit_pA = " << h2D_Fit_pA << endl;
+	// --- read-in 2D hist for MC reco dist.
+	 TH2D* h2D_Eff_Num_pA;
+	if (isPrompt) { h2D_Eff_Num_pA = (TH2D*)f2D->Get("otherMCInfo/h2D_Eff_Num_PR_pA"); }
+	else { h2D_Eff_Num_pA = (TH2D*)f2D->Get("otherMCInfo/h2D_Eff_Num_NP_pA"); }
+	h2D_Eff_Num_pA->SetName("h2D_Eff_Num_pA");
+	cout << "h2D_Eff_Num_pA = " << h2D_Eff_Num_pA << endl;
 
-	const int nbinsX = h2D_fit_pt_y_Pbp->GetNbinsX();
-	const int nbinsY = h2D_fit_pt_y_Pbp->GetNbinsY();
-	cout << "nbinsX = " << nbinsX << endl;
-	cout << "nbinsY = " << nbinsY << endl;
+	const int nbinsX = h2D_Fit_pA->GetNbinsX();
+	const int nbinsY = h2D_Fit_pA->GetNbinsY();
+	cout << "nbinsX = " << nbinsX << ", nbinsY = " << nbinsY << endl;
 	if (nbinsX != nRap) { cout << " *** Error!!! nbinsX != nRap"; return; };
 	if (nbinsY != nPt) { cout << " *** Error!!! nbinsY != nPt"; return; };
 	
-	// --- read-in 2D hist for MC reco dist.
-	 TH2D* h2D_Eff_Num_pt_y_Pbp;
-	 TH2D* h2D_Eff_Num_pt_y_pPb;
-	if (isPrompt) {
-		h2D_Eff_Num_pt_y_Pbp = (TH2D*)f2D->Get("otherMCInfo/h2D_Eff_Num_pt_y_PR_Pbp");
-		h2D_Eff_Num_pt_y_pPb = (TH2D*)f2D->Get("otherMCInfo/h2D_Eff_Num_pt_y_PR_pPb");
-	}
-	else {
-		h2D_Eff_Num_pt_y_Pbp = (TH2D*)f2D->Get("otherMCInfo/h2D_Eff_Num_pt_y_NP_Pbp");
-		h2D_Eff_Num_pt_y_pPb = (TH2D*)f2D->Get("otherMCInfo/h2D_Eff_Num_pt_y_NP_pPb");
-	}
-	h2D_Eff_Num_pt_y_Pbp->SetName("h2D_Eff_Num_pt_y_Pbp");
-	h2D_Eff_Num_pt_y_pPb->SetName("h2D_Eff_Num_pt_y_pPb");
-	cout << "h2D_Eff_Num_pt_y_Pbp = " << h2D_Eff_Num_pt_y_Pbp << endl;
-	cout << "h2D_Eff_Num_pt_y_pPb = " << h2D_Eff_Num_pt_y_pPb << endl;
-
 	// ---  projection to 1D hist
-	TH1D* h1D_data_Pbp[nbinsX]; 
-	TH1D* h1D_data_pPb[nbinsX]; 
-	TH1D* h1D_MC_Pbp[nbinsX]; 
-	TH1D* h1D_MC_pPb[nbinsX]; 
+	TH1D* h1D_data_pA[nbinsX]; 
+	TH1D* h1D_MC_pA[nbinsX]; 
 	// iy=0 refers to forwards !!! (ordering here)
 	for (Int_t iy = 0; iy < nbinsX; iy++) {
-		////// for data RECO
-		h1D_data_Pbp[iy] = h2D_fit_pt_y_Pbp->ProjectionY(Form("h1D_data_Pbp_%d",iy),iy+1,iy+1);
-		h1D_data_pPb[iy] = h2D_fit_pt_y_pPb->ProjectionY(Form("h1D_data_pPb_%d",iy),nbinsX-iy,nbinsX-iy);
-		////// for MC RECO
-		h1D_MC_Pbp[iy] = h2D_Eff_Num_pt_y_Pbp->ProjectionY(Form("h1D_MC_Pbp_%d",iy),iy+1,iy+1);
-		h1D_MC_pPb[iy] = h2D_Eff_Num_pt_y_pPb->ProjectionY(Form("h1D_MC_pPb_%d",iy),nbinsX-iy,nbinsX-iy);
-	}
-	
-	// --- fot Pbp+pPb merged dist.
-	TH1D* h1D_data_tot[nbinsX]; 
-	TH1D* h1D_MC_tot[nbinsX];
-	for (Int_t iy = 0; iy < nbinsX; iy++) {
-		h1D_data_tot[iy]=(TH1D*)h1D_data_Pbp[iy]->Clone(Form("h1D_data_tot_%d",iy));
-		h1D_data_tot[iy]->Add(h1D_data_pPb[iy]);
-		h1D_MC_tot[iy]=(TH1D*)h1D_MC_Pbp[iy]->Clone(Form("h1D_MC_tot_%d",iy));
-		h1D_MC_tot[iy]->Add(h1D_MC_pPb[iy]);
+	  //// for_pA
+		h1D_data_pA[iy] = h2D_Fit_pA->ProjectionY(Form("h1D_data_pA_%d",iy),iy+1,iy+1);
+		h1D_MC_pA[iy] = h2D_Eff_Num_pA->ProjectionY(Form("h1D_MC_pA_%d",iy),iy+1,iy+1);
+	  //// for_pp
+		//h1D_data_pp[iy] = h2D_Fit_pp->ProjectionY(Form("h1D_data_pp_%d",iy),nbinsX-iy,nbinsX-iy);
+		//h1D_MC_pp[iy] = h2D_Eff_Num_pp->ProjectionY(Form("h1D_MC_pp_%d",iy),nbinsX-iy,nbinsX-iy);
 	}
 	
 	//////////////////////////////////////////////////////////////////////////////////////
@@ -169,396 +114,146 @@ void draw_DataMCRecoPt(char* dirName = "8rap9pt", bool isPrompt=false, bool isLo
 	// set values as zero for unused bins
 	for (Int_t iy = 0; iy < nbinsX; iy++) {
 		if (iy>=1 && iy<=6) {
-			h1D_data_Pbp[iy]->SetBinContent(1,0);
-			h1D_data_Pbp[iy]->SetBinError(1,0);
-			h1D_data_pPb[iy]->SetBinContent(1,0);
-			h1D_data_pPb[iy]->SetBinError(1,0);
-			h1D_data_tot[iy]->SetBinContent(1,0);
-			h1D_data_tot[iy]->SetBinError(1,0);
-			h1D_MC_Pbp[iy]->SetBinContent(1,0);
-			h1D_MC_Pbp[iy]->SetBinError(1,0);
-			h1D_MC_pPb[iy]->SetBinContent(1,0);
-			h1D_MC_pPb[iy]->SetBinError(1,0);
-			h1D_MC_tot[iy]->SetBinContent(1,0);
-			h1D_MC_tot[iy]->SetBinError(1,0);
+			h1D_data_pA[iy]->SetBinContent(1,0);
+			h1D_data_pA[iy]->SetBinError(1,0);
+			h1D_MC_pA[iy]->SetBinContent(1,0);
+			h1D_MC_pA[iy]->SetBinError(1,0);
+			h1D_data_pA[iy]->SetBinContent(2,0);
+			h1D_data_pA[iy]->SetBinError(2,0);
+			h1D_MC_pA[iy]->SetBinContent(2,0);
+			h1D_MC_pA[iy]->SetBinError(2,0);
 		}
 		if (iy>=2 && iy<=5) {
-			h1D_data_Pbp[iy]->SetBinContent(2,0);
-			h1D_data_Pbp[iy]->SetBinError(2,0);
-			h1D_data_Pbp[iy]->SetBinContent(3,0);
-			h1D_data_Pbp[iy]->SetBinError(3,0);
-			h1D_data_pPb[iy]->SetBinContent(2,0);
-			h1D_data_pPb[iy]->SetBinError(2,0);
-			h1D_data_pPb[iy]->SetBinContent(3,0);
-			h1D_data_pPb[iy]->SetBinError(3,0);
-			h1D_data_tot[iy]->SetBinContent(2,0);
-			h1D_data_tot[iy]->SetBinError(2,0);
-			h1D_data_tot[iy]->SetBinContent(3,0);
-			h1D_data_tot[iy]->SetBinError(3,0);
-			h1D_MC_Pbp[iy]->SetBinContent(2,0);
-			h1D_MC_Pbp[iy]->SetBinError(2,0);
-			h1D_MC_Pbp[iy]->SetBinContent(3,0);
-			h1D_MC_Pbp[iy]->SetBinError(3,0);
-			h1D_MC_pPb[iy]->SetBinContent(2,0);
-			h1D_MC_pPb[iy]->SetBinError(2,0);
-			h1D_MC_pPb[iy]->SetBinContent(3,0);
-			h1D_MC_pPb[iy]->SetBinError(3,0);
-			h1D_MC_tot[iy]->SetBinContent(2,0);
-			h1D_MC_tot[iy]->SetBinError(2,0);
-			h1D_MC_tot[iy]->SetBinContent(3,0);
-			h1D_MC_tot[iy]->SetBinError(3,0);
+			h1D_data_pA[iy]->SetBinContent(3,0);
+			h1D_data_pA[iy]->SetBinError(3,0);
+			h1D_MC_pA[iy]->SetBinContent(3,0);
+			h1D_MC_pA[iy]->SetBinError(3,0);
 		}
-		if (iy>=2 && iy<=4) {
-			h1D_data_Pbp[iy]->SetBinContent(4,0);
-			h1D_data_Pbp[iy]->SetBinError(4,0);
-			h1D_data_pPb[iy]->SetBinContent(4,0);
-			h1D_data_pPb[iy]->SetBinError(4,0);
-			h1D_data_tot[iy]->SetBinContent(4,0);
-			h1D_data_tot[iy]->SetBinError(4,0);
-			h1D_MC_Pbp[iy]->SetBinContent(4,0);
-			h1D_MC_Pbp[iy]->SetBinError(4,0);
-			h1D_MC_pPb[iy]->SetBinContent(4,0);
-			h1D_MC_pPb[iy]->SetBinError(4,0);
-			h1D_MC_tot[iy]->SetBinContent(4,0);
-			h1D_MC_tot[iy]->SetBinError(4,0);
+		if (iy>=2 && iy<=4) { //for_pA
+		//if (iy>=2 && iy<=5) { //for_pp
+			h1D_data_pA[iy]->SetBinContent(4,0);
+			h1D_data_pA[iy]->SetBinError(4,0);
+			h1D_MC_pA[iy]->SetBinContent(4,0);
+			h1D_MC_pA[iy]->SetBinError(4,0);
 		}
 	}
-	
 	////// after zero-bin setting, normalize!
 	for (Int_t iy = 0; iy < nbinsX; iy++) {
-		h1D_data_Pbp[iy]->Scale(1./h1D_data_Pbp[iy]->Integral());
-		h1D_data_pPb[iy]->Scale(1./h1D_data_pPb[iy]->Integral());
-		h1D_data_tot[iy]->Scale(1./h1D_data_tot[iy]->Integral());
-		h1D_MC_Pbp[iy]->Scale(1./h1D_MC_Pbp[iy]->Integral());
-		h1D_MC_pPb[iy]->Scale(1./h1D_MC_pPb[iy]->Integral());
-		h1D_MC_tot[iy]->Scale(1./h1D_MC_tot[iy]->Integral());
-		h1D_data_Pbp[iy]->Scale(1,"width");
-		h1D_data_pPb[iy]->Scale(1,"width");
-		h1D_data_tot[iy]->Scale(1,"width");
-		h1D_MC_Pbp[iy]->Scale(1,"width");
-		h1D_MC_pPb[iy]->Scale(1,"width");
-		h1D_MC_tot[iy]->Scale(1,"width");
+		h1D_data_pA[iy]->Scale(1./h1D_data_pA[iy]->Integral());
+		h1D_MC_pA[iy]->Scale(1./h1D_MC_pA[iy]->Integral());
+		h1D_data_pA[iy]->Scale(1,"width");
+		h1D_MC_pA[iy]->Scale(1,"width");
 	}
-	//////////////////////////////////////////////////////////////////
-	//// --- Draw histograms
-
-	double maxVal=0.;
 	
-	TLegend *legUR = new TLegend(0.45, 0.75, 0.86, 0.92); //upper left
-	TLegend *legBL = new TLegend(0.18, 0.18, 0.59, 0.35); //upper left
+  //// calculate ratio
+  TH1D* hRatio_pA[nRap];
+	for (Int_t iy = 0; iy < nbinsX; iy++) {
+		hRatio_pA[iy]=(TH1D*)h1D_data_pA[iy]->Clone(Form("hRatio_pA_%d",iy));
+		hRatio_pA[iy]->Divide(h1D_MC_pA[iy]);
+	}
+	
+  //////////////////////////////////////////////////////////////////
+	//// --- Draw histograms
+	TLegend *legUR = new TLegend(0.45, 0.75, 0.86, 0.92);
 	SetLegendStyle(legUR);
-	SetLegendStyle(legBL);
 	 	
-	//latex box for beam, rapidity, pT info
 	TLatex* latex = new TLatex();
 	latex->SetNDC();
 	latex->SetTextAlign(12);
 	latex->SetTextSize(0.04);
 	
-	// --- Pbp (1st run)
-	TCanvas* c_Pbp = new TCanvas("c_Pbp","c_Pbp",200,10,1600,800);
-	c_Pbp->Divide(4,2);
-	if (isLog) gPad->SetLogy(1);
-	else gPad->SetLogy(0);
-	for (Int_t iy = 0; iy < nbinsX; iy++) {
-		c_Pbp->cd(iy+1);
-		SetHistStyle(h1D_data_Pbp[iy],1,0);
-		SetHistStyle(h1D_MC_Pbp[iy],2,10);
-		h1D_data_Pbp[iy]->GetXaxis()->SetTitle("p_{T} (GeV/c)");
-		h1D_data_Pbp[iy]->GetXaxis()->CenterTitle();
-		h1D_data_Pbp[iy]->GetXaxis()->SetRangeUser(0.,30.);
-		h1D_data_Pbp[iy]->GetYaxis()->SetTitle("");
+	TCanvas* c_pA = new TCanvas("c_pA","c_pA",200,10,1600,800);
+	c_pA->Divide(4,2);
+	
+  TGraphAsymmErrors* g_data_pA[nbinsX];
+  TGraphAsymmErrors* g_MC_pA[nbinsX];
+	double maxVal=0.;
+	
+  for (Int_t iy = 0; iy < nbinsX; iy++) {
+		c_pA->cd(iy+1);
+	  if (isLog) gPad->SetLogy(1);
+	  else gPad->SetLogy(0);
+		g_data_pA[iy]=new TGraphAsymmErrors(h1D_data_pA[iy]);
+		g_data_pA[iy]->SetName(Form("g_data_pA_%d",iy));
+		g_MC_pA[iy]=new TGraphAsymmErrors(h1D_MC_pA[iy]);
+		g_MC_pA[iy]->SetName(Form("g_MC_pA_%d",iy));
+		SetGraphStyle(g_data_pA[iy],1,0);
+		SetGraphStyle(g_MC_pA[iy],2,10);
+		g_data_pA[iy]->GetXaxis()->SetTitle("p_{T} (GeV/c)");
+		g_data_pA[iy]->GetXaxis()->CenterTitle();
+		g_data_pA[iy]->GetXaxis()->SetLimits(0.,30.);
+		g_data_pA[iy]->GetYaxis()->SetTitle("");
 		if (!isLog){
-			maxVal = h1D_data_Pbp[iy]->GetMaximum();
-			h1D_data_Pbp[iy]->GetYaxis()->SetRangeUser(0.,maxVal*1.3);
+			maxVal = g_data_pA[iy]->GetMaximum();
+			g_data_pA[iy]->SetMinimum(0.);
+//			g_data_pA[iy]->SetMaximum(maxVal*1.3);
 		}
-		h1D_data_Pbp[iy]->Draw("pe");
-		h1D_MC_Pbp[iy]->Draw("pe same");
+		g_data_pA[iy]->Draw("ap");
+		g_MC_pA[iy]->Draw("p");
 		if (iy==0){
-			if (isPrompt) legUR -> SetHeader("Prompt J/#psi 1st run");
-			else legUR -> SetHeader("Non-prompt J/#psi 1st run");
-			legUR -> AddEntry(h1D_data_Pbp[iy],"data RECO","lp");
-			legUR -> AddEntry(h1D_MC_Pbp[iy],"MC RECO","lp");
-			legUR->Draw();
+			if (isPrompt) legUR -> SetHeader("pA Prompt J/#psi");
+			else legUR -> SetHeader("pA Non-prompt J/#psi");
+			legUR -> AddEntry(g_data_pA[iy],"data RECO","lp");
+			legUR -> AddEntry(g_MC_pA[iy],"MC RECO","lp");
+			//legUR->Draw();
 			latex->DrawLatex(0.56,0.68,Form("%s",rapArr[iy].c_str()));
 		}
 		else latex->DrawLatex(0.56,0.88,Form("%s",rapArr[iy].c_str()));
 	}
-	c_Pbp->SaveAs(Form("DataMcRecoPt_%s/DataMcRecoPt_Pbp_isPrompt%d_isLog%d.pdf",dirName,(int)isPrompt,(int)isLog));
 	legUR->Clear();
 	
-	// --- pPb (2nd run)
-	TCanvas* c_pPb = new TCanvas("c_pPb","c_pPb",200,10,1600,800);
-	c_pPb->Divide(4,2);
-	for (Int_t iy = 0; iy < nbinsX; iy++) {
-		c_pPb->cd(iy+1);
-		if (isLog) gPad->SetLogy(1);
-		else gPad->SetLogy(0);
-		SetHistStyle(h1D_data_pPb[iy],1,0);
-		SetHistStyle(h1D_MC_pPb[iy],2,10);
-		h1D_data_pPb[iy]->GetXaxis()->SetTitle("p_{T} (GeV/c)");
-		h1D_data_pPb[iy]->GetXaxis()->CenterTitle();
-		h1D_data_pPb[iy]->GetXaxis()->SetRangeUser(0.,30.);
-		h1D_data_pPb[iy]->GetYaxis()->SetTitle("");
-		if (!isLog){
-			maxVal = h1D_data_pPb[iy]->GetMaximum();
-			h1D_data_pPb[iy]->GetYaxis()->SetRangeUser(0.,maxVal*1.3);
-		}
-		h1D_data_pPb[iy]->Draw("pe");
-		h1D_MC_pPb[iy]->Draw("pe same");
-		if (iy==0){
-			if (isPrompt) legUR -> SetHeader("Prompt J/#psi 2nd run");
-			else legUR -> SetHeader("Non-prompt J/#psi 2nd run");
-			legUR -> AddEntry(h1D_data_pPb[iy],"data RECO","lp");
-			legUR -> AddEntry(h1D_MC_pPb[iy],"MC RECO","lp");
-			legUR->Draw();
-			latex->DrawLatex(0.56,0.68,Form("%s",rapArr[iy].c_str()));
-		}
-		else latex->DrawLatex(0.56,0.88,Form("%s",rapArr[iy].c_str()));
-	}
-	c_pPb->SaveAs(Form("DataMcRecoPt_%s/DataMcRecoPt_pPb_isPrompt%d_isLog%d.pdf",dirName,(int)isPrompt,(int)isLog));
-	legUR->Clear();
 	
-	// --- tot (1st+2nd)
-	TCanvas* c_tot = new TCanvas("c_tot","c_tot",200,10,1600,800);
-	c_tot->Divide(4,2);
-	for (Int_t iy = 0; iy < nbinsX; iy++) {
-		c_tot->cd(iy+1);
-		if (isLog) gPad->SetLogy(1);
-		else gPad->SetLogy(0);
-		SetHistStyle(h1D_data_tot[iy],1,0);
-		SetHistStyle(h1D_MC_tot[iy],2,10);
-		h1D_data_tot[iy]->GetXaxis()->SetTitle("p_{T} (GeV/c)");
-		h1D_data_tot[iy]->GetXaxis()->CenterTitle();
-		h1D_data_tot[iy]->GetXaxis()->SetRangeUser(0.,30.);
-		h1D_data_tot[iy]->GetYaxis()->SetTitle("");
-		if (!isLog){
-			maxVal = h1D_data_tot[iy]->GetMaximum();
-			h1D_data_tot[iy]->GetYaxis()->SetRangeUser(0.,maxVal*1.3);
-		}
-		h1D_data_tot[iy]->Draw("pe");
-		h1D_MC_tot[iy]->Draw("pe same");
-		if (iy==0){
-			if (isPrompt) legUR -> SetHeader("Prompt J/#psi total");
-			else legUR -> SetHeader("Non-prompt J/#psi total");
-			legUR -> AddEntry(h1D_data_tot[iy],"data RECO","lp");
-			legUR -> AddEntry(h1D_MC_tot[iy],"MC RECO","lp");
-			legUR->Draw();
-			latex->DrawLatex(0.56,0.68,Form("%s",rapArr[iy].c_str()));
-		}
-		else latex->DrawLatex(0.56,0.88,Form("%s",rapArr[iy].c_str()));
-	}
-	c_tot->SaveAs(Form("DataMcRecoPt_%s/DataMcRecoPt_tot_isPrompt%d_isLog%d.pdf",dirName,(int)isPrompt,(int)isLog));
-	legUR->Clear();
-
-
-
-
+  //////////////////////////////////////////////////////////////////
+	//// hRatio, and convert to gRatio (TGraphAsymErrors)
 	//////////////////////////////////////////////////////////////////
-	// hRatio
-	TH1D* hRatio_Pbp[nRap];
-	TH1D* hRatio_pPb[nRap];
-	TH1D* hRatio_tot[nRap];
 	
-	// --- Pbp (1st run)
+  TCanvas* c_pA_2 = new TCanvas("c_pA_2","c_pA_2",200,10,1600,800);
+	c_pA_2->Divide(4,2);	
+	
+	TGraphAsymmErrors* gRatio_pA[nbinsX];
+	
 	for (Int_t iy = 0; iy < nbinsX; iy++) {
-		c_Pbp->cd(iy+1);
-		gPad->SetLogy(0);
-		hRatio_Pbp[iy]=(TH1D*)h1D_data_Pbp[iy]->Clone(Form("hRatio_Pbp_%d",iy));
-		hRatio_Pbp[iy]->Divide(h1D_MC_Pbp[iy]);
-		SetHistStyle(hRatio_Pbp[iy],5,0);
-		hRatio_Pbp[iy]->GetXaxis()->SetTitle("p_{T} (GeV/c)");
-		hRatio_Pbp[iy]->GetYaxis()->SetTitle("Ratio");
-		hRatio_Pbp[iy]->GetXaxis()->SetRangeUser(0.,30.);
-		//hRatio_Pbp[iy]->GetYaxis()->SetRangeUser(0.5,1.5);
-		hRatio_Pbp[iy]->GetYaxis()->SetRangeUser(0.0,2.0);
-		hRatio_Pbp[iy]->Draw("pe");
-		if (iy==0) {
-			if (isPrompt) legBL -> SetHeader("Prompt J/#psi 1st run");
-			else legBL -> SetHeader("Non-prompt J/#psi 1st run");
-			legBL -> AddEntry(hRatio_Pbp[iy],"DATA/MC","lp");
-			legBL->Draw();
+		gRatio_pA[iy]=new TGraphAsymmErrors(hRatio_pA[iy]);
+		gRatio_pA[iy]->SetName(Form("gRatio_pA_%d",iy));
+	  SetGraphStyle(gRatio_pA[iy],4,0);
+  	for (Int_t ipt=0; ipt<nbinsY; ipt++ ){
+			gRatio_pA[iy]->GetPoint(ipt, pxtmp[iy][ipt], pytmp[iy][ipt]);	
+			gRatio_pA[iy]->SetPoint(ipt, px[iy][ipt], pytmp[iy][ipt]);
+			gRatio_pA[iy]->SetPointEXlow(ipt, ex[ipt]);
+			gRatio_pA[iy]->SetPointEXhigh(ipt, ex[ipt]);
 		}
-		else latex->DrawLatex(0.56,0.88,Form("%s",rapArr[iy].c_str()));
-		dashedLine(0.,1.,30.,1.,1,1);
-	}
-//	c_Pbp->SaveAs(Form("DataMcRecoPt_%s/DataMcRecoPtRatio_Pbp_isPrompt%d_isLog%d.pdf",dirName,(int)isPrompt,(int)isLog));
-	legBL->Clear();
-
-	// --- pPb (2nd run)
-	for (Int_t iy = 0; iy < nbinsX; iy++) {
-		c_pPb->cd(iy+1);
-		gPad->SetLogy(0);
-		hRatio_pPb[iy]=(TH1D*)h1D_data_pPb[iy]->Clone(Form("hRatio_pPb_%d",iy));
-		hRatio_pPb[iy]->Divide(h1D_MC_pPb[iy]);
-		SetHistStyle(hRatio_pPb[iy],5,0);
-		hRatio_pPb[iy]->GetXaxis()->SetTitle("p_{T} (GeV/c)");
-		hRatio_pPb[iy]->GetYaxis()->SetTitle("Ratio");
-		hRatio_pPb[iy]->GetXaxis()->SetRangeUser(0.,30.);
-		//hRatio_pPb[iy]->GetYaxis()->SetRangeUser(0.5,1.5);
-		hRatio_pPb[iy]->GetYaxis()->SetRangeUser(0.0,2.0);
-		hRatio_pPb[iy]->Draw("pe");
+		c_pA_2->cd(iy+1);
+		gRatio_pA[iy]->GetXaxis()->SetLimits(0.0,25.);
+		gRatio_pA[iy]->GetXaxis()->CenterTitle();
+		gRatio_pA[iy]->SetMinimum(ratiomin);
+		gRatio_pA[iy]->SetMaximum(ratiomax);
+		gRatio_pA[iy]->GetYaxis()->CenterTitle();
+		gRatio_pA[iy]->GetXaxis()->SetTitle("p_{T} [GeV/c]");
+		gRatio_pA[iy]->GetYaxis()->SetTitle("Data/MC");
+		gRatio_pA[iy]->Draw("AP");
 		if (iy==0){
-			if (isPrompt) legBL -> SetHeader("Prompt J/#psi 2nd run");
-			else legBL -> SetHeader("Non-prompt J/#psi 2nd run");
-			legBL -> AddEntry(hRatio_pPb[iy],"data/MC","lp");
-			legBL->Draw();
-		}
-		else latex->DrawLatex(0.56,0.88,Form("%s",rapArr[iy].c_str()));
-		dashedLine(0.,1.,30.,1.,1,1);
-	}
-//	c_pPb->SaveAs(Form("DataMcRecoPt_%s/DataMcRecoPtRatio_pPb_isPrompt%d_isLog%d.pdf",dirName,(int)isPrompt,(int)isLog));
-	legBL->Clear();
-	
-	// --- tot (1st + 2nd)
-	for (Int_t iy = 0; iy < nbinsX; iy++) {
-		c_tot->cd(iy+1);
-		gPad->SetLogy(0);
-		hRatio_tot[iy]=(TH1D*)h1D_data_tot[iy]->Clone(Form("hRatio_tot_%d",iy));
-		hRatio_tot[iy]->Divide(h1D_MC_tot[iy]);
-		SetHistStyle(hRatio_tot[iy],5,0);
-		hRatio_tot[iy]->GetXaxis()->SetTitle("p_{T} (GeV/c)");
-		hRatio_tot[iy]->GetYaxis()->SetTitle("Ratio");
-		hRatio_tot[iy]->GetXaxis()->SetRangeUser(0.,30.);
-		//hRatio_tot[iy]->GetYaxis()->SetRangeUser(0.5,1.5);
-		hRatio_tot[iy]->GetYaxis()->SetRangeUser(0.0,2.0);
-		hRatio_tot[iy]->Draw("pe");
-		if (iy==0){
-			if (isPrompt) legBL -> SetHeader("Prompt J/#psi total");
-			else legBL -> SetHeader("Non-prompt J/#psi total");
-			legBL -> AddEntry(hRatio_tot[iy],"data/MC","lp");
-			legBL->Draw();
-		}
-		else latex->DrawLatex(0.56,0.88,Form("%s",rapArr[iy].c_str()));
-		dashedLine(0.,1.,30.,1.,1,1);
-	}
-//	c_tot->SaveAs(Form("DataMcRecoPt_%s/DataMcRecoPtRatio_tot_isPrompt%d_isLog%d.pdf",dirName,(int)isPrompt,(int)isLog));
-	legBL->Clear();
-
-	c_Pbp->Clear();
-	c_pPb->Clear();
-	c_tot->Clear();
-
-	//////////////////////////////////////////////////////////////////
-	// convert to TGraphAsymErrors only for ratio
-	TGraphAsymmErrors* gRatio_Pbp[nbinsX];
-	TGraphAsymmErrors* gRatio_pPb[nbinsX];
-	TGraphAsymmErrors* gRatio_tot[nbinsX];
-	
-	TCanvas* c_Pbp2 = new TCanvas("c_Pbp2","c_Pbp2",200,10,1600,800);
-	c_Pbp2->Divide(4,2);	
-	TCanvas* c_pPb2 = new TCanvas("c_pPb2","c_pPb2",200,10,1600,800);
-	c_pPb2->Divide(4,2);	
-	TCanvas* c_tot2 = new TCanvas("c_tot2","c_tot2",200,10,1600,800);
-	c_tot2->Divide(4,2);	
-	
-	
-	// --- Pbp (1st run)
-	for (Int_t iy = 0; iy < nbinsX; iy++) {
-		gRatio_Pbp[iy]=new TGraphAsymmErrors(hRatio_Pbp[iy]);
-		gRatio_Pbp[iy]->SetName(Form("gRatio_Pbp_%d",iy));
-		for (Int_t ipt=0; ipt<nbinsY; ipt++ ){
-			gRatio_Pbp[iy]->GetPoint(ipt, pxtmp[iy][ipt], pytmp[iy][ipt]);	
-			gRatio_Pbp[iy]->SetPoint(ipt, px[iy][ipt], pytmp[iy][ipt]);
-			gRatio_Pbp[iy]->SetPointEXlow(ipt, ex[ipt]);
-			gRatio_Pbp[iy]->SetPointEXhigh(ipt, ex[ipt]);
-			cout << "pr : pytmp["<<iy<<"]["<<ipt<<"] = " << pytmp[iy][ipt]<<endl;
-		}
-		c_Pbp2->cd(iy+1);
-		gRatio_Pbp[iy]->GetXaxis()->SetLimits(0.0,25.);
-		gRatio_Pbp[iy]->SetMinimum(0.2);
-		gRatio_Pbp[iy]->SetMaximum(1.8);
-		gRatio_Pbp[iy]->GetXaxis()->SetTitle("p_{T} [GeV/c]");
-		gRatio_Pbp[iy]->GetYaxis()->SetTitle("Ratio");
-		gRatio_Pbp[iy]->Draw("AP");
-		if (iy==0){
-			if (isPrompt) latex->DrawLatex(0.23,0.23,"Prompt J/#psi Pbp");
-			else latex->DrawLatex(0.23, 0.23,"Non-prompt J/#psi Pbp");
-			//latex->DrawLatex(0.56,0.88,Form("%s",rapArr[iy].c_str()));
+			if (isPrompt) latex->DrawLatex(0.23,0.23,"pA Prompt J/#psi");
+			else latex->DrawLatex(0.23, 0.23,"pA Non-prompt J/#psi");
 		}
 		latex->DrawLatex(0.56,0.88,Form("%s",rapArr[iy].c_str()));
 		dashedLine(0.,1.,25.,1.,1,1);
 	}	
-	c_Pbp2->SaveAs(Form("DataMcRecoPt_%s/DataMcRecoPt_gRatio_Pbp_isPrompt%d.pdf",dirName,(int)isPrompt));
-
-	// --- pPb (2nd run)
-	for (Int_t iy = 0; iy < nbinsX; iy++) {
-		gRatio_pPb[iy]=new TGraphAsymmErrors(hRatio_pPb[iy]);
-		gRatio_pPb[iy]->SetName(Form("gRatio_pPb_%d",iy));
-		for (Int_t ipt=0; ipt<nbinsY; ipt++ ){
-			gRatio_pPb[iy]->GetPoint(ipt, pxtmp[iy][ipt], pytmp[iy][ipt]);	
-			gRatio_pPb[iy]->SetPoint(ipt, px[iy][ipt], pytmp[iy][ipt]);
-			gRatio_pPb[iy]->SetPointEXlow(ipt, ex[ipt]);
-			gRatio_pPb[iy]->SetPointEXhigh(ipt, ex[ipt]);
-			cout << "pr : pytmp["<<iy<<"]["<<ipt<<"] = " << pytmp[iy][ipt]<<endl;
-		}
-		c_pPb2->cd(iy+1);
-		gRatio_pPb[iy]->GetXaxis()->SetLimits(0.0,25.);
-		gRatio_pPb[iy]->SetMinimum(0.2);
-		gRatio_pPb[iy]->SetMaximum(1.8);
-		gRatio_pPb[iy]->GetXaxis()->SetTitle("p_{T} [GeV/c]");
-		gRatio_pPb[iy]->GetYaxis()->SetTitle("Ratio");
-		gRatio_pPb[iy]->Draw("AP");
-		if (iy==0){
-			if (isPrompt) latex->DrawLatex(0.23,0.23,"Prompt J/#psi pPb");
-			else latex->DrawLatex(0.23, 0.23,"Non-prompt J/#psi pPb");
-			//latex->DrawLatex(0.56,0.88,Form("%s",rapArr[iy].c_str()));
-		}
-		latex->DrawLatex(0.56,0.88,Form("%s",rapArr[iy].c_str()));
-		dashedLine(0.,1.,25.,1.,1,1);
-	}	
-	c_pPb2->SaveAs(Form("DataMcRecoPt_%s/DataMcRecoPt_gRatio_pPb_isPrompt%d.pdf",dirName,(int)isPrompt));
-
-
-
-	// --- tot (1st + 2nd)
-	for (Int_t iy = 0; iy < nbinsX; iy++) {
-		gRatio_tot[iy]=new TGraphAsymmErrors(hRatio_tot[iy]);
-		gRatio_tot[iy]->SetName(Form("gRatio_tot_%d",iy));
-		for (Int_t ipt=0; ipt<nbinsY; ipt++ ){
-			gRatio_tot[iy]->GetPoint(ipt, pxtmp[iy][ipt], pytmp[iy][ipt]);	
-			gRatio_tot[iy]->SetPoint(ipt, px[iy][ipt], pytmp[iy][ipt]);
-			gRatio_tot[iy]->SetPointEXlow(ipt, ex[ipt]);
-			gRatio_tot[iy]->SetPointEXhigh(ipt, ex[ipt]);
-			cout << "pr : pytmp["<<iy<<"]["<<ipt<<"] = " << pytmp[iy][ipt]<<endl;
-		}
-		c_tot2->cd(iy+1);
-		gRatio_tot[iy]->GetXaxis()->SetLimits(0.0,25.);
-		gRatio_tot[iy]->SetMinimum(0.2);
-		gRatio_tot[iy]->SetMaximum(1.8);
-		gRatio_tot[iy]->GetXaxis()->SetTitle("p_{T} [GeV/c]");
-		gRatio_tot[iy]->GetYaxis()->SetTitle("Ratio");
-		gRatio_tot[iy]->Draw("AP");
-		if (iy==0){
-			if (isPrompt) latex->DrawLatex(0.23,0.23,"Prompt J/#psi tot");
-			else latex->DrawLatex(0.23, 0.23,"Non-prompt J/#psi tot");
-			//latex->DrawLatex(0.56,0.88,Form("%s",rapArr[iy].c_str()));
-		}
-		latex->DrawLatex(0.56,0.88,Form("%s",rapArr[iy].c_str()));
-		dashedLine(0.,1.,25.,1.,1,1);
-	}	
-	c_tot2->SaveAs(Form("DataMcRecoPt_%s/DataMcRecoPt_gRatio_tot_isPrompt%d.pdf",dirName,(int)isPrompt));
+	c_pA_2->SaveAs(Form("dir_DataMcRecoPt/pA_DataMcRecoPtRatio_isPrompt%d.pdf",(int)isPrompt));
 
 	//////////////////////////////////////////////////////////////////
 	// root file
-	TFile *fOut = new TFile(Form("DataMcRecoPt_%s/DataMcRecoPt_isPrompt%d.root",dirName,(int)isPrompt),"RECREATE");
+	TFile *fOut = new TFile(Form("dir_DataMcRecoPt/pA_DataMcRecoPt_isPrompt%d.root",(int)isPrompt),"RECREATE");
 	fOut->cd();
 	for (Int_t iy = 0; iy < nbinsX; iy++) {
-		h1D_data_Pbp[iy]->Write();
-		h1D_MC_Pbp[iy]->Write();
-		hRatio_Pbp[iy]->Write();
-		gRatio_Pbp[iy]->Write();
-		h1D_data_pPb[iy]->Write();
-		h1D_MC_pPb[iy]->Write();
-		hRatio_pPb[iy]->Write();
-		gRatio_pPb[iy]->Write();
-		h1D_data_tot[iy]->Write();
-		h1D_MC_tot[iy]->Write();
-		hRatio_tot[iy]->Write();
-		gRatio_tot[iy]->Write();
+		h1D_data_pA[iy]->Write();
+		h1D_MC_pA[iy]->Write();
+		hRatio_pA[iy]->Write();
+		g_data_pA[iy]->Write();
+		g_MC_pA[iy]->Write();
+		gRatio_pA[iy]->Write();
 	}
 	fOut->Close();
-	cout << "DataMcRecoPt_isPropmt" <<(int)isPrompt<<".root has been created :)" <<endl; 
+	cout << "pA_DataMcRecoPt_isPrompt" <<(int)isPrompt<<".root has been created :)" <<endl; 
 	
 	return;
 
