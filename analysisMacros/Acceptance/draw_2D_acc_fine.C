@@ -1,6 +1,6 @@
 #include "../SONGKYO.h"
 
-void draw_2D_acc_fine(bool isPrompt = true)
+void draw_2D_acc_fine(int MrapNpt=89, int isPA = 0, bool isPrompt=false, int accCutType =2, TString szDir="dir_acc")
 {
   gROOT->Macro("../Style2D.C");
 
@@ -14,11 +14,11 @@ void draw_2D_acc_fine(bool isPrompt = true)
   TString szPA;
   if (isPA==0) szPA="pp";
   else if (isPA==1) szPA="pA";
-  else {cout << "select among isPA = 0 or 1 only (pA instead of Pbp or pPb) "<< endl; return 0; }
+  else {cout << "select among isPA = 0 or 1 only (pA instead of Pbp or pPb) "<< endl; return; }
   TString szAccCut;
   if (accCutType==1) szAccCut="oldcut";
   else if (accCutType==2) szAccCut="newcut";
-  else {cout << "select among accCutType = 1 or 2"<< endl; return 0; }   
+  else {cout << "select among accCutType = 1 or 2"<< endl; return; }   
   TString szPrompt;
   if (isPrompt) szPrompt = "PR";
   else szPrompt = "NP"; 
@@ -46,24 +46,26 @@ void draw_2D_acc_fine(bool isPrompt = true)
   h2D_Den->GetXaxis()->SetTitle("y_{lab}");
   h2D_Den->GetXaxis()->CenterTitle();
   h2D_Den->GetYaxis()->SetTitle("p_{T} (GeV/c)");
+  //h2D_Den->Rebin2D(2,2);
   h2D_Den->Draw("colz");
   c1->Update();
   pal = (TPaletteAxis*)h2D_Den->GetListOfFunctions()->FindObject("palette"); 
   pal->SetX2NDC(0.92);
   c1->Modified();
   c1->Update();
-  c1->SaveAs(Form("dir_acc/h2D_Den_%s_fine.pdf",szFinal.Data()));
+  c1->SaveAs(Form("%s/h2D_Den_%s_fine.pdf",szDir.Data(),szFinal.Data()));
 
   h2D_Num->GetXaxis()->SetTitle("y_{lab}");
   h2D_Num->GetXaxis()->CenterTitle();
   h2D_Num->GetYaxis()->SetTitle("p_{T} (GeV/c)");
+  //h2D_Num->Rebin2D(2,2);
   h2D_Num->Draw("colz");
   c1->Update();
   pal = (TPaletteAxis*)h2D_Num->GetListOfFunctions()->FindObject("palette"); 
   pal->SetX2NDC(0.92);
   c1->Modified();
   c1->Update();
-  c1->SaveAs(Form("dir_acc/h2D_Num_%s_fine.pdf",szFinal.Data()));
+  c1->SaveAs(Form("%s/h2D_Num_%s_fine.pdf",szDir.Data(),szFinal.Data()));
 
   h2D_Acc->GetXaxis()->SetTitle("y_{lab}");
   h2D_Acc->GetXaxis()->CenterTitle();
@@ -75,7 +77,7 @@ void draw_2D_acc_fine(bool isPrompt = true)
   pal->SetX2NDC(0.92);
   c1->Modified();
   c1->Update();
-  c1->SaveAs(Form("dir_acc/h2D_Acc_%s_fine.pdf",szFinal.Data()));
+  c1->SaveAs(Form("%s/h2D_Acc_%s_fine.pdf",szDir.Data(),szFinal.Data()));
 
   return;
 

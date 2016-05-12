@@ -1,7 +1,7 @@
 #include "../SONGKYO.h"
 
 
-void draw_2D_acc(int MrapNpt=89, bool isPrompt = false)
+void draw_2D_acc(int MrapNpt=89, int isPA = 0, bool isPrompt=false, int accCutType =2, TString szDir="dir_acc")
 {
   gROOT->Macro("../Style2D.C");
 
@@ -15,11 +15,11 @@ void draw_2D_acc(int MrapNpt=89, bool isPrompt = false)
   TString szPA;
   if (isPA==0) szPA="pp";
   else if (isPA==1) szPA="pA";
-  else {cout << "select among isPA = 0 or 1 only (pA instead of Pbp or pPb) "<< endl; return 0; }
+  else {cout << "select among isPA = 0 or 1 only (pA instead of Pbp or pPb) "<< endl; return; }
   TString szAccCut;
   if (accCutType==1) szAccCut="oldcut";
   else if (accCutType==2) szAccCut="newcut";
-  else {cout << "select among accCutType = 1 or 2"<< endl; return 0; }   
+  else {cout << "select among accCutType = 1 or 2"<< endl; return; }   
   TString szPrompt;
   if (isPrompt) szPrompt = "PR";
   else szPrompt = "NP"; 
@@ -78,7 +78,8 @@ void draw_2D_acc(int MrapNpt=89, bool isPrompt = false)
   h2D_Acc->GetXaxis()->SetTitle("y_{lab}");
   h2D_Acc->GetXaxis()->CenterTitle();
   h2D_Acc->GetYaxis()->SetTitle("p_{T} (GeV/c)");
-  h2D_Acc->SetMaximum(1.);
+  //h2D_Acc->SetMaximum(1.);
+  h2D_Acc->SetMaximum(0.8);
   h2D_Acc->Draw("colz");
   c1->Update();
   pal = (TPaletteAxis*)h2D_Acc->GetListOfFunctions()->FindObject("palette"); 
@@ -89,13 +90,13 @@ void draw_2D_acc(int MrapNpt=89, bool isPrompt = false)
   if (isPA==0) {
     if (MrapNpt==89) {
       dashedLine(-2.4,2.0,-1.93,2.0,1,4);
-      dashedLine(-1.93,2.0,-1.93,3.0,1,4);
-      dashedLine(-1.93,3.0,-1.5,3.0,1,4);
-      dashedLine(-1.5,3.0,-1.5,6.5,1,4);
+      dashedLine(-1.93,2.0,-1.93,4.0,1,4);
+      dashedLine(-1.93,4.0,-1.5,4.0,1,4);
+      dashedLine(-1.5,4.0,-1.5,6.5,1,4);
       dashedLine(-1.5,6.5,1.5,6.5,1,4);
-      dashedLine(1.5,3.0,1.5,6.5,1,4);
-      dashedLine(1.5,3.0,1.93,3.0,1,4);
-      dashedLine(1.93,2.0,1.93,3.0,1,4);
+      dashedLine(1.5,4.0,1.5,6.5,1,4);
+      dashedLine(1.5,4.0,1.93,4.0,1,4);
+      dashedLine(1.93,2.0,1.93,4.0,1,4);
       dashedLine(1.93,2.0,2.4,2.0,1,4);
       dashedLine(2.4,2.0,2.4,30.0,1,4);
       dashedLine(-2.4,30.0,2.4,30.0,1,4);
@@ -107,15 +108,15 @@ void draw_2D_acc(int MrapNpt=89, bool isPrompt = false)
   else {
     if (MrapNpt==89) {
       dashedLine(-2.4,2.0,-1.97,2.0,1,4);
-      dashedLine(-1.97,2.0,-1.97,3.0,1,4);
-      dashedLine(-1.97,3.0,-1.37,3.0,1,4);
-      dashedLine(-1.37,3.0,-1.37,6.5,1,4);
+      dashedLine(-1.97,2.0,-1.97,4.0,1,4);
+      dashedLine(-1.97,4.0,-1.37,4.0,1,4);
+      dashedLine(-1.37,4.0,-1.37,6.5,1,4);
       dashedLine(-1.37,6.5,1.03,6.5,1,4);
       dashedLine(1.03,5.0,1.03,6.5,1,4);
       dashedLine(1.03,5.0,1.46,5.0,1,4);
-      dashedLine(1.46,3.0,1.46,5.0,1,4);
-      dashedLine(1.46,3.0,1.93,3.0,1,4);
-      dashedLine(1.93,2.0,1.93,3.0,1,4);
+      dashedLine(1.46,4.0,1.46,5.0,1,4);
+      dashedLine(1.46,4.0,1.93,4.0,1,4);
+      dashedLine(1.93,2.0,1.93,4.0,1,4);
       dashedLine(1.93,2.0,2.4,2.0,1,4);
       dashedLine(2.4,2.0,2.4,30.0,1,4);
       dashedLine(-2.4,30.0,2.4,30.0,1,4);
@@ -132,7 +133,7 @@ void draw_2D_acc(int MrapNpt=89, bool isPrompt = false)
       dashedLine(-2.4,5.0,-2.4,30.0,1,4);
     }
   }
-  c1->SaveAs(Form("dir_acc/h2D_Acc_%s.pdf",szFinal.Data()));
+  c1->SaveAs(Form("%s/h2D_Acc_%s.pdf",szDir.Data(),szFinal.Data()));
 
   return;
 
