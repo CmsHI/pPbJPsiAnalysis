@@ -91,18 +91,18 @@ void draw_1D_eff_comp(TString szDir = "dir_eff_comp", bool isNoErr=false)
     //// draw line at low pT limit
     if (isPA==0) {
       if (iy==0 || iy==7) dashedLine (2.,0.,2.,1.,2,1);
-      else if (iy ==1 || iy==6) dashedLine (3.,0.,3.,1.,2,1);
+      else if (iy ==1 || iy==6) dashedLine (4.,0.,4.,1.,2,1);
       else if (iy ==2 || iy==3 || iy==4 || iy==5)  dashedLine (6.5,0.,6.5,1.,2,1);
     }
     else if (isPA==1) {
       if (iy==0 || iy==7) dashedLine (2.,0.,2.,1.,2,1);
-      else if (iy==1 || iy==6) dashedLine (3.,0.,3.,1.,2,1);
+      else if (iy==1 || iy==6) dashedLine (4.,0.,4.,1.,2,1);
       else if (iy==2 || iy==3 || iy==4)  dashedLine (6.5,0.,6.5,1.,2,1);
       else if (iy==5)  dashedLine (5.,0.,5.,1.,2,1);
     }
     else if (isPA==2){
       if (iy==0 || iy==7) dashedLine (2.,0.,2.,1.,2,1);
-      else if (iy==1 || iy==6) dashedLine (3.,0.,3.,1.,2,1);
+      else if (iy==1 || iy==6) dashedLine (4.,0.,4.,1.,2,1);
       else if (iy==2)  dashedLine (5.,0.,5.,1.,2,1);
       else if (iy==3 || iy==4 || iy==5)  dashedLine (6.5,0.,6.5,1.,2,1);
     }
@@ -133,18 +133,18 @@ void draw_1D_eff_comp(TString szDir = "dir_eff_comp", bool isNoErr=false)
     //// draw line at lot pT limit
     if (isPA==0) {
       if (iy==0 || iy==7) dashedLine (2.,ratiomin,2.,ratiomax,2,1);
-      else if (iy ==1 || iy==6) dashedLine (3.,ratiomin,3.,ratiomax,2,1);
+      else if (iy ==1 || iy==6) dashedLine (4.,ratiomin,4.,ratiomax,2,1);
       else if (iy ==2 || iy==3 || iy==4 || iy==5)  dashedLine (6.5,ratiomin,6.5,ratiomax,2,1);
     }
     else if (isPA==1) {
       if (iy==0 || iy==7) dashedLine (2.,ratiomin,2.,ratiomax,2,1);
-      else if (iy==1 || iy==6) dashedLine (3.,ratiomin,3.,ratiomax,2,1);
+      else if (iy==1 || iy==6) dashedLine (4.,ratiomin,4.,ratiomax,2,1);
       else if (iy==2 || iy==3 || iy==4)  dashedLine (6.5,ratiomin,6.5,ratiomax,2,1);
       else if (iy==5)  dashedLine (5.,ratiomin,5.,ratiomax,2,1);
     }
     else if (isPA==2){
       if (iy==0 || iy==7) dashedLine (2.,ratiomin,2.,ratiomax,2,1);
-      else if (iy==1 || iy==6) dashedLine (3.,ratiomin,3.,ratiomax,2,1);
+      else if (iy==1 || iy==6) dashedLine (4.,ratiomin,4.,ratiomax,2,1);
       else if (iy==2)  dashedLine (5.,ratiomin,5.,ratiomax,2,1);
       else if (iy==3 || iy==4 || iy==5)  dashedLine (6.5,ratiomin,6.5,ratiomax,2,1);
     }
