@@ -133,6 +133,7 @@ void draw_2D_acc(int MrapNpt=89, int isPA = 0, bool isPrompt=false, int accCutTy
       dashedLine(-2.4,5.0,-2.4,30.0,1,4);
     }
   }
+  
   c1->SaveAs(Form("%s/h2D_Acc_%s.pdf",szDir.Data(),szFinal.Data()));
 
   return;
