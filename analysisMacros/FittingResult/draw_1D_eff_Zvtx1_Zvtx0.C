@@ -4,7 +4,7 @@ void formRapArr(Double_t binmin, Double_t binmax, string* arr);
 void formAbsRapArr(Double_t binmin, Double_t binmax, string* arr);
 void formPtArr(Double_t binmin, Double_t binmax, string* arr);
 
-void draw_1D_eff_Zvtx1_Zvtx0(TString szBinning="8rap9pt", bool isPrompt=true,bool isLog=false)
+void draw_1D_eff_Zvtx1_Zvtx0(TString szBinning="8rap9pt", bool isPrompt=false, bool isLog=false, bool isNoErr=true)
 {
 	gROOT->Macro("../Style.C");
 
@@ -113,6 +113,12 @@ void draw_1D_eff_Zvtx1_Zvtx0(TString szBinning="8rap9pt", bool isPrompt=true,boo
 	for (Int_t iy = 0; iy < nbinsX; iy++) {
 		hRatio_pA[iy]=(TH1D*)h1D_pA01[iy]->Clone(Form("hRatio_pA_%d",iy));
 		hRatio_pA[iy]->Divide(h1D_pA02[iy]);
+    if (isNoErr) {
+      for (int ipt=0; ipt<nbinsY; ipt++) {
+        hRatio_pA[iy]->SetBinError(ipt+1,0.);
+        cout << iy <<"th rap, "<<ipt<<"th pT, ratio = "<<hRatio_pA[iy]->GetBinContent(ipt+1)<<endl;
+      }
+    }
   }
 	
 	//////////////////////////////////////////////////////////////////
