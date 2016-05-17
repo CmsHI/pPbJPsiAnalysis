@@ -16,4 +16,4 @@ pPbJPsiAnalysis
     - 2D fit of mass and lifetime to separate prompt and non-prompt
 - [Dimuons_pPb]
     - git@github.com:SongkyoLee/Dimuons_pPb.git
-    -Onia codes (HiSkim and HiAnalysis) CMSSW_5_3_X
+    - Onia codes (HiSkim and HiAnalysis) CMSSW_5_3_X
