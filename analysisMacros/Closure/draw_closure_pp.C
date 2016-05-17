@@ -10,10 +10,10 @@ int draw_closure_pp(bool useZvtxWeight=false, bool useSF = false, bool isLog = f
   using namespace std;
 
   ////rap array in yCM (from forward to backward)
-  //-- for pp
+  //-- for_pp
   Double_t rapArrNumFB[] = {2.4, 1.93, 1.5, 0.9, 0., -0.9, -1.5, -1.93, -2.4};// for pt dist.
   Double_t rapArrNumBF[] = {-2.4, -1.93, -1.5, -0.9, 0., 0.9, 1.5, 1.93, 2.4};// for rap dist.
-  //-- for pA
+  //-- for_pA
   //Double_t rapArrNumFB[] = {1.93, 1.5, 0.9, 0., -0.9, -1.5, -1.93, -2.4, -2.87};// for pt dist.
   //Double_t rapArrNumBF[] = {-2.87, -2.4, -1.93, -1.5, -0.9, 0., 0.9, 1.5, 1.93};// for rap dist.
   const Int_t nRap = sizeof(rapArrNumFB)/sizeof(Double_t)-1;
@@ -45,7 +45,6 @@ int draw_closure_pp(bool useZvtxWeight=false, bool useSF = false, bool isLog = f
   
   const int nbinsX = h2D_MCCorrY_PR_pp->GetNbinsX();
   const int nbinsY = h2D_MCCorrY_PR_pp->GetNbinsY();
-  cout << "nbinsX = " << nbinsX << ", nbinsY = " << nbinsY << endl;
   if (nbinsX != nRap) { cout << " *** Error!!! nbinsX != nRap"; return 0; };
   if (nbinsY != nPt) { cout << " *** Error!!! nbinsY != nPt"; return 0; };
   
@@ -71,7 +70,7 @@ int draw_closure_pp(bool useZvtxWeight=false, bool useSF = false, bool isLog = f
   //////////////////////////////////////////////////////////////////////////////////////
   //////////////////////////////////////////////////////////////////////////////////////
   
-  // set values as zero for unused bins
+  //// set values as zero for unused bins
   for (Int_t iy = 0; iy < nbinsX; iy++) {
     if (iy>=1 && iy<=6) {
       h1D_MCCorrY_PR_pp[iy]->SetBinContent(1,0);
@@ -101,8 +100,8 @@ int draw_closure_pp(bool useZvtxWeight=false, bool useSF = false, bool isLog = f
       h1D_Acc_Den_PR_pp[iy]->SetBinError(3,0);
       h1D_Acc_Den_NP_pp[iy]->SetBinError(3,0);
     }
-    //if (iy>=2 && iy<=4) { // for pA
-    if (iy>=2 && iy<=5) { // for PP
+    //if (iy>=2 && iy<=4) { // for_pA
+    if (iy>=2 && iy<=5) { // for_pp
       h1D_MCCorrY_PR_pp[iy]->SetBinContent(4,0);
       h1D_MCCorrY_NP_pp[iy]->SetBinContent(4,0);
       h1D_MCCorrY_PR_pp[iy]->SetBinError(4,0);
@@ -125,6 +124,16 @@ int draw_closure_pp(bool useZvtxWeight=false, bool useSF = false, bool isLog = f
     h1D_Acc_Den_PR_pp[iy]->Scale(1,"width");
     h1D_Acc_Den_NP_pp[iy]->Scale(1,"width");
   }
+  
+  // hRatio
+  TH1D* hRatio_PR_pp[nRap];
+  TH1D* hRatio_NP_pp[nRap];
+  for (Int_t iy = 0; iy < nbinsX; iy++) {
+    hRatio_PR_pp[iy]=(TH1D*)h1D_MCCorrY_PR_pp[iy]->Clone(Form("hRatio_PR_pp_%d",iy));
+    hRatio_PR_pp[iy]->Divide(h1D_Acc_Den_PR_pp[iy]);
+    hRatio_NP_pp[iy]=(TH1D*)h1D_MCCorrY_NP_pp[iy]->Clone(Form("hRatio_NP_pp_%d",iy));
+    hRatio_NP_pp[iy]->Divide(h1D_Acc_Den_NP_pp[iy]);
+  }
 
   //////////////////////////////////////////////////////////////////
   //// --- Draw histograms
@@ -140,21 +149,26 @@ int draw_closure_pp(bool useZvtxWeight=false, bool useSF = false, bool isLog = f
   // --- prompt pp
   TCanvas* c_PR_pp = new TCanvas("c_PR_pp","c_PR_pp",1600,800);
   c_PR_pp->Divide(4,2);
+  
+  TGraphAsymmErrors* g_MCCorrY_PR_pp[nbinsX];
+  TGraphAsymmErrors* g_Acc_Den_PR_pp[nbinsX];
   for (Int_t iy = 0; iy < nbinsX; iy++) {
     c_PR_pp->cd(iy+1);
     if (isLog) gPad->SetLogy(1);
     else gPad->SetLogy(0);
-    SetHistStyle(h1D_MCCorrY_PR_pp[iy],1,0);
-    SetHistStyle(h1D_Acc_Den_PR_pp[iy],2,10);
-    h1D_MCCorrY_PR_pp[iy]->GetXaxis()->SetTitle("p_{T} (GeV/c)");
-    h1D_MCCorrY_PR_pp[iy]->GetXaxis()->CenterTitle();
-    //h1D_MCCorrY_PR_pp[iy]->GetXaxis()->SetRangeUser(0.,30.);
-    //h1D_Acc_Den_PR_pp[iy]->GetXaxis()->SetRangeUser(0.,30.);
-    h1D_MCCorrY_PR_pp[iy]->GetYaxis()->SetTitle("");
-    h1D_MCCorrY_PR_pp[iy]->Draw("pe");
-    h1D_Acc_Den_PR_pp[iy]->Draw("pe same");
+    g_MCCorrY_PR_pp[iy]=new TGraphAsymmErrors(h1D_MCCorrY_PR_pp[iy]);
+    g_Acc_Den_PR_pp[iy]=new TGraphAsymmErrors(h1D_Acc_Den_PR_pp[iy]);
+    SetGraphStyle(g_MCCorrY_PR_pp[iy],1,0);
+    SetGraphStyle(g_Acc_Den_PR_pp[iy],2,10);
+    g_MCCorrY_PR_pp[iy]->GetXaxis()->SetTitle("p_{T} (GeV/c)");
+    g_MCCorrY_PR_pp[iy]->GetXaxis()->CenterTitle();
+    g_MCCorrY_PR_pp[iy]->GetXaxis()->SetLimits(0.,30.);
+    g_MCCorrY_PR_pp[iy]->GetYaxis()->SetTitle("");
+    g_MCCorrY_PR_pp[iy]->Draw("ap");
+    g_Acc_Den_PR_pp[iy]->Draw("p");
     if (iy==0) {
-      legUR -> SetHeader("pp Prompt J/#psi");
+      legUR -> SetHeader("pp Prompt J/#psi"); //for_pp
+      //legUR -> SetHeader("pA Prompt J/#psi"); //for_pA
       legUR -> AddEntry(h1D_MCCorrY_PR_pp[iy],"RECO/(Acc*Eff)","lp");
       legUR -> AddEntry(h1D_Acc_Den_PR_pp[iy],"GEN","lp");
       legUR->Draw();
@@ -166,20 +180,26 @@ int draw_closure_pp(bool useZvtxWeight=false, bool useSF = false, bool isLog = f
   // --- non-prompt pp
   TCanvas* c_NP_pp = new TCanvas("c_NP_pp","c_NP_pp",1600,800);
   c_NP_pp->Divide(4,2);
+  
+  TGraphAsymmErrors* g_MCCorrY_NP_pp[nbinsX];
+  TGraphAsymmErrors* g_Acc_Den_NP_pp[nbinsX];
   for (Int_t iy = 0; iy < nbinsX; iy++) {
     c_NP_pp->cd(iy+1);
     if (isLog) gPad->SetLogy(1);
     else gPad->SetLogy(0);
-    SetHistStyle(h1D_MCCorrY_NP_pp[iy],1,0);
-    SetHistStyle(h1D_Acc_Den_NP_pp[iy],2,10);
-    h1D_MCCorrY_NP_pp[iy]->GetXaxis()->SetTitle("p_{T} (GeV/c)");
-    h1D_MCCorrY_NP_pp[iy]->GetXaxis()->CenterTitle();
-    //h1D_MCCorrY_NP_pp[iy]->GetXaxis()->SetRangeUser(0.,30.);
-    //h1D_MCCorrY_NP_pp[iy]->GetYaxis()->SetTitle("");
-    h1D_MCCorrY_NP_pp[iy]->Draw("pe");
-    h1D_Acc_Den_NP_pp[iy]->Draw("pe same");
+    g_MCCorrY_NP_pp[iy]=new TGraphAsymmErrors(h1D_MCCorrY_NP_pp[iy]);
+    g_Acc_Den_NP_pp[iy]=new TGraphAsymmErrors(h1D_Acc_Den_NP_pp[iy]);
+    SetGraphStyle(g_MCCorrY_NP_pp[iy],1,0);
+    SetGraphStyle(g_Acc_Den_NP_pp[iy],2,10);
+    g_MCCorrY_NP_pp[iy]->GetXaxis()->SetTitle("p_{T} (GeV/c)");
+    g_MCCorrY_NP_pp[iy]->GetXaxis()->CenterTitle();
+    g_MCCorrY_NP_pp[iy]->GetXaxis()->SetLimits(0.,30.);
+    g_MCCorrY_NP_pp[iy]->GetYaxis()->SetTitle("");
+    g_MCCorrY_NP_pp[iy]->Draw("ap");
+    g_Acc_Den_NP_pp[iy]->Draw("p");
     if (iy==0) {
-      legUR -> SetHeader("pp Non-prompt J/#psi");
+      legUR -> SetHeader("pp Non-prompt J/#psi"); //for_pp
+      //legUR -> SetHeader("pA Non-prompt J/#psi"); //for_pA
       legUR->Draw();
     }
     latex->DrawLatex(0.46,0.68,Form("%s",rapArr[iy].c_str()));
@@ -187,24 +207,23 @@ int draw_closure_pp(bool useZvtxWeight=false, bool useSF = false, bool isLog = f
   c_NP_pp->SaveAs(Form("dir_closure/pp_NP_isLog%d.pdf",(int)isLog));
   
   //////////////////////////////////////////////////////////////////
-  // hRatio
-  TH1D* hRatio_PR_pp[nRap];
-  TH1D* hRatio_NP_pp[nRap];
+  //// Ratio
   
   // --- prompt pp
   TCanvas* c_PR_pp_2 = new TCanvas("c_PR_pp_2","c_PR_pp_2",1600,800);
   c_PR_pp_2->Divide(4,2);
+  
+  TGraphAsymmErrors* gRatio_PR_pp[nbinsX];
   for (Int_t iy = 0; iy < nbinsX; iy++) {
     c_PR_pp_2->cd(iy+1);
     gPad->SetLogy(0);
-    hRatio_PR_pp[iy]=(TH1D*)h1D_MCCorrY_PR_pp[iy]->Clone(Form("hRatio_PR_pp_%d",iy));
-    hRatio_PR_pp[iy]->Divide(h1D_Acc_Den_PR_pp[iy]);
-    SetHistStyle(hRatio_PR_pp[iy],5,0);
-    hRatio_PR_pp[iy]->GetXaxis()->SetTitle("p_{T} (GeV/c)");
-    hRatio_PR_pp[iy]->GetYaxis()->SetTitle("corrected RECO / GEN");
-    //hRatio_PR_pp[iy]->GetXaxis()->SetRangeUser(0.,30.);
-    hRatio_PR_pp[iy]->GetYaxis()->SetRangeUser(0.5,1.5);
-    hRatio_PR_pp[iy]->Draw("pe");
+    gRatio_PR_pp[iy]=new TGraphAsymmErrors(hRatio_PR_pp[iy]);
+    SetGraphStyle(gRatio_PR_pp[iy],1,0);
+    gRatio_PR_pp[iy]->GetXaxis()->SetTitle("p_{T} (GeV/c)");
+    gRatio_PR_pp[iy]->GetYaxis()->SetTitle("corrected RECO / GEN");
+    gRatio_PR_pp[iy]->GetXaxis()->SetLimits(0.,30.);
+    gRatio_PR_pp[iy]->GetYaxis()->SetRangeUser(0.5,1.5);
+    gRatio_PR_pp[iy]->Draw("ap");
     latex->DrawLatex(0.56,0.88,Form("%s",rapArr[iy].c_str()));
     dashedLine(0.,1.,30.,1.,1,1);
   }
@@ -213,17 +232,18 @@ int draw_closure_pp(bool useZvtxWeight=false, bool useSF = false, bool isLog = f
   // --- non-prompt pp
   TCanvas* c_NP_pp_2 = new TCanvas("c_NP_pp_2","c_NP_pp_2",1600,800);
   c_NP_pp_2->Divide(4,2);
+  
+  TGraphAsymmErrors* gRatio_NP_pp[nbinsX];
   for (Int_t iy = 0; iy < nbinsX; iy++) {
     c_NP_pp_2->cd(iy+1);
     gPad->SetLogy(0);
-    hRatio_NP_pp[iy]=(TH1D*)h1D_MCCorrY_NP_pp[iy]->Clone(Form("hRatio_NP_pp_%d",iy));
-    hRatio_NP_pp[iy]->Divide(h1D_Acc_Den_NP_pp[iy]);
-    SetHistStyle(hRatio_NP_pp[iy],5,0);
-    hRatio_NP_pp[iy]->GetXaxis()->SetTitle("p_{T} (GeV/c)");
-    hRatio_NP_pp[iy]->GetYaxis()->SetTitle("corrected RECO / GEN");
-    //hRatio_NP_pp[iy]->GetXaxis()->SetRangeUser(0.,30.);
-    hRatio_NP_pp[iy]->GetYaxis()->SetRangeUser(0.5,1.5);
-    hRatio_NP_pp[iy]->Draw("pe");
+    gRatio_NP_pp[iy]=new TGraphAsymmErrors(hRatio_NP_pp[iy]);
+    SetGraphStyle(gRatio_NP_pp[iy],1,0);
+    gRatio_NP_pp[iy]->GetXaxis()->SetTitle("p_{T} (GeV/c)");
+    gRatio_NP_pp[iy]->GetYaxis()->SetTitle("corrected RECO / GEN");
+    gRatio_NP_pp[iy]->GetXaxis()->SetLimits(0.,30.);
+    gRatio_NP_pp[iy]->GetYaxis()->SetRangeUser(0.5,1.5);
+    gRatio_NP_pp[iy]->Draw("ap");
     latex->DrawLatex(0.56,0.88,Form("%s",rapArr[iy].c_str()));
     dashedLine(0.,1.,30.,1.,1,1);
   }
