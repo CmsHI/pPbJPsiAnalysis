@@ -1,6 +1,6 @@
 #include "SONGKYO.h"
 
-void dimuonYield_pA(){
+void dimuonYield_pA(bool is1st=true){
  
   gROOT->Macro("./Style2D.C");
   gStyle->SetTitleXOffset(1.10);
@@ -19,7 +19,9 @@ void dimuonYield_pA(){
   //TString dirName = "Pbp_PRMC_newacccut";
   //TString dirName = "Pbp_NPMC_newacccut";
   //TString dirName = "Pbp_Data_newacccut";
-  TString dirName = "pPb_PRMC_newacccut";
+  TString dirName;
+  if (is1st) dirName = "Pbp_PRMC_newacccut";
+  else dirName = "pPb_PRMC_newacccut";
   //TString dirName = "pPb_NPMC_newacccut";
   //TString dirName = "pPb_Data_newacccut";
   
@@ -27,8 +29,11 @@ void dimuonYield_pA(){
   double nbin = 50;
   
   TChain* t01 = new TChain("myTree");
-  t01->Add("/home/songkyo/kyo/pPbDataSample/EfficiencySample/MCJPsiWithFSR_pa_1st_run_STARTHI53_V27_ext1_nocut.root");
-  //t01->Add("/home/songkyo/kyo/pPbDataSample/EfficiencySample/MCJPsiWithFSR_pa_2nd_run_STARTHI53_V27_ext1_nocut.root");
+  if (is1st) {
+    t01->Add("/home/songkyo/kyo/pPbDataSample/EfficiencySample/MCJPsiWithFSR_pa_1st_run_STARTHI53_V27_ext1_nocut.root");
+  } else {
+    t01->Add("/home/songkyo/kyo/pPbDataSample/EfficiencySample/MCJPsiWithFSR_pa_2nd_run_STARTHI53_V27_ext1_nocut.root");
+  }
   //t01->Add("/home/songkyo/kyo/pPbDataSample/Data/RD2013_pa_1st_run_210676-211256_GR_P_V43D_nocut.root");
   //t01->Add("/home/songkyo/kyo/pPbDataSample/Data/RD2013_pa_1st_run_210498-210658_GR_P_V43F_nocut.root");
   //t01->Add("/home/songkyo/kyo/pPbDataSample/Data/RD2013_pa_2nd_run_211313-211631_GR_P_V43D_nocut.root");
@@ -37,7 +42,9 @@ void dimuonYield_pA(){
   TCanvas* c01 = new TCanvas("c01","",600,600); //c01->SetGridx(); c01->SetGridy();
 
   cout << "nbin = " << nbin << endl;
-  TH2D* h2D_01 = new TH2D("h2D_01","J/#psi p_{T} vs y_{lab}^{2nd};J/#psi y_{lab}^{2nd};J/#psi p_{T} [GeV];",nbin,-2.4,2.4,nbin,0,9.);
+  TH2D* h2D_01;
+  if (is1st) h2D_01 = new TH2D("h2D_01","J/#psi p_{T} vs y_{lab}^{1st};J/#psi y_{lab}^{1st};J/#psi p_{T} [GeV];",nbin,-2.4,2.4,nbin,0,9.);
+  else h2D_01 = new TH2D("h2D_01","J/#psi p_{T} vs y_{lab}^{2nd};J/#psi y_{lab}^{2nd};J/#psi p_{T} [GeV];",nbin,-2.4,2.4,nbin,0,9.);
   h2D_01->Sumw2();
   
   TCut trigCut = "((Reco_QQ_trig&1)==1 && (HLTriggers&1)==1 )";
@@ -80,51 +87,108 @@ TCut accOldRecoMinus = "(TMath::Abs(Reco_QQ_mumi_4mom.Eta()) < 2.4 && ((TMath::A
   cout << "entries = " << h2D_01->GetEntries() << endl;
 
   ////////////////////////////////////////////////////////////////////////////////////////////////////
-  //// binning
-  TLine* tPAbin01 = new TLine(-1.93, 0, -1.93, 9.);
-  tPAbin01->SetLineWidth(4); tPAbin01->SetLineColor(kBlack); tPAbin01->SetLineStyle(2); tPAbin01->Draw();
-  TLine* tPAbin02 = new TLine(-1.46, 0, -1.46, 9.);
-  tPAbin02->SetLineWidth(4); tPAbin02->SetLineColor(kBlack); tPAbin02->SetLineStyle(2); tPAbin02->Draw();
-  TLine* tPAbin03 = new TLine(-1.03, 0, -1.03, 9.);
-  tPAbin03->SetLineWidth(4); tPAbin03->SetLineColor(kBlack); tPAbin03->SetLineStyle(2); tPAbin03->Draw();
-  TLine* tPAbin04 = new TLine(-0.43, 0, -0.43 , 9.);
-  tPAbin04->SetLineWidth(4); tPAbin04->SetLineColor(kBlack); tPAbin04->SetLineStyle(2); tPAbin04->Draw();
-  TLine* tPAbin05 = new TLine(0.47, 0, 0.47, 9.);
-  tPAbin05->SetLineWidth(4); tPAbin05->SetLineColor(kBlack); tPAbin05->SetLineStyle(1); tPAbin05->Draw();
-  TLine* tPAbin06 = new TLine(1.37, 0, 1.37, 9.);
-  tPAbin06->SetLineWidth(4); tPAbin06->SetLineColor(kBlack); tPAbin06->SetLineStyle(2); tPAbin06->Draw();
-  TLine* tPAbin07 = new TLine(1.97, 0, 1.97, 9.);
-  tPAbin07->SetLineWidth(4); tPAbin07->SetLineColor(kBlack); tPAbin07->SetLineStyle(2); tPAbin07->Draw();
+  //// 1) y binning
+  TLine* tPAbin01;
+  TLine* tPAbin02;
+  TLine* tPAbin03;
+  TLine* tPAbin04;
+  TLine* tPAbin05;
+  TLine* tPAbin06;
+  TLine* tPAbin07;
+  if (is1st){
+    tPAbin01 = new TLine(-1.97, 0, -1.97, 9.);
+    tPAbin02 = new TLine(-1.37, 0, -1.37, 9.);
+    tPAbin03 = new TLine(-0.47, 0, -0.47, 9.);
+    tPAbin04 = new TLine(0.43, 0, 0.43 , 9.);
+    tPAbin05 = new TLine(1.03, 0, 1.03, 9.);
+    tPAbin06 = new TLine(1.46, 0, 1.46, 9.);
+    tPAbin07 = new TLine(1.93, 0, 1.93, 9.);
+    tPAbin01->SetLineWidth(4); tPAbin01->SetLineColor(kBlack); tPAbin01->SetLineStyle(2); tPAbin01->Draw();
+    tPAbin02->SetLineWidth(4); tPAbin02->SetLineColor(kBlack); tPAbin02->SetLineStyle(2); tPAbin02->Draw();
+    tPAbin03->SetLineWidth(4); tPAbin03->SetLineColor(kBlack); tPAbin03->SetLineStyle(1); tPAbin03->Draw();
+    tPAbin04->SetLineWidth(4); tPAbin04->SetLineColor(kBlack); tPAbin04->SetLineStyle(2); tPAbin04->Draw();
+    tPAbin05->SetLineWidth(4); tPAbin05->SetLineColor(kBlack); tPAbin05->SetLineStyle(2); tPAbin05->Draw();
+    tPAbin06->SetLineWidth(4); tPAbin06->SetLineColor(kBlack); tPAbin06->SetLineStyle(2); tPAbin06->Draw();
+    tPAbin07->SetLineWidth(4); tPAbin07->SetLineColor(kBlack); tPAbin07->SetLineStyle(2); tPAbin07->Draw();
+  }
+  else {
+    tPAbin01 = new TLine(-1.93, 0, -1.93, 9.);
+    tPAbin02 = new TLine(-1.46, 0, -1.46, 9.);
+    tPAbin03 = new TLine(-1.03, 0, -1.03, 9.);
+    tPAbin04 = new TLine(-0.43, 0, -0.43 , 9.);
+    tPAbin05 = new TLine(0.47, 0, 0.47, 9.);
+    tPAbin06 = new TLine(1.37, 0, 1.37, 9.);
+    tPAbin07 = new TLine(1.97, 0, 1.97, 9.);
+    tPAbin01->SetLineWidth(4); tPAbin01->SetLineColor(kBlack); tPAbin01->SetLineStyle(2); tPAbin01->Draw();
+    tPAbin02->SetLineWidth(4); tPAbin02->SetLineColor(kBlack); tPAbin02->SetLineStyle(2); tPAbin02->Draw();
+    tPAbin03->SetLineWidth(4); tPAbin03->SetLineColor(kBlack); tPAbin03->SetLineStyle(2); tPAbin03->Draw();
+    tPAbin04->SetLineWidth(4); tPAbin04->SetLineColor(kBlack); tPAbin04->SetLineStyle(2); tPAbin04->Draw();
+    tPAbin05->SetLineWidth(4); tPAbin05->SetLineColor(kBlack); tPAbin05->SetLineStyle(1); tPAbin05->Draw();
+    tPAbin06->SetLineWidth(4); tPAbin06->SetLineColor(kBlack); tPAbin06->SetLineStyle(2); tPAbin06->Draw();
+    tPAbin07->SetLineWidth(4); tPAbin07->SetLineColor(kBlack); tPAbin07->SetLineStyle(2); tPAbin07->Draw();
+  }
   
-  //// cut
-  TLine* tPA01 = new TLine(-2.4 ,2., -1.93, 2.);
-  tPA01->SetLineWidth(6); tPA01->SetLineColor(kRed); tPA01->Draw();
-  //TLine* tPA02 = new TLine(-1.93 ,2., -1.93, 3.);
-  TLine* tPA02 = new TLine(-1.93 ,2., -1.93, 4.);
-  tPA02->SetLineWidth(6); tPA02->SetLineColor(kRed); tPA02->Draw();
-  //TLine* tPA03 = new TLine(-1.93 ,3., -1.46, 3.);
-  TLine* tPA03 = new TLine(-1.93 ,4., -1.46, 4.);
-  tPA03->SetLineWidth(6); tPA03->SetLineColor(kRed); tPA03->Draw();
-  //TLine* tPA04 = new TLine(-1.46 ,3., -1.46, 5.);
-  TLine* tPA04 = new TLine(-1.46 ,4., -1.46, 5.);
-  tPA04->SetLineWidth(6); tPA04->SetLineColor(kRed); tPA04->Draw();
-  TLine* tPA05 = new TLine(-1.46 ,5., -1.03, 5.);
-  tPA05->SetLineWidth(6); tPA05->SetLineColor(kRed); tPA05->Draw();
-  TLine* tPA06 = new TLine(-1.03 ,5., -1.03, 6.5);
-  tPA06->SetLineWidth(6); tPA06->SetLineColor(kRed); tPA06->Draw();
-  TLine* tPA07 = new TLine(-1.03 ,6.5, 1.37, 6.5);
-  tPA07->SetLineWidth(6); tPA07->SetLineColor(kRed); tPA07->Draw();
-  //TLine* tPA08 = new TLine(1.37 ,6.5, 1.37, 3.);
-  TLine* tPA08 = new TLine(1.37 ,6.5, 1.37, 4.);
-  tPA08->SetLineWidth(6); tPA08->SetLineColor(kRed); tPA08->Draw();
-  //TLine* tPA09 = new TLine(1.37 ,3, 1.97, 3.);
-  TLine* tPA09 = new TLine(1.37 ,4, 1.97, 4.);
-  tPA09->SetLineWidth(6); tPA09->SetLineColor(kRed); tPA09->Draw();
-  //TLine* tPA10 = new TLine(1.97 ,3, 1.97, 2.);
-  TLine* tPA10 = new TLine(1.97 ,4, 1.97, 2.);
-  tPA10->SetLineWidth(6); tPA10->SetLineColor(kRed); tPA10->Draw();
-  TLine* tPA11 = new TLine(1.97 ,2, 2.4, 2.);
-  tPA11->SetLineWidth(6); tPA11->SetLineColor(kRed); tPA11->Draw();
+  //// 2) pT cut
+  TLine* tPA01;
+  TLine* tPA02;
+  TLine* tPA03;
+  TLine* tPA04;
+  TLine* tPA05;
+  TLine* tPA06;
+  TLine* tPA07;
+  TLine* tPA08;
+  TLine* tPA09;
+  TLine* tPA10;
+  TLine* tPA11;
+  if (is1st) {
+    tPA01 = new TLine(-2.4 ,2., -1.97, 2.);
+    tPA02 = new TLine(-1.97 ,2., -1.97, 4.);
+    tPA03 = new TLine(-1.97 ,4., -1.37, 4.);
+    tPA04 = new TLine(-1.37 ,4., -1.37, 6.5);
+    tPA05 = new TLine(-1.37 ,6.5, 1.03, 6.5);
+    tPA06 = new TLine(1.03 ,5., 1.03, 6.5);
+    tPA07 = new TLine(1.03 ,5., 1.46, 5.);
+    tPA08 = new TLine(1.46 ,5., 1.46, 4.);
+    tPA09 = new TLine(1.46 ,4, 1.93, 4.);
+    tPA10 = new TLine(1.93 ,4, 1.93, 2.);
+    tPA11 = new TLine(1.93 ,2, 2.4, 2.);
+    tPA01->SetLineWidth(6); tPA01->SetLineColor(kRed); tPA01->Draw();
+    tPA02->SetLineWidth(6); tPA02->SetLineColor(kRed); tPA02->Draw();
+    tPA03->SetLineWidth(6); tPA03->SetLineColor(kRed); tPA03->Draw();
+    tPA04->SetLineWidth(6); tPA04->SetLineColor(kRed); tPA04->Draw();
+    tPA05->SetLineWidth(6); tPA05->SetLineColor(kRed); tPA05->Draw();
+    tPA06->SetLineWidth(6); tPA06->SetLineColor(kRed); tPA06->Draw();
+    tPA07->SetLineWidth(6); tPA07->SetLineColor(kRed); tPA07->Draw();
+    tPA08->SetLineWidth(6); tPA08->SetLineColor(kRed); tPA08->Draw();
+    tPA09->SetLineWidth(6); tPA09->SetLineColor(kRed); tPA09->Draw();
+    tPA10->SetLineWidth(6); tPA10->SetLineColor(kRed); tPA10->Draw();
+    tPA11->SetLineWidth(6); tPA11->SetLineColor(kRed); tPA11->Draw();
+  }
+  else {
+    tPA01 = new TLine(-2.4 ,2., -1.93, 2.);
+    tPA02 = new TLine(-1.93 ,2., -1.93, 4.);
+    tPA03 = new TLine(-1.93 ,4., -1.46, 4.);
+    tPA04 = new TLine(-1.46 ,4., -1.46, 5.);
+    tPA05 = new TLine(-1.46 ,5., -1.03, 5.);
+    tPA06 = new TLine(-1.03 ,5., -1.03, 6.5);
+    tPA07 = new TLine(-1.03 ,6.5, 1.37, 6.5);
+    tPA08 = new TLine(1.37 ,6.5, 1.37, 4.);
+    tPA09 = new TLine(1.37 ,4, 1.97, 4.);
+    tPA10 = new TLine(1.97 ,4, 1.97, 2.);
+    tPA11 = new TLine(1.97 ,2, 2.4, 2.);
+    tPA01->SetLineWidth(6); tPA01->SetLineColor(kRed); tPA01->Draw();
+    tPA02->SetLineWidth(6); tPA02->SetLineColor(kRed); tPA02->Draw();
+    tPA03->SetLineWidth(6); tPA03->SetLineColor(kRed); tPA03->Draw();
+    tPA04->SetLineWidth(6); tPA04->SetLineColor(kRed); tPA04->Draw();
+    tPA05->SetLineWidth(6); tPA05->SetLineColor(kRed); tPA05->Draw();
+    tPA06->SetLineWidth(6); tPA06->SetLineColor(kRed); tPA06->Draw();
+    tPA07->SetLineWidth(6); tPA07->SetLineColor(kRed); tPA07->Draw();
+    tPA08->SetLineWidth(6); tPA08->SetLineColor(kRed); tPA08->Draw();
+    tPA09->SetLineWidth(6); tPA09->SetLineColor(kRed); tPA09->Draw();
+    tPA10->SetLineWidth(6); tPA10->SetLineColor(kRed); tPA10->Draw();
+    tPA11->SetLineWidth(6); tPA11->SetLineColor(kRed); tPA11->Draw();
+  }  
+  
   
   c01->SaveAs(Form("plot_dimuonYield_coarse/%s.pdf",dirName.Data()));
 

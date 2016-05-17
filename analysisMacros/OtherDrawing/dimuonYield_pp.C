@@ -75,7 +75,7 @@ TCut accOldRecoMinus = "(TMath::Abs(Reco_QQ_mumi_4mom.Eta()) < 2.4 && ((TMath::A
 
 
   ////////////////////////////////////////////////////////////////////////////////////////////////////
-  //// binning
+  //// 1) y binning
   TLine* tPPbin01 = new TLine(-1.93, 0, -1.93, 9.);
   tPPbin01->SetLineWidth(4); tPPbin01->SetLineColor(kBlack); tPPbin01->SetLineStyle(2); tPPbin01->Draw();
   TLine* tPPbin02 = new TLine(-1.5, 0, -1.5, 9.);
@@ -91,7 +91,7 @@ TCut accOldRecoMinus = "(TMath::Abs(Reco_QQ_mumi_4mom.Eta()) < 2.4 && ((TMath::A
   TLine* tPPbin07 = new TLine(1.93, 0, 1.93, 9.);
   tPPbin07->SetLineWidth(4); tPPbin07->SetLineColor(kBlack); tPPbin07->SetLineStyle(2); tPPbin07->Draw();
   
-  //// cut
+  //// 2) pT cut
   TLine* tPP01 = new TLine(-2.4 ,2., -1.93, 2.);
   tPP01->SetLineWidth(6); tPP01->SetLineColor(kRed); tPP01->Draw();
   //TLine* tPP02 = new TLine(-1.93 ,2., -1.93, 3.);
