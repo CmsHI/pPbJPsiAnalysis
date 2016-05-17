@@ -27,8 +27,8 @@ void dimuonYield_pA_oldcut(){
   double nbin = 50;
   
   TChain* t01 = new TChain("myTree");
-  t01->Add("/home/songkyo/kyo/pPbDataSample/EfficiencySample/MCJPsiWithFSR_pa_1st_run_STARTHI53_V27_ext1_nocut.root");
-  //t01->Add("/home/songkyo/kyo/pPbDataSample/EfficiencySample/MCJPsiWithFSR_pa_2nd_run_STARTHI53_V27_ext1_nocut.root");
+  //t01->Add("/home/songkyo/kyo/pPbDataSample/EfficiencySample/MCJPsiWithFSR_pa_1st_run_STARTHI53_V27_ext1_nocut.root");
+  t01->Add("/home/songkyo/kyo/pPbDataSample/EfficiencySample/MCJPsiWithFSR_pa_2nd_run_STARTHI53_V27_ext1_nocut.root");
   //t01->Add("/home/songkyo/kyo/pPbDataSample/Data/RD2013_pa_1st_run_210676-211256_GR_P_V43D_nocut.root");
   //t01->Add("/home/songkyo/kyo/pPbDataSample/Data/RD2013_pa_1st_run_210498-210658_GR_P_V43F_nocut.root");
   //t01->Add("/home/songkyo/kyo/pPbDataSample/Data/RD2013_pa_2nd_run_211313-211631_GR_P_V43D_nocut.root");
@@ -98,33 +98,16 @@ TCut accOldRecoMinus = "(TMath::Abs(Reco_QQ_mumi_4mom.Eta()) < 2.4 && ((TMath::A
   
   //// cut
   TLine* tPA01 = new TLine(-2.4 ,2., -1.93, 2.);
-  tPA01->SetLineWidth(6); tPA01->SetLineColor(kRed); tPA01->Draw();
   TLine* tPA02 = new TLine(-1.93 ,2., -1.93, 3.);
-  //TLine* tPA02 = new TLine(-1.93 ,2., -1.93, 4.);
-  tPA02->SetLineWidth(6); tPA02->SetLineColor(kRed); tPA02->Draw();
   TLine* tPA03 = new TLine(-1.93 ,3., -1.46, 3.);
-  //TLine* tPA03 = new TLine(-1.93 ,4., -1.46, 4.);
-  tPA03->SetLineWidth(6); tPA03->SetLineColor(kRed); tPA03->Draw();
   TLine* tPA04 = new TLine(-1.46 ,3., -1.46, 5.);
-  //TLine* tPA04 = new TLine(-1.46 ,4., -1.46, 5.);
-  tPA04->SetLineWidth(6); tPA04->SetLineColor(kRed); tPA04->Draw();
   TLine* tPA05 = new TLine(-1.46 ,5., -1.03, 5.);
-  tPA05->SetLineWidth(6); tPA05->SetLineColor(kRed); tPA05->Draw();
   TLine* tPA06 = new TLine(-1.03 ,5., -1.03, 6.5);
-  tPA06->SetLineWidth(6); tPA06->SetLineColor(kRed); tPA06->Draw();
   TLine* tPA07 = new TLine(-1.03 ,6.5, 1.37, 6.5);
-  tPA07->SetLineWidth(6); tPA07->SetLineColor(kRed); tPA07->Draw();
   TLine* tPA08 = new TLine(1.37 ,6.5, 1.37, 3.);
-  //TLine* tPA08 = new TLine(1.37 ,6.5, 1.37, 4.);
-  tPA08->SetLineWidth(6); tPA08->SetLineColor(kRed); tPA08->Draw();
   TLine* tPA09 = new TLine(1.37 ,3, 1.97, 3.);
-  //TLine* tPA09 = new TLine(1.37 ,4, 1.97, 4.);
-  tPA09->SetLineWidth(6); tPA09->SetLineColor(kRed); tPA09->Draw();
   TLine* tPA10 = new TLine(1.97 ,3, 1.97, 2.);
-  //TLine* tPA10 = new TLine(1.97 ,4, 1.97, 2.);
-  tPA10->SetLineWidth(6); tPA10->SetLineColor(kRed); tPA10->Draw();
   TLine* tPA11 = new TLine(1.97 ,2, 2.4, 2.);
-  tPA11->SetLineWidth(6); tPA11->SetLineColor(kRed); tPA11->Draw();
   
   c01->SaveAs(Form("plot_dimuonYield_coarse/%s.pdf",dirName.Data()));
 

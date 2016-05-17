@@ -188,8 +188,6 @@ TCut accOldRecoMinus = "(TMath::Abs(Reco_QQ_mumi_4mom.Eta()) < 2.4 && ((TMath::A
     tPA10->SetLineWidth(6); tPA10->SetLineColor(kRed); tPA10->Draw();
     tPA11->SetLineWidth(6); tPA11->SetLineColor(kRed); tPA11->Draw();
   }  
-  
-  
   c01->SaveAs(Form("plot_dimuonYield_coarse/%s.pdf",dirName.Data()));
-
 }
+ 
