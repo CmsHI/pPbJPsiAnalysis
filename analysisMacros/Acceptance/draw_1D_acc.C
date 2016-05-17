@@ -73,18 +73,18 @@ int draw_1D_acc(int MrapNpt=89, int isPA = 0, bool isPrompt=false, int accCutTyp
     //// draw line at low pT limit
     if (isPA==0) {
       if (iy==0 || iy==7) dashedLine (2.,0.,2.,1.,2,1);
-      else if (iy ==1 || iy==6) dashedLine (3.,0.,3.,1.,2,1);
+      else if (iy ==1 || iy==6) dashedLine (4.,0.,4.,1.,2,1);
       else if (iy ==2 || iy==3 || iy==4 || iy==5)  dashedLine (6.5,0.,6.5,1.,2,1);
     }
     else if (isPA==1) {
       if (iy==0 || iy==7) dashedLine (2.,0.,2.,1.,2,1);
-      else if (iy==1 || iy==6) dashedLine (3.,0.,3.,1.,2,1);
+      else if (iy==1 || iy==6) dashedLine (4.,0.,4.,1.,2,1);
       else if (iy==2 || iy==3 || iy==4)  dashedLine (6.5,0.,6.5,1.,2,1);
       else if (iy==5)  dashedLine (5.,0.,5.,1.,2,1);
     }
     else if (isPA==2){
       if (iy==0 || iy==7) dashedLine (2.,0.,2.,1.,2,1);
-      else if (iy==1 || iy==6) dashedLine (3.,0.,3.,1.,2,1);
+      else if (iy==1 || iy==6) dashedLine (4.,0.,4.,1.,2,1);
       else if (iy==2)  dashedLine (5.,0.,5.,1.,2,1);
       else if (iy==3 || iy==4 || iy==5)  dashedLine (6.5,0.,6.5,1.,2,1);
     }
