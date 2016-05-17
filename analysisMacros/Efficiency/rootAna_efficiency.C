@@ -21,7 +21,8 @@ TF1* hTnp_pa_old_eta5 = (TF1*)fTnp_pa_old->Get("ferrScale_ieta5");
 
 //// pPb, new acc cut
 //TFile* fTnp_pa_new = new TFile("../Efficiency/tagAndProbe/TnPDataVsMc_newcut_neweta_allTag5.root"); //off2M
-TFile* fTnp_pa_new = new TFile("../Efficiency/tagAndProbe/output_official_5eta_cutG_all_nominal_v1.root"); //20160425 (off8M from Kisoo)
+//TFile* fTnp_pa_new = new TFile("../Efficiency/tagAndProbe/output_official_5eta_cutG_all_nominal_v1.root"); //20160425 (off8M from Kisoo before bin-by-bin tuning)
+TFile* fTnp_pa_new = new TFile("../Efficiency/tagAndProbe/output_official_5eta_cutG_all_nominal_v1_20160516.root"); // 20150516 (off8M from Kisoo)
 TF1* hTnp_pa_new_eta1 = (TF1*)fTnp_pa_new->Get("func_1");
 TF1* hTnp_pa_new_eta2 = (TF1*)fTnp_pa_new->Get("func_2");
 TF1* hTnp_pa_new_eta3 = (TF1*)fTnp_pa_new->Get("func_3");
