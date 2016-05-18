@@ -1,7 +1,7 @@
 #include "../SONGKYO.h"
 
 /////// main func. ///////
-int make_totalHist_pp_noPtWeight_Raw(int MrapNpt=89, int accCutType = 2, bool useZvtxWeight=false, bool useSF = false){
+int make_totalHist_pp_noPtWeight(int MrapNpt=89, int accCutType = 2, bool useZvtxWeight=false, bool useSF = false){
   using namespace std;
   
   TString szBinning;
@@ -63,14 +63,10 @@ int make_totalHist_pp_noPtWeight_Raw(int MrapNpt=89, int accCutType = 2, bool us
   //////////////////////////////////////////////////////////////////////////////////////
   ////// read in from fit file
   TFile* fFitpp = new TFile(Form("./fitResHist_%s_pp_%s.root",szBinning.Data(),szAccCut.Data()));
-  //TH2D* h2D_Fit_PR_pp = (TH2D*)fFitpp->Get("h2D_nPrompt");  
-  //TH2D* h2D_Fit_NP_pp = (TH2D*)fFitpp->Get("h2D_nNonPrompt"); 
-  //TH2D* h2D_Fit_nSig_pp = (TH2D*)fFitpp->Get("h2D_nSig"); 
-  //TH2D* h2D_Fit_nBkg_pp = (TH2D*)fFitpp->Get("h2D_nBkg"); 
-  TH2D* h2D_Fit_PR_pp = (TH2D*)fFitpp->Get("h2D_nPrompt_Raw");  
-  TH2D* h2D_Fit_NP_pp = (TH2D*)fFitpp->Get("h2D_nNonPrompt_Raw"); 
-  TH2D* h2D_Fit_nSig_pp = (TH2D*)fFitpp->Get("h2D_nSig_Raw"); 
-  TH2D* h2D_Fit_nBkg_pp = (TH2D*)fFitpp->Get("h2D_nBkg_Raw"); 
+  TH2D* h2D_Fit_PR_pp = (TH2D*)fFitpp->Get("h2D_nPrompt");  
+  TH2D* h2D_Fit_NP_pp = (TH2D*)fFitpp->Get("h2D_nNonPrompt"); 
+  TH2D* h2D_Fit_nSig_pp = (TH2D*)fFitpp->Get("h2D_nSig"); 
+  TH2D* h2D_Fit_nBkg_pp = (TH2D*)fFitpp->Get("h2D_nBkg"); 
   TH2D* h2D_Fit_bFrac_pp = (TH2D*)fFitpp->Get("h2D_bFraction"); 
   TH2D* h2D_Fit_ctErrmin_pp = (TH2D*)fFitpp->Get("h2D_ctErrmin"); 
   TH2D* h2D_Fit_ctErrmax_pp = (TH2D*)fFitpp->Get("h2D_ctErrmax"); 
@@ -123,9 +119,9 @@ int make_totalHist_pp_noPtWeight_Raw(int MrapNpt=89, int accCutType = 2, bool us
   
   ////////////////////////////////////////////////
   ////// save as a root file
-  TFile *outFile = new TFile(Form("totalHist_pp_%s_Zvtx%d_SF%d_noPtWeight_Raw.root",szFinal.Data(),(int)useZvtxWeight,(int)useSF),"RECREATE");
+  TFile *outFile = new TFile(Form("totalHist_pp_%s_Zvtx%d_SF%d_noPtWeight.root",szFinal.Data(),(int)useZvtxWeight,(int)useSF),"RECREATE");
   std::cout << "szFinal: " << szFinal << std::endl;
-  cout << "totalHist_pp_"<<szFinal<<"_Zvtx"<<(int)useZvtxWeight<<"_SF"<<(int)useSF<<"_noPtWeight_Raw.root has been created :) " <<endl; 
+  cout << "totalHist_pp_"<<szFinal<<"_Zvtx"<<(int)useZvtxWeight<<"_SF"<<(int)useSF<<"_noPtWeight.root has been created :) " <<endl; 
 
   outFile->cd();
   //Acc 
