@@ -1,7 +1,7 @@
 #include "../SONGKYO.h"
 
 /////// main func. ///////
-int make_totalHist_pA_noPtWeight(int MrapNpt=89, int accCutType = 2, bool useZvtxWeight=false, bool useSF = false){
+int make_totalHist_pA_noPtWeight_ctErrCorr(int MrapNpt=89, int accCutType = 2, bool useZvtxWeight=false, bool useSF = false){
 
   using namespace std;
   //// scaling efficiency (1st+2nd) based on lumi.
@@ -204,6 +204,10 @@ int make_totalHist_pA_noPtWeight(int MrapNpt=89, int accCutType = 2, bool useZvt
   //////////////////////////////////////////////////////////////////////////////////////
   ////// read in from fit file
   TFile* fFitpA = new TFile(Form("./fitResHist_%s_pA_%s.root",szBinning.Data(),szAccCut.Data()));
+  //TH2D* h2D_Fit_PR_pA = (TH2D*)fFitpA->Get("h2D_nPrompt_Raw");  
+  //TH2D* h2D_Fit_NP_pA = (TH2D*)fFitpA->Get("h2D_nNonPrompt_Raw"); 
+  //TH2D* h2D_Fit_nSig_pA = (TH2D*)fFitpA->Get("h2D_nSig_Raw"); 
+  //TH2D* h2D_Fit_nBkg_pA = (TH2D*)fFitpA->Get("h2D_nBkg_Raw"); 
   TH2D* h2D_Fit_PR_pA = (TH2D*)fFitpA->Get("h2D_nPrompt");  
   TH2D* h2D_Fit_NP_pA = (TH2D*)fFitpA->Get("h2D_nNonPrompt"); 
   TH2D* h2D_Fit_nSig_pA = (TH2D*)fFitpA->Get("h2D_nSig"); 
@@ -260,9 +264,9 @@ int make_totalHist_pA_noPtWeight(int MrapNpt=89, int accCutType = 2, bool useZvt
   
   ////////////////////////////////////////////////
   ////// save as a root file
-  TFile *outFile = new TFile(Form("totalHist_pA_%s_Zvtx%d_SF%d_noPtWeight.root",szFinal.Data(),(int)useZvtxWeight,(int)useSF),"RECREATE");
+  TFile *outFile = new TFile(Form("totalHist_pA_%s_Zvtx%d_SF%d_noPtWeight_ctErrCorr.root",szFinal.Data(),(int)useZvtxWeight,(int)useSF),"RECREATE");
   std::cout << "szFinal: " << szFinal << std::endl;
-  cout << "totalHist_pA_"<<szFinal<<"_Zvtx"<<(int)useZvtxWeight<<"_SF"<<(int)useSF<<"_noPtWeight.root has been created :) " <<endl; 
+  cout << "totalHist_pA_"<<szFinal<<"_Zvtx"<<(int)useZvtxWeight<<"_SF"<<(int)useSF<<"_noPtWeight_ctErrCorr.root has been created :) " <<endl; 
 
   outFile->cd();
   //Acc 
