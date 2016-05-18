@@ -4,7 +4,7 @@ void formRapArr(Double_t binmin, Double_t binmax, string* arr);
 void formAbsRapArr(Double_t binmin, Double_t binmax, string* arr);
 void formPtArr(Double_t binmin, Double_t binmax, string* arr);
 
-void draw_1D_eff_Zvtx1_Zvtx0(TString szBinning="8rap9pt", bool isPrompt=false, bool isLog=false, bool isNoErr=true)
+void draw_1D_eff_Zvtx1_Zvtx0_pA(TString szBinning="8rap9pt", bool isPrompt=false, bool isLog=false, bool isNoErr=true)
 {
 	gROOT->Macro("../Style.C");
 
@@ -169,7 +169,7 @@ void draw_1D_eff_Zvtx1_Zvtx0(TString szBinning="8rap9pt", bool isPrompt=false, b
 	}
 	c01->Modified();
 	c01->Update();
-	c01->SaveAs(Form("dir_1D_%s/eff_isPrompt%d_isLog%d_Zvtx1_Zvtx0.pdf",szBinning.Data(),(int)isPrompt,(int)isLog));
+	c01->SaveAs(Form("dir_1D_%s/eff_isPrompt%d_isLog%d_Zvtx1_Zvtx0_pA.pdf",szBinning.Data(),(int)isPrompt,(int)isLog));
 
   //////////////////////////////////////////////////////////////////
 	//// hRatio, and convert to gRatio (TGraphAsymErrors)
@@ -206,7 +206,7 @@ void draw_1D_eff_Zvtx1_Zvtx0(TString szBinning="8rap9pt", bool isPrompt=false, b
 		latex->DrawLatex(0.55,0.23,Form("%s",rapArr[iy].c_str()));
 		dashedLine(0.,1.,30.,1.,1,1);
 	}	
-	c02->SaveAs(Form("dir_1D_%s/effRatio_isPrompt%d_isLog%d_Zvtx1_Zvtx0.pdf",szBinning.Data(),(int)isPrompt,(int)isLog));
+	c02->SaveAs(Form("dir_1D_%s/effRatio_isPrompt%d_isLog%d_Zvtx1_Zvtx0_pA.pdf",szBinning.Data(),(int)isPrompt,(int)isLog));
 
 
 
