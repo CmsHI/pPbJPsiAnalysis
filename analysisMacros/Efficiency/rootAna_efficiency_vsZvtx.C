@@ -40,7 +40,7 @@ TF1* hTnp_pa_new_eta5 = (TF1*)fTnp_pa_new->Get("func_5");
 ////// useSF : true=useTNPSF, false=no
 //////////////////////////////////////////////////////////////////////////////////  
 
-int rootAna_efficiency(int MrapNpt = 89, int isPA =1, int accCutType = 2, bool isPrompt = true, bool useZvtxWeight =true, bool useSF=true)
+int rootAna_efficiency_vsZvtx(int MrapNpt = 89, int isPA =1, int accCutType = 2, bool isPrompt = true, bool useZvtxWeight =false, bool useSF=false)
 {
   using namespace std;
   int initev =0;
@@ -171,6 +171,19 @@ int rootAna_efficiency(int MrapNpt = 89, int isPA =1, int accCutType = 2, bool i
   Double_t etBinsArr[] = {0.0, 120.0};
   const Int_t nEt = sizeof(etBinsArr)/sizeof(double)-1;
   cout << "nEt=" << nEt << endl;
+
+  //// for vsZvtx
+  const int nrap = nRap;
+  Double_t ptLimitPP[9]= {2.0, 4.0, 6.5, 6.5, 6.5, 6.5, 4.0, 2.0};
+  Double_t ptLimitPbp[9]= {2.0, 4.0, 6.5, 6.5, 6.5, 5.0, 4.0, 2.0};
+  Double_t ptLimitpPb[9] = {2.0, 4.0, 5.0, 6.5, 6.5, 6.5, 4.0, 2.0};
+  Double_t ptLimit[nrap];
+  for (Int_t iy=0; iy<nRap; iy++){
+    if (isPA==0) ptLimit[iy]=ptLimitPP[iy];
+    else if (isPA==1) ptLimit[iy]=ptLimitPbp[iy];
+    else ptLimit[iy]=ptLimitpPb[iy];
+    cout << iy <<"th ptLimit = " << ptLimit[iy] <<endl;
+  }
 
   #if 0
   // setting for string bin array for checking ctau error range
@@ -374,6 +387,22 @@ int rootAna_efficiency(int MrapNpt = 89, int isPA =1, int accCutType = 2, bool i
   h2D_Eff_pt_y_fine->Sumw2();
   TH1D* h1D_zVtx = new TH1D("h1D_zVtx","",60,-30,30);
   h1D_zVtx->Sumw2();
+ 
+  // Eff vsZvtx
+  const int nbinZ = 30;
+  const double minbinZ = -30.;
+  const double maxbinZ = 30.;
+  TH1D* h1D_Den_zVtx[nrap];
+  TH1D* h1D_Num_zVtx[nrap];
+  TH1D* h1D_Eff_zVtx[nrap];
+  for (int ir=0; ir< nRap; ir++) {
+    h1D_Den_zVtx[ir] = new TH1D(Form("h1D_Den_zVtx_%d",ir),"",nbinZ,minbinZ,maxbinZ);
+    h1D_Num_zVtx[ir] = new TH1D(Form("h1D_Num_zVtx_%d",ir),"",nbinZ,minbinZ,maxbinZ);
+    h1D_Eff_zVtx[ir] = new TH1D(Form("h1D_Eff_zVtx_%d",ir),"",nbinZ,minbinZ,maxbinZ);
+    h1D_Den_zVtx[ir]->Sumw2();
+    h1D_Num_zVtx[ir]->Sumw2();
+    h1D_Eff_zVtx[ir]->Sumw2();
+  } 
   
   TLorentzVector* dimu_RECO = new TLorentzVector;
   TLorentzVector* mupl_RECO = new TLorentzVector;
@@ -423,6 +452,12 @@ int rootAna_efficiency(int MrapNpt = 89, int isPA =1, int accCutType = 2, bool i
       kineCut(mumi_GEN, accCutType)) {
         h2D_Den_pt_y->Fill(jpsi_GEN->Rapidity(),jpsi_GEN->Pt(),zWeight);
         if (MrapNpt==89) h2D_Den_pt_y_fine->Fill(jpsi_GEN->Rapidity(),jpsi_GEN->Pt(),zWeight);
+        //// vsZvtx
+        for (int ir=0; ir< nRap; ir++) {
+          if (rapArr[ir]<=jpsi_GEN->Rapidity() && jpsi_GEN->Rapidity() < rapArr[ir+1] && ptLimit[ir] < jpsi_GEN->Pt() && jpsi_GEN->Pt() < 30.0 ){
+            h1D_Den_zVtx[ir]->Fill(theZvtx);
+          }
+        } 
       } //end of if statement
     } //end of Gen_QQ_size loop
   
@@ -471,6 +506,12 @@ int rootAna_efficiency(int MrapNpt = 89, int isPA =1, int accCutType = 2, bool i
         h2D_Num_pt_y->Fill(dimu_RECO->Rapidity(),dimu_RECO->Pt(), tnpWeight*zWeight);
         if (MrapNpt==89) h2D_Num_pt_y_fine->Fill(dimu_RECO->Rapidity(),dimu_RECO->Pt(), tnpWeight*zWeight);
         h1D_zVtx->Fill(theZvtx, zWeight);
+        //// vsZvtx
+        for (int ir=0; ir< nRap; ir++) {
+          if (rapArr[ir]<=dimu_RECO->Rapidity() && dimu_RECO->Rapidity() < rapArr[ir+1] && ptLimit[ir] < dimu_RECO->Pt() && dimu_RECO->Pt() < 30.0 ){
+            h1D_Num_zVtx[ir]->Fill(theZvtx);
+          }
+        } 
       } //end of if statement
     } //end of Reco_QQ_size loop
   Reco_QQ_4mom =0;
@@ -484,11 +525,15 @@ int rootAna_efficiency(int MrapNpt = 89, int isPA =1, int accCutType = 2, bool i
   // (Num/Den) to get efficiency (B : binomial error)
   h2D_Eff_pt_y->Divide(h2D_Num_pt_y,h2D_Den_pt_y,1,1,"B");
   if (MrapNpt==89) h2D_Eff_pt_y_fine->Divide(h2D_Num_pt_y_fine,h2D_Den_pt_y_fine,1,1,"B");
+  //// vsZvtx
+  for (int ir=0; ir< nRap; ir++) {
+    h1D_Eff_zVtx[ir]->Divide(h1D_Num_zVtx[ir],h1D_Den_zVtx[ir],1,1,"B");
+  } 
   
   ////////////////////////////////////////////////////////////////////////////
   // Save the data!
   
-  TFile *outFile = new TFile(Form("EffAna_%s_Zvtx%d_SF%d.root",szFinal.Data(), (int)useZvtxWeight,(int)useSF),"RECREATE");
+  TFile *outFile = new TFile(Form("EffAna_%s_Zvtx%d_SF%d_vsZvtx.root",szFinal.Data(), (int)useZvtxWeight,(int)useSF),"RECREATE");
   std::cout << "szFinal: " << szFinal << std::endl;
   outFile->cd();
   //h2D_ctErrmin->Write();
@@ -502,6 +547,12 @@ int rootAna_efficiency(int MrapNpt = 89, int isPA =1, int accCutType = 2, bool i
     h2D_Num_pt_y_fine->Write();
     h2D_Eff_pt_y_fine->Write();
   }
+  //// vsZvtx
+  for (int ir=0; ir< nRap; ir++) {
+    h1D_Den_zVtx[ir]->Write();
+    h1D_Num_zVtx[ir]->Write();
+    h1D_Eff_zVtx[ir]->Write();
+  } 
   outFile->Close();
 
   return 0;
