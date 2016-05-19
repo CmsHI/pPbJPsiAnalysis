@@ -1,28 +1,36 @@
 #include "../SONGKYO.h"
 
 /////// main func. ///////
-int make_totalHist_PA_noPtWeight(int MrapNpt=89, int accCutType = 2, bool useZvtxWeight=false, bool useSF = false){
+int make_totalHist_PbppPb_noPtWeight_privFit_privMC(int MrapNpt=89, int accCutType = 1, bool useZvtxWeight=true, bool useSF = true){
   using namespace std;
   
-  char* szBinning;
+  TString szBinning;
   if (MrapNpt==89)  {szBinning = "8rap9pt"; }
   else if (MrapNpt==83) { szBinning = "8rap3pt"; }
   else if (MrapNpt==63) { szBinning = "6rap3pt"; }
   else if (MrapNpt==62) { szBinning = "6rap2pt"; }
   else {cout << "select among MrapNpt = 89, 83, 63, or 62"<< endl; return 0; }
-  char* szAccCut;
+  TString szAccCut;
   if (accCutType==1) szAccCut="oldcut";
   else if (accCutType==2) szAccCut="newcut";
   else {cout << "select among accCutType = 0 or 1"<< endl; return 0; }
-  const char* szFinal = Form("%s_%s",szBinning,szAccCut);
+  const TString szFinal = Form("%s_%s",szBinning.Data(),szAccCut.Data());
   std::cout << "szFinal: " << szFinal << std::endl;
+
+  //////////////////////////////////////////////////////////////////////////////////////
+  //// Definition of the binning
+  int nRap, nPt;
+  if (MrapNpt==89) { nRap = 8; nPt = 9; }
+  else if (MrapNpt==83) { nRap = 8; nPt = 3; }
+  else if (MrapNpt==63) { nRap = 6; nPt = 3;} 
+  else { nRap = 6; nPt = 2;} 
 
   //////////////////////////////////////////////////////////////////////////////////////
   //////////////////////////////////////////////////////////////////////////////////////
   ////// read in Acceptance file
   // *** without pt weight
-  TFile *fAccPR = new TFile(Form("../Acceptance/AccAna_%s_PRMC_boosted.root",szBinning)); //tmp
-  TFile *fAccNP = new TFile(Form("../Acceptance/AccAna_%s_NPMC_boosted.root",szBinning));
+  TFile *fAccPR = new TFile(Form("../Acceptance/AccAna_%s_pA_PR_%s.root",szBinning.Data(),szAccCut.Data()));  
+  TFile *fAccNP = new TFile(Form("../Acceptance/AccAna_%s_pA_NP_%s.root",szBinning.Data(),szAccCut.Data()));  
   TH2D* h2D_Acc_PR_Pbp = (TH2D*)fAccPR->Get("h2D_Acc_pt_y_Pbp");
   TH2D* h2D_Acc_PR_pPb = (TH2D*)fAccPR->Get("h2D_Acc_pt_y_pPb");
   TH2D* h2D_Acc_NP_Pbp = (TH2D*)fAccNP->Get("h2D_Acc_pt_y_Pbp");
@@ -54,10 +62,10 @@ int make_totalHist_PA_noPtWeight(int MrapNpt=89, int accCutType = 2, bool useZvt
   //////////////////////////////////////////////////////////////////////////////////////
   ////// read in Efficiency file
   // *** without pt weight
-  TFile *fEffPRPbp = new TFile(Form("../Efficiency/EffAna_%s_Pbp_PR_%s_Zvtx%d_SF%d.root",szBinning,szAccCut,(int)useZvtxWeight,(int)useSF));
-  TFile *fEffPRpPb = new TFile(Form("../Efficiency/EffAna_%s_pPb_PR_%s_Zvtx%d_SF%d.root",szBinning,szAccCut,(int)useZvtxWeight,(int)useSF));
-  TFile *fEffNPPbp = new TFile(Form("../Efficiency/EffAna_%s_Pbp_NP_%s_Zvtx%d_SF%d.root",szBinning,szAccCut,(int)useZvtxWeight,(int)useSF));
-  TFile *fEffNPpPb = new TFile(Form("../Efficiency/EffAna_%s_pPb_NP_%s_Zvtx%d_SF%d.root",szBinning,szAccCut,(int)useZvtxWeight,(int)useSF));
+  TFile *fEffPRPbp = new TFile(Form("../Efficiency/EffAna_%s_Pbp_PR_%s_Zvtx%d_SF%d_privtest.root",szBinning.Data(),szAccCut.Data(),(int)useZvtxWeight,(int)useSF));
+  TFile *fEffPRpPb = new TFile(Form("../Efficiency/EffAna_%s_pPb_PR_%s_Zvtx%d_SF%d_privtest.root",szBinning.Data(),szAccCut.Data(),(int)useZvtxWeight,(int)useSF));
+  TFile *fEffNPPbp = new TFile(Form("../Efficiency/EffAna_%s_Pbp_NP_%s_Zvtx%d_SF%d_privtest.root",szBinning.Data(),szAccCut.Data(),(int)useZvtxWeight,(int)useSF));
+  TFile *fEffNPpPb = new TFile(Form("../Efficiency/EffAna_%s_pPb_NP_%s_Zvtx%d_SF%d_privtest.root",szBinning.Data(),szAccCut.Data(),(int)useZvtxWeight,(int)useSF));
   TH2D* h2D_Eff_PR_Pbp = (TH2D*)fEffPRPbp->Get("h2D_Eff_pt_y");
   TH2D* h2D_Eff_PR_pPb = (TH2D*)fEffPRpPb->Get("h2D_Eff_pt_y");
   TH2D* h2D_Eff_NP_Pbp = (TH2D*)fEffNPPbp->Get("h2D_Eff_pt_y");
@@ -88,22 +96,22 @@ int make_totalHist_PA_noPtWeight(int MrapNpt=89, int accCutType = 2, bool useZvt
   //////////////////////////////////////////////////////////////////////////////////////
   //////////////////////////////////////////////////////////////////////////////////////
   ////// read in from fit file
-  TFile* fFitPbp = new TFile(Form("./fitResHist_%s_Pbp_%s.root",szBinning,szAccCut));
-  TFile* fFitpPb = new TFile(Form("./fitResHist_%s_pPb_%s.root",szBinning,szAccCut));
-  TH2D* h2D_Fit_PR_Pbp = (TH2D*)fFitPbp->Get("h2D_nPrompt");  
-  TH2D* h2D_Fit_NP_Pbp = (TH2D*)fFitPbp->Get("h2D_nNonPrompt"); 
-  TH2D* h2D_Fit_nSig_Pbp = (TH2D*)fFitPbp->Get("h2D_nSig"); 
-  TH2D* h2D_Fit_nBkg_Pbp = (TH2D*)fFitPbp->Get("h2D_nBkg"); 
+  TFile* fFitPbp = new TFile(Form("./fitResHist_%s_Pbp_%s_privtest.root",szBinning.Data(),szAccCut.Data()));
+  TFile* fFitpPb = new TFile(Form("./fitResHist_%s_pPb_%s_privtest.root",szBinning.Data(),szAccCut.Data()));
+  TH2D* h2D_Fit_PR_Pbp = (TH2D*)fFitPbp->Get("h2D_nPrompt_Raw");  
+  TH2D* h2D_Fit_NP_Pbp = (TH2D*)fFitPbp->Get("h2D_nNonPrompt_Raw"); 
+  TH2D* h2D_Fit_nSig_Pbp = (TH2D*)fFitPbp->Get("h2D_nSig_Raw"); 
+  TH2D* h2D_Fit_nBkg_Pbp = (TH2D*)fFitPbp->Get("h2D_nBkg_Raw"); 
   TH2D* h2D_Fit_bFrac_Pbp = (TH2D*)fFitPbp->Get("h2D_bFraction"); 
   TH2D* h2D_Fit_ctErrmin_Pbp = (TH2D*)fFitPbp->Get("h2D_ctErrmin"); 
   TH2D* h2D_Fit_ctErrmax_Pbp = (TH2D*)fFitPbp->Get("h2D_ctErrmax"); 
   TH2D* h2D_Fit_NoCutEntry_Pbp = (TH2D*)fFitPbp->Get("h2D_NoCutEntry"); 
   TH2D* h2D_Fit_CutEntry_Pbp = (TH2D*)fFitPbp->Get("h2D_CutEntry"); 
   TH2D* h2D_Fit_CutRatio_Pbp = (TH2D*)fFitPbp->Get("h2D_CutRatio"); 
-  TH2D* h2D_Fit_PR_pPb = (TH2D*)fFitpPb->Get("h2D_nPrompt");  
-  TH2D* h2D_Fit_NP_pPb = (TH2D*)fFitpPb->Get("h2D_nNonPrompt"); 
-  TH2D* h2D_Fit_nSig_pPb = (TH2D*)fFitpPb->Get("h2D_nSig"); 
-  TH2D* h2D_Fit_nBkg_pPb = (TH2D*)fFitpPb->Get("h2D_nBkg"); 
+  TH2D* h2D_Fit_PR_pPb = (TH2D*)fFitpPb->Get("h2D_nPrompt_Raw");  
+  TH2D* h2D_Fit_NP_pPb = (TH2D*)fFitpPb->Get("h2D_nNonPrompt_Raw"); 
+  TH2D* h2D_Fit_nSig_pPb = (TH2D*)fFitpPb->Get("h2D_nSig_Raw"); 
+  TH2D* h2D_Fit_nBkg_pPb = (TH2D*)fFitpPb->Get("h2D_nBkg_Raw"); 
   TH2D* h2D_Fit_bFrac_pPb = (TH2D*)fFitpPb->Get("h2D_bFraction"); 
   TH2D* h2D_Fit_ctErrmin_pPb = (TH2D*)fFitpPb->Get("h2D_ctErrmin"); 
   TH2D* h2D_Fit_ctErrmax_pPb = (TH2D*)fFitpPb->Get("h2D_ctErrmax"); 
@@ -183,9 +191,9 @@ int make_totalHist_PA_noPtWeight(int MrapNpt=89, int accCutType = 2, bool useZvt
   
   ////////////////////////////////////////////////
   ////// save as a root file
-  TFile *outFile = new TFile(Form("totalHist_PA_%s_Zvtx%d_SF%d_noPtWeight.root",szFinal,(int)useZvtxWeight,(int)useSF),"RECREATE");
+  TFile *outFile = new TFile(Form("totalHist_PbppPb_%s_Zvtx%d_SF%d_noPtWeight_privFit_privMC.root",szFinal.Data(),(int)useZvtxWeight,(int)useSF),"RECREATE");
   std::cout << "szFinal: " << szFinal << std::endl;
-  cout << "totalHist_PA_"<<szFinal<<"_Zvtx"<<(int)useZvtxWeight<<"_SF"<<(int)useSF<<"_noPtWeight.root has been created :) " <<endl; 
+  cout << "totalHist_PbppPb_"<<szFinal<<"_Zvtx"<<(int)useZvtxWeight<<"_SF"<<(int)useSF<<"_noPtWeight_privFit_privMC.root has been created :) " <<endl; 
 
   outFile->cd();
   //Acc 
