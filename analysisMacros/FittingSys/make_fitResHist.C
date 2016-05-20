@@ -4,7 +4,7 @@ void formRapStr(Double_t min, Double_t max, string* arr);
 void formStr(Double_t min, Double_t max, string* arr);
 
 /////// main func. ///////
-int make_fitResHist(int MrapNpt=89, int isPA =3, int accCutType=1){
+int make_fitResHist(int MrapNpt=89, int isPA =3, int accCutType=1, TString szSys="nominal"){
 //  char *dirName = "fitRes_8rap9pt", bool is1st = true){
 
   using namespace std;
@@ -26,13 +26,13 @@ int make_fitResHist(int MrapNpt=89, int isPA =3, int accCutType=1){
   else if (accCutType==2) szAccCut="newcut";
   else {cout << "select among accCutType = 1 or 2"<< endl; return 0; }  
 
-  const TString szFinal = Form("%s_%s_%s",szBinning.Data(),szPA.Data(),szAccCut.Data());
+  const TString szFinal = Form("%s_%s_%s_%s",szBinning.Data(),szPA.Data(),szAccCut.Data(),szSys.Data());
   std::cout << "szFinal: " << szFinal << std::endl;
 
   //// read-in 3 txt files
-  std::ifstream fctau(Form("./fitRes/summary_%s_%s_%s_nominal/fit_ctauErrorRange",szPA.Data(),szBinning.Data(),szAccCut.Data()),std::ios::in);
+  std::ifstream fctau(Form("./fitRes/summary_%s_%s_%s_%s/fit_ctauErrorRange",szPA.Data(),szBinning.Data(),szAccCut.Data(),szSys.Data()),std::ios::in);
   if(!fctau.is_open()) { cout << "Warning : can NOT open the fit_ctauErrorRange file!"<<endl; return 0; }
-  std::ifstream ftable(Form("./fitRes/summary_%s_%s_%s_nominal/fit_table",szPA.Data(),szBinning.Data(),szAccCut.Data()),std::ios::in);
+  std::ifstream ftable(Form("./fitRes/summary_%s_%s_%s_%s/fit_table",szPA.Data(),szBinning.Data(),szAccCut.Data(),szSys.Data()),std::ios::in);
   if(!ftable.is_open()) { cout << "Warning : can NOT open the fit_table file!"<<endl; return 0; }
   //std::ifstream fparam(Form("./fitRes_%s/summary_%s/fit_parameters",szBinning,szPA),std::ios::in);
   //if(!fparam.is_open()) { cout << "Warning : can NOT open the fit_parameters file!"<<endl; }
