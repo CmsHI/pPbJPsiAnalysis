@@ -4,14 +4,14 @@ void formRapArr(Double_t binmin, Double_t binmax, string* arr);
 void formAbsRapArr(Double_t binmin, Double_t binmax, string* arr);
 void formPtArr(Double_t binmin, Double_t binmax, string* arr);
 
-void draw_1D_fitSys_8rap9pt(int isPA=1, bool isPrompt=false, double ymax=100)
+void draw_1D_fitSys_sys01_8rap9pt(int isPA=0, bool isPrompt=true, double ymax=100)
 {
 	gROOT->Macro("../Style.C");
 
   double ymin = 0.0;
-  //ymax = 100; //max
+  //ymax = 60; //max
   
-  const int nOpt = 4; //sys01, sys02, sys03, sys04
+  const int nOpt = 5; //sys01_01, 01_02, 01_03, 01_04, 01_05
 	cout << "nOpt = " << nOpt << endl;
   
   TString szPA;
@@ -69,10 +69,10 @@ void draw_1D_fitSys_8rap9pt(int isPA=1, bool isPrompt=false, double ymax=100)
 	TFile * f2D = new TFile(Form("../FittingSys/fitSysErr_8rap9pt_%s_newcut.root",szPA.Data()));
   
 	// --- read-in 2D hist for data reco dist
-	TH2D* h2D_tot = (TH2D*)f2D->Get(Form("h2D_%s_tot",szPrompt.Data()));
+	TH2D* h2D_tot = (TH2D*)f2D->Get(Form("h2D_%s_maxerr_sys01",szPrompt.Data()));
   TH2D* h2D_maxerr[nOpt];
 	for (int iopt=0; iopt<nOpt; iopt++){
-	  h2D_maxerr[iopt] = (TH2D*)f2D->Get(Form("h2D_%s_maxerr_sys0%d",szPrompt.Data(),iopt+1));
+	  h2D_maxerr[iopt] = (TH2D*)f2D->Get(Form("h2D_%s_err_sys01_0%d",szPrompt.Data(),iopt+1));
 	  cout << " * h2D_maxerr : " << h2D_maxerr[iopt]->GetName() << endl;
   }
 
@@ -175,7 +175,7 @@ void draw_1D_fitSys_8rap9pt(int isPA=1, bool isPrompt=false, double ymax=100)
 	TCanvas* c01 = new TCanvas("c01","c01",200,10,1600,800);
 	c01->Divide(4,2);
    
-  TGraphAsymmErrors* g_tot[nbinsX];
+  //TGraphAsymmErrors* g_tot[nbinsX];
   TGraphAsymmErrors* g_maxerr[nbinsX][nOpt];
 	
   for (Int_t iy = 0; iy < nbinsX; iy++) {
@@ -183,33 +183,45 @@ void draw_1D_fitSys_8rap9pt(int isPA=1, bool isPrompt=false, double ymax=100)
 		//if (isLog) gPad->SetLogy(1);
 		//else gPad->SetLogy(0);
 	  
-		g_tot[iy]=new TGraphAsymmErrors(h1D_tot[iy]);
+		/*
+    g_tot[iy]=new TGraphAsymmErrors(h1D_tot[iy]);
 		g_tot[iy]->SetName(Form("g_tot_%d",iy));
     SetGraphStyle2(g_tot[iy],0,0);
 		g_tot[iy]->SetMarkerSize(0.);
     g_tot[iy]->SetLineWidth(2);
+    //g_tot[iy]->SetFillColor(kYellow);
     g_tot[iy]->GetXaxis()->SetTitle("p_{T} (GeV/c)");
 		g_tot[iy]->GetXaxis()->CenterTitle();
 		g_tot[iy]->GetXaxis()->SetLimits(0.0,30.0);
 		g_tot[iy]->GetYaxis()->SetTitle("relative Systematic Error (%)");
 		g_tot[iy]->GetYaxis()->SetRangeUser(ymin,ymax);
 		g_tot[iy]->Draw("AP");
-    
+    */
+
     for (int iopt=0; iopt<nOpt; iopt++){
 		  g_maxerr[iy][iopt]=new TGraphAsymmErrors(h1D_maxerr[iy][iopt]);
 		  g_maxerr[iy][iopt]->SetName(Form("g_maxerr_%d_sys0%d",iy,iopt+1));
 		  SetGraphStyle2(g_maxerr[iy][iopt],iopt+3,0);
 		  g_maxerr[iy][iopt]->SetMarkerSize(0.);
 		  g_maxerr[iy][iopt]->SetLineWidth(2);
+      if (iopt==0) {
+        g_maxerr[iy][iopt]->GetXaxis()->SetTitle("p_{T} (GeV/c)");
+		    g_maxerr[iy][iopt]->GetXaxis()->CenterTitle();
+		    g_maxerr[iy][iopt]->GetXaxis()->SetLimits(0.0,30.0);
+		    g_maxerr[iy][iopt]->GetYaxis()->SetTitle("relative Systematic Error (%)");
+		    g_maxerr[iy][iopt]->GetYaxis()->SetRangeUser(ymin,ymax);
+		    g_maxerr[iy][iopt]->Draw("AP");
+      }
 		  g_maxerr[iy][iopt]->Draw("P");
 	  }	
 		
-		if (iy==0) {
-			legUR -> AddEntry(g_tot[iy],"total","lp");
-			legUR -> AddEntry(g_maxerr[iy][0],"syst.1","lp");
-			legUR -> AddEntry(g_maxerr[iy][1],"syst.2","lp");
-			legUR -> AddEntry(g_maxerr[iy][2],"syst.3","lp");
-			legUR -> AddEntry(g_maxerr[iy][3],"syst.4","lp");
+    if (iy==0) {
+			//legUR -> AddEntry(g_tot[iy],"sys01","lp");
+			legUR -> AddEntry(g_maxerr[iy][0],"sys01_01","lp");
+			legUR -> AddEntry(g_maxerr[iy][1],"sys01_02","lp");
+			legUR -> AddEntry(g_maxerr[iy][2],"sys01_03","lp");
+			legUR -> AddEntry(g_maxerr[iy][3],"sys01_04","lp");
+			legUR -> AddEntry(g_maxerr[iy][4],"sys01_05","lp");
 			legUR->Draw();
 			if (isPrompt) { latex->DrawLatex(0.19,0.88,Form("%s Prompt J/#psi",szPA.Data())); }
 			else { latex->DrawLatex(0.19,0.88,Form("%s Non-prompt J/#psi",szPA.Data())); }
@@ -218,7 +230,7 @@ void draw_1D_fitSys_8rap9pt(int isPA=1, bool isPrompt=false, double ymax=100)
 	}
 	c01->Modified();
 	c01->Update();
-	c01->SaveAs(Form("dir_fitSys/%s_fitSys_8rap9pt_%s_upto%.0f.pdf",szPA.Data(),szPrompt.Data(),ymax));
+	c01->SaveAs(Form("dir_fitSys/%s_fitSys_sys01_8rap9pt_%s_upto%.0f.pdf",szPA.Data(),szPrompt.Data(),ymax));
 
 	return;
 
