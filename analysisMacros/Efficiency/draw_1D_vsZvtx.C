@@ -49,7 +49,7 @@ void draw_1D_vsZvtx(int isPA = 2, TString szDir = "dir_vsZvtx")
   Double_t rapEdgePP[9] = {-2.4, -1.93, -1.5, -0.9, 0., 0.9, 1.5, 1.93, 2.4}; // 8rap9pt
   Double_t rapEdgePbp[9] = {-2.4, -1.97, -1.37, -0.47, 0.43, 1.03, 1.46, 1.93, 2.4}; // 8rap9pt
   Double_t rapEdgepPb[9] = {-2.4, -1.93, -1.46, -1.03, -0.43, 0.47, 1.37, 1.97, 2.4};
-  for (Int_t iy=0; iy<nRap; iy++){ 
+  for (Int_t iy=0; iy<nRap+1; iy++){ 
     if (isPA==0) rapEdge[iy]=rapEdgePP[iy];
     else if (isPA==1) rapEdge[iy]=rapEdgePbp[iy];
     else rapEdge[iy]=rapEdgepPb[iy];
