@@ -1,7 +1,7 @@
 #include "../SONGKYO.h"
 
 /////// main func. ///////
-int make_totalHist_pA_noPtWeight_ctErrCorr(int MrapNpt=89, int accCutType = 2, bool useZvtxWeight=false, bool useSF = false){
+int make_totalHist_pA_noPtWeight_ctErrCorr(int MrapNpt=89, int accCutType = 2, bool useZvtxWeight=false, bool useSF = false, TString szSys="nominal"){
 
   using namespace std;
   //// scaling efficiency (1st+2nd) based on lumi.
@@ -19,7 +19,7 @@ int make_totalHist_pA_noPtWeight_ctErrCorr(int MrapNpt=89, int accCutType = 2, b
   if (accCutType==1) szAccCut="oldcut";
   else if (accCutType==2) szAccCut="newcut";
   else {cout << "select among accCutType = 0 or 1"<< endl; return 0; }
-  const TString szFinal = Form("%s_%s",szBinning.Data(),szAccCut.Data());
+  const TString szFinal = Form("%s_%s_%s",szBinning.Data(),szAccCut.Data(),szSys.Data());
   std::cout << "szFinal: " << szFinal << std::endl;
 
   //////////////////////////////////////////////////////////////////////////////////////
@@ -203,7 +203,7 @@ int make_totalHist_pA_noPtWeight_ctErrCorr(int MrapNpt=89, int accCutType = 2, b
   //////////////////////////////////////////////////////////////////////////////////////
   //////////////////////////////////////////////////////////////////////////////////////
   ////// read in from fit file
-  TFile* fFitpA = new TFile(Form("./fitResHist_%s_pA_%s.root",szBinning.Data(),szAccCut.Data()));
+  TFile* fFitpA = new TFile(Form("./fitResHist_%s_pA_%s_%s.root",szBinning.Data(),szAccCut.Data(),szSys.Data()));
   //TH2D* h2D_Fit_PR_pA = (TH2D*)fFitpA->Get("h2D_nPrompt_Raw");  
   //TH2D* h2D_Fit_NP_pA = (TH2D*)fFitpA->Get("h2D_nNonPrompt_Raw"); 
   //TH2D* h2D_Fit_nSig_pA = (TH2D*)fFitpA->Get("h2D_nSig_Raw"); 
