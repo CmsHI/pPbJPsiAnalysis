@@ -26,7 +26,7 @@ int make_fitResHist(int MrapNpt=89, int isPA =3, int accCutType=1, TString szSys
   else if (accCutType==2) szAccCut="newcut";
   else {cout << "select among accCutType = 1 or 2"<< endl; return 0; }  
 
-  const TString szFinal = Form("%s_%s_%s",szBinning.Data(),szPA.Data(),szAccCut.Data());
+  const TString szFinal = Form("%s_%s_%s_%s",szBinning.Data(),szPA.Data(),szAccCut.Data(),szSys.Data());
   std::cout << "szFinal: " << szFinal << std::endl;
 
   //// read-in 3 txt files

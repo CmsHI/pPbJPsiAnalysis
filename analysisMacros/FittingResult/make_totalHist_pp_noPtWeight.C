@@ -1,7 +1,7 @@
 #include "../SONGKYO.h"
 
 /////// main func. ///////
-int make_totalHist_pp_noPtWeight(int MrapNpt=89, int accCutType = 2, bool useZvtxWeight=false, bool useSF = false){
+int make_totalHist_pp_noPtWeight(int MrapNpt=89, int accCutType = 2, bool useZvtxWeight=false, bool useSF = false, TString szSys="nominal"){
   using namespace std;
   
   TString szBinning;
@@ -14,7 +14,7 @@ int make_totalHist_pp_noPtWeight(int MrapNpt=89, int accCutType = 2, bool useZvt
   if (accCutType==1) szAccCut="oldcut";
   else if (accCutType==2) szAccCut="newcut";
   else {cout << "select among accCutType = 0 or 1"<< endl; return 0; }
-  const TString szFinal = Form("%s_%s",szBinning.Data(),szAccCut.Data());
+  const TString szFinal = Form("%s_%s_%s",szBinning.Data(),szAccCut.Data(),szSys.Data());
   std::cout << "szFinal: " << szFinal << std::endl;
 
   //////////////////////////////////////////////////////////////////////////////////////
@@ -62,7 +62,7 @@ int make_totalHist_pp_noPtWeight(int MrapNpt=89, int accCutType = 2, bool useZvt
   //////////////////////////////////////////////////////////////////////////////////////
   //////////////////////////////////////////////////////////////////////////////////////
   ////// read in from fit file
-  TFile* fFitpp = new TFile(Form("./fitResHist_%s_pp_%s.root",szBinning.Data(),szAccCut.Data()));
+  TFile* fFitpp = new TFile(Form("./fitResHist_%s_pp_%s_%s.root",szBinning.Data(),szAccCut.Data(),szSys.Data()));
   TH2D* h2D_Fit_PR_pp = (TH2D*)fFitpp->Get("h2D_nPrompt_Raw");  
   TH2D* h2D_Fit_NP_pp = (TH2D*)fFitpp->Get("h2D_nNonPrompt_Raw"); 
   TH2D* h2D_Fit_nSig_pp = (TH2D*)fFitpp->Get("h2D_nSig_Raw"); 
