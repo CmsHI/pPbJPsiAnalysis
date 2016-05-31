@@ -13,12 +13,18 @@ void draw_1D_eff_comp(TString szDir = "dir_eff_comp", bool isNoErr=false)
   TString szF01="ppPRZvtx1";
   TString szF02="ppPRZvtx0";
   */
-  
+  /* 
   int isPA =1; //0:pp, 1:Pbp, 2:pPb for drawing dashed line at low pT limit
   TFile* f01 = new TFile("./dir_eff/8rap9pt_Pbp_PR_newcut_Zvtx1_SF0_EffPt.root");
   TFile* f02 = new TFile("./dir_eff/8rap9pt_Pbp_PR_newcut_Zvtx0_SF0_EffPt.root");
   TString szF01="PbpPRZvtx1";
   TString szF02="PbpPRZvtx0";
+  */
+  int isPA =1; //0:pp, 1:Pbp, 2:pPb for drawing dashed line at low pT limit
+  TFile* f01 = new TFile("./dir_eff/8rap9pt_Pbp_PR_newcut_Zvtx0_SF0_EffPt.root");
+  TFile* f02 = new TFile("./dir_eff/8rap9pt_Pbp_NP_newcut_Zvtx0_SF0_EffPt.root");
+  TString szF01="PbpPR";
+  TString szF02="PbpNP";
   
   //double ratiomin=0.98; 
   //double ratiomax=1.02; 
