@@ -4,7 +4,7 @@ void formRapStr(Double_t min, Double_t max, string* arr);
 void formStr(Double_t min, Double_t max, string* arr);
 
 /////// main func. ///////
-int make_fitResHist(int MrapNpt=89, int isPA =3, int accCutType=1, TString szSys="nominal"){
+int make_fitResHist(int MrapNpt=89, int isPA =0, int accCutType=2, TString szSys="nominal"){
 //  char *dirName = "fitRes_8rap9pt", bool is1st = true){
 
   using namespace std;
@@ -34,8 +34,8 @@ int make_fitResHist(int MrapNpt=89, int isPA =3, int accCutType=1, TString szSys
   if(!fctau.is_open()) { cout << "Warning : can NOT open the fit_ctauErrorRange file!"<<endl; return 0; }
   std::ifstream ftable(Form("./fitRes/summary_%s_%s_%s_%s/fit_table",szPA.Data(),szBinning.Data(),szAccCut.Data(),szSys.Data()),std::ios::in);
   if(!ftable.is_open()) { cout << "Warning : can NOT open the fit_table file!"<<endl; return 0; }
-  //std::ifstream fparam(Form("./fitRes_%s/summary_%s/fit_parameters",szBinning,szPA),std::ios::in);
-  //if(!fparam.is_open()) { cout << "Warning : can NOT open the fit_parameters file!"<<endl; }
+  std::ifstream fparam(Form("./fitRes/summary_%s_%s_%s_%s/fit_parameters",szPA.Data(),szBinning.Data(),szAccCut.Data(),szSys.Data()),std::ios::in);
+  if(!fparam.is_open()) { cout << "Warning : can NOT open the fit_table file!"<<endl; return 0; }
 
   ///////////////////////////////////////////////////
   //////// Definition of binning
@@ -191,8 +191,7 @@ int make_fitResHist(int MrapNpt=89, int isPA =3, int accCutType=1, TString szSys
   TH2D *h2D_nPrompt_Raw = new TH2D("h2D_nPrompt_Raw","",nRap,rapArr,nPt,ptArr);
   TH2D *h2D_nNonPrompt_Raw = new TH2D("h2D_nNonPrompt_Raw","",nRap,rapArr,nPt,ptArr);
   TH2D *h2D_bFraction = new TH2D("h2D_bFraction","",nRap,rapArr,nPt,ptArr);
-
-  ////// read ctauErr txt
+  
   headers;
   getline(ftable, headers); // remove prefix
   getline(ftable, headers); // remove column names
@@ -236,8 +235,7 @@ int make_fitResHist(int MrapNpt=89, int isPA =3, int accCutType=1, TString szSys
       h2D_bFraction->SetBinError(tmpbin, bFractionErr[iy][ipt]);
     }
   }
-  ////////////////////////////////////////////////////////////////////////////////////////////////
-  ////////////////////////////////////////////////////////////////////////////////////////////////
+  
   //// weight by CutRatio
   TH2D *h2D_nSig = new TH2D("h2D_nSig","",nRap,rapArr,nPt,ptArr);
   TH2D *h2D_nBkg = new TH2D("h2D_nBkg","",nRap,rapArr,nPt,ptArr);
@@ -258,7 +256,259 @@ int make_fitResHist(int MrapNpt=89, int isPA =3, int accCutType=1, TString szSys
     }
   }
 
+  //////////////////////////////////////////////////////
+  ////// 3) read fit_parameters
 
+  float coefExp[nRap][nPt]; float coefExpErr[nRap][nPt];
+  float coefPol[nRap][nPt]; float coefPolErr[nRap][nPt];
+  float fracG1[nRap][nPt]; float fracG1Err[nRap][nPt];
+  float meanSig[nRap][nPt]; float meanSigErr[nRap][nPt];
+  float sigmaSig1[nRap][nPt]; float sigmaSig1Err[nRap][nPt];
+  float sigmaSig2[nRap][nPt]; float sigmaSig2Err[nRap][nPt];
+  float alpha[nRap][nPt]; float alphaErr[nRap][nPt];
+  float enne[nRap][nPt]; float enneErr[nRap][nPt];
+  float sigWidth[nRap][nPt]; float sigWidthErr[nRap][nPt];
+  float sigmaNPTrue[nRap][nPt]; float sigmaNPTrueErr[nRap][nPt];
+  float coefExpNPTrue[nRap][nPt]; float coefExpNPTrueErr[nRap][nPt];
+  float fracRes[nRap][nPt]; float fracResErr[nRap][nPt];
+  float meanPRResW[nRap][nPt]; float meanPRResWErr[nRap][nPt];
+  float meanPRResN[nRap][nPt]; float meanPRResNErr[nRap][nPt];
+  float sigmaPRResW[nRap][nPt]; float sigmaPRResWErr[nRap][nPt];
+  float sigmaPRResN[nRap][nPt]; float sigmaPRResNErr[nRap][nPt];
+  float fracCtBkg1[nRap][nPt]; float fracCtBkg1Err[nRap][nPt];
+  float fracCtBkg2[nRap][nPt]; float fracCtBkg2Err[nRap][nPt];
+  float fracCtBkg3[nRap][nPt]; float fracCtBkg3Err[nRap][nPt];
+  float lambdam[nRap][nPt]; float lambdamErr[nRap][nPt];
+  float lambdap[nRap][nPt]; float lambdapErr[nRap][nPt];
+  float lambdasym[nRap][nPt]; float lambdasymErr[nRap][nPt];
+  
+  float NLL[nRap][nPt];
+  float Resolution[nRap][nPt]; float ResolutionErr[nRap][nPt];
+  
+  float UnNormChi2_mass[nRap][nPt];
+  float nFitParam_mass[nRap][nPt];
+  float nFullBinsPull_mass[nRap][nPt];
+  float Dof_mass[nRap][nPt];
+  float Chi2_mass[nRap][nPt];
+  float theChi2Prob_mass[nRap][nPt];
+  float UnNormChi2_time[nRap][nPt];
+  float nFitParam_time[nRap][nPt];
+  float nFullBinsPull_time[nRap][nPt];
+  float Dof_time[nRap][nPt];
+  float Chi2_time[nRap][nPt];
+  float theChi2Prob_time[nRap][nPt];
+  float UnNormChi2_side[nRap][nPt];
+  float nFitParam_side[nRap][nPt];
+  float nFullBinsPull_side[nRap][nPt];
+  float Dof_side[nRap][nPt];
+  float Chi2_side[nRap][nPt];
+  float theChi2Prob_side[nRap][nPt];
+
+  TH2D *h2D_coefExp = new TH2D("h2D_coefExp","",nRap,rapArr,nPt,ptArr);
+  TH2D *h2D_coefPol = new TH2D("h2D_coefPol","",nRap,rapArr,nPt,ptArr);
+  TH2D *h2D_fracG1 = new TH2D("h2D_fracG1","",nRap,rapArr,nPt,ptArr);
+  TH2D *h2D_meanSig = new TH2D("h2D_meanSig","",nRap,rapArr,nPt,ptArr);
+  TH2D *h2D_sigmaSig1 = new TH2D("h2D_sigmaSig1","",nRap,rapArr,nPt,ptArr);
+  TH2D *h2D_sigmaSig2 = new TH2D("h2D_sigmaSig2","",nRap,rapArr,nPt,ptArr);
+  TH2D *h2D_alpha = new TH2D("h2D_alpha","",nRap,rapArr,nPt,ptArr);
+  TH2D *h2D_enne = new TH2D("h2D_enne","",nRap,rapArr,nPt,ptArr);
+  TH2D *h2D_sigWidth = new TH2D("h2D_sigWidth","",nRap,rapArr,nPt,ptArr);
+  TH2D *h2D_sigmaNPTrue = new TH2D("h2D_sigmaNPTrue","",nRap,rapArr,nPt,ptArr);
+  TH2D *h2D_coefExpNPTrue = new TH2D("h2D_coefExpNPTrue","",nRap,rapArr,nPt,ptArr);
+  TH2D *h2D_fracRes = new TH2D("h2D_fracRes","",nRap,rapArr,nPt,ptArr);
+  TH2D *h2D_meanPRResW = new TH2D("h2D_meanPRResW","",nRap,rapArr,nPt,ptArr);
+  TH2D *h2D_meanPRResN = new TH2D("h2D_meanPRResN","",nRap,rapArr,nPt,ptArr);
+  TH2D *h2D_sigmaPRResW = new TH2D("h2D_sigmaPRResW","",nRap,rapArr,nPt,ptArr);
+  TH2D *h2D_sigmaPRResN = new TH2D("h2D_sigmaPRResN","",nRap,rapArr,nPt,ptArr);
+  TH2D *h2D_fracCtBkg1 = new TH2D("h2D_fracCtBkg1","",nRap,rapArr,nPt,ptArr);
+  TH2D *h2D_fracCtBkg2 = new TH2D("h2D_fracCtBkg2","",nRap,rapArr,nPt,ptArr);
+  TH2D *h2D_fracCtBkg3 = new TH2D("h2D_fracCtBkg3","",nRap,rapArr,nPt,ptArr);
+  TH2D *h2D_lambdam = new TH2D("h2D_lambdam","",nRap,rapArr,nPt,ptArr);
+  TH2D *h2D_lambdap = new TH2D("h2D_lambdap","",nRap,rapArr,nPt,ptArr);
+  TH2D *h2D_lambdasym = new TH2D("h2D_lambdasym","",nRap,rapArr,nPt,ptArr);
+  
+  TH2D *h2D_NLL = new TH2D("h2D_NLL","",nRap,rapArr,nPt,ptArr);
+  TH2D *h2D_Resolution = new TH2D("h2D_Resolution","",nRap,rapArr,nPt,ptArr);
+  
+  TH2D *h2D_UnNormChi2_mass = new TH2D("h2D_UnNormChi2_mass","",nRap,rapArr,nPt,ptArr);
+  TH2D *h2D_nFitParam_mass = new TH2D("h2D_nFitParam_mass","",nRap,rapArr,nPt,ptArr);
+  TH2D *h2D_nFullBinsPull_mass = new TH2D("h2D_nFullBinsPull_mass","",nRap,rapArr,nPt,ptArr);
+  TH2D *h2D_Dof_mass = new TH2D("h2D_Dof_mass","",nRap,rapArr,nPt,ptArr);
+  TH2D *h2D_Chi2_mass = new TH2D("h2D_Chi2_mass","",nRap,rapArr,nPt,ptArr);
+  TH2D *h2D_theChi2Prob_mass = new TH2D("h2D_theChi2Prob_mass","",nRap,rapArr,nPt,ptArr);
+  TH2D *h2D_UnNormChi2_time = new TH2D("h2D_UnNormChi2_time","",nRap,rapArr,nPt,ptArr);
+  TH2D *h2D_nFitParam_time = new TH2D("h2D_nFitParam_time","",nRap,rapArr,nPt,ptArr);
+  TH2D *h2D_nFullBinsPull_time = new TH2D("h2D_nFullBinsPull_time","",nRap,rapArr,nPt,ptArr);
+  TH2D *h2D_Dof_time = new TH2D("h2D_Dof_time","",nRap,rapArr,nPt,ptArr);
+  TH2D *h2D_Chi2_time = new TH2D("h2D_Chi2_time","",nRap,rapArr,nPt,ptArr);
+  TH2D *h2D_theChi2Prob_time = new TH2D("h2D_theChi2Prob_time","",nRap,rapArr,nPt,ptArr);
+  TH2D *h2D_UnNormChi2_side = new TH2D("h2D_UnNormChi2_side","",nRap,rapArr,nPt,ptArr);
+  TH2D *h2D_nFitParam_side = new TH2D("h2D_nFitParam_side","",nRap,rapArr,nPt,ptArr);
+  TH2D *h2D_nFullBinsPull_side = new TH2D("h2D_nFullBinsPull_side","",nRap,rapArr,nPt,ptArr);
+  TH2D *h2D_Dof_side = new TH2D("h2D_Dof_side","",nRap,rapArr,nPt,ptArr);
+  TH2D *h2D_Chi2_side = new TH2D("h2D_Chi2_side","",nRap,rapArr,nPt,ptArr);
+  TH2D *h2D_theChi2Prob_side = new TH2D("h2D_theChi2Prob_side","",nRap,rapArr,nPt,ptArr);
+
+  headers;
+  getline(fparam, headers); // remove prefix
+  getline(fparam, headers); // remove column names
+  string coefexp, coefexperr, coefpol, coefpolerr, fracg1, fracg1err, meansig, meansigerr, sigmasig1, sigmasig1err, sigmasig2, sigmasig2err, alphadum, alphadumerr, ennedum, ennedumerr, sigwidth, sigwidtherr;
+  string signptr, signptrerr, coefexpnptr, coefexpnptrerr, fracres, fracreserr, meanprresw, meanprreswerr, meanprresn, meanprresnerr, sigprresw, sigprreswerr, sigprresn, sigprresnerr;
+  string fracbkg1, fracbkg1err, fracbkg2, fracbkg2err, fracbkg3, fracbkg3err, lambm, lambmerr, lambp, lambperr, lambsym, lambsymerr;
+  string nll, resol, resolerr;
+  string unnormchi2_m, fitpar_m, nbins_m, dof_m, chi2_m, prob_m;
+  string unnormchi2_t, fitpar_t, nbins_t, dof_t, chi2_t, prob_t;
+  string unnormchi2_s, fitpar_s, nbins_s, dof_s, chi2_s, prob_s;
+
+  while(!fparam.eof()) {
+    fparam >> rapdum >> ptdum >> ntrdum >> etdum >> errmin >> errmax >> nocutentry >> cutentry >> sigdum >> sigerrdum >> bkgdum >> bkgerrdum >> coefexp>> coefexperr>> coefpol>> coefpolerr>> fracg1>> fracg1err>> meansig>> meansigerr>> sigmasig1>> sigmasig1err>> sigmasig2>> sigmasig2err>> alphadum>> alphadumerr>> ennedum>> ennedumerr>> sigwidth>> sigwidtherr >> signptr>> signptrerr>> coefexpnptr>> coefexpnptrerr>> fracres>> fracreserr>> meanprresw>> meanprreswerr>> meanprresn>> meanprresnerr>> sigprresw>> sigprreswerr>> sigprresn>> sigprresnerr >> fracbkg1>> fracbkg1err>> fracbkg2>> fracbkg2err>> fracbkg3>> fracbkg3err>> lambm>> lambmerr>> lambp>> lambperr >> lambsym >> lambsymerr >> nll>> resol>> resolerr >> prdum >> prerrdum >> npdum >> nperrdum >> bfrdum >> bfrerrdum >> unnormchi2_m>> fitpar_m>> nbins_m>> dof_m>> chi2_m>> prob_m >> unnormchi2_t>> fitpar_t>> nbins_t>> dof_t>> chi2_t>> prob_t >> unnormchi2_s>> fitpar_s>> nbins_s>> dof_s>> chi2_s>> prob_s;
+    //cout << rapdum <<", "<< ptdum <<", "<< ntrdum <<", "<< etdum <<", "<< errmin <<", "<< errmax <<", "<< nocutentry <<", "<< cutentry <<", "<< sigdum <<", "<< sigerrdum <<", "<< bkgdum <<", "<< bkgerrdum <<", "<< coefexp<<", "<< coefexperr<<", "<< coefpol<<", "<< coefpolerr<<", "<< fracg1<<", "<< fracg1err<<", "<< meansig<<", "<< meansigerr<<", "<< sigmasig1<<", "<< sigmasig1err<<", "<< sigmasig2<<", "<< sigmasig2err<<", "<< alphadum<<", "<< alphadumerr<<", "<< ennedum<<", "<< ennedumerr<<", "<< sigwidth<<", "<< sigwidtherr <<", "<< signptr<<", "<< signptrerr<<", "<< coefexpnptr<<", "<< coefexpnptrerr<<", "<< fracres<<", "<< fracreserr<<", "<< meanprresw<<", "<< meanprreswerr<<", "<< meanprresn<<", "<< meanprresnerr<<", "<< sigprresw<<", "<< sigprreswerr<<", "<< sigprresn<<", "<< sigprresnerr <<", "<< fracbkg1<<", "<< fracbkg1err<<", "<< fracbkg2<<", "<< fracbkg2err<<", "<< fracbkg3<<", "<< fracbkg3err<<", "<< lambm<<", "<< lambmerr<<", "<< lambp<<", "<< lambperr <<", "<< lambsym <<", "<< lambsymerr <<", "<< nll<<", "<< resol<<", "<< resolerr <<", "<< prdum <<", "<< prerrdum <<", "<< npdum <<", "<< nperrdum <<", "<< bfrdum <<", "<< bfrerrdum <<", "<< unnormchi2_m<<", "<< fitpar_m<<", "<< nbins_m<<", "<< dof_m<<", "<< chi2_m<<", "<< prob_m <<", "<< unnormchi2_t<<", "<< fitpar_t<<", "<< nbins_t<<", "<< dof_t<<", "<< chi2_t<<", "<< prob_t <<", "<< unnormchi2_s<<", "<< fitpar_s<<", "<< nbins_s<<", "<< dof_s<<", "<< chi2_s<<", "<< prob_s << endl;
+    for (Int_t iy=0; iy<nRap; iy++){
+      for (Int_t ipt=0; ipt<nPt; ipt++) {
+        if (!yrange[iy].compare(rapdum) && !ptrange[ipt].compare(ptdum) && !ntrrange[0].compare(ntrdum) && !etrange[0].compare(etdum)) { // no loop for ntrrange and etrange
+          coefExp[iy][ipt] = atof(coefexp.c_str());
+          coefExpErr[iy][ipt] = atof(coefexperr.c_str());
+          coefPol[iy][ipt] = atof(coefpol.c_str());
+          coefPolErr[iy][ipt] = atof(coefpolerr.c_str());
+          fracG1[iy][ipt] = atof(fracg1.c_str());
+          fracG1Err[iy][ipt] = atof(fracg1err.c_str());
+          meanSig[iy][ipt] = atof(meansig.c_str());
+          meanSigErr[iy][ipt] = atof(meansigerr.c_str());
+          sigmaSig1[iy][ipt] = atof(sigmasig1.c_str());
+          sigmaSig1Err[iy][ipt] = atof(sigmasig1err.c_str());
+          sigmaSig2[iy][ipt] = atof(sigmasig2.c_str());
+          sigmaSig2Err[iy][ipt] = atof(sigmasig2err.c_str());
+          alpha[iy][ipt] = atof(alphadum.c_str());
+          alphaErr[iy][ipt] = atof(alphadumerr.c_str());
+          enne[iy][ipt] = atof(ennedum.c_str());
+          enneErr[iy][ipt] = atof(ennedumerr.c_str());
+          sigWidth[iy][ipt] = atof(sigwidth.c_str());
+          sigWidthErr[iy][ipt] = atof(sigwidtherr.c_str());
+          sigmaNPTrue[iy][ipt] = atof(signptr.c_str());
+          sigmaNPTrueErr[iy][ipt] = atof(signptrerr.c_str());
+          coefExpNPTrue[iy][ipt] = atof(coefexpnptr.c_str());
+          coefExpNPTrueErr[iy][ipt] = atof(coefexpnptrerr.c_str());
+          fracRes[iy][ipt] = atof(fracres.c_str());
+          fracResErr[iy][ipt] = atof(fracreserr.c_str());
+          meanPRResW[iy][ipt] = atof(meanprresw.c_str());
+          meanPRResWErr[iy][ipt] = atof(meanprreswerr.c_str());
+          meanPRResN[iy][ipt] = atof(meanprresn.c_str());
+          meanPRResNErr[iy][ipt] = atof(meanprresnerr.c_str());
+          sigmaPRResW[iy][ipt] = atof(sigprresw.c_str());
+          sigmaPRResWErr[iy][ipt] = atof(sigprreswerr.c_str());
+          sigmaPRResN[iy][ipt] = atof(sigprresn.c_str());
+          sigmaPRResNErr[iy][ipt] = atof(sigprresnerr.c_str());
+          fracCtBkg1[iy][ipt] = atof(fracbkg1.c_str());
+          fracCtBkg1Err[iy][ipt] = atof(fracbkg1err.c_str());
+          fracCtBkg2[iy][ipt] = atof(fracbkg2.c_str());
+          fracCtBkg2Err[iy][ipt] = atof(fracbkg2err.c_str());
+          fracCtBkg3[iy][ipt] = atof(fracbkg3.c_str());
+          fracCtBkg3Err[iy][ipt] = atof(fracbkg3err.c_str());
+          lambdam[iy][ipt] = atof(lambm.c_str());
+          lambdamErr[iy][ipt] = atof(lambmerr.c_str());
+          lambdap[iy][ipt] = atof(lambp.c_str());
+          lambdapErr[iy][ipt] = atof(lambperr.c_str());
+          lambdasym[iy][ipt] = atof(lambsym.c_str());
+          lambdasymErr[iy][ipt] = atof(lambsymerr.c_str());
+          NLL[iy][ipt] = atof(nll.c_str());
+          Resolution[iy][ipt] = atof(resol.c_str());
+          ResolutionErr[iy][ipt] = atof(resolerr.c_str());
+          
+          UnNormChi2_mass[iy][ipt] = atof(unnormchi2_m.c_str());
+          nFitParam_mass[iy][ipt] = atof(fitpar_m.c_str());
+          nFullBinsPull_mass[iy][ipt] = atof(nbins_m.c_str());
+          Dof_mass[iy][ipt] = atof(dof_m.c_str());
+          Chi2_mass[iy][ipt] = atof(chi2_m.c_str());
+          theChi2Prob_mass[iy][ipt] = atof(prob_m.c_str());
+          UnNormChi2_time[iy][ipt] = atof(unnormchi2_t.c_str());
+          nFitParam_time[iy][ipt] = atof(fitpar_t.c_str());
+          nFullBinsPull_time[iy][ipt] = atof(nbins_t.c_str());
+          Dof_time[iy][ipt] = atof(dof_t.c_str());
+          Chi2_time[iy][ipt] = atof(chi2_t.c_str());
+          theChi2Prob_time[iy][ipt] = atof(prob_t.c_str());
+          UnNormChi2_side[iy][ipt] = atof(unnormchi2_s.c_str());
+          nFitParam_side[iy][ipt] = atof(fitpar_s.c_str());
+          nFullBinsPull_side[iy][ipt] = atof(nbins_s.c_str());
+          Dof_side[iy][ipt] = atof(dof_s.c_str());
+          Chi2_side[iy][ipt] = atof(chi2_s.c_str());
+          theChi2Prob_side[iy][ipt] = atof(prob_s.c_str());
+        }
+      } 
+    }
+  } //end of while file open
+  
+  // put the values into hist
+  tmpbin=0;
+  for (Int_t iy=0; iy<nRap; iy++){
+    for (Int_t ipt=0; ipt<nPt; ipt++) {
+      tmpbin = h2D_nSig_Raw->FindBin((rapArr[iy]+rapArr[iy+1])/2, (ptArr[ipt]+ptArr[ipt+1])/2); 
+      h2D_coefExp->SetBinContent(tmpbin, coefExp[iy][ipt]);
+      h2D_coefExp->SetBinError(tmpbin, coefExpErr[iy][ipt]);
+      h2D_coefPol->SetBinContent(tmpbin, coefPol[iy][ipt]);
+      h2D_coefPol->SetBinError(tmpbin, coefPolErr[iy][ipt]);
+      h2D_fracG1->SetBinContent(tmpbin, fracG1[iy][ipt]);
+      h2D_fracG1->SetBinError(tmpbin, fracG1Err[iy][ipt]);
+      h2D_meanSig->SetBinContent(tmpbin, meanSig[iy][ipt]);
+      h2D_meanSig->SetBinError(tmpbin, meanSigErr[iy][ipt]);
+      h2D_sigmaSig1->SetBinContent(tmpbin, sigmaSig1[iy][ipt]);
+      h2D_sigmaSig1->SetBinError(tmpbin, sigmaSig1Err[iy][ipt]);
+      h2D_sigmaSig2->SetBinContent(tmpbin, sigmaSig2[iy][ipt]);
+      h2D_sigmaSig2->SetBinError(tmpbin, sigmaSig2Err[iy][ipt]);
+      h2D_alpha->SetBinContent(tmpbin, alpha[iy][ipt]);
+      h2D_alpha->SetBinError(tmpbin, alphaErr[iy][ipt]);
+      h2D_enne->SetBinContent(tmpbin, enne[iy][ipt]);
+      h2D_enne->SetBinError(tmpbin, enneErr[iy][ipt]);
+      h2D_sigWidth->SetBinContent(tmpbin, sigWidth[iy][ipt]);
+      h2D_sigWidth->SetBinError(tmpbin, sigWidthErr[iy][ipt]);
+      h2D_sigmaNPTrue->SetBinContent(tmpbin, sigmaNPTrue[iy][ipt]);
+      h2D_sigmaNPTrue->SetBinError(tmpbin, sigmaNPTrueErr[iy][ipt]);
+      h2D_coefExpNPTrue->SetBinContent(tmpbin, coefExpNPTrue[iy][ipt]);
+      h2D_coefExpNPTrue->SetBinError(tmpbin, coefExpNPTrueErr[iy][ipt]);
+      h2D_fracRes->SetBinContent(tmpbin, fracRes[iy][ipt]);
+      h2D_fracRes->SetBinError(tmpbin, fracResErr[iy][ipt]);
+      h2D_meanPRResW->SetBinContent(tmpbin, meanPRResW[iy][ipt]);
+      h2D_meanPRResW->SetBinError(tmpbin, meanPRResWErr[iy][ipt]);
+      h2D_meanPRResN->SetBinContent(tmpbin, meanPRResN[iy][ipt]);
+      h2D_meanPRResN->SetBinError(tmpbin, meanPRResNErr[iy][ipt]);
+      h2D_sigmaPRResW->SetBinContent(tmpbin, sigmaPRResW[iy][ipt]);
+      h2D_sigmaPRResN->SetBinError(tmpbin, sigmaPRResNErr[iy][ipt]);
+      h2D_fracCtBkg1->SetBinContent(tmpbin, fracCtBkg1[iy][ipt]);
+      h2D_fracCtBkg1->SetBinError(tmpbin, fracCtBkg1Err[iy][ipt]);
+      h2D_fracCtBkg2->SetBinContent(tmpbin, fracCtBkg2[iy][ipt]);
+      h2D_fracCtBkg2->SetBinError(tmpbin, fracCtBkg2Err[iy][ipt]);
+      h2D_fracCtBkg3->SetBinContent(tmpbin, fracCtBkg3[iy][ipt]);
+      h2D_fracCtBkg3->SetBinError(tmpbin, fracCtBkg3Err[iy][ipt]);
+      h2D_lambdam->SetBinContent(tmpbin, lambdam[iy][ipt]);
+      h2D_lambdam->SetBinError(tmpbin, lambdamErr[iy][ipt]);
+      h2D_lambdap->SetBinContent(tmpbin, lambdap[iy][ipt]);
+      h2D_lambdap->SetBinError(tmpbin, lambdapErr[iy][ipt]);
+      h2D_lambdasym->SetBinContent(tmpbin, lambdasym[iy][ipt]);
+      h2D_lambdasym->SetBinError(tmpbin, lambdasymErr[iy][ipt]);
+      h2D_NLL->SetBinContent(tmpbin, NLL[iy][ipt]);
+      h2D_Resolution->SetBinContent(tmpbin, Resolution[iy][ipt]);
+      h2D_Resolution->SetBinError(tmpbin, ResolutionErr[iy][ipt]);
+      
+      h2D_UnNormChi2_mass->SetBinContent(tmpbin, UnNormChi2_mass[iy][ipt]);
+      h2D_nFitParam_mass->SetBinContent(tmpbin, nFitParam_mass[iy][ipt]);
+      h2D_nFullBinsPull_mass->SetBinContent(tmpbin, nFullBinsPull_mass[iy][ipt]);
+      h2D_Dof_mass->SetBinContent(tmpbin, Dof_mass[iy][ipt]);
+      h2D_Chi2_mass->SetBinContent(tmpbin, Chi2_mass[iy][ipt]);
+      h2D_theChi2Prob_mass->SetBinContent(tmpbin, theChi2Prob_mass[iy][ipt]);
+      h2D_UnNormChi2_time->SetBinContent(tmpbin, UnNormChi2_time[iy][ipt]);
+      h2D_nFitParam_time->SetBinContent(tmpbin, nFitParam_time[iy][ipt]);
+      h2D_nFullBinsPull_time->SetBinContent(tmpbin, nFullBinsPull_time[iy][ipt]);
+      h2D_Dof_time->SetBinContent(tmpbin, Dof_time[iy][ipt]);
+      h2D_Chi2_time->SetBinContent(tmpbin, Chi2_time[iy][ipt]);
+      h2D_theChi2Prob_time->SetBinContent(tmpbin, theChi2Prob_time[iy][ipt]);
+      h2D_UnNormChi2_side->SetBinContent(tmpbin, UnNormChi2_side[iy][ipt]);
+      h2D_nFitParam_side->SetBinContent(tmpbin, nFitParam_side[iy][ipt]);
+      h2D_nFullBinsPull_side->SetBinContent(tmpbin, nFullBinsPull_side[iy][ipt]);
+      h2D_Dof_side->SetBinContent(tmpbin, Dof_side[iy][ipt]);
+      h2D_Chi2_side->SetBinContent(tmpbin, Chi2_side[iy][ipt]);
+      h2D_theChi2Prob_side->SetBinContent(tmpbin, theChi2Prob_side[iy][ipt]);
+    }
+  }
+  
   ////////////////////////////////////////////////////////////////////////////////////////////////
   ////////////////////////////////////////////////////////////////////////////////////////////////
   //// Save as a root file
@@ -281,6 +531,58 @@ int make_fitResHist(int MrapNpt=89, int isPA =3, int accCutType=1, TString szSys
   h2D_nPrompt->Write();
   h2D_nNonPrompt->Write();
   h2D_bFraction->Write();
+  
+  TDirectoryFile *otherParam = new TDirectoryFile("otherParam","otherParam");
+  otherParam->cd();
+  h2D_coefExp->Write();
+  h2D_coefPol->Write();
+  h2D_fracG1->Write();
+  h2D_meanSig->Write();
+  h2D_sigmaSig1->Write();
+  h2D_sigmaSig2->Write();
+  h2D_alpha->Write();
+  h2D_enne->Write();
+  h2D_sigWidth->Write();
+  h2D_sigmaNPTrue->Write();
+  h2D_coefExpNPTrue->Write();
+  h2D_fracRes->Write();
+  h2D_meanPRResW->Write();
+  h2D_meanPRResN->Write();
+  h2D_sigmaPRResW->Write();
+  h2D_sigmaPRResN->Write();
+  h2D_fracCtBkg1->Write();
+  h2D_fracCtBkg2->Write();
+  h2D_fracCtBkg3->Write();
+  h2D_lambdam->Write();
+  h2D_lambdap->Write();
+  h2D_lambdasym->Write();
+  h2D_NLL->Write();
+  h2D_Resolution->Write();
+  otherParam->Write();
+  
+  outFile->cd();
+  TDirectoryFile *chi2Prob = new TDirectoryFile("chi2Prob","chi2Prob");
+  chi2Prob->cd();
+  h2D_UnNormChi2_mass->Write();
+  h2D_nFitParam_mass->Write();
+  h2D_nFullBinsPull_mass->Write();
+  h2D_Dof_mass->Write();
+  h2D_Chi2_mass->Write();
+  h2D_theChi2Prob_mass->Write();
+  h2D_UnNormChi2_time->Write();
+  h2D_nFitParam_time->Write();
+  h2D_nFullBinsPull_time->Write();
+  h2D_Dof_time->Write();
+  h2D_Chi2_time->Write();
+  h2D_theChi2Prob_time->Write();
+  h2D_UnNormChi2_side->Write();
+  h2D_nFitParam_side->Write();
+  h2D_nFullBinsPull_side->Write();
+  h2D_Dof_side->Write();
+  h2D_Chi2_side->Write();
+  h2D_theChi2Prob_side->Write();
+  chi2Prob->Write();
+ 
   outFile->Close();
   
   return 0;

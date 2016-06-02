@@ -1,8 +1,8 @@
 #include "../SONGKYO.h"
 
-void formRapArr(Double_t binmin, Double_t binmax, string* arr);
-void formAbsRapArr(Double_t binmin, Double_t binmax, string* arr);
-void formPtArr(Double_t binmin, Double_t binmax, string* arr);
+void formRapArr(Double_t binmin, Double_t binmax, TString* arr);
+void formAbsRapArr(Double_t binmin, Double_t binmax, TString* arr);
+void formPtArr(Double_t binmin, Double_t binmax, TString* arr);
 
 void draw_1D_eff_SF1_SF0(TString szBinning="8rap9pt", int isPA=1, bool isPrompt=true, bool isLog=false, bool isNoErr=true)
 {
@@ -51,21 +51,21 @@ void draw_1D_eff_SF1_SF0(TString szBinning="8rap9pt", int isPA=1, bool isPrompt=
 		ptBinW[ipt] = ptArrNum[ipt+1]-ptArrNum[ipt]; 
 	}
 	
-  //// array string
-	string rapArr[nRap];
+  //// array TString
+	TString rapArr[nRap];
 	for (Int_t iy=0; iy<nRap; iy++) {
 		formRapArr(rapArrNumFB[iy+1], rapArrNumFB[iy], &rapArr[iy]);
 		cout << iy <<"th rapArr = " << rapArr[iy] << endl;
 	}
-	string ptArr[nPt];
+	TString ptArr[nPt];
 	for (Int_t ipt=0; ipt<nPt; ipt++) {
 		formPtArr(ptArrNum[ipt], ptArrNum[ipt+1], &ptArr[ipt]);
 		cout << ipt <<"th ptArr = " << ptArr[ipt] << endl;
 	}
 	
 	// --- read-in file
-	TFile * f2D_01 = new TFile(Form("../FittingResult/totalHist_%s_%s_newcut_Zvtx1_SF1_noPtWeight.root",szPA.Data(),szBinning.Data()));
-	TFile * f2D_02 = new TFile(Form("../FittingResult/totalHist_%s_%s_newcut_Zvtx1_SF0_noPtWeight.root",szPA.Data(),szBinning.Data()));
+	TFile * f2D_01 = new TFile(Form("../FittingResult/totalHist_%s_%s_newcut_nominal_Zvtx1_SF1_noPtWeight.root",szPA.Data(),szBinning.Data()));
+	TFile * f2D_02 = new TFile(Form("../FittingResult/totalHist_%s_%s_newcut_nominal_Zvtx1_SF0_noPtWeight.root",szPA.Data(),szBinning.Data()));
 
 	// --- read-in 2D hist for data reco dist
 	TH2D* h2D_01 = (TH2D*)f2D_01->Get(Form("h2D_Eff_%s_%s",szPrompt.Data(),szPA.Data()));
@@ -202,7 +202,7 @@ void draw_1D_eff_SF1_SF0(TString szBinning="8rap9pt", int isPA=1, bool isPrompt=
 			if (isPrompt) { latex->DrawLatex(0.19,0.23,Form("%s Prompt J/#psi",szPA.Data())); }
 			else { latex->DrawLatex(0.19,0.23,Form("%s Non-prompt J/#psi",szPA.Data())); }
 		}
-		latex->DrawLatex(0.55,0.23,Form("%s",rapArr[iy].c_str()));
+		latex->DrawLatex(0.55,0.23,Form("%s",rapArr[iy].Data()));
 	}
 	c01->Modified();
 	c01->Update();
@@ -241,7 +241,7 @@ void draw_1D_eff_SF1_SF0(TString szBinning="8rap9pt", int isPA=1, bool isPrompt=
 			if (isPrompt) { latex->DrawLatex(0.19,0.23,Form("%s Prompt J/#psi",szPA.Data())); }
 			else { latex->DrawLatex(0.19,0.23,Form("%s Non-prompt J/#psi",szPA.Data())); }
 		}
-		latex->DrawLatex(0.55,0.23,Form("%s",rapArr[iy].c_str()));
+		latex->DrawLatex(0.55,0.23,Form("%s",rapArr[iy].Data()));
 		dashedLine(0.,1.,30.,1.,1,1);
 	}	
 	c02->SaveAs(Form("dir_1D_%s/effRatio_isPrompt%d_isLog%d_SF1_SF0_%s.pdf",szBinning.Data(),(int)isPrompt,(int)isLog,szPA.Data()));
@@ -250,7 +250,7 @@ void draw_1D_eff_SF1_SF0(TString szBinning="8rap9pt", int isPA=1, bool isPrompt=
 
 } // end of main func.
 
-void formRapArr(Double_t binmin, Double_t binmax, string* arr) {
+void formRapArr(Double_t binmin, Double_t binmax, TString* arr) {
 	Double_t intMin, intMax; 
 	Double_t fracMin = modf(binmin, &intMin);
 	Double_t fracMax = modf(binmax, &intMax);
@@ -265,7 +265,7 @@ void formRapArr(Double_t binmin, Double_t binmax, string* arr) {
 	}
 }
 
-void formAbsRapArr(Double_t binmin, Double_t binmax, string* arr) {
+void formAbsRapArr(Double_t binmin, Double_t binmax, TString* arr) {
 	Double_t intMin, intMax; 
 	Double_t fracMin = modf(binmin, &intMin);
 	Double_t fracMax = modf(binmax, &intMax);
@@ -280,7 +280,7 @@ void formAbsRapArr(Double_t binmin, Double_t binmax, string* arr) {
 	}
 }
 
-void formPtArr(Double_t binmin, Double_t binmax, string* arr) {
+void formPtArr(Double_t binmin, Double_t binmax, TString* arr) {
 	Double_t intMin, intMax; 
 	Double_t fracMin = modf(binmin, &intMin);
 	Double_t fracMax = modf(binmax, &intMax);
