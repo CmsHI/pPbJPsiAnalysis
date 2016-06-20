@@ -471,6 +471,8 @@ int make_fitResHist(int MrapNpt=89, int isPA =0, int accCutType=2, TString szSys
       h2D_meanPRResN->SetBinContent(tmpbin, meanPRResN[iy][ipt]);
       h2D_meanPRResN->SetBinError(tmpbin, meanPRResNErr[iy][ipt]);
       h2D_sigmaPRResW->SetBinContent(tmpbin, sigmaPRResW[iy][ipt]);
+      h2D_sigmaPRResW->SetBinError(tmpbin, sigmaPRResWErr[iy][ipt]);
+      h2D_sigmaPRResN->SetBinContent(tmpbin, sigmaPRResN[iy][ipt]);
       h2D_sigmaPRResN->SetBinError(tmpbin, sigmaPRResNErr[iy][ipt]);
       h2D_fracCtBkg1->SetBinContent(tmpbin, fracCtBkg1[iy][ipt]);
       h2D_fracCtBkg1->SetBinError(tmpbin, fracCtBkg1Err[iy][ipt]);
