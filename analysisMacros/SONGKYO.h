@@ -24,6 +24,7 @@
 #include <TH2.h>
 #include <TH3.h>
 #include <TLegend.h>
+#include <TLegendEntry.h>
 #include <TPaveText.h>
 #include <TText.h>
 #include <TLatex.h>
@@ -112,12 +113,27 @@ void SetGraphStyle(TGraph* gr, Int_t c, Int_t m) {
 void SetGraphStyle2(TGraph* gr, Int_t c, Int_t m) {
   Int_t colorArr[] = { kGray+3, kRed+2, kBlue+1, kOrange+7, kAzure+9, kViolet-4, kGreen+1, kPink+9, kBlack };
   Int_t markerFullArr[] = {kFullCircle, kFullTriangleUp, kFullTriangleDown, kFullSquare, kFullStar, kFullDiamond};
-  Int_t markerOpenArr[] = {kOpenCircle, kOpenTriangleUp, kOpenTriangleDown, kOpenSquare, kOpenStar, kOpenDiamond};
+  //Int_t markerOpenArr[] = {kOpenCircle, kOpenTriangleUp, kOpenTriangleDown, kOpenSquare, kOpenStar, kOpenDiamond};
+  Int_t markerOpenArr[] = {kOpenCircle, kOpenTriangleUp, kOpenTriangleDown, kOpenSquare, kOpenCircle, kOpenTriangleUp, kOpenTriangleDown, kOpenSquare};
 
   gr-> SetMarkerColor(colorArr[c]);
   if(m<10) gr-> SetMarkerStyle(markerFullArr[m]);
   else gr-> SetMarkerStyle(markerOpenArr[m-10]);
   gr-> SetMarkerSize(1.2);
+  gr-> SetLineColor(colorArr[c]);
+  gr-> SetLineWidth(1);
+}
+
+void SetGraphStyleFinal(TGraph* gr, Int_t c, Int_t m) {
+  Int_t colorArr[] = { kGreen+3, kPink-6, kBlue-3, kRed-4, kBlue, kOrange+8, kGreen+3, kAzure+9, kViolet-6, kBlack };
+  Int_t markerFullArr[] = {kFullCircle, kFullTriangleUp, kFullTriangleDown, kFullSquare, kFullStar, kFullDiamond};
+  Int_t markerOpenArr[] = {kOpenCircle, kOpenTriangleUp, kOpenTriangleDown, kOpenSquare, kOpenStar, kOpenDiamond};
+
+  gr-> SetMarkerColor(colorArr[c]);
+  if(m<10) gr-> SetMarkerStyle(markerFullArr[m]);
+  else gr-> SetMarkerStyle(markerOpenArr[m-10]);
+  //gr-> SetMarkerSize(1.2);
+  gr-> SetMarkerSize(2.1);
   gr-> SetLineColor(colorArr[c]);
   gr-> SetLineWidth(1);
 }
@@ -128,6 +144,7 @@ void SetLegendStyle(TLegend* l) {
   l->SetBorderSize(0);
   l->SetMargin(0.2);
   l->SetTextSize(0.040);
+  l->SetTextFont(42);
 }
 
 void SetTextStyle(TPaveText* t) {
