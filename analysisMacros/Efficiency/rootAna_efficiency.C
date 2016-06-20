@@ -20,8 +20,6 @@ TF1* hTnp_pa_old_eta4 = (TF1*)fTnp_pa_old->Get("ferrScale_ieta4");
 TF1* hTnp_pa_old_eta5 = (TF1*)fTnp_pa_old->Get("ferrScale_ieta5");
 
 //// pPb, new acc cut
-//TFile* fTnp_pa_new = new TFile("../Efficiency/tagAndProbe/TnPDataVsMc_newcut_neweta_allTag5.root"); //off2M
-//TFile* fTnp_pa_new = new TFile("../Efficiency/tagAndProbe/output_official_5eta_cutG_all_nominal_v1.root"); //20160425 (off8M from Kisoo before bin-by-bin tuning)
 TFile* fTnp_pa_new = new TFile("../Efficiency/tagAndProbe/output_official_5eta_cutG_all_nominal_v1_20160516.root"); // 20150516 (off8M from Kisoo)
 TF1* hTnp_pa_new_eta1 = (TF1*)fTnp_pa_new->Get("func_1");
 TF1* hTnp_pa_new_eta2 = (TF1*)fTnp_pa_new->Get("func_2");
@@ -30,6 +28,12 @@ TF1* hTnp_pa_new_eta4 = (TF1*)fTnp_pa_new->Get("func_4");
 TF1* hTnp_pa_new_eta5 = (TF1*)fTnp_pa_new->Get("func_5");
 
 //// pp new TNP
+TFile* fTnp_pp_new = new TFile("../Efficiency/tagAndProbe/output_pp_5eta_cutG_all_nominal_v5.root");
+TF1* hTnp_pp_new_eta1 = (TF1*)fTnp_pp_new->Get("func_1");
+TF1* hTnp_pp_new_eta2 = (TF1*)fTnp_pp_new->Get("func_2");
+TF1* hTnp_pp_new_eta3 = (TF1*)fTnp_pp_new->Get("func_3");
+TF1* hTnp_pp_new_eta4 = (TF1*)fTnp_pp_new->Get("func_4");
+TF1* hTnp_pp_new_eta5 = (TF1*)fTnp_pp_new->Get("func_5");
 
 ////////////////////////////////////////////////////////////////////////////////  
 ////// MrapNpt (M rapidity and N pt bins) : (MN) = (89, 83, 63, 62)
@@ -67,6 +71,8 @@ int rootAna_efficiency(int MrapNpt = 89, int isPA =1, int accCutType = 2, bool i
   else szPrompt = "NP";
   const TString szFinal = Form("%s_%s_%s_%s",szBinning.Data(),szPA.Data(),szPrompt.Data(),szAccCut.Data());
   std::cout << "szFinal: " << szFinal << std::endl;
+
+  if (isPA==0 && accCutType==1 && useSF) {cout <<"No oldcut TNP for pp"<<endl; return 0; }
 
   //////// read zVtx functions for weight : ratio = (Data)/(pythia)
   TFile* fZvtx;
@@ -520,31 +526,17 @@ float getSF(float mupt1, float mueta1, float mupt2, float mueta2, int ispa, int 
   TF1* hw1;
   TF1* hw2;
 
-  if (ispa==0) { //tmp
-    if (acctype==1) {
-      if (  TMath::Abs(mueta1) < 0.6 )      hw1 = hTnp_pa_old_eta1;
-      else if ( TMath::Abs(mueta1) < 1.3 )  hw1 = hTnp_pa_old_eta2;
-      else if ( TMath::Abs(mueta1) < 1.8 )  hw1 = hTnp_pa_old_eta3;
-      else if ( TMath::Abs(mueta1) < 2.2 )  hw1 = hTnp_pa_old_eta4;
-      else                                  hw1 = hTnp_pa_old_eta5;
-      if (  TMath::Abs(mueta2) < 0.6 )      hw2 = hTnp_pa_old_eta1;
-      else if ( TMath::Abs(mueta2) < 1.3 )  hw2 = hTnp_pa_old_eta2;
-      else if ( TMath::Abs(mueta2) < 1.8 )  hw2 = hTnp_pa_old_eta3;
-      else if ( TMath::Abs(mueta2) < 2.2 )  hw2 = hTnp_pa_old_eta4;
-      else                                  hw2 = hTnp_pa_old_eta5;
-    }
-    else if (acctype==2) {
-      if (  TMath::Abs(mueta1) < 0.9 )      hw1 = hTnp_pa_new_eta1;
-      else if ( TMath::Abs(mueta1) < 1.2 )  hw1 = hTnp_pa_new_eta2;
-      else if ( TMath::Abs(mueta1) < 1.6 )  hw1 = hTnp_pa_new_eta3;
-      else if ( TMath::Abs(mueta1) < 2.1 )  hw1 = hTnp_pa_new_eta4;
-      else                                  hw1 = hTnp_pa_new_eta5;
-      if (  TMath::Abs(mueta2) < 0.9 )      hw2 = hTnp_pa_new_eta1;
-      else if ( TMath::Abs(mueta2) < 1.2 )  hw2 = hTnp_pa_new_eta2;
-      else if ( TMath::Abs(mueta2) < 1.6 )  hw2 = hTnp_pa_new_eta3;
-      else if ( TMath::Abs(mueta2) < 2.1 )  hw2 = hTnp_pa_new_eta4;
-      else                                  hw2 = hTnp_pa_new_eta5;
-    }
+  if (ispa==0) { 
+    if (  TMath::Abs(mueta1) < 0.9 )      hw1 = hTnp_pp_new_eta1;
+    else if ( TMath::Abs(mueta1) < 1.2 )  hw1 = hTnp_pp_new_eta2;
+    else if ( TMath::Abs(mueta1) < 1.6 )  hw1 = hTnp_pp_new_eta3;
+    else if ( TMath::Abs(mueta1) < 2.1 )  hw1 = hTnp_pp_new_eta4;
+    else                                  hw1 = hTnp_pp_new_eta5;
+    if (  TMath::Abs(mueta2) < 0.9 )      hw2 = hTnp_pp_new_eta1;
+    else if ( TMath::Abs(mueta2) < 1.2 )  hw2 = hTnp_pp_new_eta2;
+    else if ( TMath::Abs(mueta2) < 1.6 )  hw2 = hTnp_pp_new_eta3;
+    else if ( TMath::Abs(mueta2) < 2.1 )  hw2 = hTnp_pp_new_eta4;
+    else                                  hw2 = hTnp_pp_new_eta5;
   }
   else if (ispa==1 || ispa==2) {
     if (acctype==1) {
