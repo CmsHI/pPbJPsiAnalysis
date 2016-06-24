@@ -43,7 +43,8 @@ void draw_RFB_pt(bool sysByHand=true, bool noPtWeight=true, bool isPrompt=true)
     {-531, 8.25131, 13.61970} //0.0-0.9
 	};
   Double_t ex[nPtRFB] = {0.,0.,0.}; // x stat error (0)
-	Double_t exsys[nPtRFB] = {0.25,0.25,0.25}; // x sys err (box width)
+	//Double_t exsys[nPtRFB] = {0.25,0.25,0.25}; // x sys err (box width)
+	Double_t exsys[nPtRFB] = {0.3,0.3,0.3}; // x sys err (box width)
   Double_t eysys[nRapRFB][nPtRFB]; //absolute y sys error
 	Double_t eysysrel[nRapRFB][nPtRFB]; //relative y sys error
 	Double_t eysysrelPR[nRapRFB][nPtRFB] = {

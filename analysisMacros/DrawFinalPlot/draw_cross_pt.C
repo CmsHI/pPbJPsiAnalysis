@@ -159,7 +159,7 @@ void draw_cross_pt(bool sysByHand=true, bool noPtWeight=true, bool isScale=true,
     else f2D = new TFile("../FittingResult/totalHist_pA_8rap9pt_newcut_nominal_Zvtx1_SF1.root");
 
   }
-	// --- read-in 2D hist for corrected yield
+	//// read-in 2D hist for corrected yield
 	TH2D* h2D_CorrY;
 	if (isPA==0) {
     if (isPrompt) h2D_CorrY = (TH2D*)f2D->Get("h2D_CorrY_PR_pp");

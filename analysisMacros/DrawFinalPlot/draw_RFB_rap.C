@@ -265,14 +265,14 @@ void draw_RFB_rap(bool sysByHand=true,  bool noPtWeight=true, bool isPrompt = tr
 	gRFB_highpt->Draw("P");	
 	
 	dashedLine(0.,1.,2.,1.,1,1);
-	TLegendEntry *le1=legBR->AddEntry("le2",Form("  %s", ptArr_lowpt.Data()),"lpf");
+	TLegendEntry *le1=legBR->AddEntry("le1",Form("  %s", ptArr_lowpt.Data()),"lpf");
   le1->SetFillColor(kRed-10);
   le1->SetFillStyle(1001);
   le1->SetLineColor(kPink-6);
   le1->SetMarkerStyle(kFullSquare);
   le1->SetMarkerColor(kPink-6);
   le1->SetMarkerSize(2.1);
-	legBR->Draw();
+	//legBR->Draw();
 	TLegendEntry *le2=legBR->AddEntry("le2",Form("  %s", ptArr_highpt.Data()),"lpf");
   le2->SetFillColor(kTeal-9);
   le2->SetFillStyle(1001);
