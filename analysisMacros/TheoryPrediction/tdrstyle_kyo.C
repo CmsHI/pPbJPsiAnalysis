@@ -1,5 +1,4 @@
-#include "TStyle.h"
-
+//#include "TStyle.h"
 {
 //  TStyle *tdrStyle = new TStyle("tdrStyle","Style for P-TDR");
 
@@ -74,13 +73,15 @@
   // gStyle->SetStatY(Float_t y = 0);
 
 // Margins:
-  gStyle->SetPadTopMargin(0.05);
+//  gStyle->SetPadTopMargin(0.05);
 //  gStyle->SetPadBottomMargin(0.13);
-  gStyle->SetPadBottomMargin(0.14); //KYO
 //  gStyle->SetPadLeftMargin(0.16);
-  gStyle->SetPadLeftMargin(0.165); //KYO
 //  gStyle->SetPadRightMargin(0.02);
-  gStyle->SetPadRightMargin(0.01); //KYO
+  gStyle->SetPadTopMargin(0.075);
+  gStyle->SetPadBottomMargin(0.13); //KYO
+//  gStyle->SetPadLeftMargin(0.14); //KYO
+  gStyle->SetPadLeftMargin(0.16); //KYO
+  gStyle->SetPadRightMargin(0.03);
 
 // For the Global title:
 
@@ -102,13 +103,15 @@
   gStyle->SetTitleColor(1, "XYZ");
   gStyle->SetTitleFont(42, "XYZ");
   //gStyle->SetTitleSize(0.06, "XYZ");
-  //gStyle->SetTitleSize(0.15, "Y"); // KYO
+	//gStyle->SetTitleSize(0.058, "XYZ"); // KYO
+	gStyle->SetTitleSize(0.055, "XYZ"); // KYO
   // gStyle->SetTitleXSize(Float_t size = 0.02); // Another way to set the size?
   // gStyle->SetTitleYSize(Float_t size = 0.02);
   //gStyle->SetTitleXOffset(0.9);
   //gStyle->SetTitleYOffset(1.25);
   gStyle->SetTitleXOffset(1.0);//KYO
-  gStyle->SetTitleYOffset(1.3); //KYO
+  //gStyle->SetTitleYOffset(1.11); //KYO
+  gStyle->SetTitleYOffset(1.20); //KYO
   // gStyle->SetTitleOffset(1.1, "Y"); // Another way to set the Offset
 
 // For the axis labels:
@@ -116,7 +119,8 @@
   gStyle->SetLabelColor(1, "XYZ");
   gStyle->SetLabelFont(42, "XYZ");
   gStyle->SetLabelOffset(0.007, "XYZ");
-  gStyle->SetLabelSize(0.05, "XYZ");
+  //gStyle->SetLabelSize(0.05, "XYZ");
+  gStyle->SetLabelSize(0.045, "XYZ");
 
 // For the axis:
 
@@ -146,9 +150,9 @@
   // gStyle->SetTimeOffset(Double_t toffset);
   // gStyle->SetHistMinimumZero(kTRUE);
 
-  gStyle->SetHatchesLineWidth(5);
-  gStyle->SetHatchesSpacing(0.05);
+  //gStyle->SetHatchesLineWidth(5);
+  //gStyle->SetHatchesSpacing(0.05);
+  //gStyle->SetHatchesSpacing(0.01);
 
   gStyle->cd();
-
 }
