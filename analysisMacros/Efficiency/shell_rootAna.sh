@@ -33,7 +33,7 @@
 ########## new cut
 ####### pp
 #root -l -b -q 'rootAna_efficiency.C+(89,0,2,true,false,false)'
-root -l -b -q 'rootAna_efficiency.C+(89,0,2,true,false,true)'
+#root -l -b -q 'rootAna_efficiency.C+(89,0,2,true,false,true)'
 #root -l -b -q 'rootAna_efficiency.C+(89,0,2,false,false,false)'
 root -l -b -q 'rootAna_efficiency.C+(89,0,2,false,false,true)'
 ####### Pbp

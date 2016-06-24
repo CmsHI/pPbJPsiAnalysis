@@ -20,7 +20,8 @@ TF1* hTnp_pa_old_eta4 = (TF1*)fTnp_pa_old->Get("ferrScale_ieta4");
 TF1* hTnp_pa_old_eta5 = (TF1*)fTnp_pa_old->Get("ferrScale_ieta5");
 
 //// pPb, new acc cut
-TFile* fTnp_pa_new = new TFile("../Efficiency/tagAndProbe/output_official_5eta_cutG_all_nominal_v1_20160516.root"); // 20150516 (off8M from Kisoo)
+//TFile* fTnp_pa_new = new TFile("../Efficiency/tagAndProbe/output_official_5eta_cutG_all_nominal_v1_20160516.root"); // 20160516 (off8M tagpt3)
+TFile* fTnp_pa_new = new TFile("../Efficiency/tagAndProbe/output_official_5eta_cutG_all_nominal_v2_20160621.root"); // 20160621 (off8M, eta4-5 tagpt5)
 TF1* hTnp_pa_new_eta1 = (TF1*)fTnp_pa_new->Get("func_1");
 TF1* hTnp_pa_new_eta2 = (TF1*)fTnp_pa_new->Get("func_2");
 TF1* hTnp_pa_new_eta3 = (TF1*)fTnp_pa_new->Get("func_3");
@@ -28,7 +29,8 @@ TF1* hTnp_pa_new_eta4 = (TF1*)fTnp_pa_new->Get("func_4");
 TF1* hTnp_pa_new_eta5 = (TF1*)fTnp_pa_new->Get("func_5");
 
 //// pp new TNP
-TFile* fTnp_pp_new = new TFile("../Efficiency/tagAndProbe/output_pp_5eta_cutG_all_nominal_v5.root");
+//TFile* fTnp_pp_new = new TFile("../Efficiency/tagAndProbe/output_pp_5eta_cutG_all_nominal_v5.root"); //20160620 (off tagpt3)
+TFile* fTnp_pp_new = new TFile("../Efficiency/tagAndProbe/output_pp_5eta_cutG_all_nominal_v6.root"); //20160621 (off, eta4-5 tagpt5)
 TF1* hTnp_pp_new_eta1 = (TF1*)fTnp_pp_new->Get("func_1");
 TF1* hTnp_pp_new_eta2 = (TF1*)fTnp_pp_new->Get("func_2");
 TF1* hTnp_pp_new_eta3 = (TF1*)fTnp_pp_new->Get("func_3");
@@ -85,11 +87,11 @@ int rootAna_efficiency(int MrapNpt = 89, int isPA =1, int accCutType = 2, bool i
   ////// read-in HiOniaTrees
   if (isPA==0){
     if (isPrompt) {
-      f1 = new TFile("/storage/OniaTree/Onia5TeV/ppOfficialMC/OniaTree_JpsiMM_5p02TeV_TuneCUETP8M1_Trk_HINppWinter16DR-75X_mcRun2_asymptotic_ppAt5TeV_v3-v1.root"); //official
+      f1 = new TFile("/home/storage/OniaTree/Onia5TeV/ppOfficialMC/OniaTree_JpsiMM_5p02TeV_TuneCUETP8M1_Trk_HINppWinter16DR-75X_mcRun2_asymptotic_ppAt5TeV_v3-v1.root"); //official
       //f1 = new TFile("/home/songkyo/kyo/ppDataSample/EfficiencySamplePrivate/OniaTree_JpsiMM_pp5p02TeV_TuneCUETP8M1_Trk_noCUT.root"); //private
     }
     else {
-      f1 = new TFile("/storage/OniaTree/Onia5TeV/ppOfficialMC/OniaTree_BJpsiMM_5p02TeV_TuneCUETP8M1_Trk_HINppWinter16DR-75X_mcRun2_asymptotic_ppAt5TeV_v3-v1.root"); //official
+      f1 = new TFile("/home/storage/OniaTree/Onia5TeV/ppOfficialMC/OniaTree_BJpsiMM_5p02TeV_TuneCUETP8M1_Trk_HINppWinter16DR-75X_mcRun2_asymptotic_ppAt5TeV_v3-v1.root"); //official
       //f1 = new TFile("/home/songkyo/kyo/ppDataSample/EfficiencySamplePrivate/OniaTree_BJpsiMM_pp5p02TeV_TuneCUETP8M1_Trk_noCUT.root"); //private
     }
   }
