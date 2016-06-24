@@ -19,13 +19,15 @@
 	double lumi_PP =26.3*1000*1000;
 	double A_pb =208;
 
-  //double ymin=0.5;
-  //double ymax=1.5;
-  double ymin=0.0;
-  double ymax=2.0;
+  double ymin=0.5;
+  double ymax=1.5;
+  //double ymin=0.0;
+  //double ymax=2.0;
 		
-	TFile* f1 = TFile::Open("totalHist_pA_8rap9pt_newcut_Zvtx0_SF0_noPtWeight.root");
-	TFile* f2 = TFile::Open("totalHist_pp_8rap9pt_newcut_Zvtx0_SF0_noPtWeight.root");
+	//TFile* f1 = TFile::Open("totalHist_pA_8rap9pt_newcut_nominal_Zvtx1_SF0_noPtWeight.root");
+	//TFile* f2 = TFile::Open("totalHist_pp_8rap9pt_newcut_nominal_Zvtx0_SF0_noPtWeight.root");
+	TFile* f1 = TFile::Open("totalHist_pA_8rap9pt_newcut_nominal_Zvtx1_SF1_noPtWeight.root");
+	TFile* f2 = TFile::Open("totalHist_pp_8rap9pt_newcut_nominal_Zvtx0_SF1_noPtWeight.root");
 	
 	TH2D* h2D_PA = (TH2D*)f1->Get("h2D_CorrY_NP_pA");
 	h2D_PA->SetName("h2D_PA");
