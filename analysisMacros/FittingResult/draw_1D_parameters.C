@@ -205,7 +205,8 @@ void draw_1D_parameters(TString szBinning="8rap9pt", int isPA=1, bool isPrompt=t
 		legUR -> AddEntry(g_01[iy],rapArr[iy].Data(),"lp");
 	}
 	legUR->Draw();
-	c02->SaveAs(Form("dir_1D_param/%s_%s_%s.pdf",szPA.Data(),szBinning.Data(),szParam.Data()));
+	if (strcmp(szParam,"meanSig")==0) { solidLine(0.,3.096916,30.,3.096916,2,1); }
+  c02->SaveAs(Form("dir_1D_param/%s_%s_%s.pdf",szPA.Data(),szBinning.Data(),szParam.Data()));
 
 
 	return;
