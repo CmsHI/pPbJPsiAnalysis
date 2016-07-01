@@ -12,7 +12,7 @@ float getSF(float mupt1=0, float mueta1=0, float mupt2=0, float mueta2=0, int is
 //read TNP plots for useSF
 
 //// pPb, old acc cut (PAS)
-TFile* fTnp_pa_old = new TFile("../Efficiency/tagAndProbe/tnpRate_nominal_fitRatio_5etaBin.root"); //priv
+TFile* fTnp_pa_old = new TFile("../Efficiency/tagAndProbe/tnpRate_nominal_fitRatio_5etaBin.root"); //priv (eta4-5 tagpt5)
 TF1* hTnp_pa_old_eta1 = (TF1*)fTnp_pa_old->Get("ferrScale_ieta1");
 TF1* hTnp_pa_old_eta2 = (TF1*)fTnp_pa_old->Get("ferrScale_ieta2");
 TF1* hTnp_pa_old_eta3 = (TF1*)fTnp_pa_old->Get("ferrScale_ieta3");
@@ -21,7 +21,8 @@ TF1* hTnp_pa_old_eta5 = (TF1*)fTnp_pa_old->Get("ferrScale_ieta5");
 
 //// pPb, new acc cut
 //TFile* fTnp_pa_new = new TFile("../Efficiency/tagAndProbe/output_official_5eta_cutG_all_nominal_v1_20160516.root"); // 20160516 (off8M tagpt3)
-TFile* fTnp_pa_new = new TFile("../Efficiency/tagAndProbe/output_official_5eta_cutG_all_nominal_v2_20160621.root"); // 20160621 (off8M, eta4-5 tagpt5)
+//TFile* fTnp_pa_new = new TFile("../Efficiency/tagAndProbe/output_official_5eta_cutG_all_nominal_v2_20160621.root"); // 20160621 (off8M, eta4-5 tagpt5)
+TFile* fTnp_pa_new = new TFile("../Efficiency/tagAndProbe/output_official_5eta_cutG_all_nominal_v3.root"); // 20160626 (off8M, tagpt5)
 TF1* hTnp_pa_new_eta1 = (TF1*)fTnp_pa_new->Get("func_1");
 TF1* hTnp_pa_new_eta2 = (TF1*)fTnp_pa_new->Get("func_2");
 TF1* hTnp_pa_new_eta3 = (TF1*)fTnp_pa_new->Get("func_3");
@@ -30,7 +31,8 @@ TF1* hTnp_pa_new_eta5 = (TF1*)fTnp_pa_new->Get("func_5");
 
 //// pp new TNP
 //TFile* fTnp_pp_new = new TFile("../Efficiency/tagAndProbe/output_pp_5eta_cutG_all_nominal_v5.root"); //20160620 (off tagpt3)
-TFile* fTnp_pp_new = new TFile("../Efficiency/tagAndProbe/output_pp_5eta_cutG_all_nominal_v6.root"); //20160621 (off, eta4-5 tagpt5)
+//TFile* fTnp_pp_new = new TFile("../Efficiency/tagAndProbe/output_pp_5eta_cutG_all_nominal_v6.root"); //20160621 (off, eta4-5 tagpt5)
+TFile* fTnp_pp_new = new TFile("../Efficiency/tagAndProbe/output_pp_5eta_cutG_all_nominal_v7.root"); //20160626 (off, tagpt5)
 TF1* hTnp_pp_new_eta1 = (TF1*)fTnp_pp_new->Get("func_1");
 TF1* hTnp_pp_new_eta2 = (TF1*)fTnp_pp_new->Get("func_2");
 TF1* hTnp_pp_new_eta3 = (TF1*)fTnp_pp_new->Get("func_3");
