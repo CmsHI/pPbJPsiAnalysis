@@ -310,14 +310,20 @@ void formRapArr(Double_t binmin, Double_t binmax, TString* arr) {
 	Double_t intMin, intMax; 
 	Double_t fracMin = modf(binmin, &intMin);
 	Double_t fracMax = modf(binmax, &intMax);
-	if ( fracMin == 0 && fracMax == 0 ) {
+  if ( binmin == 1.93 || binmin == -1.93 || binmin == -2.40 || binmin == -2.87) {
+		*arr = Form("%.2f < y_{CM} < %.1f", binmin, binmax);
+  }
+  else if ( binmax == 1.93 || binmax ==  -1.93 || binmax == 2.40 || binmax == -2.87 ) {
+		*arr = Form("%.1f < y_{CM} < %.2f", binmin, binmax);
+  }
+	else if ( fracMin == 0 && fracMax == 0 ) {
 		*arr = Form("%.0f < y_{CM} < %.0f", binmin, binmax);
 	} else if ( fracMin != 0 && fracMax == 0 ) {
-		*arr = Form("%.2f < y_{CM} < %.0f", binmin, binmax);
+		*arr = Form("%.1f < y_{CM} < %.0f", binmin, binmax);
 	} else if ( fracMin == 0 && fracMax != 0 ) {
-		*arr = Form("%.0f < y_{CM} < %.2f", binmin, binmax);
+		*arr = Form("%.0f < y_{CM} < %.1f", binmin, binmax);
 	} else {
-		*arr = Form("%.2f < y_{CM} < %.2f", binmin, binmax);
+		*arr = Form("%.1f < y_{CM} < %.1f", binmin, binmax);
 	}
 }
 
@@ -325,10 +331,10 @@ void formAbsRapArr(Double_t binmin, Double_t binmax, TString* arr) {
 	Double_t intMin, intMax; 
 	Double_t fracMin = modf(binmin, &intMin);
 	Double_t fracMax = modf(binmax, &intMax);
-  if ( binmin == 1.93 || binmin == -1.93 || binmin == -2.87) {
+  if ( binmin == 1.93 || binmin == -1.93 || binmin == -2.40 || binmin == -2.87) {
 		*arr = Form("%.2f < |y_{CM}| < %.1f", binmin, binmax);
   }
-  else if ( binmax == 1.93 || binmax ==  -1.93 || binmax == -2.87 ) {
+  else if ( binmax == 1.93 || binmax ==  -1.93 || binmax == 2.40 || binmax == -2.87 ) {
 		*arr = Form("%.1f < |y_{CM}| < %.2f", binmin, binmax);
   }
 	else if ( fracMin == 0 && fracMax == 0 ) {
