@@ -203,7 +203,7 @@ void draw_dNdPt(int isPA=1, bool isPrompt=true, bool noPtWeight=true, bool isLog
 	
   //////////////////////////////////////////////////////////////////
 	//// Draw histograms
-	TLegend *legUR = new TLegend(0.45, 0.75, 0.86, 0.92);
+	TLegend *legUR = new TLegend(0.65, 0.75, 0.86, 0.83);
 	SetLegendStyle(legUR);
 	 	
 	TLatex* latex = new TLatex();
@@ -246,27 +246,29 @@ void draw_dNdPt(int isPA=1, bool isPrompt=true, bool noPtWeight=true, bool isLog
 		if (!isLog){
 			maxVal = g_Data[iy]->GetMaximum();
 			g_Data[iy]->SetMinimum(0.);
-//			g_Data[iy]->SetMaximum(maxVal*1.3);
+			//g_Data[iy]->SetMaximum(maxVal*1.000000000001);
+			g_Data[iy]->SetMaximum(0.28);
 		}
 		g_Data[iy]->Draw("ap");
 		g_MC[iy]->Draw("p");
+		
 		if (iy==0){
       if (isPA==0) {
-  			if (isPrompt) legUR -> SetHeader("pp Prompt J/#psi");
-  			else legUR -> SetHeader("pp Non-prompt J/#psi");
+			  if (isPrompt) latex->DrawLatex(0.19,0.88,"pp Prompt J/#psi");
+			  else latex->DrawLatex(0.19, 0.88,"pp Non-prompt J/#psi");
       } else {
-  			if (isPrompt) legUR -> SetHeader("pPb Prompt J/#psi");
-  			else legUR -> SetHeader("pPb Non-prompt J/#psi");
+			  if (isPrompt) latex->DrawLatex(0.19,0.88,"pPb Prompt J/#psi");
+			  else latex->DrawLatex(0.19, 0.88,"pPb Non-prompt J/#psi");
       }
-			legUR -> AddEntry(g_Data[iy],"Data","lp");
-			legUR -> AddEntry(g_MC[iy],"MC","lp");
-			//legUR->Draw();
+		  legUR -> AddEntry(g_Data[iy],"Data","lp");
+		  legUR -> AddEntry(g_MC[iy],"MC","lp");
+		  legUR->Draw();
 		}
-		latex->DrawLatex(0.56,0.88,Form("%s",rapArr[iy].Data()));
+    latex->DrawLatex(0.57,0.88,Form("%s",rapArr[iy].Data()));
 	}
 	if (isPA==0) c1->SaveAs(Form("dir_dNdPt/pp_dNdPt_isPrompt%d.pdf",(int)isPrompt));
 	else c1->SaveAs(Form("dir_dNdPt/pA_dNdPt_isPrompt%d.pdf",(int)isPrompt));
-	legUR->Clear();
+	//legUR->Clear();
 	
 	
   //////////////////////////////////////////////////////////////////
@@ -316,7 +318,7 @@ void draw_dNdPt(int isPA=1, bool isPrompt=true, bool noPtWeight=true, bool isLog
 	//////////////////////////////////////////////////////////////////
 	// root file
 	TFile *fOut;
-  if (isPA) fOut= new TFile(Form("dir_dNdPt/pp_dNdPt_isPrompt%d.root",(int)isPrompt),"RECREATE");
+  if (isPA==0) fOut= new TFile(Form("dir_dNdPt/pp_dNdPt_isPrompt%d.root",(int)isPrompt),"RECREATE");
   else fOut= new TFile(Form("dir_dNdPt/pA_dNdPt_isPrompt%d.root",(int)isPrompt),"RECREATE");
 	fOut->cd();
 	for (Int_t iy = 0; iy < nRap; iy++) {
