@@ -12,20 +12,20 @@ root -l -b -q 'draw_cross_pt.C+(1,1,1,1,0,false)'
 ### no log, no scale
 root -l -b -q 'draw_cross_pt.C+(1,1,0,0,0,true)'
 root -l -b -q 'draw_cross_pt.C+(1,1,0,0,0,false)'
-root -l -b -q 'draw_cross_pt_tag3.C+(1,1,0,0,0,true)'
-root -l -b -q 'draw_cross_pt_tag3.C+(1,1,0,0,0,false)'
-root -l -b -q 'draw_cross_pt_eta45_tag5.C+(1,1,0,0,0,true)'
-root -l -b -q 'draw_cross_pt_eta45_tag5.C+(1,1,0,0,0,false)'
+#root -l -b -q 'draw_cross_pt_tag3.C+(1,1,0,0,0,true)'
+#root -l -b -q 'draw_cross_pt_tag3.C+(1,1,0,0,0,false)'
+#root -l -b -q 'draw_cross_pt_eta45_tag5.C+(1,1,0,0,0,true)'
+#root -l -b -q 'draw_cross_pt_eta45_tag5.C+(1,1,0,0,0,false)'
 ################## pA ##################
 root -l -b -q 'draw_cross_pt.C+(1,1,1,1,1,true)'
 root -l -b -q 'draw_cross_pt.C+(1,1,1,1,1,false)'
 ### no log, no scale
 root -l -b -q 'draw_cross_pt.C+(1,1,0,0,1,true)'
 root -l -b -q 'draw_cross_pt.C+(1,1,0,0,1,false)'
-root -l -b -q 'draw_cross_pt_tag3.C+(1,1,0,0,1,true)'
-root -l -b -q 'draw_cross_pt_tag3.C+(1,1,0,0,1,false)'
-root -l -b -q 'draw_cross_pt_eta45_tag5.C+(1,1,0,0,1,true)'
-root -l -b -q 'draw_cross_pt_eta45_tag5.C+(1,1,0,0,1,false)'
+#root -l -b -q 'draw_cross_pt_tag3.C+(1,1,0,0,1,true)'
+#root -l -b -q 'draw_cross_pt_tag3.C+(1,1,0,0,1,false)'
+#root -l -b -q 'draw_cross_pt_eta45_tag5.C+(1,1,0,0,1,true)'
+#root -l -b -q 'draw_cross_pt_eta45_tag5.C+(1,1,0,0,1,false)'
 ######### for comparision ###############
 ### no log, no scale (middle for LHCb, integ_middle for ATLAS)
 #root -l -b -q 'draw_cross_pt_middle.C+(1,1,0,0,1,true)'
@@ -38,11 +38,11 @@ root -l -b -q 'draw_cross_pt_eta45_tag5.C+(1,1,0,0,1,false)'
 ########################################
 
 ################## pp ##################
-#root -l -b -q 'draw_cross_rap.C+(1,1,0,0,true)'
-#root -l -b -q 'draw_cross_rap.C+(1,1,0,0,false)'
+root -l -b -q 'draw_cross_rap.C+(1,1,0,0,true)'
+root -l -b -q 'draw_cross_rap.C+(1,1,0,0,false)'
 ################## pA ##################
-#root -l -b -q 'draw_cross_rap.C+(1,1,0,1,true)'
-#root -l -b -q 'draw_cross_rap.C+(1,1,0,1,false)'
+root -l -b -q 'draw_cross_rap.C+(1,1,0,1,true)'
+root -l -b -q 'draw_cross_rap.C+(1,1,0,1,false)'
 
 
 

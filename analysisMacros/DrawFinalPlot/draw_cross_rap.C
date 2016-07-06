@@ -120,12 +120,10 @@ void draw_cross_rap(bool sysByHand=true, bool noPtWeight=true, bool isScale=fals
 	//// read-in corr-yield file
 	TFile * f2D;
   if (isPA==0) {
-    //if (noPtWeight) f2D = new TFile("../FittingResult/totalHist_pp_8rap9pt_newcut_nominal_Zvtx0_SF0_noPtWeight.root");
-    if (noPtWeight) f2D = new TFile("../FittingResult/totalHist_pp_8rap9pt_newcut_nominal_Zvtx0_SF0_noPtWeight_releasemeanPRResW.root");
-    else f2D = new TFile("../FittingResult/totalHist_pp_8rap9pt_newcut_nominal_Zvtx0_SF0.root");
+    if (noPtWeight) f2D = new TFile("../FittingResult/totalHist_pp_8rap9pt_newcut_nominal_Zvtx0_SF1_noPtWeight.root");
+    else f2D = new TFile("../FittingResult/totalHist_pp_8rap9pt_newcut_nominal_Zvtx0_SF1.root");
   } else {
-    //if (noPtWeight) f2D = new TFile("../FittingResult/totalHist_pA_8rap9pt_newcut_nominal_Zvtx1_SF1_noPtWeight.root");
-    if (noPtWeight) f2D = new TFile("../FittingResult/totalHist_pA_8rap9pt_newcut_nominal_Zvtx1_SF1_noPtWeight_releasemeanPRResW.root");
+    if (noPtWeight) f2D = new TFile("../FittingResult/totalHist_pA_8rap9pt_newcut_nominal_Zvtx1_SF1_noPtWeight.root");
     else f2D = new TFile("../FittingResult/totalHist_pA_8rap9pt_newcut_nominal_Zvtx1_SF1.root");
 
   }
@@ -349,114 +347,49 @@ void draw_cross_rap(bool sysByHand=true, bool noPtWeight=true, bool isScale=fals
 	//globtex->DrawLatex(0.89, 0.80, "Global uncertainty : 3.5 \%");
 	CMS_lumi( c1, isPA, iPos );
 	c1->Update();
-//	c1->SaveAs(Form("cross_%s/crossSection_rap_pr_isScale%d.pdf",dirName,(int)isScale));
-//	c1->SaveAs(Form("cross_%s/crossSection_rap_pr_isScale%d.png",dirName,(int)isScale));
-	legUL->Clear();
-#if 0
-	////////////2) non-prompt
-	TCanvas* c_np = new TCanvas("c_np","c_np",200,10,600,600);
-	c_np->cd();
+  if (isPA==0){
+    if (noPtWeight) {
+      c1->SaveAs(Form("plot_cross/pp_cross_rap_isPrompt%d_isScale%d_noPtWeight.pdf",(int)isPrompt,(int)isScale));
+      c1->SaveAs(Form("plot_cross/pp_cross_rap_isPrompt%d_isScale%d_noPtWeight.png",(int)isPrompt,(int)isScale));
+    } else {
+      c1->SaveAs(Form("plot_cross/pp_cross_rap_isPrompt%d_isScale%d.pdf",(int)isPrompt,(int)isScale));
+      c1->SaveAs(Form("plot_cross/pp_cross_rap_isPrompt%d_isScale%d.png",(int)isPrompt,(int)isScale));
+    }
+  } else {
+    if (noPtWeight) {
+      c1->SaveAs(Form("plot_cross/pA_cross_rap_isPrompt%d_isScale%d_noPtWeight.pdf",(int)isPrompt,(int)isScale));
+      c1->SaveAs(Form("plot_cross/pA_cross_rap_isPrompt%d_isScale%d_noPtWeight.png",(int)isPrompt,(int)isScale));
+    } else {
+      c1->SaveAs(Form("plot_cross/pA_cross_rap_isPrompt%d_isScale%d.pdf",(int)isPrompt,(int)isScale));
+      c1->SaveAs(Form("plot_cross/pA_cross_rap_isPrompt%d_isScale%d.png",(int)isPrompt,(int)isScale));
+    }
+  }
 	
-	//lowpt
-	TGraphAsymmErrors* gCross_np_lowpt = new TGraphAsymmErrors(h1D_corrY_NP_tot[lowpt_init]);
-	gCross_np_lowpt->SetName("gCross_np_lowpt");
-	for (Int_t iy=0; iy<nRap; iy++){
-		gCross_np_lowpt->SetPointEXlow(iy,ex[iy]);
-		gCross_np_lowpt->SetPointEXhigh(iy,ex[iy]);
-		gCross_np_lowpt->GetPoint(iy, pxtmp_lowpt[iy], pytmp_lowpt[iy]);
-		eytmp[iy] = gCross_np_lowpt-> GetErrorY(iy);
-		cout << "np : pytmp_lowpt["<<iy<<"] = " << pytmp_lowpt[iy]<<endl;
-		cout << "np : eytmp_lowpt["<<iy<<"] = " << eytmp[iy]<<endl;
-	}
-	
-	//sys_lowpt
-	TGraphAsymmErrors* gCross_np_sys_lowpt = new TGraphAsymmErrors(h1D_corrY_NP_tot[lowpt_init]);
-	gCross_np_sys_lowpt->SetName("gCross_np_sys_lowpt");
-	for (Int_t iy=0; iy<nRap; iy++){
-		//absolute error calculation
-		eysys_np_lowpt[iy]=eysysrel_np_lowpt[iy]*pytmp_lowpt[iy];
-		gCross_np_sys_lowpt->SetPointError(iy, exsys[iy], exsys[iy], scaleNP_low*eysys_np_lowpt[iy], scaleNP_low*eysys_np_lowpt[iy]);
-	}
-	
-	//highpt
-	TGraphAsymmErrors* gCross_np_highpt = new TGraphAsymmErrors(h1D_corrY_NP_tot[highpt_init]);
-	gCross_np_highpt->SetName("gCross_np_highpt");
-	for (Int_t iy=0; iy<nRap; iy++){
-		gCross_np_highpt->SetPointEXlow(iy,ex[iy]);
-		gCross_np_highpt->SetPointEXhigh(iy,ex[iy]);
-		gCross_np_highpt->GetPoint(iy, pxtmp_highpt[iy], pytmp_highpt[iy]);
-		eytmp[iy] = gCross_np_highpt-> GetErrorY(iy);
-		cout << "np : pytmp_highpt["<<iy<<"] = " << pytmp_highpt[iy]<<endl;
-		cout << "np : eytmp_highpt["<<iy<<"] = " << eytmp[iy]<<endl;
-	}
-	
-	//sys_highpt
-	TGraphAsymmErrors* gCross_np_sys_highpt = new TGraphAsymmErrors(h1D_corrY_NP_tot[highpt_init]);
-	gCross_np_sys_highpt->SetName("gCross_np_sys_highpt");
-	for (Int_t iy=0; iy<nRap; iy++){
-		//absolute error calculation
-		eysys_np_highpt[iy]=eysysrel_np_highpt[iy]*pytmp_highpt[iy];
-//		gCross_np_sys_highpt->SetPointError(iy, exsys[iy], exsys[iy], eysys_np_highpt[iy], eysys_np_highpt[iy]);
-		gCross_np_sys_highpt->SetPointError(iy, exsys[iy], exsys[iy], scaleNP_high*eysys_np_highpt[iy], scaleNP_high*eysys_np_highpt[iy]);
-	}
-	
-	gCross_np_sys_lowpt->GetXaxis()->SetTitle("y_{CM}");	
-	gCross_np_sys_lowpt->GetXaxis()->CenterTitle();	
-	gCross_np_sys_lowpt->GetYaxis()->SetTitle("B x d#sigma/dy [#mub]");	
-	gCross_np_sys_lowpt->GetXaxis()->SetLimits(-2.87,1.93);	
-	//gCross_np_sys_lowpt->GetXaxis()->SetLimits(-3.1,2.2);	
-	if (isZoomIn) {
-		gCross_np_sys_lowpt->SetMinimum(0.0);	
-		gCross_np_sys_lowpt->SetMaximum(1.1);	
-	}
-	else {
-		gCross_np_sys_lowpt->SetMinimum(0.0);	
-		gCross_np_sys_lowpt->SetMaximum(27.0);	
-	}
-	gCross_np_sys_lowpt->SetFillColor(kRed-9);	
-	gCross_np_sys_lowpt->Draw("A2");
-	
-	gCross_np_sys_highpt->SetFillColor(kTeal-9);	
-	gCross_np_sys_highpt->Draw("2");
-	
-	SetGraphStyle(gCross_np_lowpt,1,3);
-	gCross_np_lowpt->Draw("P");
-	
-	SetGraphStyle(gCross_np_highpt,0,5);
-	gCross_np_highpt->SetMarkerSize(2.1);
-	gCross_np_highpt->Draw("P");
+  ///////////////////////////////////////////////////////////////////
+	//// save as a root file
+	TFile *outFile;
+  if (isPA==0) {
+    if (noPtWeight) {
+      outFile = new TFile(Form("plot_cross/pp_cross_rap_isPrompt%d_isScale%d_noPtWeight.root",(int)isPrompt,(int)isScale),"RECREATE");
+    } else {
+      outFile = new TFile(Form("plot_cross/pp_cross_rap_isPrompt%d_isScale%d.root",(int)isPrompt,(int)isScale),"RECREATE");
+    }
+  }else {
+    if (noPtWeight) {
+      outFile = new TFile(Form("plot_cross/pA_cross_rap_isPrompt%d_isScale%d_noPtWeight.root",(int)isPrompt,(int)isScale),"RECREATE");
+    } else {
+      outFile = new TFile(Form("plot_cross/pA_cross_rap_isPrompt%d_isScale%d.root",(int)isPrompt,(int)isScale),"RECREATE");
+    }
+  }
 
-	//legUL -> SetHeader("Non-prompt J/#psi");
-	if (isScale && scaleNP_low != 1.0) legUL -> AddEntry(gCross_np_lowpt,Form("6.5 < p_{T} < 10 GeV/c [x%1.f]",scaleNP_low), "lp");
-	else legUL -> AddEntry(gCross_np_lowpt,"6.5 < p_{T} < 10 GeV/c","lp");
-	if (isScale && scaleNP_high != 1.0) legUL -> AddEntry(gCross_np_highpt,Form("10 < p_{T} < 30 GeV/c [x%.1f]",scaleNP_high),"lp");
-	else legUL -> AddEntry(gCross_np_highpt,"10 < p_{T} < 30 GeV/c","lp");
-	legUL->Draw();
-	globtex->SetTextSize(0.045);
-	globtex->SetTextFont(62);
-	globtex->DrawLatex(0.89, 0.86, "Non-prompt J/#psi");
-	//globtex->SetTextSize(0.035);
-	globtex->SetTextSize(0.032);
-	globtex->SetTextFont(42);
-	globtex->DrawLatex(0.89, 0.80, "Global uncertainty : 3.5 \%");
-	//globtex->DrawLatex(0.88, 0.36, "Global uncertainty : 3.6 \%");
-	CMS_lumi( c_np, iPeriod, iPos );
-	c_np->Update();
-	c_np->SaveAs(Form("cross_%s/crossSection_rap_np_isScale%d.pdf",dirName,(int)isScale));
-	c_np->SaveAs(Form("cross_%s/crossSection_rap_np_isScale%d.png",dirName,(int)isScale));
-	legUL->Clear();
-	
-	///////////////////////////////////////////////////////////////////
-	// save as a root file
-	TFile *outFile = new TFile(Form("cross_%s/crossSection_rap_isScale%d.root",dirName,(int)isScale),"RECREATE");
 	outFile->cd();
-	g_cross_sys_lowpt->Write();	
-	g_cross_lowpt->Write();	
-	g_cross_sys_highpt->Write();	
-	g_cross_highpt->Write();	
+	g_cross_sys_lowpt->Write();
+	g_cross_lowpt->Write();
+	g_cross_sys_highpt->Write();
+	g_cross_highpt->Write();
 	outFile->Close();
-#endif		
-	return;
+	
+  return;
 
 } // end of main func.
 
