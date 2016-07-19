@@ -1,67 +1,39 @@
-#include "KYOcommonOpt.h"
+#include <../SONGKYO.h>
 
-#include <iostream>
-#include <iomanip>
-#include <fstream>
-#include <sstream>
-#include <TString.h>
-#include <string>
+void formRapArr(Double_t binmin, Double_t binmax, TString arr);
+void formAbsRapArr(Double_t binmin, Double_t binmax, TString arr);
+void formPtArr(Double_t binmin, Double_t binmax, TString arr);
+void formCentArr(Double_t binmin, Double_t binmax, TString arr);
+void formEtArr(Double_t binmin, Double_t binmax, TString arr);
 
-#include <TROOT.h>
-#include "TSystem.h"
-#include <TFile.h>
-#include <TTree.h>
-#include <TChain.h>
-#include <TDirectory.h>
-#include <TNtuple.h>
-#include <TMath.h>
-#include <math.h>
-#include <cmath>
-#include <TH1.h>
-#include <TH2.h>
-#include <TH3.h>
-#include <TStyle.h>
-#include <TCanvas.h>
-#include <TVector3.h>
-#include <TLorentzVector.h>
-#include "TRandom3.h"
-#include "TClonesArray.h"
-#include <TAxis.h>
-#include <TLorentzRotation.h>
-#include <TCut.h>
-
-#include <TCanvas.h>
-#include <TStyle.h>
-#include <TPaveStats.h>
-
-void formRapArr(Double_t binmin, Double_t binmax, string* arr);
-void formAbsRapArr(Double_t binmin, Double_t binmax, string* arr);
-void formPtArr(Double_t binmin, Double_t binmax, string* arr);
-void formCentArr(Double_t binmin, Double_t binmax, string* arr);
-void formEtArr(Double_t binmin, Double_t binmax, string* arr);
-
-int rootAna_meanPt(char *strBin = "8rap9pt"){
+int rootAna_meanPt(TString szPA = "pa", TString szBinning = "8rap9pt", bool isSmall =true){
 
 	const int nbin = 100; //arbitrary binning for each pT hist.
 	const int nEntry = 10000;
 		
-	gROOT->Macro("./JpsiStyle.C");
+	gROOT->Macro("../Style.C");
 
-	// read-in root file (data)
-	TFile *fDataPbp1; // 210498<= runNb <= 210658 should be rejected
-	TFile *fDataPbp2; // only 210498<= runNb <= 210658 will be used : 1st 7 run
-	TFile *fDatapPb;
-	fDataPbp1 = new TFile("/home/songkyo/kyo/pPbDataSample/merged_pPbData_1st_ntuple_PromptReco-v1_GR_P_V43D_pileupRej_noMuID_tot.root");
-	fDataPbp2 = new TFile("/home/songkyo/kyo/pPbDataSample/merged_pPbData_1st_ntuple_ReprocessedReco-v1_GR_P_V43F_pileupRej_muID_tot.root");
-	fDatapPb = new TFile("/home/songkyo/kyo/pPbDataSample/merged_pPbData_2nd_ntuple_PromptReco-v1_GR_P_V43D_pileupRej_muID_tot.root");
-
-	TTree *treeDataPbp1 = (TTree*)fDataPbp1->Get("myTree");
-	TTree *treeDataPbp2 = (TTree*)fDataPbp2->Get("myTree");
-	TTree *treeDatapPb = (TTree*)fDatapPb->Get("myTree");
+  //// read-in root file
+  TFile *fData;
+  TFile *fPRMC;
+  TTree *treeData;
+  TTree *treePRMC;
+  if (strcmp(szPA,"pp")==0) {
+    fData = new TFile("/storage/OniaTree/Onia5TeV/ppData/OniaTree_DoubleMu_Run2015E-PromptReco-v1_Run_262157_262328_noCUT_TRKMU.root");
+    fPRMC = new TFile("/storage/OniaTree/Onia5TeV/ppOfficialMC/OniaTree_JpsiMM_5p02TeV_TuneCUETP8M1_Trk_HINppWinter16DR-75X_mcRun2_asymptotic_ppAt5TeV_v3-v1.root");
+    treeData = (TTree*)fData->Get("hionia/myTree");
+    treePRMC = (TTree*)fPRMC->Get("hionia/myTree");
+  } else if (strcmp(szPA,"pa")==0) {
+    fData = new TFile("/home/songkyo/kyo/pPbDataSample/Data/RD2013_pa_1st_run_210676-211256_GR_P_V43D_nocut.root");
+    fPRMC = new TFile("/home/songkyo/kyo/pPbDataSample/EfficiencySample/MCJPsiWithFSR_pa_1st_run_STARTHI53_V27_ext1_nocut.root");
+    treeData = (TTree*)fData->Get("myTree");
+    treePRMC = (TTree*)fPRMC->Get("myTree");
+  }
+  else { cout << "WARNING :: Select among szPA = \"pp\" or \"pa\" "; return 0; }
 
 	/////////////////////////////////////////////////////////////	
 	////////////// binning
-	Double_t ptArr[] = {0.0, 3.0, 4.0, 5.0, 6.5, 7.5, 8.5, 10.0, 14.0, 30.0}; // 8rap9pt	
+	Double_t ptArr[] = {2.0, 3.0, 4.0, 5.0, 6.5, 7.5, 8.5, 10.0, 14.0, 30.0}; // 8rap9pt	
 	const Int_t nPt = sizeof(ptArr)/sizeof(double)-1;
 	cout << "nPt=" << nPt << endl;
 
@@ -70,7 +42,7 @@ int rootAna_meanPt(char *strBin = "8rap9pt"){
 	const Int_t nRap = sizeof(yArr)/sizeof(double)-1;
 	cout << "nRap=" << nRap << endl;
 
-	string rapstrArr[nRap];
+	TString rapstrArr[nRap];
 	for (int ir=0; ir<nRap; ir++){
 		formRapArr(yArr[ir+1], yArr[ir], &rapstrArr[ir]);
 		cout << "rap string arr = " << rapstrArr[ir].c_str() << endl;
@@ -81,7 +53,7 @@ int rootAna_meanPt(char *strBin = "8rap9pt"){
 	const Int_t nEt = sizeof(etArr)/sizeof(double)-1;
 	cout << "nEt=" << nEt << endl;
 
-	string etstrArr[nEt];
+	TString etstrArr[nEt];
 	for (int in=0; in<nEt; in++){
 		 formEtArr(etArr[in], etArr[in+1], &etstrArr[in]);
 		 cout << "et string arr = " << etstrArr[in].c_str() << endl;
@@ -90,7 +62,7 @@ int rootAna_meanPt(char *strBin = "8rap9pt"){
 	/////////////////////////////////////////////////////////////	
 	////////////// cut definitions
 	TCut trigCut = "( (Reco_QQ_trig&1)==1 && (HLTriggers&1)==1 )"; 
-	TCut recoCut = "Reco_QQ_size>=1 && Reco_QQ_sign==0";	
+	TCut recoCut = "Reco_QQ_sign==0 && Reco_QQ_VtxProb > 0.01";	
 //	TCut massRange = "Reco_QQ_4mom.M() >2.6 && Reco_QQ_4mom.M() < 3.5";
 	TCut massRange = "Reco_QQ_4mom.M() >2.9 && Reco_QQ_4mom.M() < 3.3";
 	TCut ctauRange = "Reco_QQ_ctau > -3.0 && Reco_QQ_ctau < 5.0 && Reco_QQ_ctauErr > 0.0 && Reco_QQ_ctauErr < 1.0"; 
@@ -177,14 +149,14 @@ int rootAna_meanPt(char *strBin = "8rap9pt"){
 				//c1->Clear();
 			}
 			cmulti[in][ir]->Update();
-			cmulti[in][ir]->SaveAs(Form("meanPt_%s_%d_%d.png",strBin,in,ir));
+			cmulti[in][ir]->SaveAs(Form("meanPt_%s_%d_%d.png",szBinning,in,ir));
 			//cmulti[in][ir]->Clear();
 		}
 	}
 
 	/// Save as a root file
-	TFile *outFile = new TFile(Form("meanPt_%s.root",strBin),"RECREATE");
-	std::cout << "strBin : " << strBin << std::endl;
+	TFile *outFile = new TFile(Form("meanPt_%s.root",szBinning),"RECREATE");
+	std::cout << "szBinning : " << szBinning << std::endl;
 	outFile->cd();
 	for (int in=0; in<nEt; in++){
 		for (int ir=0; ir<nRap; ir++ ) {
@@ -202,7 +174,7 @@ int rootAna_meanPt(char *strBin = "8rap9pt"){
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // sub-routines function 
 
-void formRapArr(Double_t binmin, Double_t binmax, string* arr) {
+void formRapArr(Double_t binmin, Double_t binmax, TString arr) {
 	Double_t intMin, intMax; 
 	Double_t fracMin = modf(binmin, &intMin);
 	Double_t fracMax = modf(binmax, &intMax);
@@ -217,7 +189,7 @@ void formRapArr(Double_t binmin, Double_t binmax, string* arr) {
 	}
 }
 
-void formAbsRapArr(Double_t binmin, Double_t binmax, string* arr) {
+void formAbsRapArr(Double_t binmin, Double_t binmax, TString arr) {
 	Double_t intMin, intMax; 
 	Double_t fracMin = modf(binmin, &intMin);
 	Double_t fracMax = modf(binmax, &intMax);
@@ -232,7 +204,7 @@ void formAbsRapArr(Double_t binmin, Double_t binmax, string* arr) {
 	}
 }
 
-void formPtArr(Double_t binmin, Double_t binmax, string* arr) {
+void formPtArr(Double_t binmin, Double_t binmax, TString arr) {
 	Double_t intMin, intMax; 
 	Double_t fracMin = modf(binmin, &intMin);
 	Double_t fracMax = modf(binmax, &intMax);
@@ -247,7 +219,7 @@ void formPtArr(Double_t binmin, Double_t binmax, string* arr) {
 	}
 }
 
-void formCentArr(Double_t binmin, Double_t binmax, string* arr) {
+void formCentArr(Double_t binmin, Double_t binmax, TString arr) {
 	Double_t intMin, intMax; 
 	Double_t fracMin = modf(binmin, &intMin);
 	Double_t fracMax = modf(binmax, &intMax);
@@ -262,7 +234,7 @@ void formCentArr(Double_t binmin, Double_t binmax, string* arr) {
 	}
 }
 
-void formEtArr(Double_t binmin, Double_t binmax, string* arr) {
+void formEtArr(Double_t binmin, Double_t binmax, TString arr) {
 	Double_t intMin, intMax; 
 	Double_t fracMin = modf(binmin, &intMin);
 	Double_t fracMax = modf(binmax, &intMax);
