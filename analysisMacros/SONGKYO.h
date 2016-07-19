@@ -98,6 +98,20 @@ void SetHistStyle(TH1* h, Int_t c, Int_t m) {
   h-> GetYaxis()->CenterTitle();
 }
 
+void SetHistStyle2(TH1* h, Int_t c, Int_t m) {
+  Int_t colorArr[] = { kGray+3, kRed+2, kBlue+1, kOrange+7, kAzure+9, kViolet-4, kGreen+1, kPink+9, kBlack };
+  Int_t markerFullArr[] = {kFullCircle, kFullTriangleUp, kFullTriangleDown, kFullSquare, kFullStar, kFullDiamond};
+  //Int_t markerOpenArr[] = {kOpenCircle, kOpenTriangleUp, kOpenTriangleDown, kOpenSquare, kOpenStar, kOpenDiamond};
+  Int_t markerOpenArr[] = {kOpenCircle, kOpenTriangleUp, kOpenTriangleDown, kOpenSquare, kOpenCircle, kOpenTriangleUp, kOpenTriangleDown, kOpenSquare};
+
+  h-> SetMarkerColor(colorArr[c]);
+  if(m<10) h-> SetMarkerStyle(markerFullArr[m]);
+  else h-> SetMarkerStyle(markerOpenArr[m-10]);
+  h-> SetMarkerSize(1.2);
+  h-> SetLineColor(colorArr[c]);
+  h-> SetLineWidth(1);
+}
+
 void SetGraphStyle(TGraph* gr, Int_t c, Int_t m) {
   Int_t colorArr[] = { kGray+3, kRed+2, kBlue+1, kOrange+7, kGreen+3, kAzure+9, kViolet-4, kGreen+1, kBlack };
   Int_t markerFullArr[] = {kFullCircle, kFullTriangleUp, kFullTriangleDown, kFullSquare, kFullStar, kFullDiamond};
