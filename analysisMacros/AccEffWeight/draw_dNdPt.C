@@ -4,7 +4,7 @@ void formRapArr(Double_t binmin, Double_t binmax, TString* arr);
 void formAbsRapArr(Double_t binmin, Double_t binmax, TString* arr);
 void formPtArr(Double_t binmin, Double_t binmax, TString* arr);
 
-void draw_dNdPt(int isPA=1, bool isPrompt=true, bool noPtWeight=true, bool isLog=false)
+void draw_dNdPt(int isPA=1, bool isPrompt=false, bool noPtWeight=true, bool isLog=false)
 {
 	gROOT->Macro("../Style.C");
 
