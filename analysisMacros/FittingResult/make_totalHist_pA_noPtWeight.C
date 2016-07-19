@@ -203,7 +203,7 @@ int make_totalHist_pA_noPtWeight(int MrapNpt=89, int accCutType = 2, bool useZvt
   //////////////////////////////////////////////////////////////////////////////////////
   //////////////////////////////////////////////////////////////////////////////////////
   ////// read in from fit file
-  TFile* fFitpA = new TFile(Form("./fitResHist_%s_pA_%s_%s.root",szBinning.Data(),szAccCut.Data(),szSys.Data()));
+  TFile* fFitpA = new TFile(Form("./fitResHist_%s_pA_%s_%s_etOpt0.root",szBinning.Data(),szAccCut.Data(),szSys.Data()));
   TH2D* h2D_Fit_PR_pA = (TH2D*)fFitpA->Get("h2D_nPrompt_Raw");  
   TH2D* h2D_Fit_NP_pA = (TH2D*)fFitpA->Get("h2D_nNonPrompt_Raw"); 
   TH2D* h2D_Fit_nSig_pA = (TH2D*)fFitpA->Get("h2D_nSig_Raw"); 

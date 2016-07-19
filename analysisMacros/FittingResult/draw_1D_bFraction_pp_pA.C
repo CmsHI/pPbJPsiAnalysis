@@ -41,18 +41,17 @@ void draw_1D_bFraction_pp_pA(TString szBinning="8rap9pt", bool isLog=false)
   }
   
   // --- read-in file
-  TFile * f2D_pA = new TFile(Form("../FittingResult/totalHist_pA_%s_newcut_nominal_Zvtx0_SF0_noPtWeight.root",szBinning.Data()));
-  //TFile * f2D_PbppPb = new TFile(Form("../FittingResult/totalHist_PbppPb_%s_newcut_nominal_Zvtx0_SF0_noPtWeight.root",szBinning.Data()));
-  TFile * f2D_pp = new TFile(Form("../FittingResult/totalHist_pp_%s_newcut_nominal_Zvtx0_SF0_noPtWeight.root",szBinning.Data()));
+  TFile * f2D_pA = new TFile(Form("../FittingResult/totalHist_pA_%s_newcut_nominal_Zvtx1_SF1_etOpt0.root",szBinning.Data()));
+  TFile * f2D_pp = new TFile(Form("../FittingResult/totalHist_pp_%s_newcut_nominal_Zvtx0_SF1_etOpt0.root",szBinning.Data()));
+  //TFile * f2D_pA = new TFile("../FittingSys/fitResHist_8rap9pt_pA_newcut_sys04_01_etOpt0.root");
+  //TFile * f2D_pp = new TFile("../FittingSys/fitResHist_8rap9pt_pp_newcut_sys04_01_etOpt0.root");
 
   // --- read-in 2D hist for data reco dist
   TH2D* h2D_pA = (TH2D*)f2D_pA->Get("otherFitInfo/h2D_Fit_bFrac_pA");
-  //TH2D* h2D_Pbp = (TH2D*)f2D_PbppPb->Get("otherFitInfo/h2D_Fit_bFrac_Pbp");
-  //TH2D* h2D_pPb = (TH2D*)f2D_PbppPb->Get("otherFitInfo/h2D_Fit_bFrac_pPb");
   TH2D* h2D_pp = (TH2D*)f2D_pp->Get("otherFitInfo/h2D_Fit_bFrac_pp");
+  //TH2D* h2D_pA = (TH2D*)f2D_pA->Get("h2D_bFraction");
+  //TH2D* h2D_pp = (TH2D*)f2D_pp->Get("h2D_bFraction");
   cout << "h2D_pA = " << h2D_pA << endl;
-  //cout << "h2D_Pbp = " << h2D_Pbp << endl;
-  //cout << "h2D_pPb = " << h2D_pPb << endl;
   cout << "h2D_pp = " << h2D_pp << endl;
 
   const int nbinsX = h2D_pA->GetNbinsX();
@@ -168,8 +167,10 @@ void draw_1D_bFraction_pp_pA(TString szBinning="8rap9pt", bool isLog=false)
     //SetHistStyle(h1D_Pbp[iy],3,10);
     //SetHistStyle(h1D_pPb[iy],5,10);
     //SetHistStyle(h1D_pp[iy],6,13);
-    SetHistStyle(h1D_pA[iy],1,0);
-    SetHistStyle(h1D_pp[iy],2,10);
+    //SetHistStyle(h1D_pA[iy],1,0);
+    //SetHistStyle(h1D_pp[iy],2,10);
+    SetHistStyle(h1D_pA[iy],3,0);
+    SetHistStyle(h1D_pp[iy],5,10);
     
     h1D_pA[iy]->GetXaxis()->SetTitle("p_{T} (GeV/c)");
     h1D_pA[iy]->GetXaxis()->CenterTitle();
@@ -188,14 +189,26 @@ void draw_1D_bFraction_pp_pA(TString szBinning="8rap9pt", bool isLog=false)
     */
     h1D_pA[iy]->Draw("pe");
     if(iy!=nbinsX-1) h1D_pp[iy+1]->Draw("pe same");
+    else h1D_pp[0]->Draw("pe same");
     if (iy==0) {
       //legBR -> AddEntry(h1D_Pbp[iy],"Pbp","lp");
       //legBR -> AddEntry(h1D_pPb[iy],"pPb","lp");
       legBR -> AddEntry(h1D_pA[iy],"pA","lp");
       legBR -> AddEntry(h1D_pp[iy],"pp","lp");
-      legBR->Draw();
+      //legBR->Draw();
     }
-    latex->DrawLatex(0.49,0.20,Form("%s",rapArr[iy].Data()));
+    if (iy==nbinsX-1) { 
+      latex->SetTextColor(kBlack);
+      latex->DrawLatex(0.49,0.32,"un-overlapped region");
+      latex->SetTextColor(kAzure+9);
+      latex->DrawLatex(0.49,0.26,"pp : 1.93 < y_{CM} < 2.4");
+      latex->SetTextColor(kOrange+7);
+      latex->DrawLatex(0.49,0.20,"pPb : -2.87 < y_{CM} < -2.4");
+    }
+    else  { 
+      latex->SetTextColor(kBlack);
+      latex->DrawLatex(0.49,0.20,Form("%s",rapArr[iy].Data()));
+    }
   }
   c_multi->Modified();
   c_multi->Update();

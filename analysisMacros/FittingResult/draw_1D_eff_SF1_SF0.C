@@ -4,7 +4,7 @@ void formRapArr(Double_t binmin, Double_t binmax, TString* arr);
 void formAbsRapArr(Double_t binmin, Double_t binmax, TString* arr);
 void formPtArr(Double_t binmin, Double_t binmax, TString* arr);
 
-void draw_1D_eff_SF1_SF0(TString szBinning="8rap9pt", int isPA=1, bool isPrompt=true, bool isLog=false, bool isNoErr=true)
+void draw_1D_eff_SF1_SF0(TString szBinning="8rap9pt", int isPA=0, bool isPrompt=false, bool isLog=false, bool isNoErr=true)
 {
 	gROOT->Macro("../Style.C");
 
@@ -64,8 +64,15 @@ void draw_1D_eff_SF1_SF0(TString szBinning="8rap9pt", int isPA=1, bool isPrompt=
 	}
 	
 	// --- read-in file
-	TFile * f2D_01 = new TFile(Form("../FittingResult/totalHist_%s_%s_newcut_nominal_Zvtx1_SF1_noPtWeight.root",szPA.Data(),szBinning.Data()));
-	TFile * f2D_02 = new TFile(Form("../FittingResult/totalHist_%s_%s_newcut_nominal_Zvtx1_SF0_noPtWeight.root",szPA.Data(),szBinning.Data()));
+	TFile * f2D_01;
+	TFile * f2D_02;
+  if (isPA==0) {
+    f2D_01 = new TFile(Form("../FittingResult/totalHist_%s_%s_newcut_nominal_Zvtx0_SF1_noPtWeight.root",szPA.Data(),szBinning.Data()));
+    f2D_02 = new TFile(Form("../FittingResult/totalHist_%s_%s_newcut_nominal_Zvtx0_SF0_noPtWeight.root",szPA.Data(),szBinning.Data()));
+  } else {
+    f2D_01 = new TFile(Form("../FittingResult/totalHist_%s_%s_newcut_nominal_Zvtx1_SF1_noPtWeight.root",szPA.Data(),szBinning.Data()));
+    f2D_02 = new TFile(Form("../FittingResult/totalHist_%s_%s_newcut_nominal_Zvtx1_SF0_noPtWeight.root",szPA.Data(),szBinning.Data()));
+  }
 
 	// --- read-in 2D hist for data reco dist
 	TH2D* h2D_01 = (TH2D*)f2D_01->Get(Form("h2D_Eff_%s_%s",szPrompt.Data(),szPA.Data()));

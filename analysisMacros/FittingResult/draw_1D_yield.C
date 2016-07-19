@@ -17,12 +17,20 @@ void draw_1D_yield(TString szBinning="8rap9pt", int isPA=1, bool isPrompt=true, 
   else szPrompt = "NP"; 
   
   double binmin, binmax;
-  if (strcmp(szParam,"nSig_Raw")==0) {binmin=0.0; binmax=40000.0;}
-  else if (strcmp(szParam,"nBkg_Raw")==0) {binmin=0.0; binmax=20000.0;}
-  else if (strcmp(szParam,"nPrompt_Raw")==0) {binmin=0.0; binmax=40000.0;}
-  else if (strcmp(szParam,"nNonPrompt_Raw")==0) {binmin=0.0; binmax=10000.0;}
-  else if (strcmp(szParam,"bFraction")==0) {binmin=0.0; binmax=0.8;}
-  
+  if (isPA==0) {
+    if (strcmp(szParam,"nSig_Raw")==0) {binmin=0.0; binmax=50000.0;}
+    else if (strcmp(szParam,"nBkg_Raw")==0) {binmin=0.0; binmax=18000.0;}
+    else if (strcmp(szParam,"nPrompt_Raw")==0) {binmin=0.0; binmax=40000.0;}
+    else if (strcmp(szParam,"nNonPrompt_Raw")==0) {binmin=0.0; binmax=12000.0;}
+    else if (strcmp(szParam,"bFraction")==0) {binmin=0.0; binmax=0.8;}
+  }else {
+    if (strcmp(szParam,"nSig_Raw")==0) {binmin=0.0; binmax=25000.0;}
+    else if (strcmp(szParam,"nBkg_Raw")==0) {binmin=0.0; binmax=20000.0;}
+    else if (strcmp(szParam,"nPrompt_Raw")==0) {binmin=0.0; binmax=20000.0;}
+    else if (strcmp(szParam,"nNonPrompt_Raw")==0) {binmin=0.0; binmax=4500.0;}
+    else if (strcmp(szParam,"bFraction")==0) {binmin=0.0; binmax=0.8;}
+  }
+   
   ////rap array in yCM (from forward to backward)
   const Int_t nRap = 8; 
   const Int_t nPt = 9; 
@@ -66,7 +74,7 @@ void draw_1D_yield(TString szBinning="8rap9pt", int isPA=1, bool isPrompt=true, 
 	}
 
 	// --- read-in file
-	TFile * f2D_01 = new TFile(Form("../FittingResult/fitResHist_%s_%s_newcut_nominal.root",szBinning.Data(),szPA.Data()));
+	TFile * f2D_01 = new TFile(Form("../FittingResult/fitResHist_%s_%s_newcut_nominal_etOpt0.root",szBinning.Data(),szPA.Data()));
 
 	// --- read-in 2D hist for data reco dist
 	TH2D* h2D_01 = (TH2D*)f2D_01->Get(Form("h2D_%s",szParam.Data()));

@@ -81,7 +81,7 @@ void draw_1D_chi2(TString szBinning="8rap9pt", int isPA=1, bool isPrompt=true, b
 	}
 
 	// --- read-in file
-	TFile * f2D_01 = new TFile(Form("../FittingResult/fitResHist_%s_%s_newcut_nominal.root",szBinning.Data(),szPA.Data()));
+	TFile * f2D_01 = new TFile(Form("../FittingResult/fitResHist_%s_%s_newcut_nominal_etOpt0.root",szBinning.Data(),szPA.Data()));
 
 	// --- read-in 2D hist for data reco dist
 	TH2D* h2D_01 = (TH2D*)f2D_01->Get(Form("chi2Prob/h2D_%s",szParam.Data()));

@@ -4,8 +4,7 @@ void formRapStr(Double_t min, Double_t max, string* arr);
 void formStr(Double_t min, Double_t max, string* arr);
 
 /////// main func. ///////
-int make_fitResHist(int MrapNpt=89, int isPA =0, int accCutType=2, TString szSys="nominal"){
-//  char *dirName = "fitRes_8rap9pt", bool is1st = true){
+int make_fitResHist(int MrapNpt=62, int isPA =3, int accCutType=2, TString szSys="nominal", int etOpt = 2){
 
   using namespace std;
 
@@ -93,15 +92,25 @@ int make_fitResHist(int MrapNpt=89, int isPA =0, int accCutType=2, TString szSys
   Double_t ntrArr[] = {0.0, 350.0};
   const Int_t nNtr = sizeof(ntrArr)/sizeof(double)-1;
   // --- Et bin
-  Double_t etArr[] = {0.0, 120.0};
-  const Int_t nEt = sizeof(etArr)/sizeof(double)-1;
-
+  Double_t etArr_bin0[] = {0.0, 120.0};
+  Double_t etArr_bin1[] = {0.0, 20.0};
+  Double_t etArr_bin2[] = {20.0, 30.0};
+  Double_t etArr_bin3[] = {30.0, 120.0};
+  const Int_t nEt = sizeof(etArr_bin0)/sizeof(double)-1;
+  const Int_t nEtTmp = nEt+1;
+  Double_t etArr[nEtTmp];
+  for (int iet=0; iet<nEtTmp; iet++) {
+    if (etOpt==0) { etArr[iet] = etArr_bin0[iet];}
+    else if (etOpt==1) { etArr[iet] = etArr_bin1[iet];}
+    else if (etOpt==2) { etArr[iet] = etArr_bin2[iet];}
+    else if (etOpt==3) { etArr[iet] = etArr_bin3[iet];}
+    else {cout << "ERORR : select etOpt among 0, 1, 2 or 3" << endl; }
+  }
   cout << " *** nBins *** " << endl;  
   cout << "nRap=" << nRap << endl;
   cout << "nPt=" << nPt << endl;
   cout << "nNtr=" << nNtr << endl;
   cout << "nEt=" << nEt << endl;
-  
   // setting for string bin array for checking summary & files
   string* yrange = new string[nRap];
   string* ptrange = new string[nPt];
@@ -514,7 +523,7 @@ int make_fitResHist(int MrapNpt=89, int isPA =0, int accCutType=2, TString szSys
   ////////////////////////////////////////////////////////////////////////////////////////////////
   ////////////////////////////////////////////////////////////////////////////////////////////////
   //// Save as a root file
-  TFile *outFile = new TFile(Form("fitResHist_%s.root",szFinal.Data()),"RECREATE");
+  TFile *outFile = new TFile(Form("fitResHist_%s_etOpt%d.root",szFinal.Data(),etOpt),"RECREATE");
   std::cout << "szFinal: " << szFinal << std::endl;
   
   outFile->cd();

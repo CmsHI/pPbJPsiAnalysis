@@ -62,7 +62,7 @@ int make_totalHist_pp_noPtWeight(int MrapNpt=89, int accCutType = 2, bool useZvt
   //////////////////////////////////////////////////////////////////////////////////////
   //////////////////////////////////////////////////////////////////////////////////////
   ////// read in from fit file
-  TFile* fFitpp = new TFile(Form("./fitResHist_%s_pp_%s_%s.root",szBinning.Data(),szAccCut.Data(),szSys.Data()));
+  TFile* fFitpp = new TFile(Form("./fitResHist_%s_pp_%s_%s_etOpt0.root",szBinning.Data(),szAccCut.Data(),szSys.Data()));
   TH2D* h2D_Fit_PR_pp = (TH2D*)fFitpp->Get("h2D_nPrompt_Raw");  
   TH2D* h2D_Fit_NP_pp = (TH2D*)fFitpp->Get("h2D_nNonPrompt_Raw"); 
   TH2D* h2D_Fit_nSig_pp = (TH2D*)fFitpp->Get("h2D_nSig_Raw"); 
