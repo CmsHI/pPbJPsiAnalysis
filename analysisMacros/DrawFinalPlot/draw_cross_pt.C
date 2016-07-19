@@ -27,8 +27,8 @@ void draw_cross_pt(bool sysByHand=true, bool noPtWeight=true, bool isScale=true,
 	//// BR and lumi info.
 	const Double_t br = 0.0593 ;
 	const Double_t brErr = 0.0006;
-	const Double_t pp_lumi_pb =26.3; // 26.3/pb
-	const Double_t pp_lumi_pb_err = 2.63; // tmp
+	const Double_t pp_lumi_pb =25.8; // 26.3/pb
+	const Double_t pp_lumi_pb_err = 2.58; // tmp
 	const Double_t pPb_lumi_nb = 34.622; // 34.6/nb
 	const Double_t pPb_lumi_nb_err = 1.2;
 	Double_t lumi_mub;
@@ -152,11 +152,11 @@ void draw_cross_pt(bool sysByHand=true, bool noPtWeight=true, bool isScale=true,
 	//// read-in corr-yield file
 	TFile * f2D;
   if (isPA==0) {
-    if (noPtWeight) f2D = new TFile("../FittingResult/totalHist_pp_8rap9pt_newcut_nominal_Zvtx0_SF1_noPtWeight.root");
-    else f2D = new TFile("../FittingResult/totalHist_pp_8rap9pt_newcut_nominal_Zvtx0_SF1.root");
+    if (noPtWeight) f2D = new TFile("../FittingResult/totalHist_pp_8rap9pt_newcut_nominal_Zvtx0_SF1_etOpt0_noPtWeight.root");
+    else f2D = new TFile("../FittingResult/totalHist_pp_8rap9pt_newcut_nominal_Zvtx0_SF1_etOpt0.root");
   } else {
-    if (noPtWeight) f2D = new TFile("../FittingResult/totalHist_pA_8rap9pt_newcut_nominal_Zvtx1_SF1_noPtWeight.root");
-    else f2D = new TFile("../FittingResult/totalHist_pA_8rap9pt_newcut_nominal_Zvtx1_SF1.root");
+    if (noPtWeight) f2D = new TFile("../FittingResult/totalHist_pA_8rap9pt_newcut_nominal_Zvtx1_SF1_etOpt0_noPtWeight.root");
+    else f2D = new TFile("../FittingResult/totalHist_pA_8rap9pt_newcut_nominal_Zvtx1_SF1_etOpt0.root");
 
   }
 	//// read-in 2D hist for corrected yield
@@ -335,10 +335,10 @@ void draw_cross_pt(bool sysByHand=true, bool noPtWeight=true, bool isScale=true,
   if (isPA==0) {
 	  g_cross_sys[0]->SetFillColor(kViolet-9);
 	  g_cross_sys[1]->SetFillColor(kTeal-9);
-	  g_cross_sys[2]->SetFillColor(kRed-9);
-	  g_cross_sys[3]->SetFillColor(kAzure-9);
-	  g_cross_sys[4]->SetFillColor(kAzure-9);
-	  g_cross_sys[5]->SetFillColor(kRed-9);
+	  g_cross_sys[2]->SetFillColor(kRed-10);
+	  g_cross_sys[3]->SetFillColor(kBlue-10);
+	  g_cross_sys[4]->SetFillColor(kBlue-10);
+	  g_cross_sys[5]->SetFillColor(kRed-10);
 	  g_cross_sys[6]->SetFillColor(kTeal-9);
 	  g_cross_sys[7]->SetFillColor(kViolet-9);
 	  SetGraphStyleFinal(g_cross[0],	8,2);
@@ -360,10 +360,10 @@ void draw_cross_pt(bool sysByHand=true, bool noPtWeight=true, bool isScale=true,
 
   } else {
 	  g_cross_sys[0]->SetFillColor(kTeal-9);
-	  g_cross_sys[1]->SetFillColor(kRed-9);
-	  g_cross_sys[2]->SetFillColor(kAzure-9);
-	  g_cross_sys[3]->SetFillColor(kAzure-9);
-	  g_cross_sys[4]->SetFillColor(kRed-9);
+	  g_cross_sys[1]->SetFillColor(kRed-10);
+	  g_cross_sys[2]->SetFillColor(kBlue-10);
+	  g_cross_sys[3]->SetFillColor(kBlue-10);
+	  g_cross_sys[4]->SetFillColor(kRed-10);
 	  g_cross_sys[5]->SetFillColor(kTeal-9);
 	  g_cross_sys[6]->SetFillColor(kViolet-9);
 	  g_cross_sys[7]->SetFillColor(kGray);

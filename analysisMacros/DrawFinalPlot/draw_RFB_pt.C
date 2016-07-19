@@ -7,7 +7,7 @@ void formPtArr(Double_t binmin, Double_t binmax, TString* arr);
 
 void CMS_lumi( TPad* pad, int iPeriod, int iPosX );
 
-void draw_RFB_pt(bool sysByHand=true, bool noPtWeight=true, bool isPrompt=true)
+void draw_RFB_pt(bool sysByHand=true, bool noPtWeight=false, bool isPrompt=true)
 {
 	gROOT->Macro("./tdrstyle_kyo.C");
   //cmsTextFont   = 42;  // for b.hong
@@ -94,8 +94,8 @@ void draw_RFB_pt(bool sysByHand=true, bool noPtWeight=true, bool isPrompt=true)
 	/////////////////////////////////////////////////////////////////////////
 	//// read-in file
 	TFile * f2D;
-  if (noPtWeight) f2D = new TFile("../FittingResult/totalHist_pA_8rap9pt_newcut_nominal_Zvtx1_SF1_noPtWeight.root");
-  else f2D = new TFile("../FittingResult/totalHist_pA_8rap9pt_newcut_nominal_Zvtx1_SF1.root");
+  if (noPtWeight) f2D = new TFile("../FittingResult/totalHist_pA_8rap9pt_newcut_nominal_Zvtx1_SF1_etOpt0_noPtWeight.root");
+  else f2D = new TFile("../FittingResult/totalHist_pA_8rap9pt_newcut_nominal_Zvtx1_SF1_etOpt0.root");
 	//// read-in 2D hist
 	TH2D* h2D_CorrY;
 	if (isPrompt) h2D_CorrY = (TH2D*)f2D->Get("h2D_CorrY_PR_pA");
@@ -218,6 +218,7 @@ void draw_RFB_pt(bool sysByHand=true, bool noPtWeight=true, bool isPrompt=true)
 	gRFB_sys[0]->GetXaxis()->SetLimits(0.,17.0);
 	gRFB_sys[0]->SetMinimum(0.5);
 	gRFB_sys[0]->SetMaximum(1.15);
+//	gRFB_sys[0]->SetMaximum(1.5);
 	gRFB_sys[0]->SetFillColor(kTeal-9);
 	gRFB_sys[0]->Draw("A2");
 	gRFB_sys[1]->SetFillColor(kRed-10);

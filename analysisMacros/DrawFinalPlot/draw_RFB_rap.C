@@ -99,8 +99,8 @@ void draw_RFB_rap(bool sysByHand=true,  bool noPtWeight=true, bool isPrompt = tr
   /////////////////////////////////////////////////////////////////////////
 	//// read-in file
 	TFile * f2D;
-  if (noPtWeight) f2D = new TFile("../FittingResult/totalHist_pA_8rap9pt_newcut_nominal_Zvtx1_SF1_noPtWeight.root");
-  else f2D = new TFile("../FittingResult/totalHist_pA_8rap9pt_newcut_nominal_Zvtx1_SF1.root");
+  if (noPtWeight) f2D = new TFile("../FittingResult/totalHist_pA_8rap9pt_newcut_nominal_Zvtx1_SF1_etOpt0_noPtWeight.root");
+  else f2D = new TFile("../FittingResult/totalHist_pA_8rap9pt_newcut_nominal_Zvtx1_SF1_etOpt0.root");
 	//// read-in 2D hist
 	TH2D* h2D_CorrY;
 	if (isPrompt) h2D_CorrY = (TH2D*)f2D->Get("h2D_CorrY_PR_pA");
@@ -253,6 +253,7 @@ void draw_RFB_rap(bool sysByHand=true,  bool noPtWeight=true, bool isPrompt = tr
 	gRFB_sys_lowpt->GetXaxis()->SetLimits(0.,2.);	
 	gRFB_sys_lowpt->SetMinimum(0.5);
 	gRFB_sys_lowpt->SetMaximum(1.15);
+//	gRFB_sys_lowpt->SetMaximum(1.5);
 	gRFB_sys_lowpt->SetFillColor(kRed-10);	
 	gRFB_sys_lowpt->Draw("A2");
 	gRFB_sys_highpt->SetFillColor(kTeal-9);

@@ -7,7 +7,7 @@ void formPtArr(Double_t binmin, Double_t binmax, TString* arr);
 
 void CMS_lumi( TPad* pad, int iPeriod, int iPosX );
 
-void draw_cross_rap(bool sysByHand=true, bool noPtWeight=true, bool isScale=false, int isPA = 1, bool isPrompt=false)
+void draw_cross_rap(bool sysByHand=true, bool noPtWeight=false, bool isScale=false, int isPA = 1, bool isPrompt=false)
 {
 	gROOT->Macro("./tdrstyle_kyo.C");
   gStyle->SetTitleYOffset(1.38); //KYO
@@ -120,11 +120,11 @@ void draw_cross_rap(bool sysByHand=true, bool noPtWeight=true, bool isScale=fals
 	//// read-in corr-yield file
 	TFile * f2D;
   if (isPA==0) {
-    if (noPtWeight) f2D = new TFile("../FittingResult/totalHist_pp_8rap9pt_newcut_nominal_Zvtx0_SF1_noPtWeight.root");
-    else f2D = new TFile("../FittingResult/totalHist_pp_8rap9pt_newcut_nominal_Zvtx0_SF1.root");
+    if (noPtWeight) f2D = new TFile("../FittingResult/totalHist_pp_8rap9pt_newcut_nominal_Zvtx0_SF1_etOpt0_noPtWeight.root");
+    else f2D = new TFile("../FittingResult/totalHist_pp_8rap9pt_newcut_nominal_Zvtx0_SF1_etOpt0.root");
   } else {
-    if (noPtWeight) f2D = new TFile("../FittingResult/totalHist_pA_8rap9pt_newcut_nominal_Zvtx1_SF1_noPtWeight.root");
-    else f2D = new TFile("../FittingResult/totalHist_pA_8rap9pt_newcut_nominal_Zvtx1_SF1.root");
+    if (noPtWeight) f2D = new TFile("../FittingResult/totalHist_pA_8rap9pt_newcut_nominal_Zvtx1_SF1_etOpt0_noPtWeight.root");
+    else f2D = new TFile("../FittingResult/totalHist_pA_8rap9pt_newcut_nominal_Zvtx1_SF1_etOpt0.root");
 
   }
 	// --- read-in 2D hist for corrected yield
@@ -245,7 +245,7 @@ void draw_cross_rap(bool sysByHand=true, bool noPtWeight=true, bool isScale=fals
 	
 	//////////////////////////////////////////////////////////////////////
 
-	TLegend *legUL = new TLegend(0.14, 0.78, 0.56, 0.89);
+	TLegend *legUL = new TLegend(0.17, 0.77, 0.56, 0.88);
 	SetLegendStyle(legUL);
 	legUL->SetTextSize(0.037);
 
@@ -319,7 +319,7 @@ void draw_cross_rap(bool sysByHand=true, bool noPtWeight=true, bool isScale=fals
     else g_cross_sys_lowpt->SetMaximum(0.006);	
   } else {
     if (isPrompt) g_cross_sys_lowpt->SetMaximum(4.);	
-		else g_cross_sys_lowpt->SetMaximum(1.1);	
+		else g_cross_sys_lowpt->SetMaximum(1.2);	
 	}
 	g_cross_sys_lowpt->SetFillColor(kRed-9);	
 	g_cross_sys_lowpt->Draw("A2");
@@ -338,12 +338,12 @@ void draw_cross_rap(bool sysByHand=true, bool noPtWeight=true, bool isScale=fals
 	legUL->Draw();
 	globtex->SetTextSize(0.055);
 	globtex->SetTextFont(42);
-	if (isPrompt) globtex->DrawLatex(0.89, 0.86, "Prompt J/#psi");
-  else globtex->DrawLatex(0.89, 0.86, "Non-prompt J/#psi");
+	if (isPrompt) globtex->DrawLatex(0.93, 0.85, "Prompt J/#psi");
+  else globtex->DrawLatex(0.93, 0.85, "Non-prompt J/#psi");
 	globtex->SetTextSize(0.035);
 	globtex->SetTextFont(42);
-  if (isPA==0) globtex->DrawLatex(0.91, 0.80, "Global uncertainty : 10 \%");
-	else globtex->DrawLatex(0.91, 0.80, "Global uncertainty : 3.5 \%");
+  if (isPA==0) globtex->DrawLatex(0.93, 0.79, "Global uncertainty : 10 \%");
+	else globtex->DrawLatex(0.93, 0.79, "Global uncertainty : 3.5 \%");
 	//globtex->DrawLatex(0.89, 0.80, "Global uncertainty : 3.5 \%");
 	CMS_lumi( c1, isPA, iPos );
 	c1->Update();

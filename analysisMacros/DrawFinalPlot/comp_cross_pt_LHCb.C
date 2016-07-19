@@ -38,8 +38,8 @@ void comp_cross_pt_LHCb(bool isShift=false, bool isPrompt = true, bool isLog=tru
 	
 	//// read our result
 	TFile *inFile;
-  if (isPrompt) inFile= new TFile("plot_cross/pA_cross_pt_middle_isPrompt1_isLog0_isScale0_noPtWeight.root");
-  else inFile= new TFile("plot_cross/pA_cross_pt_middle_isPrompt0_isLog0_isScale0_noPtWeight.root");
+  if (isPrompt) inFile= new TFile("plot_cross/pA_cross_pt_middle_isPrompt1_isLog0_isScale0.root");
+  else inFile= new TFile("plot_cross/pA_cross_pt_middle_isPrompt0_isLog0_isScale0.root");
 	TGraphAsymmErrors* g_cross_sys_0 = (TGraphAsymmErrors*)inFile->Get("g_cross_sys_0"); 	
 	TGraphAsymmErrors* g_cross_0 = (TGraphAsymmErrors*)inFile->Get("g_cross_0"); 	
 	cout << "g_cross_sys_0 = " << g_cross_sys_0 << endl;
