@@ -18,6 +18,7 @@ void draw_1D_parameters(TString szBinning="8rap9pt", int isPA=1, bool isPrompt=t
   
   double binmin, binmax;
   if (strcmp(szParam,"coefExp")==0) {binmin=-3.0; binmax=3.0;}
+  else if (strcmp(szParam,"coefPol")==0) {binmin=-0.3; binmax=1.;}
   else if (strcmp(szParam,"fracG1")==0) {binmin=0.0; binmax=1.5;}
   else if (strcmp(szParam,"meanSig")==0) {binmin=3.08; binmax=3.11;}
   else if (strcmp(szParam,"sigmaSig1")==0) {binmin=0.00; binmax=0.14;}
