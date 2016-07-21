@@ -168,9 +168,9 @@ void comp_RFB_rap_Vogt(bool isLine=true, bool isSmoothened=false)
 	//// overlay experimental points	
 	///////////////////////////////////////////////////
   //// PAS
-	TFile *inFile = new TFile("../../2015PAS/drawFinalPlot/RFB_8rap9pt2gev/RFB_rap_isPrompt1.root");
+	//TFile *inFile = new TFile("../../2015PAS/drawFinalPlot/RFB_8rap9pt2gev/RFB_rap_isPrompt1.root");
   //// NEW
-	//TFile *inFile = new TFile("../DrawFinalPlot/plot_RFB/RFB_rap_isPrompt1_noPtWeight.root");
+	TFile *inFile = new TFile("../DrawFinalPlot/plot_RFB/RFB_rap_isPrompt1.root");
 	TGraphAsymmErrors* gRFB_sys_lowpt = (TGraphAsymmErrors*)inFile->Get("gRFB_sys_lowpt"); 	
 	TGraphAsymmErrors* gRFB_lowpt = (TGraphAsymmErrors*)inFile->Get("gRFB_lowpt"); 	
 	TGraphAsymmErrors* gRFB_sys_highpt = (TGraphAsymmErrors*)inFile->Get("gRFB_sys_highpt"); 	

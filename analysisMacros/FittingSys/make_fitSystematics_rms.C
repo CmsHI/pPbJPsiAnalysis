@@ -1,7 +1,7 @@
 #include <../SONGKYO.h>
 
 /////// main func. ///////
-int make_fitSystematics_rms(int MrapNpt=89, int isPA =1, int accCutType=2){
+int make_fitSystematics_rms(int MrapNpt=89, int isPA =1, int accCutType=2, int etOpt = 2){
 
   using namespace std;
   
@@ -44,7 +44,7 @@ int make_fitSystematics_rms(int MrapNpt=89, int isPA =1, int accCutType=2){
 
 	////////////////////////////////////////////////
 	////// read in fromfit file :: nominal
-  TFile* fFit = new TFile(Form("../FittingResult/fitResHist_%s_nominal_etOpt0.root",szFinal.Data()));
+  TFile* fFit = new TFile(Form("../FittingResult/fitResHist_%s_nominal_etOpt%d.root",szFinal.Data(),etOpt));
 	cout << "fFit : " << fFit << endl;
   TH2D* h2D_PR = (TH2D*)fFit->Get("h2D_nPrompt_Raw");	
 	TH2D* h2D_NP = (TH2D*)fFit->Get("h2D_nNonPrompt_Raw");	
@@ -65,7 +65,7 @@ int make_fitSystematics_rms(int MrapNpt=89, int isPA =1, int accCutType=2){
 	
 	for (int iopt=0; iopt<nOpt; iopt++){
 		for (int isubopt=0; isubopt<nSubOpt[iopt]; isubopt++){
-      fFit_sys[iopt][isubopt] = new TFile(Form("../FittingSys/fitResHist_%s_%s_0%d_etOpt0.root",szFinal.Data(),szSysOpt[iopt].Data(),isubopt+1));
+      fFit_sys[iopt][isubopt] = new TFile(Form("../FittingSys/fitResHist_%s_%s_0%d_etOpt%d.root",szFinal.Data(),szSysOpt[iopt].Data(),isubopt+1,etOpt));
 			h2D_PR_sys[iopt][isubopt] = (TH2D*)fFit_sys[iopt][isubopt]->Get("h2D_nPrompt_Raw");	
 			h2D_NP_sys[iopt][isubopt] = (TH2D*)fFit_sys[iopt][isubopt]->Get("h2D_nNonPrompt_Raw");	
 			h2D_PR_sys[iopt][isubopt]->SetName(Form("h2D_PR_%s_0%d",szSysOpt[iopt].Data(),isubopt+1));
@@ -116,21 +116,21 @@ int make_fitSystematics_rms(int MrapNpt=89, int isPA =1, int accCutType=2){
 					tmpNPval[isubopt]=0;
 					tmpPRval[isubopt] = h2D_PR_diff[iopt][isubopt]->GetBinContent(iy+1,ipt+1);	
 					tmpNPval[isubopt] = h2D_NP_diff[iopt][isubopt]->GetBinContent(iy+1,ipt+1);	
-          //cout << " --- tmpPRval["<<isubopt<<"] = "<<tmpPRval[isubopt]<<endl;
+          cout << " --- tmpPRval["<<isubopt<<"] = "<<tmpPRval[isubopt]<<endl;
           tmpPRmaxdiff[iopt][iy][ipt] += tmpPRval[isubopt]*tmpPRval[isubopt];
           tmpNPmaxdiff[iopt][iy][ipt] += tmpNPval[isubopt]*tmpNPval[isubopt];
-          //cout << "--- tmpPRmaxdiff["<<isubopt<<"] = "<<tmpPRmaxdiff[iopt][iy][ipt]<<endl;
+          cout << "--- tmpPRmaxdiff["<<isubopt<<"] = "<<tmpPRmaxdiff[iopt][iy][ipt]<<endl;
 				}
 				tmpPRmaxdiff[iopt][iy][ipt] = TMath::Sqrt((tmpPRmaxdiff[iopt][iy][ipt])/nSubOpt[iopt]); //RMS
 				tmpNPmaxdiff[iopt][iy][ipt] = TMath::Sqrt((tmpNPmaxdiff[iopt][iy][ipt])/nSubOpt[iopt]); //RMS
-        //cout << iopt << "opt, maxdiff PR err for" <<iy<<"th y, "<<ipt<<"th pT = " << tmpPRmaxdiff[iopt][iy][ipt]<<endl;
-				//cout << iopt << "opt, maxdiff NP err for" <<iy<<"th y, "<<ipt<<"th pT = " << tmpNPmaxdiff[iopt][iy][ipt]<<endl;
+        cout << iopt << "opt, maxdiff PR err for" <<iy<<"th y, "<<ipt<<"th pT = " << tmpPRmaxdiff[iopt][iy][ipt]<<endl;
+				cout << iopt << "opt, maxdiff NP err for" <<iy<<"th y, "<<ipt<<"th pT = " << tmpNPmaxdiff[iopt][iy][ipt]<<endl;
 				h2D_PR_maxdiff[iopt]->SetBinContent(iy+1,ipt+1,tmpPRmaxdiff[iopt][iy][ipt]);
 				h2D_NP_maxdiff[iopt]->SetBinContent(iy+1,ipt+1,tmpNPmaxdiff[iopt][iy][ipt]);
 			}
 		}
 	}
-	
+  
   ////////////////////////////////////////////////
 	/// check relative err for each szSysOpt ( (norminal)-(sys)/(nominal) )
 	TH2D* h2D_PR_maxerr[nOpt]; //y binning in y_lab^1st
@@ -171,7 +171,7 @@ int make_fitSystematics_rms(int MrapNpt=89, int isPA =1, int accCutType=2){
 			h2D_NP_tot->SetBinContent(iy+1, ipt+1, tmpNPtot[iy][ipt]);	
 		}
 	}	
-	
+/*	
 	//// set unsed values as zero		
 	for (int iy=0; iy<nRap;iy++ ){
 		for (int ipt=0; ipt<nPt;ipt++ ){
@@ -189,7 +189,7 @@ int make_fitSystematics_rms(int MrapNpt=89, int isPA =1, int accCutType=2){
 			h2D_NP_tot->SetBinContent(iy+1, ipt+1, 0);
 		}
 	}	
-  
+*/  
   //// cout check	
   for (int iy=0; iy<nRap;iy++ ){
 		for (int ipt=0; ipt<nPt;ipt++ ){
@@ -202,8 +202,8 @@ int make_fitSystematics_rms(int MrapNpt=89, int isPA =1, int accCutType=2){
 	
 	////////////////////////////////////////////////
 	////// save as a root file
-	TFile *outFile = new TFile(Form("fitSysErr_%s_etOpt0_rms.root",szFinal.Data()),"RECREATE");
-	cout << "firSysErr_"<<szFinal<<".root has been created :) " <<endl;	
+	TFile *outFile = new TFile(Form("fitSysErr_%s_etOpt%d_rms.root",szFinal.Data(),etOpt),"RECREATE");
+	cout << "firSysErr_"<<szFinal<<"etOpt"<<etOpt<<"_rms.root has been created :) " <<endl;	
 
 	outFile->cd();
 	//raw yield
