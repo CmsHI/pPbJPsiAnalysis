@@ -89,8 +89,8 @@ void fitRatio_dNdPt(int isPA=1, bool isPrompt=false){
           if (iy==0) {
             funct[iy]->SetParameter(0, -5.6);
             funct[iy]->SetParLimits(0,-5.8,-4.0);
-            funct[iy]->SetParameter(1, -1.2);
-            funct[iy]->SetParLimits(1,-1.4, 0.5); // the larger, the stiffer at low pT
+            funct[iy]->SetParameter(1, 0.55);
+            funct[iy]->SetParLimits(1, 0.5, 0.8); // the larger, the stiffer at low pT
           }
           else if (iy==2) {
             //funct[iy]->SetParameter(0, -4.6);
@@ -119,12 +119,12 @@ void fitRatio_dNdPt(int isPA=1, bool isPrompt=false){
             //funct[iy]->SetParLimits(1,-1.4, -1.0);
             funct[iy]->SetParLimits(1,-1.4, 0.5); // the larger, the stiffer at low pT
           }
-          //if (iy==7) {
-            //funct[iy]->SetParameter(0, -4.6);
-            //funct[iy]->SetParLimits(0,-4.8,-4.4);
-            //funct[iy]->SetParameter(1, -3.0);
-           // funct[iy]->SetParLimits(1,-3.2, -2.6);
-          //}
+          else if (iy==1) {
+            funct[iy]->SetParameter(0, 0.0);
+            funct[iy]->SetParLimits(0, -0.1,0.0001);
+            funct[iy]->SetParameter(1, 1);
+            funct[iy]->SetParLimits(1, 0.99, 1.01);
+          }
         } else {
           if (iy==3) {
             //funct[iy]->FixParameter(0,-4.13184);
