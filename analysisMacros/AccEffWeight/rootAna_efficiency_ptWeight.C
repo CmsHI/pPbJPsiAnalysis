@@ -433,6 +433,7 @@ int rootAna_efficiency_ptWeight(int MrapNpt = 89, int isPA =1, int accCutType = 
   cout << "Entries of tree : " << myTree->GetEntries() << endl;
   if(nevt == -1) nevt = myTree->GetEntries();
 
+  if(isPA==0 && isPrompt==false) nevt = myTree->GetEntries()-2;
   //// event loop start!
   for(int iev=initev; iev<nevt; ++iev){
     if(iev%100000==0) cout << ">>>>> EVENT " << iev << " / " << myTree->GetEntries() << " ("<<(int)(100.*iev/myTree->GetEntries()) << "%)" << endl;
