@@ -546,8 +546,13 @@ int rootAna_efficiency_ptWeight(int MrapNpt = 89, int isPA =1, int accCutType = 
   Gen_QQ_4mom =0;
   Gen_QQ_mupl_4mom =0;
   Gen_QQ_mumi_4mom =0;
+  
+  if(iev == 2346436) cout << "wtf " << endl;
+  
   } //end of event loop
   
+  cout << "wtf" << endl;
+
   // (Num/Den) to get efficiency (B : binomial error)
   h2D_Eff_pt_y_noPtWeight->Divide(h2D_Num_pt_y_noPtWeight,h2D_Den_pt_y_noPtWeight,1,1,"B");
   h2D_Eff_pt_y->Divide(h2D_Num_pt_y,h2D_Den_pt_y,1,1,"B");
@@ -555,7 +560,7 @@ int rootAna_efficiency_ptWeight(int MrapNpt = 89, int isPA =1, int accCutType = 
   
   ////////////////////////////////////////////////////////////////////////////
   // Save the data!
-  
+
   TFile *outFile = new TFile(Form("EffAna_%s_Zvtx%d_SF%d_ptWeight.root",szFinal.Data(), (int)useZvtxWeight,(int)useSF),"RECREATE");
   std::cout << "szFinal: " << szFinal << std::endl;
   outFile->cd();
