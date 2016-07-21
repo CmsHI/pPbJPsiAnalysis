@@ -24,10 +24,10 @@ void draw_cross_rap(bool sysByHand=true, bool noPtWeight=false, bool isScale=fal
 	//// BR and lumi info.
 	const Double_t br = 0.0593 ;
 	const Double_t brErr = 0.0006;
-	const Double_t pp_lumi_pb =26.3; // 26.3/pb
-	const Double_t pp_lumi_pb_err = 2.63; // tmp
-	const Double_t pPb_lumi_nb = 34.622;
-	const Double_t pPb_lumi_nb_err = 1.2;
+	const Double_t pp_lumi_pb =28.538; // 28.5/pb
+	const Double_t pp_lumi_pb_err = 1.1; // 4 %
+	const Double_t pPb_lumi_nb = 34.622; // 34.6/nb
+	const Double_t pPb_lumi_nb_err = 1.2; // 3.5 %
 	Double_t lumi_mub;
 	Double_t lumi_mub_err;
   if (isPA==0) {
@@ -109,8 +109,8 @@ void draw_cross_rap(bool sysByHand=true, bool noPtWeight=false, bool isScale=fal
 	//////////////////////////////////////////////////////////////	
 	//// read-in sys. file 
 	TFile * fSys;
-  if (isPA==0) fSys = new TFile("../totalSys/TotSys_8rap9pt2gev.root"); //tmp
-  else fSys = new TFile("../totalSys/TotSys_8rap9pt2gev.root"); //tmp
+  if (isPA==0) fSys = new TFile("../TotalSys/TotSys_8rap9pt2gev.root"); //tmp
+  else fSys = new TFile("../TotalSys/TotSys_8rap9pt2gev.root"); //tmp
 	TH2D* h2D_SysErr;
   if (isPrompt) h2D_SysErr = (TH2D*)fSys->Get("hTotalPR");
 	else h2D_SysErr = (TH2D*)fSys->Get("hTotalNP");

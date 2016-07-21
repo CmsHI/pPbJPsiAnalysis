@@ -18,8 +18,8 @@ void draw_RFB_rap(bool sysByHand=true,  bool noPtWeight=true, bool isPrompt = tr
 	//// BR and lumi info.
 	const Double_t br = 0.0593 ;
 	const Double_t brErr = 0.0006;
-	const Double_t pPb_lumi_nb = 34.622;
-	const Double_t pPb_lumi_nb_err = 1.2;
+	const Double_t pPb_lumi_nb = 34.622; // 34.6/nb
+	const Double_t pPb_lumi_nb_err = 1.2; // 3.5 %
 	const Double_t pPb_lumi_mub = pPb_lumi_nb * 1000; // (nb)^{-1} -> {#mub}^{-1}
 	const Double_t pPb_lumi_mub_err = pPb_lumi_nb_err * 1000; // (nb)^{-1} -> {#mub}^{-1}
 	

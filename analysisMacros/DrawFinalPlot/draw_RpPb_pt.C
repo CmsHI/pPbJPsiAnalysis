@@ -20,10 +20,10 @@ void draw_RpPb_pt(bool sysByHand=true, bool noPtWeight=false, bool isPrompt=true
   //// BR and lumi info.
   const Double_t br = 0.0593 ;
   const Double_t brErr = 0.0006;
-  const Double_t pp_lumi_pb =26.3; // 26.3/pb
-  const Double_t pp_lumi_pb_err = 2.63; // tmp
-  const Double_t pPb_lumi_nb = 34.622; // 34.6/nb
-  const Double_t pPb_lumi_nb_err = 1.2;
+	const Double_t pp_lumi_pb =28.538; // 28.5/pb
+	const Double_t pp_lumi_pb_err = 1.1; // 4 %
+	const Double_t pPb_lumi_nb = 34.622; // 34.6/nb
+	const Double_t pPb_lumi_nb_err = 1.2; // 3.5 %
   const Double_t pp_lumi_mub = pp_lumi_pb *1000*1000;
   const Double_t pPb_lumi_mub_err = pp_lumi_pb_err *1000*1000;
  
