@@ -142,57 +142,6 @@ void draw_1D_fitSys_total(int MrapNpt=89, int isPA=1, bool isPrompt=false, doubl
       }
     }
 	
-  //////////////////////////////////////////////////////////////////////////////////////
-	//////////////////////////////////////////////////////////////////////////////////////
-/*
-	//// --- set values as zero for unused bins
-	//// 8rap9pt
-	for (Int_t iy = 0; iy < nRap; iy++) {
-	  for (int iopt=0; iopt<nOpt; iopt++){
-		  if (iy>=1 && iy<=6) {
-			  h1D_tot[iy]->SetBinContent(1,0);
-  			h1D_tot[iy]->SetBinError(1,0);
-  			h1D_tot[iy]->SetBinContent(2,0);
-  			h1D_tot[iy]->SetBinError(2,0);
-			  h1D_maxerr[iy][iopt]->SetBinContent(1,0);
-  			h1D_maxerr[iy][iopt]->SetBinError(1,0);
-  			h1D_maxerr[iy][iopt]->SetBinContent(2,0);
-  			h1D_maxerr[iy][iopt]->SetBinError(2,0);
-  		}
-  		if (iy>=2 && iy<=5) {
-  			h1D_tot[iy]->SetBinContent(3,0);
-  			h1D_tot[iy]->SetBinError(3,0);
-  			h1D_maxerr[iy][iopt]->SetBinContent(3,0);
-  			h1D_maxerr[iy][iopt]->SetBinError(3,0);
-  		}
-      if (isPA ==0){ //for_pp 
-        if (iy>=2 && iy<=5) { 
-			    h1D_tot[iy]->SetBinContent(4,0);
-			    h1D_tot[iy]->SetBinError(4,0);
-			    h1D_maxerr[iy][iopt]->SetBinContent(4,0);
-			    h1D_maxerr[iy][iopt]->SetBinError(4,0);
-		    }
-      }
-      else {
-        if (iy>=2 && iy<=4) { // for_pA
-			    h1D_tot[iy]->SetBinContent(4,0);
-			    h1D_tot[iy]->SetBinError(4,0);
-			    h1D_maxerr[iy][iopt]->SetBinContent(4,0);
-			    h1D_maxerr[iy][iopt]->SetBinError(4,0);
-		    }
-		  }
-		}
-	}
- */ 
-
-/*	
-  ////// after zero-bin setting, normalize!
-	for (Int_t iy = 0; iy < nRap; iy++) {
-		h1D_01[iy]->Scale(1./h1D_01[iy]->Integral());
-		h1D_01[iy]->Scale(1,"width");
-	}
-*/
-	
 	//////////////////////////////////////////////////////////////////
 	//// Draw plots
 	//////////////////////////////////////////////////////////////////
@@ -256,8 +205,14 @@ void draw_1D_fitSys_total(int MrapNpt=89, int isPA=1, bool isPrompt=false, doubl
 	c01->SaveAs(Form("dir_fitSys/%s_fitSys_total_%s_etOpt%d_%s_upto%.0f.pdf",szPA.Data(),szBinning.Data(),etOpt,szPrompt.Data(),ymax));
 */	
   //// hist
-  TCanvas* c02 = new TCanvas("c02","c02",200,10,1600,800);
-	c02->Divide(4,2);
+  TCanvas* c02;
+  if (nRap==8) {
+    c02 = new TCanvas("c02","c02",200,10,1600,800);
+  	c02->Divide(4,2);
+  } else if (nRap==6) {
+    c02 = new TCanvas("c02","c02",200,10,1200,800);
+  	c02->Divide(3,2);
+  }
   
   for (Int_t iy = 0; iy < nRap; iy++) {
     c02->cd(iy+1);
@@ -287,7 +242,7 @@ void draw_1D_fitSys_total(int MrapNpt=89, int isPA=1, bool isPrompt=false, doubl
 			legUR -> AddEntry(h1D_maxerr[iy][1],"syst.2","l");
 			legUR -> AddEntry(h1D_maxerr[iy][2],"syst.3","l");
 			legUR -> AddEntry(h1D_maxerr[iy][3],"syst.4","l");
-			legUR->Draw();
+			//legUR->Draw();
 			if (isPrompt) { latex->DrawLatex(0.19,0.88,Form("%s Prompt J/#psi",szPA.Data())); }
 			else { latex->DrawLatex(0.19,0.88,Form("%s Non-prompt J/#psi",szPA.Data())); }
 		}

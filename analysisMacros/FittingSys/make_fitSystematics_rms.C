@@ -171,12 +171,13 @@ int make_fitSystematics_rms(int MrapNpt=89, int isPA =1, int accCutType=2, int e
 			h2D_NP_tot->SetBinContent(iy+1, ipt+1, tmpNPtot[iy][ipt]);	
 		}
 	}	
-/*	
-	//// set unsed values as zero		
+	
+  //// set unsed values as zero		
 	for (int iy=0; iy<nRap;iy++ ){
 		for (int ipt=0; ipt<nPt;ipt++ ){
-			if ( isPA==0 && !( (iy>=1&&iy<=6&&(ipt==0||ipt==1)) || (iy>=2&&iy<=5&&(ipt==2||ipt==3)) ) ) { continue;}
-			if ( isPA==1 && !( (iy>=1&&iy<=6&&(ipt==0||ipt==1)) || (iy>=2&&iy<=5&&(ipt==2)) || (iy>=2&&iy<=4&&ipt==3) ) ) { continue;}
+			if ( MrapNpt==89 && isPA==0 && !( (iy>=1&&iy<=6&&(ipt==0||ipt==1)) || (iy>=2&&iy<=5&&(ipt==2||ipt==3)) ) ) { continue;}
+			if ( MrapNpt==89 && isPA==1 && !( (iy>=1&&iy<=6&&(ipt==0||ipt==1)) || (iy>=2&&iy<=5&&(ipt==2)) || (iy>=2&&iy<=4&&ipt==3) ) ) { continue;}
+      if (MrapNpt==62 && isPA==1 && !( (iy>=1 && iy<=4&&(ipt==0)) ) ) {continue; } 
 			for (int iopt=0; iopt<nOpt; iopt++){
 				h2D_PR_maxerr[iopt]->SetBinContent(iy+1,ipt+1,0);
 				h2D_NP_maxerr[iopt]->SetBinContent(iy+1,ipt+1,0);
@@ -189,7 +190,7 @@ int make_fitSystematics_rms(int MrapNpt=89, int isPA =1, int accCutType=2, int e
 			h2D_NP_tot->SetBinContent(iy+1, ipt+1, 0);
 		}
 	}	
-*/  
+  
   //// cout check	
   for (int iy=0; iy<nRap;iy++ ){
 		for (int ipt=0; ipt<nPt;ipt++ ){

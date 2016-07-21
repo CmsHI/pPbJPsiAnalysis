@@ -26,7 +26,7 @@
 #root -l 'draw_1D_fitSys_each_8rap9pt.C+(89,1,false,30,"sys04",false,0)'
 
 ######### E_T dependence
-for iopt in 1 2
+for iopt in 1 2 3
   do 
   root -l 'draw_1D_fitSys_total.C+(62,1,true,6,false,'$iopt')'
   root -l 'draw_1D_fitSys_total.C+(62,1,false,30,false,'$iopt')'
