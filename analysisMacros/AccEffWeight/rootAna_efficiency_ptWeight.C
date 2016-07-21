@@ -51,7 +51,8 @@ TF1* hTnp_pp_new_eta5 = (TF1*)fTnp_pp_new->Get("func_5");
 int rootAna_efficiency_ptWeight(int MrapNpt = 89, int isPA =1, int accCutType = 2, bool isPrompt = true, bool useZvtxWeight =true, bool useSF=true)
 {
   using namespace std;
-  int initev =0;
+  //int initev =0;
+  int initev =2205202;
   int nevt;
   if (!isPrompt) nevt = 8900000; 
   else nevt = -1; //all
@@ -547,11 +548,12 @@ int rootAna_efficiency_ptWeight(int MrapNpt = 89, int isPA =1, int accCutType = 
   Gen_QQ_mupl_4mom =0;
   Gen_QQ_mumi_4mom =0;
   
-  if(iev == 2346436) cout << "wtf " << endl;
+  cout << " iev = " << iev << endl;
+  if(iev == 2346436) cout << "wtf 1 " << endl;
   
   } //end of event loop
   
-  cout << "wtf" << endl;
+  cout << "wtf 2" << endl;
 
   // (Num/Den) to get efficiency (B : binomial error)
   h2D_Eff_pt_y_noPtWeight->Divide(h2D_Num_pt_y_noPtWeight,h2D_Den_pt_y_noPtWeight,1,1,"B");
