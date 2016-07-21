@@ -181,9 +181,10 @@ void draw_RpPb_pt(bool sysByHand=true, bool noPtWeight=false, bool isPrompt=true
     g_RpPb_sys[iy]->GetYaxis()->SetLabelSize(0.055);
     g_RpPb_sys[iy]->GetYaxis()->CenterTitle();
     g_RpPb_sys[iy]->GetXaxis()->SetLimits(0.,20.0);
-    g_RpPb_sys[iy]->SetMinimum(0.5);
-    //g_RpPb_sys[iy]->SetMaximum(1.15);
-    g_RpPb_sys[iy]->SetMaximum(1.5);
+    //g_RpPb_sys[iy]->SetMinimum(0.5);
+    //g_RpPb_sys[iy]->SetMaximum(1.5);
+    g_RpPb_sys[iy]->SetMinimum(0.0);
+    g_RpPb_sys[iy]->SetMaximum(1.8);
   } 
   g_RpPb_sys[0]->SetFillColor(kTeal-9);
   g_RpPb_sys[1]->SetFillColor(kRed-9);

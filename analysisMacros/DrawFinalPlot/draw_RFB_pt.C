@@ -216,9 +216,10 @@ void draw_RFB_pt(bool sysByHand=true, bool noPtWeight=false, bool isPrompt=true)
 	gRFB_sys[0]->GetYaxis()->SetTitle("R_{FB}");
 	gRFB_sys[0]->GetYaxis()->CenterTitle();
 	gRFB_sys[0]->GetXaxis()->SetLimits(0.,17.0);
-	gRFB_sys[0]->SetMinimum(0.5);
-	gRFB_sys[0]->SetMaximum(1.15);
-//	gRFB_sys[0]->SetMaximum(1.5);
+//	gRFB_sys[0]->SetMinimum(0.5);
+//	gRFB_sys[0]->SetMaximum(1.15);
+	gRFB_sys[0]->SetMinimum(0.0);
+	gRFB_sys[0]->SetMaximum(1.5);
 	gRFB_sys[0]->SetFillColor(kTeal-9);
 	gRFB_sys[0]->Draw("A2");
 	gRFB_sys[1]->SetFillColor(kRed-10);
