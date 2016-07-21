@@ -6,6 +6,6 @@ root -l 'draw_1D_eff_SF1_SF0.C+("8rap9pt",0,false,false,true)'
 root -l 'draw_1D_eff_SF1_SF0.C+("8rap9pt",1,true,false,true)'
 root -l 'draw_1D_eff_SF1_SF0.C+("8rap9pt",1,false,false,true)'
 
-root -l 'draw_1D_eff_Zvtx1_Zvtx0_pA.C+("8rap9pt",true,false,true)'
-root -l 'draw_1D_eff_Zvtx1_Zvtx0_pA.C+("8rap9pt",false,false,true)'
+#root -l 'draw_1D_eff_Zvtx1_Zvtx0_pA.C+("8rap9pt",true,false,true)'
+#root -l 'draw_1D_eff_Zvtx1_Zvtx0_pA.C+("8rap9pt",false,false,true)'
 
