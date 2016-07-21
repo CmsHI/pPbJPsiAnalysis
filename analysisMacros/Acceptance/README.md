@@ -23,7 +23,7 @@
     - input : [AccAna_BINNING_MCSAMPLE_boosted.root] 
     - output : dir_acc/h2D_xxx_fine.pdf
 
-# Files needed
+# Final Output Files
 - AccAna_8rap9pt_pp_PR_newcut.root
 - AccAna_8rap9pt_pp_NP_newcut.root
 - AccAna_8rap9pt_pA_PR_newcut.root
