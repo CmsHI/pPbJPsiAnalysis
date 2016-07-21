@@ -221,9 +221,9 @@ void comp_RFB_pt_Vogt(double ptmax=20, bool isLine=true, bool isSmoothened=false
 	///////////////////////////////////////////////////
 
   //// PAS
-  TFile *inFile = new TFile("../../2015PAS/drawFinalPlot/RFB_8rap9pt2gev/RFB_pt_isPrompt1.root");
+  //TFile *inFile = new TFile("../../2015PAS/drawFinalPlot/RFB_8rap9pt2gev/RFB_pt_isPrompt1.root");
   //// NEW
-  //TFile *inFile = new TFile("../DrawFinalPlot/plot_RFB/RFB_pt_isPrompt1_noPtWeight.root");
+  TFile *inFile = new TFile("../DrawFinalPlot/plot_RFB/RFB_pt_isPrompt1.root");
   
   TGraphAsymmErrors* gRFB_sys[nRapRFB];
   TGraphAsymmErrors* gRFB[nRapRFB];
