@@ -156,8 +156,14 @@ void draw_1D_fitSys_total(int MrapNpt=89, int isPA=1, bool isPrompt=false, doubl
 	latex->SetTextSize(0.04);
 /*
   //// TGraph
-	TCanvas* c01 = new TCanvas("c01","c01",200,10,1600,800);
-	c01->Divide(4,2);
+  TCanvas* c01;
+  if (nRap==8) {
+    c01 = new TCanvas("c01","c01",200,10,1600,800);
+  	c01->Divide(4,2);
+  } else if (nRap==6) {
+    c01 = new TCanvas("c01","c01",200,10,1200,800);
+  	c01->Divide(3,2);
+  }
    
   TGraphAsymmErrors* g_tot[nRap];
   TGraphAsymmErrors* g_maxerr[nRap][nOpt];

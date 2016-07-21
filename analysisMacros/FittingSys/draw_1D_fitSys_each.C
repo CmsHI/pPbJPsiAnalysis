@@ -1,10 +1,10 @@
 #include "../SONGKYO.h"
 
-void formRapArr(Double_t binmin, Double_t binmax, string* arr);
-void formAbsRapArr(Double_t binmin, Double_t binmax, string* arr);
-void formPtArr(Double_t binmin, Double_t binmax, string* arr);
+void formRapArr(Double_t binmin, Double_t binmax, TString* arr);
+void formAbsRapArr(Double_t binmin, Double_t binmax, TString* arr);
+void formPtArr(Double_t binmin, Double_t binmax, TString* arr);
 
-void draw_1D_fitSys_each_8rap9pt(int isPA=0, bool isPrompt=true, double ymax=100, TString szSys="sys02", bool isMax=true, int etOpt = 2)
+void draw_1D_fitSys_each(int MrapNpt=89, int isPA=0, bool isPrompt=true, double ymax=6, TString szSys="sys02", bool isMax=false, int etOpt = 0)
 {
 	gROOT->Macro("../Style.C");
 
@@ -23,6 +23,12 @@ void draw_1D_fitSys_each_8rap9pt(int isPA=0, bool isPrompt=true, double ymax=100
   const int nOpt = opttmp;
 	cout << "nOpt = " << nOpt << endl;
   
+  TString szBinning;
+  if (MrapNpt==89)  {szBinning = "8rap9pt"; }
+  else if (MrapNpt==83) { szBinning = "8rap3pt"; }
+  else if (MrapNpt==63) { szBinning = "6rap3pt"; }
+  else if (MrapNpt==62) { szBinning = "6rap2pt"; }
+  else {cout << "select among MrapNpt = 89, 83, 63, or 62"<< endl; return; }
   TString szPA;
   if (isPA==0) szPA="pp";
   else if (isPA==1) szPA="pA";
@@ -30,26 +36,46 @@ void draw_1D_fitSys_each_8rap9pt(int isPA=0, bool isPrompt=true, double ymax=100
   TString szPrompt;
   if (isPrompt) szPrompt = "PR";
   else szPrompt = "NP"; 
+ 
+  if (isPA==0 && MrapNpt==62) { cout << "ERORR: no 6rap2pt for pp!!!" <<endl; return; }; 
   
-  ////rap array in yCM (from forward to backward)
-  const Int_t nRap = 8; 
-  const Int_t nPt = 9; 
-  const int nRapTmp = nRap +1; 
-  const int nPtTmp = nPt +1; 
-  
+  ///////////////////////////////////////////////////
+  //////// Definition of binning
+  int nRapInt, nPtInt;
+  if (MrapNpt==89) { nRapInt = 8; nPtInt = 9; }
+  else if (MrapNpt==83) { nRapInt = 8; nPtInt = 3; }
+  else if (MrapNpt==63) { nRapInt = 6; nPtInt = 3;}
+  else { nRapInt = 6; nPtInt = 2;}
+  const int nRapTmp = nRapInt +1;
+  const int nPtTmp = nPtInt +1; 
+  //// pt bins
+  Double_t ptArrNum[nPtTmp];
+  Double_t ptArrNum_9pt[10] = {2.0, 3.0, 4.0, 5.0, 6.5, 7.5, 8.5, 10.0, 14.0, 30.0};
+  Double_t ptArrNum_2pt[3] = {5.0, 6.5, 30.0};
+  for (int ipt=0; ipt<nPtTmp; ipt++){
+    if (MrapNpt==89) {ptArrNum[ipt]=ptArrNum_9pt[ipt];}
+    else {ptArrNum[ipt]=ptArrNum_2pt[ipt];}
+  } 
+  ////rap array in yCM (from forward to backward !!!!)
   Double_t rapArrNumFB[nRapTmp];
-  Double_t rapArrNumFB_pp[nRapTmp] = {2.4, 1.93, 1.5, 0.9, 0., -0.9, -1.5, -1.93, -2.4};// for pt dist.
-  Double_t rapArrNumFB_pA[nRapTmp] = {1.93, 1.5, 0.9, 0., -0.9, -1.5, -1.93, -2.4, -2.87};// for pt dist.
-  //Double_t rapArrNumBF[nRapTmp];
-  //Double_t rapArrNumBF_pp[nRapTmp] = {-2.4, -1.93, -1.5, -0.9, 0., 0.9, 1.5, 1.93, 2.4};// for rap dist.
-  //Double_t rapArrNumBF_pA[nRapTmp] = {-2.87, -2.4, -1.93, -1.5, -0.9, 0., 0.9, 1.5, 1.93};// for rap dist.
+  Double_t rapArrNumFB_8rap_pp[9] = {2.4, 1.93, 1.5, 0.9, 0., -0.9, -1.5, -1.93, -2.4};// for pt dist.
+  Double_t rapArrNumFB_8rap_pA[9] = {1.93, 1.5, 0.9, 0., -0.9, -1.5, -1.93, -2.4, -2.87};// for pt dist.
+  Double_t rapArrNumFB_6rap_pA[9] = {1.93, 1.5, 0.9, 0., -0.9, -1.5, -1.93};// for pt dist.
+  
   for (int iy=0; iy<nRapTmp; iy++){
-    if (isPA==0) { rapArrNumFB[iy]=rapArrNumFB_pp[iy];}
-    else { rapArrNumFB[iy]=rapArrNumFB_pA[iy];}
+    if (isPA==0) { 
+      rapArrNumFB[iy]=rapArrNumFB_8rap_pp[iy];
+    }
+    else {
+      if (MrapNpt==89) { rapArrNumFB[iy]=rapArrNumFB_8rap_pA[iy]; }
+      else { rapArrNumFB[iy]=rapArrNumFB_6rap_pA[iy]; }
+    }
   } 
   
-  ////pt array
-  Double_t ptArrNum[10] = {2.0, 3.0, 4.0, 5.0, 6.5, 7.5, 8.5, 10., 14., 30.};
+  const Int_t nRap = sizeof(rapArrNumFB)/sizeof(double)-1;
+  const Int_t nPt = sizeof(ptArrNum)/sizeof(double)-1;
+  cout << "nRap = " << nRap << endl;
+  cout << "nPt = " << nPt << endl;
  
   //// bin width 
 	Double_t rapBinW[nRap];
@@ -60,14 +86,16 @@ void draw_1D_fitSys_each_8rap9pt(int isPA=0, bool isPrompt=true, double ymax=100
 	for (Int_t ipt=0; ipt<nPt; ipt++) {
 		ptBinW[ipt] = ptArrNum[ipt+1]-ptArrNum[ipt]; 
 	}
-	
+  
   //// array string
-	string rapArr[nRap];
-	for (Int_t iy=0; iy<nRap; iy++) {
+	//TString rapArr[nRap];
+	TString *rapArr = new TString[nRap];
+  for (Int_t iy=0; iy<nRap; iy++) {
 		formRapArr(rapArrNumFB[iy+1], rapArrNumFB[iy], &rapArr[iy]);
 		cout << iy <<"th rapArr = " << rapArr[iy] << endl;
 	}
-	string ptArr[nPt];
+	//TString ptArr[nPt];
+	TString *ptArr = new TString[nPt];
 	for (Int_t ipt=0; ipt<nPt; ipt++) {
 		formPtArr(ptArrNum[ipt], ptArrNum[ipt+1], &ptArr[ipt]);
 		cout << ipt <<"th ptArr = " << ptArr[ipt] << endl;
@@ -76,8 +104,8 @@ void draw_1D_fitSys_each_8rap9pt(int isPA=0, bool isPrompt=true, double ymax=100
   //////////////////////////////////////////////////////////////////////////////
 	// --- read-in file
 	TFile * f2D;
-  if (isMax) f2D = new TFile(Form("../FittingSys/fitSysErr_8rap9pt_%s_newcut_etOpt%d_max.root",szPA.Data(),etOpt));
-  else f2D = new TFile(Form("../FittingSys/fitSysErr_8rap9pt_%s_newcut_etOpt%d_rms.root",szPA.Data(),etOpt));
+  if (isMax) f2D = new TFile(Form("../FittingSys/fitSysErr_%s_%s_newcut_etOpt%d_max.root",szBinning.Data(),szPA.Data(),etOpt));
+  else f2D = new TFile(Form("../FittingSys/fitSysErr_%s_%s_newcut_etOpt%d_rms.root",szBinning.Data(),szPA.Data(),etOpt));
   
 	// --- read-in 2D hist for data reco dist
 	TH2D* h2D_tot = (TH2D*)f2D->Get(Form("h2D_%s_maxerr_%s",szPrompt.Data(),szSys.Data()));
@@ -132,55 +160,6 @@ void draw_1D_fitSys_each_8rap9pt(int isPA=0, bool isPrompt=true, double ymax=100
       }
     }
 	
-  //////////////////////////////////////////////////////////////////////////////////////
-	//////////////////////////////////////////////////////////////////////////////////////
-	//// --- set values as zero for unused bins
-	//// 8rap9pt
-	for (Int_t iy = 0; iy < nRap; iy++) {
-	  for (int iopt=0; iopt<nOpt; iopt++){
-		  if (iy>=1 && iy<=6) {
-			  h1D_tot[iy]->SetBinContent(1,0);
-  			h1D_tot[iy]->SetBinError(1,0);
-  			h1D_tot[iy]->SetBinContent(2,0);
-  			h1D_tot[iy]->SetBinError(2,0);
-			  h1D_maxerr[iy][iopt]->SetBinContent(1,0);
-  			h1D_maxerr[iy][iopt]->SetBinError(1,0);
-  			h1D_maxerr[iy][iopt]->SetBinContent(2,0);
-  			h1D_maxerr[iy][iopt]->SetBinError(2,0);
-  		}
-  		if (iy>=2 && iy<=5) {
-  			h1D_tot[iy]->SetBinContent(3,0);
-  			h1D_tot[iy]->SetBinError(3,0);
-  			h1D_maxerr[iy][iopt]->SetBinContent(3,0);
-  			h1D_maxerr[iy][iopt]->SetBinError(3,0);
-  		}
-      if (isPA ==0){ //for_pp 
-        if (iy>=2 && iy<=5) { 
-			    h1D_tot[iy]->SetBinContent(4,0);
-			    h1D_tot[iy]->SetBinError(4,0);
-			    h1D_maxerr[iy][iopt]->SetBinContent(4,0);
-			    h1D_maxerr[iy][iopt]->SetBinError(4,0);
-		    }
-      }
-      else {
-        if (iy>=2 && iy<=4) { // for_pA
-			    h1D_tot[iy]->SetBinContent(4,0);
-			    h1D_tot[iy]->SetBinError(4,0);
-			    h1D_maxerr[iy][iopt]->SetBinContent(4,0);
-			    h1D_maxerr[iy][iopt]->SetBinError(4,0);
-		    }
-		  }
-		}
-	}
-
-/*	
-  ////// after zero-bin setting, normalize!
-	for (Int_t iy = 0; iy < nRap; iy++) {
-		h1D_01[iy]->Scale(1./h1D_01[iy]->Integral());
-		h1D_01[iy]->Scale(1,"width");
-	}
-*/
-	
 	//////////////////////////////////////////////////////////////////
 	//// Draw plots
 	//////////////////////////////////////////////////////////////////
@@ -196,8 +175,14 @@ void draw_1D_fitSys_each_8rap9pt(int isPA=0, bool isPrompt=true, double ymax=100
 
 /*
   //// TGraph
-	TCanvas* c01 = new TCanvas("c01","c01",200,10,1600,800);
-	c01->Divide(4,2);
+  TCanvas* c01;
+  if (nRap==8) {
+    c01 = new TCanvas("c01","c01",200,10,1600,800);
+  	c01->Divide(4,2);
+  } else if (nRap==6) {
+    c01 = new TCanvas("c01","c01",200,10,1200,800);
+  	c01->Divide(3,2);
+  }
    
   //TGraphAsymmErrors* g_tot[nRap];
   TGraphAsymmErrors* g_maxerr[nRap][nOpt];
@@ -230,15 +215,22 @@ void draw_1D_fitSys_each_8rap9pt(int isPA=0, bool isPrompt=true, double ymax=100
 			if (isPrompt) { latex->DrawLatex(0.19,0.88,Form("%s Prompt J/#psi",szPA.Data())); }
 			else { latex->DrawLatex(0.19,0.88,Form("%s Non-prompt J/#psi",szPA.Data())); }
 		}
-		latex->DrawLatex(0.55,0.88,Form("%s",rapArr[iy].c_str()));
+		latex->DrawLatex(0.55,0.88,Form("%s",rapArr[iy].Data()));
 	}
 	c01->Modified();
 	c01->Update();
-	c01->SaveAs(Form("dir_fitSys/%s_fitSys_%s_8rap9pt_etOpt%d_%s_upto%.0f.pdf",szPA.Data(),szSys.Data(),etOpt,szPrompt.Data(),ymax));
+	c01->SaveAs(Form("dir_fitSys/%s_fitSys_%s_%s_etOpt%d_%s_upto%.0f.pdf",szPA.Data(),szBinning.Data(),szSys.Data(),etOpt,szPrompt.Data(),ymax));
  */ 
   //// Hist
-	TCanvas* c02 = new TCanvas("c02","c02",200,10,1600,800);
-	c02->Divide(4,2);
+  TCanvas* c02;
+  if (nRap==8) {
+    c02 = new TCanvas("c02","c02",200,10,1600,800);
+  	c02->Divide(4,2);
+  } else if (nRap==6) {
+    c02 = new TCanvas("c02","c02",200,10,1200,800);
+  	c02->Divide(3,2);
+  }
+  
   for (Int_t iy = 0; iy < nRap; iy++) {
     c02->cd(iy+1);
     for (int iopt=0; iopt<nOpt; iopt++){
@@ -271,19 +263,19 @@ void draw_1D_fitSys_each_8rap9pt(int isPA=0, bool isPrompt=true, double ymax=100
 			if (isPrompt) { latex->DrawLatex(0.19,0.88,Form("%s Prompt J/#psi",szPA.Data())); }
 			else { latex->DrawLatex(0.19,0.88,Form("%s Non-prompt J/#psi",szPA.Data())); }
 		}
-		latex->DrawLatex(0.55,0.88,Form("%s",rapArr[iy].c_str()));
+		latex->DrawLatex(0.55,0.88,Form("%s",rapArr[iy].Data()));
   	solidLine(2.,0.,30.,0.,1,1);
   }
 	c02->Modified();
 	c02->Update();
-	if (isMax) c02->SaveAs(Form("dir_fitSys/%s_fitSysHist_%s_8rap9pt_etOpt%d_%s_upto%.0f_max.pdf",szPA.Data(),szSys.Data(),etOpt,szPrompt.Data(),ymax));
-	else c02->SaveAs(Form("dir_fitSys/%s_fitSysHist_%s_8rap9pt_%s_upto%.0f_rms.pdf",szPA.Data(),szSys.Data(),szPrompt.Data(),ymax));
+	if (isMax) c02->SaveAs(Form("dir_fitSys/%s_fitSysHist_%s_%s_etOpt%d_%s_upto%.0f_max.pdf",szPA.Data(),szBinning.Data(),szSys.Data(),etOpt,szPrompt.Data(),ymax));
+	else c02->SaveAs(Form("dir_fitSys/%s_fitSysHist_%s_%s_etOpt%d_%s_upto%.0f_rms.pdf",szPA.Data(),szBinning.Data(),szSys.Data(),etOpt,szPrompt.Data(),ymax));
 
 	return;
 
 } // end of main func.
 
-void formRapArr(Double_t binmin, Double_t binmax, string* arr) {
+void formRapArr(Double_t binmin, Double_t binmax, TString* arr) {
 	Double_t intMin, intMax; 
 	Double_t fracMin = modf(binmin, &intMin);
 	Double_t fracMax = modf(binmax, &intMax);
@@ -298,7 +290,7 @@ void formRapArr(Double_t binmin, Double_t binmax, string* arr) {
 	}
 }
 
-void formAbsRapArr(Double_t binmin, Double_t binmax, string* arr) {
+void formAbsRapArr(Double_t binmin, Double_t binmax, TString* arr) {
 	Double_t intMin, intMax; 
 	Double_t fracMin = modf(binmin, &intMin);
 	Double_t fracMax = modf(binmax, &intMax);
@@ -313,7 +305,7 @@ void formAbsRapArr(Double_t binmin, Double_t binmax, string* arr) {
 	}
 }
 
-void formPtArr(Double_t binmin, Double_t binmax, string* arr) {
+void formPtArr(Double_t binmin, Double_t binmax, TString* arr) {
 	Double_t intMin, intMax; 
 	Double_t fracMin = modf(binmin, &intMin);
 	Double_t fracMax = modf(binmax, &intMax);
