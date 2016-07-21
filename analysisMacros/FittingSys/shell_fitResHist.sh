@@ -19,7 +19,7 @@ root -l -b -q 'make_fitResHist.C+(89,3,2,"sys03_02",0)'
 root -l -b -q 'make_fitResHist.C+(89,3,2,"sys04_01",0)'
 
 #### E_T dependence
-for iopt in 1 2
+for iopt in 1 2 3
   do 
   root -l -b -q 'make_fitResHist.C+(62,3,2,"sys01_01",'$iopt')'
   root -l -b -q 'make_fitResHist.C+(62,3,2,"sys01_02",'$iopt')'
