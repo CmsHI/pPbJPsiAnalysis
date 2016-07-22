@@ -129,7 +129,9 @@ int make_TotSys(int MrapNpt = 89, int isPA =0, int etOpt=0){
 	//// set unsed values as zero		
 	for (int iy=0; iy<nRap;iy++ ){
 		for (int ipt=0; ipt<nPt;ipt++ ){
-			if ( !( (iy>=1&&iy<=6&&ipt==0) || (iy>=2&&iy<=5&&(ipt==1||ipt==2)) || (iy>=2&&iy<=4&&ipt==3) ) ) { continue;}
+			if ( isPA==0 && !( (iy>=1&&iy<=6&&(ipt==0||ipt==1)) || (iy>=2&&iy<=5&&(ipt==2||ipt==3)) ) ) { continue;}
+			if ( isPA==1 && !( (iy>=1&&iy<=6&&(ipt==0||ipt==1)) || (iy>=2&&iy<=5&&(ipt==2)) || (iy>=2&&iy<=4&&ipt==3) ) ) { continue;}
+      if (MrapNpt==62 && isPA==1 && !( (iy>=1 && iy<=4&&(ipt==0)) ) ) {continue; } 
 			hTotalPR->SetBinContent(iy+1, ipt+1, 0);
 			hTotalNP->SetBinContent(iy+1, ipt+1, 0);
 		}

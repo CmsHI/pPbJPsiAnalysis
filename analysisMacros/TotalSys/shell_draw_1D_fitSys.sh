@@ -8,9 +8,9 @@ root -l -b -q 'draw_1D_TotSys.C+(89,1,true,12,0)'
 root -l -b -q 'draw_1D_TotSys.C+(89,1,false,32,0)'
 
 ######### E_T dependence
-#for iopt in 1 2 3
-#  do 
-#  root -l -b -q 'draw_1D_TotSys.C+(62,1,true,4,'$iopt')'
-#  root -l -b -q 'draw_1D_TotSys.C+(62,1,false,12,'$iopt')'
-#done
+for iopt in 1 2 3
+  do 
+  root -l -b -q 'draw_1D_TotSys.C+(62,1,true,8,'$iopt')'
+  root -l -b -q 'draw_1D_TotSys.C+(62,1,false,12,'$iopt')'
+done
 
