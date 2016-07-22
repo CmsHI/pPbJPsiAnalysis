@@ -8,7 +8,7 @@ void formEtArr(Double_t min, Double_t max, TString* arr);
 
 void CMS_lumi( TPad* pad, int iPeriod, int iPosX );
 
-void draw_RFB_ethf(bool sysByHand=true, bool noPtWeight = false, bool isPrompt=true)
+void draw_RFB_ethf(bool sysByHand=true, bool noPtWeight = false, bool isPrompt=false)
 {
 	gROOT->Macro("./tdrstyle_kyo.C");
   int isPA = 1;	
@@ -280,9 +280,10 @@ void draw_RFB_ethf(bool sysByHand=true, bool noPtWeight = false, bool isPrompt=t
 	gRFB_sys[0]->GetYaxis()->SetTitle("R_{FB}");
 	gRFB_sys[0]->GetYaxis()->CenterTitle();
 	gRFB_sys[0]->GetXaxis()->SetLimits(0.,50.0);
-	//gRFB_sys[0]->SetMinimum(0.4);
-	gRFB_sys[0]->SetMinimum(0.5);
-	gRFB_sys[0]->SetMaximum(1.15);
+	//gRFB_sys[0]->SetMinimum(0.5);
+	//gRFB_sys[0]->SetMaximum(1.15);
+	gRFB_sys[0]->SetMinimum(0.0);
+	gRFB_sys[0]->SetMaximum(1.5);
 	gRFB_sys[0]->SetFillColor(kViolet-9);
 	gRFB_sys[0]->Draw("A2");
 	gRFB_sys[1]->SetFillColor(kTeal-9);

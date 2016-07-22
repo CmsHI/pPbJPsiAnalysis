@@ -7,7 +7,7 @@ void formPtArr(Double_t binmin, Double_t binmax, TString* arr);
 
 void CMS_lumi( TPad* pad, int iPeriod, int iPosX );
 
-void draw_RpPb_rap(bool sysByHand=true, bool noPtWeight=false, bool isPrompt=false)
+void draw_RpPb_rap(bool sysByHand=true, bool noPtWeight=false, bool isPrompt=true)
 {
   gROOT->Macro("./tdrstyle_kyo.C");
   //cmsTextFont   = 42;  // for b.hong
@@ -193,8 +193,9 @@ void draw_RpPb_rap(bool sysByHand=true, bool noPtWeight=false, bool isPrompt=fal
   g_RpPb_sys_lowpt->GetYaxis()->CenterTitle();
   g_RpPb_sys_lowpt->GetXaxis()->SetLimits(-2.4,1.93);
   //g_RpPb_sys_lowpt->GetXaxis()->SetLimits(-2.4,2.4);
-  g_RpPb_sys_lowpt->SetMinimum(0.5);
-  //g_RpPb_sys_lowpt->SetMaximum(1.15);
+  //g_RpPb_sys_lowpt->SetMinimum(0.5);
+  //g_RpPb_sys_lowpt->SetMaximum(1.5);
+  g_RpPb_sys_lowpt->SetMinimum(0.0);
   g_RpPb_sys_lowpt->SetMaximum(1.5);
 
   g_RpPb_sys_lowpt->SetFillColor(kRed-9);

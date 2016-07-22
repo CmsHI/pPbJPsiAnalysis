@@ -7,7 +7,7 @@ void formPtArr(Double_t binmin, Double_t binmax, TString* arr);
 
 void CMS_lumi( TPad* pad, int iPeriod, int iPosX );
 
-void draw_RFB_rap(bool sysByHand=true,  bool noPtWeight=true, bool isPrompt = true)
+void draw_RFB_rap(bool sysByHand=true,  bool noPtWeight=false, bool isPrompt = true)
 {
 	gROOT->Macro("./tdrstyle_kyo.C");
 	int isPA = 1;  // 0:pp, 1:pPb
@@ -251,9 +251,10 @@ void draw_RFB_rap(bool sysByHand=true,  bool noPtWeight=true, bool isPrompt = tr
 	gRFB_sys_lowpt->GetYaxis()->SetTitle("R_{FB}");	
 	gRFB_sys_lowpt->GetYaxis()->CenterTitle();	
 	gRFB_sys_lowpt->GetXaxis()->SetLimits(0.,2.);	
-	gRFB_sys_lowpt->SetMinimum(0.5);
+	//gRFB_sys_lowpt->SetMinimum(0.5);
+	//gRFB_sys_lowpt->SetMaximum(1.15);
+	gRFB_sys_lowpt->SetMinimum(0.0);
 	gRFB_sys_lowpt->SetMaximum(1.15);
-//	gRFB_sys_lowpt->SetMaximum(1.5);
 	gRFB_sys_lowpt->SetFillColor(kRed-10);	
 	gRFB_sys_lowpt->Draw("A2");
 	gRFB_sys_highpt->SetFillColor(kTeal-9);

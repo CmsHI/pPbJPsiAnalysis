@@ -243,14 +243,16 @@ void draw_1D_fitSys_total(int MrapNpt=89, int isPA=1, bool isPrompt=false, doubl
 		h1D_tot[iy]->Draw("hist same");
 		
 		if (iy==0) {
+			if (isPrompt) { latex->DrawLatex(0.19,0.88,Form("%s Prompt J/#psi",szPA.Data())); }
+			else { latex->DrawLatex(0.19,0.88,Form("%s Non-prompt J/#psi",szPA.Data())); }
+		}
+    if (iy==nRap-1) {
 			legUR -> AddEntry(h1D_tot[iy],"total","l");
 			legUR -> AddEntry(h1D_maxerr[iy][0],"syst.1","l");
 			legUR -> AddEntry(h1D_maxerr[iy][1],"syst.2","l");
 			legUR -> AddEntry(h1D_maxerr[iy][2],"syst.3","l");
 			legUR -> AddEntry(h1D_maxerr[iy][3],"syst.4","l");
-			//legUR->Draw();
-			if (isPrompt) { latex->DrawLatex(0.19,0.88,Form("%s Prompt J/#psi",szPA.Data())); }
-			else { latex->DrawLatex(0.19,0.88,Form("%s Non-prompt J/#psi",szPA.Data())); }
+			legUR->Draw();
 		}
 		latex->DrawLatex(0.55,0.88,Form("%s",rapArr[iy].Data()));
 	}
