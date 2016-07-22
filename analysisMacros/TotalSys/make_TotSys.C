@@ -158,7 +158,7 @@ int make_TotSys(int MrapNpt = 89, int isPA =0, int etOpt=0){
 	
   ////////////////////////////////////////////////
 	////// save as a root file
-	TFile *outFile = new TFile(Form("TotSys_%s.root",szFinal.Data()),"RECREATE");
+	TFile *outFile = new TFile(Form("TotSys_%s_etOpt%d.root",szFinal.Data(),etOpt),"RECREATE");
 	cout << "TotSys_"<<szFinal.Data()<<".root has been created :) " <<endl;	
 
 	outFile->cd();
