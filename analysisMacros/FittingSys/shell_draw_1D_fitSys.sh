@@ -28,15 +28,15 @@ root -l -b -q 'draw_1D_fitSys_each.C+(89,1,false,30,"sys04",false,0)'
 ######### E_T dependence
 for iopt in 1 2 3
   do 
-  root -l -b -q 'draw_1D_fitSys_total.C+(62,1,true,4,false,'$iopt')'
+  root -l -b -q 'draw_1D_fitSys_total.C+(62,1,true,6,false,'$iopt')'
   root -l -b -q 'draw_1D_fitSys_total.C+(62,1,false,12,false,'$iopt')'
-  root -l -b -q 'draw_1D_fitSys_each.C+(62,1,true,4,"sys01",false,'$iopt')'
+  root -l -b -q 'draw_1D_fitSys_each.C+(62,1,true,6,"sys01",false,'$iopt')'
   root -l -b -q 'draw_1D_fitSys_each.C+(62,1,false,12,"sys01",false,'$iopt')'
-  root -l -b -q 'draw_1D_fitSys_each.C+(62,1,true,4,"sys02",false,'$iopt')'
+  root -l -b -q 'draw_1D_fitSys_each.C+(62,1,true,6,"sys02",false,'$iopt')'
   root -l -b -q 'draw_1D_fitSys_each.C+(62,1,false,12,"sys02",false,'$iopt')'
-  root -l -b -q 'draw_1D_fitSys_each.C+(62,1,true,4,"sys03",false,'$iopt')'
+  root -l -b -q 'draw_1D_fitSys_each.C+(62,1,true,6,"sys03",false,'$iopt')'
   root -l -b -q 'draw_1D_fitSys_each.C+(62,1,false,12,"sys03",false,'$iopt')'
-  root -l -b -q 'draw_1D_fitSys_each.C+(62,1,true,4,"sys04",false,'$iopt')'
+  root -l -b -q 'draw_1D_fitSys_each.C+(62,1,true,6,"sys04",false,'$iopt')'
   root -l -b -q 'draw_1D_fitSys_each.C+(62,1,false,12,"sys04",false,'$iopt')'
 done
 
