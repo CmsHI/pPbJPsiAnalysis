@@ -32,7 +32,8 @@ TF1* hTnp_pa_new_eta5 = (TF1*)fTnp_pa_new->Get("func_5");
 //// pp new TNP
 //TFile* fTnp_pp_new = new TFile("../Efficiency/tagAndProbe/output_pp_5eta_cutG_all_nominal_v5.root"); //20160620 (off tagpt3)
 //TFile* fTnp_pp_new = new TFile("../Efficiency/tagAndProbe/output_pp_5eta_cutG_all_nominal_v6.root"); //20160621 (off, eta4-5 tagpt5)
-TFile* fTnp_pp_new = new TFile("../Efficiency/tagAndProbe/output_pp_5eta_cutG_all_nominal_v7.root"); //20160626 (off, tagpt5)
+//TFile* fTnp_pp_new = new TFile("../Efficiency/tagAndProbe/output_pp_5eta_cutG_all_nominal_v7.root"); //20160626 (off, tagpt5)
+TFile* fTnp_pp_new = new TFile("../Efficiency/tagAndProbe/output_pp_5eta_cutG_all_nominal_v8.root"); //20160626 (off, tagpt5, tuned 20160727)
 TF1* hTnp_pp_new_eta1 = (TF1*)fTnp_pp_new->Get("func_1");
 TF1* hTnp_pp_new_eta2 = (TF1*)fTnp_pp_new->Get("func_2");
 TF1* hTnp_pp_new_eta3 = (TF1*)fTnp_pp_new->Get("func_3");
