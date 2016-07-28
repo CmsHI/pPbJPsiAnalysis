@@ -7,7 +7,7 @@ void formPtArr(Double_t binmin, Double_t binmax, TString* arr);
 
 void CMS_lumi( TPad* pad, int iPeriod, int iPosX );
 
-void draw_RFB_rap(bool sysByHand=true,  bool noPtWeight=false, bool isPrompt = true)
+void draw_RFB_rap(bool sysByHand=true,  bool noPtWeight=false, bool isPrompt = false)
 {
 	gROOT->Macro("./tdrstyle_kyo.C");
 	int isPA = 1;  // 0:pp, 1:pPb
@@ -40,24 +40,25 @@ void draw_RFB_rap(bool sysByHand=true,  bool noPtWeight=false, bool isPrompt = t
 	Double_t exsys[nRapRFB] = {0.03, 0.03, 0.03}; //x sys error (box width)
 	Double_t eysys_lowpt[nRapRFB]; //absolute y sys error
 	Double_t eysys_highpt[nRapRFB]; //absolute y sys error
-	Double_t eysysrelPR_lowpt[nRapRFB] = { //relative y sys error
-		0.04694, //0-0.9
-		0.04245, //0.9-1.5
-		0.04795}; //1.5-1.93; 
-	Double_t eysysrelNP_lowpt[nRapRFB] = { //relative y sys error
-		0.07412,
-		0.06288,
-		0.10487};
-	Double_t eysysrelPR_highpt[nRapRFB] = { //relative y sys error
-		0.03705,
-		0.03360,
-		0.06486};
-	Double_t eysysrelNP_highpt[nRapRFB] = { //relative y sys error
-		0.04483,
-		0.05592,
-		0.09280};
 	Double_t eysysrel_lowpt[nRapRFB];
 	Double_t eysysrel_highpt[nRapRFB];
+	
+  Double_t eysysrelPR_lowpt[nRapRFB] = { //relative y sys error
+		0.0695577, //0-0.9
+		0.063361, //0.9-1.5
+		0.0885176}; //1.5-1.93; 
+	Double_t eysysrelNP_lowpt[nRapRFB] = { //relative y sys error
+		0.110379,
+		0.100797,
+		0.139039};
+	Double_t eysysrelPR_highpt[nRapRFB] = { //relative y sys error
+		0.0439381,
+		0.0535455,
+		0.0848076};
+	Double_t eysysrelNP_highpt[nRapRFB] = { //relative y sys error
+		0.0615193,
+		0.0793497,
+		0.113259};
 	for (int iy=0; iy<nRapRFB; iy++){
 		if (isPrompt) { 
 			eysysrel_lowpt[iy] = eysysrelPR_lowpt[iy];
@@ -96,6 +97,16 @@ void draw_RFB_rap(bool sysByHand=true,  bool noPtWeight=false, bool isPrompt = t
 		cout << ipt <<"th ptArr = " << ptArr[ipt] << endl;
 	}
 
+	//////////////////////////////////////////////////////////////	
+	//// read-in sys. file 
+	TFile * fSys;
+  if (isPA==0) fSys = new TFile("../TotalSys/TotSys_8rap9pt_pp_etOpt0.root");
+  else fSys = new TFile("../TotalSys/TotSys_8rap9pt_pA_etOpt0.root");
+	TH2D* h2D_SysErr;
+  if (isPrompt) h2D_SysErr = (TH2D*)fSys->Get("hTotalPR");
+	else h2D_SysErr = (TH2D*)fSys->Get("hTotalNP");
+//	cout << " *** h2D_SysErr = " <<  h2D_SysErr << endl;	
+
   /////////////////////////////////////////////////////////////////////////
 	//// read-in file
 	TFile * f2D;
@@ -114,11 +125,16 @@ void draw_RFB_rap(bool sysByHand=true,  bool noPtWeight=false, bool isPrompt = t
   //// projection to 1D hist : iy=0 refers to forwards !!! (ordering here && in CM)
 	TH1D* h1D_CorrY_lab[nPt]; // in y_lab(1st)
 	TH1D* h1D_CorrY[nPt]; // in y_CM
+	TH1D* h1D_SysErr_lab[nPt];
+	TH1D* h1D_SysErr[nPt];
 	int tmpbin; double tmpval=0; double tmperr=0;
 	for (Int_t ipt = 0; ipt < nPt; ipt++) {
 		h1D_CorrY_lab[ipt] = h2D_CorrY->ProjectionX(Form("h1D_CorrY_lab_%d",ipt),ipt+1,ipt+1);
+		h1D_SysErr_lab[ipt] = h2D_SysErr->ProjectionX(Form("h1D_SysErr_lab_%d",ipt),ipt+1,ipt+1);
 		h1D_CorrY[ipt] = new TH1D(Form("h1D_CorrY_%d",ipt),Form("h1D_CorrY_%d",ipt),nRap,rapArrNumBF);
 		h1D_CorrY[ipt]->Sumw2();
+		h1D_SysErr[ipt] = new TH1D(Form("h1D_SysErr_%d",ipt),Form("h1D_SysErr_%d",ipt),nRap,rapArrNumBF);
+		h1D_SysErr[ipt]->Sumw2();
 		for (Int_t iy=0; iy<nRap; iy++){
 			tmpval = h1D_CorrY_lab[ipt]->GetBinContent(iy+1);
 			tmperr = h1D_CorrY_lab[ipt]->GetBinError(iy+1);
@@ -126,6 +142,10 @@ void draw_RFB_rap(bool sysByHand=true,  bool noPtWeight=false, bool isPrompt = t
 			h1D_CorrY[ipt]->SetBinError(nRap-iy,tmperr);
 			//h1D_CorrY[ipt]->SetBinContent(iy+1,tmpval);
 			//h1D_CorrY[ipt]->SetBinError(iy+1,tmperr);
+			tmpval = h1D_SysErr_lab[ipt]->GetBinContent(iy+1);
+			tmperr = h1D_SysErr_lab[ipt]->GetBinError(iy+1);
+			h1D_SysErr[ipt]->SetBinContent(nRap-iy,tmpval);
+			h1D_SysErr[ipt]->SetBinError(nRap-iy,tmperr);
 		}
 	}
 	
@@ -134,8 +154,33 @@ void draw_RFB_rap(bool sysByHand=true,  bool noPtWeight=false, bool isPrompt = t
 	
 	const int lowpt_init=4;
 	const int highpt_init=7;	
-
-	//// pt bin merging
+	
+  //// take proper error propagation for sys (pt bin merging)
+	double tmpsys[nRap][nPt];
+	double tmpsys_lowpt[nRap];
+	double tmpsys_highpt[nRap];
+	for (int iy=0; iy <nRap; iy ++ ){ 
+	  for (Int_t ipt = lowpt_init; ipt < highpt_init; ipt++) {
+			tmpsys[iy][ipt] = h1D_SysErr[ipt]->GetBinContent(iy+1);
+      cout << iy << "th iy, "<<ipt<<"th ipt tmpssys = " << tmpsys[iy][ipt] << endl;
+      tmpsys_lowpt[iy] += tmpsys[iy][ipt]*tmpsys[iy][ipt]; 
+	  }
+    cout << "tmpsys_lowpt[iy]" << tmpsys_lowpt[iy] << endl;
+    tmpsys_lowpt[iy] = TMath::Sqrt(tmpsys_lowpt[iy]);
+    cout << "tmpsys_lowpt[iy]" << tmpsys_lowpt[iy] << endl;
+	}
+	for (int iy=0; iy <nRap; iy ++ ){ 
+	  for (Int_t ipt = highpt_init; ipt < nPt; ipt++) {
+			tmpsys[iy][ipt] = h1D_SysErr[ipt]->GetBinContent(iy+1);
+      cout << iy << "th iy, "<<ipt<<"th ipt tmpssys = " << tmpsys[iy][ipt] << endl;
+      tmpsys_highpt[iy] += tmpsys[iy][ipt]*tmpsys[iy][ipt]; 
+	  }
+    cout << "tmpsys_highpt[iy]" << tmpsys_highpt[iy] << endl;
+    tmpsys_highpt[iy] = TMath::Sqrt(tmpsys_highpt[iy]);
+    cout << "tmpsys_highpt[iy]" << tmpsys_highpt[iy] << endl;
+	}
+  
+  //// pt bin merging
 	cout << "1) low pT bin starts from : " << ptArr[lowpt_init].Data() << endl;
 	for (Int_t ipt = lowpt_init+1; ipt < highpt_init; ipt++) {
 		h1D_CorrY[lowpt_init]->Add(h1D_CorrY[ipt]);
@@ -173,7 +218,19 @@ void draw_RFB_rap(bool sysByHand=true,  bool noPtWeight=false, bool isPrompt = t
 		}
 	}	
 	
-	//////////////////////////////////////////////////////////////////
+	//// sys F/B calculation
+  for (int iy=0; iy<nRapRFB; iy++){
+    //eysysrel_lowpt[iy] = TMath::Sqrt(tmpsys_lowpt[nRap-iy-1]*tmpsys_lowpt[nRap-iy-1]+tmpsys_lowpt[rap_init+iy]*tmpsys_lowpt[rap_init+iy]);
+    //eysysrel_highpt[iy] = TMath::Sqrt(tmpsys_highpt[nRap-iy-1]*tmpsys_highpt[nRap-iy-1]+tmpsys_highpt[rap_init+iy]*tmpsys_highpt[rap_init+iy]);
+    cout << "FW bin lowpt = " << tmpsys_lowpt[iy] << endl;
+    cout << "BW bin lowpt = " << tmpsys_lowpt[rap_init+iy+1] << endl;
+    cout << "eysysrel_lowpt["<<iy<<"] = " << eysysrel_lowpt[iy] << endl;
+    cout << "FW bin highpt = " << tmpsys_highpt[iy] << endl;
+    cout << "BW bin highpt = " << tmpsys_highpt[rap_init+iy+1] << endl;
+    cout << "eysysrel_highpt["<<iy<<"] = " << eysysrel_highpt[iy] << endl;
+	}
+  	
+  //////////////////////////////////////////////////////////////////
 	//TLegend *legBR = new TLegend(0.51, 0.17, 0.71, 0.38);
 	TLegend *legBR = new TLegend(0.45, 0.18, 0.70, 0.32);
 	SetLegendStyle(legBR);
@@ -251,10 +308,10 @@ void draw_RFB_rap(bool sysByHand=true,  bool noPtWeight=false, bool isPrompt = t
 	gRFB_sys_lowpt->GetYaxis()->SetTitle("R_{FB}");	
 	gRFB_sys_lowpt->GetYaxis()->CenterTitle();	
 	gRFB_sys_lowpt->GetXaxis()->SetLimits(0.,2.);	
-	//gRFB_sys_lowpt->SetMinimum(0.5);
-	//gRFB_sys_lowpt->SetMaximum(1.15);
-	gRFB_sys_lowpt->SetMinimum(0.0);
+	gRFB_sys_lowpt->SetMinimum(0.5);
 	gRFB_sys_lowpt->SetMaximum(1.15);
+	//gRFB_sys_lowpt->SetMinimum(0.0);
+	//gRFB_sys_lowpt->SetMaximum(1.15);
 	gRFB_sys_lowpt->SetFillColor(kRed-10);	
 	gRFB_sys_lowpt->Draw("A2");
 	gRFB_sys_highpt->SetFillColor(kTeal-9);
@@ -286,8 +343,10 @@ void draw_RFB_rap(bool sysByHand=true,  bool noPtWeight=false, bool isPrompt = t
 	
   globtex->SetTextSize(0.055);
 	globtex->SetTextFont(42);
-	if (isPrompt) globtex->DrawLatex(0.21, 0.84, "Prompt J/#psi");
-	else globtex->DrawLatex(0.21, 0.84, "Non-prompt J/#psi");
+	//if (isPrompt) globtex->DrawLatex(0.21, 0.84, "Prompt J/#psi");
+	//else globtex->DrawLatex(0.21, 0.84, "Non-prompt J/#psi");
+	if (isPrompt) globtex->DrawLatex(0.21, 0.85, "Prompt J/#psi");
+	else globtex->DrawLatex(0.21, 0.85, "Non-prompt J/#psi");
 	CMS_lumi( c1, isPA, iPos );
 	c1->Update();
 

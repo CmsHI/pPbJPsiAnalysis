@@ -7,7 +7,7 @@ void formPtArr(Double_t binmin, Double_t binmax, TString* arr);
 
 void CMS_lumi( TPad* pad, int iPeriod, int iPosX );
 
-void draw_cross_pt_middle(bool sysByHand=true, bool noPtWeight=true, bool isScale=true, bool isLog=true, int isPA = 1, bool isPrompt=false)
+void draw_cross_pt_middle(bool sysByHand=false, bool noPtWeight=false, bool isScale=true, bool isLog=true, int isPA = 1, bool isPrompt=false)
 {
 	gROOT->Macro("./tdrstyle_kyo.C");
   gStyle->SetTitleYOffset(1.38); //KYO
@@ -22,15 +22,15 @@ void draw_cross_pt_middle(bool sysByHand=true, bool noPtWeight=true, bool isScal
 	cout << " *** pileReg = " << pileReg << endl;
 
 	//// zvtx correction!!
-	const Double_t zvtxCor = 1.064; // not used anymore
+	//const Double_t zvtxCor = 1.064; // not used anymore!!
 
 	//// BR and lumi info.
 	const Double_t br = 0.0593 ;
 	const Double_t brErr = 0.0006;
-	const Double_t pp_lumi_pb =26.3; // 26.3/pb
-	const Double_t pp_lumi_pb_err = 2.63; // tmp
+	const Double_t pp_lumi_pb =28.538; // 28.5/pb
+	const Double_t pp_lumi_pb_err = 1.1; // 4 %
 	const Double_t pPb_lumi_nb = 34.622; // 34.6/nb
-	const Double_t pPb_lumi_nb_err = 1.2;
+	const Double_t pPb_lumi_nb_err = 1.2; // 3.5 %
 	Double_t lumi_mub;
 	Double_t lumi_mub_err;
   if (isPA==0) {
@@ -44,7 +44,6 @@ void draw_cross_pt_middle(bool sysByHand=true, bool noPtWeight=true, bool isScal
     cout << "select among isPA = 0 or 1"<< endl; return ;
   }
 	cout << "isPA = " << isPA << ", and lumi_mub = " << lumi_mub <<"+-" <<lumi_mub_err <<  endl;
-
   //double A_pb =208;
 
 	/////////////////////////////////////////////////////////////////////////
@@ -61,50 +60,50 @@ void draw_cross_pt_middle(bool sysByHand=true, bool noPtWeight=true, bool isScal
 	Double_t eytmp[nRap][nPt]; //y point error to fill remporarily
 
 	Double_t px[nRap][nPt];
-#if 0
-	Double_t px_pp[nRap][nPt] = { //x point (mean pT) tmp
-	  {2.49530, 3.48529, 4.47275, 5.68792, 6.9644, 7.96271, 9.1754, 11.5315, 17.7588}, 
-	  {0.00000, 3.53123, 4.5027, 5.71709, 6.96523, 7.9693, 9.17314, 11.4952, 17.6927}, 
-	  {0.00000, 0.00000, 0.00000, 0.00000, 7.01977, 7.99712, 9.19936, 11.5743, 17.7732}, 
-	  {0.00000, 0.00000, 0.00000, 0.00000, 7.12292, 8.01305, 9.22816, 11.6279, 17.8879}, 
-	  {0.00000, 0.00000, 0.00000, 0.00000, 7.05476, 8.00208, 9.21589, 11.5645, 17.7176}, 
-	  {0.00000, 0.00000, 0.00000, 5.82095, 6.97886, 7.96732, 9.18979, 11.5158, 17.4116}, 
-	  {0.00000, 3.52893, 4.48328, 5.69351, 6.96188, 7.95707, 9.14886, 11.4747, 17.231}, 
-	  {2.49481, 3.47853, 4.46938, 5.6761, 6.96419, 7.97702, 9.16158, 11.5077, 17.3061} 
+	/*
+  Double_t px_pp[nRap][nPt] = { //x point (mean pT) by JB
+    {2.54567, 3.50886, 4.48508, 5.69331, 6.97532, 7.97107, 9.17601, 11.5322, 17.4867},
+    {0, 0, 4.54938, 5.75633, 6.9727, 7.97359, 9.17558, 11.4729, 17.4391},
+    {0, 0, 0, 0, 7.0061, 7.97991, 9.19355, 11.5729, 17.6818},
+    {0, 0, 0, 0, 7.08557, 8.01392, 9.2137, 11.6042, 17.9741},
+    {0, 0, 0, 0, 7.08944, 8.01343, 9.21616, 11.6091, 17.7608},
+    {0, 0, 0, 0, 7.00408, 7.98632, 9.19122, 11.5535, 17.7004},
+    {0, 0, 4.54198, 5.76465, 6.97492, 7.96787, 9.18318, 11.5223, 17.4279},
+    {2.54164, 3.5085, 4.48298, 5.69705, 6.97263, 7.97372, 9.17313, 11.5032, 17.3023}
 	};
-	Double_t px_pA[nRap][nPt] = { //x point (mean pT)
-	  {2.49530, 3.48529, 4.47275, 5.68792, 6.9644, 7.96271, 9.1754, 11.5315, 17.7588}, 
-	  {0.00000, 3.53123, 4.5027, 5.71709, 6.96523, 7.9693, 9.17314, 11.4952, 17.6927}, 
-	  {0.00000, 0.00000, 0.00000, 0.00000, 7.01977, 7.99712, 9.19936, 11.5743, 17.7732}, 
-	  {0.00000, 0.00000, 0.00000, 0.00000, 7.12292, 8.01305, 9.22816, 11.6279, 17.8879}, 
-	  {0.00000, 0.00000, 0.00000, 0.00000, 7.05476, 8.00208, 9.21589, 11.5645, 17.7176}, 
-	  {0.00000, 0.00000, 0.00000, 5.82095, 6.97886, 7.96732, 9.18979, 11.5158, 17.4116}, 
-	  {0.00000, 3.52893, 4.48328, 5.69351, 6.96188, 7.95707, 9.14886, 11.4747, 17.231}, 
-	  {2.49481, 3.47853, 4.46938, 5.6761, 6.96419, 7.97702, 9.16158, 11.5077, 17.3061} 
+	Double_t px_pA[nRap][nPt] = { //x point (mean pT) by JB
+    {2.525, 3.51255, 4.4772, 5.70327, 6.96635, 7.96061, 9.17243, 11.5938, 18.0681},
+    {0, 0, 4.52793, 5.74033, 6.97622, 7.98335, 9.19458, 11.4927, 17.6693},
+    {0, 0, 0, 0, 7.018, 8.00224, 9.19714, 11.5483, 17.6577},
+    {0, 0, 0, 0, 7.11111, 8.02103, 9.24485, 11.6204, 17.8454},
+    {0, 0, 0, 0, 7.05329, 8.00998, 9.20583, 11.5222, 17.4633},
+    {0, 0, 0, 5.84477, 6.98466, 7.97917, 9.17551, 11.5322, 17.34},
+    {0, 0, 4.52204, 5.72881, 6.97074, 7.95284, 9.14157, 11.4976, 17.3058},
+    {2.51699, 3.4959, 4.47636, 5.68624, 6.97338, 7.97824, 9.1805, 11.4841, 16.8762}
 	};
-#endif
-	//// point at middle
-	Double_t px_pp[nRap][nPt] = {	
+*/	
+	//// for middle
+  Double_t px_pp[nRap][nPt] = {	
 		{2.5, 3.5, 4.5, 5.75, 7, 8, 9.25, 12., 22}, 
-		{0., 3.5, 4.5, 5.75, 7, 8, 9.25, 12., 22},
+		{0., 0., 4.5, 5.75, 7, 8, 9.25, 12., 22},
 		{0., 0., 0., 0., 7, 8, 9.25, 12., 22},
 		{0., 0., 0., 0., 7, 8, 9.25, 12., 22}, 
 		{0., 0., 0., 0., 7, 8, 9.25, 12., 22}, 
-		{0., 0., 0., 5.75, 7, 8, 9.25, 12., 22},
-		{0., 3.5, 4.5, 5.75, 7, 8, 9.25, 12., 22}, 
+		{0., 0., 0., 0., 7, 8, 9.25, 12., 22},
+		{0., 0., 4.5, 5.75, 7, 8, 9.25, 12., 22}, 
 		{2.5, 3.5, 4.5, 5.75, 7, 8, 9.25, 12., 22}
 	};
 	Double_t px_pA[nRap][nPt] = {	
 		{2.5, 3.5, 4.5, 5.75, 7, 8, 9.25, 12., 22}, 
-		{0., 3.5, 4.5, 5.75, 7, 8, 9.25, 12., 22},
+		{0., 0., 4.5, 5.75, 7, 8, 9.25, 12., 22},
 		{0., 0., 0., 0., 7, 8, 9.25, 12., 22},
 		{0., 0., 0., 0., 7, 8, 9.25, 12., 22}, 
 		{0., 0., 0., 0., 7, 8, 9.25, 12., 22}, 
 		{0., 0., 0., 5.75, 7, 8, 9.25, 12., 22},
-		{0., 3.5, 4.5, 5.75, 7, 8, 9.25, 12., 22}, 
+		{0., 0., 4.5, 5.75, 7, 8, 9.25, 12., 22}, 
 		{2.5, 3.5, 4.5, 5.75, 7, 8, 9.25, 12., 22}
 	};
-	Double_t ex[nPt] = {0,0,0,0,0,0,0,0,0}; // x stat error
+  Double_t ex[nPt] = {0,0,0,0,0,0,0,0,0}; // x stat error
 	Double_t exsys[nPt] = {0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4}; // x sys error
 	Double_t eysysrel[nRap][nPt]; //relative y sys error
 	Double_t eysys[nRap][nPt]; //absolute y sys error
@@ -140,6 +139,7 @@ void draw_cross_pt_middle(bool sysByHand=true, bool noPtWeight=true, bool isScal
 	Double_t rapBinW[nRap];
 	for (Int_t iy=0; iy<nRap; iy++) {
     rapBinW[iy] = rapArrNumFB[iy]-rapArrNumFB[iy+1];
+    //rapBinW[iy] = rapArrNumBF[iy+1]-rapArrNumBF[iy];
 		//cout << iy <<"th rapBinW = " << rapBinW[iy] <<endl;
 	}
 	//// 2) pt array
@@ -164,8 +164,8 @@ void draw_cross_pt_middle(bool sysByHand=true, bool noPtWeight=true, bool isScal
 	//////////////////////////////////////////////////////////////	
 	//// read-in sys. file 
 	TFile * fSys;
-  if (isPA==0) fSys = new TFile("../totalSys/TotSys_8rap9pt2gev.root"); //tmp
-  else fSys = new TFile("../totalSys/TotSys_8rap9pt2gev.root"); //tmp
+  if (isPA==0) fSys = new TFile("../TotalSys/TotSys_8rap9pt_pp_etOpt0.root");
+  else fSys = new TFile("../TotalSys/TotSys_8rap9pt_pA_etOpt0.root");
 	TH2D* h2D_SysErr;
   if (isPrompt) h2D_SysErr = (TH2D*)fSys->Get("hTotalPR");
 	else h2D_SysErr = (TH2D*)fSys->Get("hTotalNP");
@@ -175,14 +175,14 @@ void draw_cross_pt_middle(bool sysByHand=true, bool noPtWeight=true, bool isScal
 	//// read-in corr-yield file
 	TFile * f2D;
   if (isPA==0) {
-    if (noPtWeight) f2D = new TFile("../FittingResult/totalHist_pp_8rap9pt_newcut_nominal_Zvtx0_SF0_noPtWeight_etOpt0.root");
-    else f2D = new TFile("../FittingResult/totalHist_pp_8rap9pt_newcut_nominal_Zvtx0_SF0_etOpt0.root");
+    if (noPtWeight) f2D = new TFile("../FittingResult/totalHist_pp_8rap9pt_newcut_nominal_Zvtx0_SF1_etOpt0_noPtWeight.root");
+    else f2D = new TFile("../FittingResult/totalHist_pp_8rap9pt_newcut_nominal_Zvtx0_SF1_etOpt0.root");
   } else {
-    if (noPtWeight) f2D = new TFile("../FittingResult/totalHist_pA_8rap9pt_newcut_nominal_Zvtx1_SF1_noPtWeight_etOpt0.root");
+    if (noPtWeight) f2D = new TFile("../FittingResult/totalHist_pA_8rap9pt_newcut_nominal_Zvtx1_SF1_etOpt0_noPtWeight.root");
     else f2D = new TFile("../FittingResult/totalHist_pA_8rap9pt_newcut_nominal_Zvtx1_SF1_etOpt0.root");
 
   }
-	// --- read-in 2D hist for corrected yield
+	//// read-in 2D hist for corrected yield
 	TH2D* h2D_CorrY;
 	if (isPA==0) {
     if (isPrompt) h2D_CorrY = (TH2D*)f2D->Get("h2D_CorrY_PR_pp");
@@ -208,9 +208,9 @@ void draw_cross_pt_middle(bool sysByHand=true, bool noPtWeight=true, bool isScal
 		  h1D_SysErr[iy] = h2D_SysErr->ProjectionY(Form("h1D_SysErr_%d",iy),iy+1,iy+1);
 		}
 	}
-  //// check sys values	
+  //// read sys values from hist	
 	for (Int_t iy = 0; iy < nRap; iy++) {
-		for (int ipt=0; ipt <nbinsY; ipt ++ ){ 
+		for (int ipt=0; ipt <nPt; ipt ++ ){ 
 			eysysrel[iy][ipt] = h1D_SysErr[iy]->GetBinContent(ipt+1);
 //			cout << "eysysrel["<<iy<<"]["<<ipt<<"] = "<<eysysrel[iy][ipt]<<endl;
 		}
@@ -227,7 +227,7 @@ void draw_cross_pt_middle(bool sysByHand=true, bool noPtWeight=true, bool isScal
 		h1D_cross[iy]->Scale(1./rapBinW[iy]); //rap bin
 		h1D_cross[iy]->Scale(1./lumi_mub); // lumi
 		// h1D_cross[iy]->Scale(1./br); //br
-		// if (isPA==0) h1D_cross[iy]->Scale(A_pb); // for test
+		// if (isPA==0) h1D_cross[iy]->Scale(A_pb); //// for test
 		// h1D_cross[iy]->Scale(zvtxCor); // z vertex correction	
     if (isPA==1) h1D_cross[iy]->Scale(pileReg);	// pileup correction
 		h1D_cross[iy]->Scale(scaleF[iy]); // scaling for drawing
@@ -351,17 +351,17 @@ void draw_cross_pt_middle(bool sysByHand=true, bool noPtWeight=true, bool isScal
         else g_cross_sys[iy]->SetMaximum(2);
   	  }
   	}
-	  g_cross_sys[iy]->GetXaxis()->SetLimits(0.0, 30.);
+	  g_cross_sys[iy]->GetXaxis()->SetLimits(0.0, 20.);
 	}
 
   //// different color scheme for pp and pA
   if (isPA==0) {
 	  g_cross_sys[0]->SetFillColor(kViolet-9);
 	  g_cross_sys[1]->SetFillColor(kTeal-9);
-	  g_cross_sys[2]->SetFillColor(kRed-9);
-	  g_cross_sys[3]->SetFillColor(kAzure-9);
-	  g_cross_sys[4]->SetFillColor(kAzure-9);
-	  g_cross_sys[5]->SetFillColor(kRed-9);
+	  g_cross_sys[2]->SetFillColor(kRed-10);
+	  g_cross_sys[3]->SetFillColor(kBlue-10);
+	  g_cross_sys[4]->SetFillColor(kBlue-10);
+	  g_cross_sys[5]->SetFillColor(kRed-10);
 	  g_cross_sys[6]->SetFillColor(kTeal-9);
 	  g_cross_sys[7]->SetFillColor(kViolet-9);
 	  SetGraphStyleFinal(g_cross[0],	8,2);
@@ -383,10 +383,10 @@ void draw_cross_pt_middle(bool sysByHand=true, bool noPtWeight=true, bool isScal
 
   } else {
 	  g_cross_sys[0]->SetFillColor(kTeal-9);
-	  g_cross_sys[1]->SetFillColor(kRed-9);
-	  g_cross_sys[2]->SetFillColor(kAzure-9);
-	  g_cross_sys[3]->SetFillColor(kAzure-9);
-	  g_cross_sys[4]->SetFillColor(kRed-9);
+	  g_cross_sys[1]->SetFillColor(kRed-10);
+	  g_cross_sys[2]->SetFillColor(kBlue-10);
+	  g_cross_sys[3]->SetFillColor(kBlue-10);
+	  g_cross_sys[4]->SetFillColor(kRed-10);
 	  g_cross_sys[5]->SetFillColor(kTeal-9);
 	  g_cross_sys[6]->SetFillColor(kViolet-9);
 	  g_cross_sys[7]->SetFillColor(kGray);
@@ -435,7 +435,7 @@ void draw_cross_pt_middle(bool sysByHand=true, bool noPtWeight=true, bool isScal
 	else globtex->DrawLatex(0.91, 0.86, "Non-Prompt J/#psi");
 	globtex->SetTextSize(0.035);
 	globtex->SetTextFont(42);
-	if (isPA==0) globtex->DrawLatex(0.91, 0.80, "Global uncertainty : 10 \%");
+	if (isPA==0) globtex->DrawLatex(0.91, 0.80, "Global uncertainty : 4 \%");
 	else globtex->DrawLatex(0.91, 0.80, "Global uncertainty : 3.5 \%");
 	CMS_lumi( c_fw, isPA, iPos );
 	c_fw->Update();
@@ -485,7 +485,7 @@ void draw_cross_pt_middle(bool sysByHand=true, bool noPtWeight=true, bool isScal
 	else globtex->DrawLatex(0.91, 0.86, "Non-Prompt J/#psi");
 	globtex->SetTextSize(0.035);
 	globtex->SetTextFont(42);
-	if (isPA==0) globtex->DrawLatex(0.91, 0.80, "Global uncertainty : 10 \%");
+	if (isPA==0) globtex->DrawLatex(0.91, 0.80, "Global uncertainty : 4 \%");
 	else globtex->DrawLatex(0.91, 0.80, "Global uncertainty : 3.5 \%");
 	CMS_lumi( c_bw, isPA, iPos );
 	c_bw->Update();
@@ -541,10 +541,10 @@ void formRapArr(Double_t binmin, Double_t binmax, TString* arr) {
 	Double_t fracMin = modf(binmin, &intMin);
 	Double_t fracMax = modf(binmax, &intMax);
   if ( binmin == 1.93 || binmin == -1.93 || binmin == -2.87) {
-		*arr = Form("%.2f < |y_{CM}| < %.1f", binmin, binmax);
+		*arr = Form("%.2f < y_{CM} < %.1f", binmin, binmax);
   }
   else if ( binmax == 1.93 || binmax ==  -1.93 || binmax == -2.87 ) {
-		*arr = Form("%.1f < |y_{CM}| < %.2f", binmin, binmax);
+		*arr = Form("%.1f < y_{CM} < %.2f", binmin, binmax);
   }
 	else if ( fracMin == 0 && fracMax == 0 ) {
 		*arr = Form("%.0f < y_{CM} < %.0f", binmin, binmax);
