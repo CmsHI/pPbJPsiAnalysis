@@ -52,14 +52,15 @@ TF1* hTnp_pp_new_eta5 = (TF1*)fTnp_pp_new->Get("func_5");
 int rootAna_efficiency_ptWeight(int MrapNpt = 89, int isPA =1, int accCutType = 2, bool isPrompt = true, bool useZvtxWeight =true, bool useSF=true)
 {
   using namespace std;
-  //int initev =0;
-  int initev =2205202;
+  int initev =0;
+  //int initev =2205202;
   int nevt;
   if (!isPrompt) nevt = 8900000; 
   else nevt = -1; //all
   //int nevt = 100000;
   //int nevt = 1000;
-  
+  cout << "nevt : " << nevt;
+
   TString szBinning;
   if (MrapNpt==89)  {szBinning = "8rap9pt"; }
   else if (MrapNpt==83) { szBinning = "8rap3pt"; }
