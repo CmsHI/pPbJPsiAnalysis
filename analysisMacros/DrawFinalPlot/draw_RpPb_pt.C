@@ -163,6 +163,8 @@ void draw_RpPb_pt(bool sysByHand=false, bool noPtWeight=false, bool isPrompt=tru
   //for (Int_t iy = 0; iy < 1; iy++) { 
     g_RpPb_sys[iy] = new TGraphAsymmErrors(nPt, px_pA[iy], pytmp[iy], exsys, exsys, eysys[iy], eysys[iy]);
     g_RpPb[iy] = new TGraphAsymmErrors(nPt, px_pA[iy], pytmp[iy], ex, ex, eytmp[iy], eytmp[iy]);
+		g_RpPb_sys[iy] -> SetName(Form("g_RpPb_sys_%d",iy));
+		g_RpPb[iy] -> SetName(Form("g_RpPb_%d",iy));
     g_RpPb_sys[iy]->GetXaxis()->SetTitle("p_{T} [GeV/c]");
     g_RpPb_sys[iy]->GetXaxis()->SetTitleOffset(0.9);
     if (iy==0 || iy==3) {

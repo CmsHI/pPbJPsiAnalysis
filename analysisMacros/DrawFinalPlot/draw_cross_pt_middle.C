@@ -439,6 +439,7 @@ void draw_cross_pt_middle(bool sysByHand=false, bool noPtWeight=false, bool isSc
 	else globtex->DrawLatex(0.91, 0.80, "Global uncertainty : 3.5 \%");
 	CMS_lumi( c_fw, isPA, iPos );
 	c_fw->Update();
+/*
   if (isPA==0){
     if (noPtWeight) {
     	c_fw->SaveAs(Form("plot_cross/pp_fw_cross_pt_middle_isPrompt%d_isLog%d_isScale%d_noPtWeight.pdf",(int)isPrompt,(int)isLog,(int)isScale));
@@ -456,6 +457,7 @@ void draw_cross_pt_middle(bool sysByHand=false, bool noPtWeight=false, bool isSc
     	c_fw->SaveAs(Form("plot_cross/pA_fw_cross_pt_middle_isPrompt%d_isLog%d_isScale%d.png",(int)isPrompt,(int)isLog,(int)isScale));
     }
   }
+*/
   legBLFW->Clear();
 	
   ////////  Backward
@@ -489,6 +491,7 @@ void draw_cross_pt_middle(bool sysByHand=false, bool noPtWeight=false, bool isSc
 	else globtex->DrawLatex(0.91, 0.80, "Global uncertainty : 3.5 \%");
 	CMS_lumi( c_bw, isPA, iPos );
 	c_bw->Update();
+/*
   if (isPA==0){
     if (noPtWeight) {
     	c_bw->SaveAs(Form("plot_cross/pp_bw_cross_pt_middle_isPrompt%d_isLog%d_isScale%d_noPtWeight.pdf",(int)isPrompt,(int)isLog,(int)isScale));
@@ -506,6 +509,7 @@ void draw_cross_pt_middle(bool sysByHand=false, bool noPtWeight=false, bool isSc
     	c_bw->SaveAs(Form("plot_cross/pA_bw_cross_pt_middle_isPrompt%d_isLog%d_isScale%d.png",(int)isPrompt,(int)isLog,(int)isScale));
     }
   }
+*/
 	legBLBW->Clear();
   	
 	///////////////////////////////////////////////////////////////////

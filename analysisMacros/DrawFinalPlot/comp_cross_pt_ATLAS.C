@@ -9,7 +9,7 @@ void formPtArr(Double_t binmin, Double_t binmax, TString* arr);
 void getMeanPtBins( Double_t* binArr, TF1* func);
 void CMS_lumi( TPad* pad, int iPeriod, int iPosX );
 
-void comp_cross_pt_ATLAS(bool shifted=false, bool isPrompt = false, bool isLog=true)
+void comp_cross_pt_ATLAS(bool isShift=false, bool isPrompt = true, bool isLog=true)
 {
 	gROOT->Macro("./tdrstyle_kyo.C");
 	int isPA = 1;
@@ -38,8 +38,8 @@ void comp_cross_pt_ATLAS(bool shifted=false, bool isPrompt = false, bool isLog=t
 
 	//// read our result
 	TFile *inFile;
-  if (isPrompt) inFile = new TFile("plot_cross/pA_cross_pt_integ_middle_isPrompt1_isLog0_isScale0.root");
-  else inFile= new TFile("plot_cross/pA_cross_pt_integ_middle_isPrompt0_isLog0_isScale0.root");
+  if (isPrompt) inFile = new TFile("plot_cross/pA_cross_pt_integ_middle_isPrompt1_isLog0_isScale0_maxrap193.root");
+  else inFile= new TFile("plot_cross/pA_cross_pt_integ_middle_isPrompt0_isLog0_isScale0_maxrap193.root");
 	TGraphAsymmErrors* g_cross_fwrap = (TGraphAsymmErrors*)inFile->Get("g_cross_fwrap"); 
 	TGraphAsymmErrors* g_cross_bwrap = (TGraphAsymmErrors*)inFile->Get("g_cross_bwrap"); 
 	TGraphAsymmErrors* g_cross_sys_fwrap = (TGraphAsymmErrors*)inFile->Get("g_cross_sys_fwrap"); 
@@ -106,13 +106,13 @@ void comp_cross_pt_ATLAS(bool shifted=false, bool isPrompt = false, bool isLog=t
 	////// Draw Plots
 	////////////////////
 
-	TLegend *legUL01 = new TLegend(0.165,0.80,0.55,0.92); //upper left
+	TLegend *legUL01 = new TLegend(0.185,0.79,0.565,0.89); //upper left
 	SetLegendStyle(legUL01);
-	TLegend *legBL01 = new TLegend(0.165,0.175,0.55,0.34); //upper left
+	TLegend *legBL01 = new TLegend(0.185,0.175,0.565,0.34); //upper left
 	SetLegendStyle(legBL01);
-	TLegend *legUC01 = new TLegend(0.30,0.67,0.58,0.83); //upper left
+	TLegend *legUC01 = new TLegend(0.36,0.63,0.64,0.76); //upper left
 	SetLegendStyle(legUC01);
-	TLegend *legUC02 = new TLegend(0.62,0.67,0.89,0.83); //upper left
+	TLegend *legUC02 = new TLegend(0.66,0.63,0.91,0.76); //upper left
 	SetLegendStyle(legUC02);
   
 	legUL01->SetTextSize(0.037);
@@ -207,7 +207,7 @@ void comp_cross_pt_ATLAS(bool shifted=false, bool isPrompt = false, bool isLog=t
   else g_cross_atlas_sys_fwrap_shift = new TGraphAsymmErrors(nPtATLAS, atlas_px_fwShift, atlas_py_pr_fw, atlas_exsys, atlas_exsys, atlas_eysys01_pr_fw, atlas_eysys01_pr_fw);
 	g_cross_atlas_sys_fwrap_shift->SetFillColor(kGray+1);
 	
-	if ( shifted)  { 
+	if ( isShift)  { 
 	  g_cross_atlas_sys_fwrap_shift->Draw("2");
 	  g_cross_atlas_fwrap_shift->Draw("p");
 	}
@@ -246,7 +246,7 @@ void comp_cross_pt_ATLAS(bool shifted=false, bool isPrompt = false, bool isLog=t
         else g_cross_atlas_sys_bwrap_shift = new TGraphAsymmErrors(nPtATLAS, atlas_px_bwShift, atlas_py_np_bw, atlas_exsys, atlas_exsys, atlas_eysys01_np_bw, atlas_eysys01_np_bw);
         g_cross_atlas_sys_bwrap_shift->SetFillColor(kGray);
        
-	if ( shifted)  { 
+	if ( isShift)  { 
 	  g_cross_atlas_sys_bwrap_shift->Draw("2");
 	  g_cross_atlas_bwrap_shift->Draw("p");
 	}
@@ -266,7 +266,7 @@ void comp_cross_pt_ATLAS(bool shifted=false, bool isPrompt = false, bool isLog=t
 	g_cross_bwrap->Draw("P");
 
 	//// re-draw
-	if ( shifted)  { 
+	if ( isShift)  { 
 	 g_cross_atlas_fwrap_shift->Draw("p");
 	 g_cross_atlas_bwrap_shift->Draw("p");
 	}
@@ -300,22 +300,15 @@ void comp_cross_pt_ATLAS(bool shifted=false, bool isPrompt = false, bool isLog=t
  	legUC02-> Draw();
        }
 	
-	globtex->SetTextSize(0.045);
-	globtex->SetTextFont(22);
-	if (isPrompt) globtex->DrawLatex(0.88, 0.88, "Prompt J/#psi");
-	else globtex->DrawLatex(0.88, 0.88, "Non-prompt J/#psi");
+  globtex->SetTextSize(0.055); 
+  globtex->SetTextFont(42);
+	if (isPrompt) globtex->DrawLatex(0.88, 0.84, "Prompt J/#psi");
+	else globtex->DrawLatex(0.88, 0.84, "Non-prompt J/#psi");
 	
-//	if (isLog) {
-//		latex->DrawLatex(0.17, 0.28, Form("%s",beamstring.c_str()));
-//	}
-//	else {
-//		latex->DrawLatex(0.89, 0.28, Form("%s",beamstring.c_str()));
-//	}	
-
 	CMS_lumi( c1, isPA, iPos );
 	c1->Update();
-	//c1->SaveAs(Form("compOtherExp/comp_crossSection_pt_ATLAS_pr_isLog%d_%d_shifted_%d_middle_xErr.pdf",(int)isLog,(int)isPtCut,(int)shifted));
-	//c1->SaveAs(Form("compOtherExp/comp_crossSection_pt_ATLAS_pr_isLog%d_%d_shifted_%d_middle_xErr.png",(int)isLog,(int)isPtCut,(int)shifted));
+	c1->SaveAs(Form("plot_otherExp/comp_cross_pt_ATLAS_isPrompt%d_isLog%d_isShift%d.pdf",(int)isPrompt,(int)isLog,(int)isShift));
+	c1->SaveAs(Form("plot_otherExp/comp_cross_pt_ATLAS_isPrompt%d_isLog%d_isShift%d.png",(int)isPrompt,(int)isLog,(int)isShift));
 	//c1->Clear();
 	legUL01->Clear();
 	legBL01->Clear();

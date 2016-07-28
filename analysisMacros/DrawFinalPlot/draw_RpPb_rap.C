@@ -190,6 +190,10 @@ void draw_RpPb_rap(bool sysByHand=false, bool noPtWeight=false, bool isPrompt=fa
   g_RpPb_lowpt = new TGraphAsymmErrors(nRapRpPb, pxtmp_lowpt_pp, pytmp_lowpt, ex, ex, eytmp_lowpt, eytmp_lowpt);
   g_RpPb_sys_highpt = new TGraphAsymmErrors(nRapRpPb, pxtmp_highpt_pp, pytmp_highpt, exsys, exsys, eysys_highpt, eysys_highpt);
   g_RpPb_highpt = new TGraphAsymmErrors(nRapRpPb, pxtmp_highpt_pp, pytmp_highpt, ex, ex, eytmp_highpt, eytmp_highpt);
+	g_RpPb_sys_lowpt -> SetName("g_RpPb_sys_lowpt");
+	g_RpPb_lowpt -> SetName("g_RpPb_lowpt");
+	g_RpPb_sys_highpt -> SetName("g_RpPb_sys_highpt");
+	g_RpPb_highpt -> SetName("g_RpPb_highpt");
   g_RpPb_sys_lowpt->GetXaxis()->SetTitle("y_{CM}");
   g_RpPb_sys_lowpt->GetXaxis()->CenterTitle();
   g_RpPb_sys_lowpt->GetYaxis()->SetTitle("R_{pPb}");

@@ -7,7 +7,10 @@ void formPtArr(Double_t binmin, Double_t binmax, TString* arr);
 
 void CMS_lumi( TPad* pad, int iPeriod, int iPosX );
 
-void draw_cross_pt_integ_middle(bool sysByHand=false, bool noPtWeight=false, bool isScale=false, bool isLog=false, int isPA = 1, bool isPrompt=false)
+//// maxrap = 193 (0 < y < 1.93) in fwrap, (-1.93 < 0 < 0 ) in bwrap [used for R_FB] 
+/// maxrap = 300 (-1.5 < y < 1.5) in fwrap, (do NOT use bwrap) [used for ATLAS R_pPb]
+/// maxrap = 386 (-1.93 < y < 1.93) in fwrap, (do NOT use bwrap) [used for B R_pPb]
+void draw_cross_pt_integ_middle(bool sysByHand=false, bool noPtWeight=false, bool isScale=false, bool isLog=false, int isPA = 0, bool isPrompt=true, double maxrap=300)
 {
 	gROOT->Macro("./tdrstyle_kyo.C");
   gStyle->SetTitleYOffset(1.38); //KYO
@@ -226,7 +229,7 @@ void draw_cross_pt_integ_middle(bool sysByHand=false, bool noPtWeight=false, boo
 		//// normalization
 		h1D_cross[iy]->Scale(1,"width"); //pT bin 
 		//h1D_cross[iy]->Scale(1./rapBinW[iy]); //rap bin
-		h1D_cross[iy]->Scale(1./1.93); //for ATLAS !!
+		h1D_cross[iy]->Scale(1./(maxrap/100.)); //for ATLAS !!
 		h1D_cross[iy]->Scale(1./lumi_mub); // lumi
 		// h1D_cross[iy]->Scale(1./br); //br
     // if (isPA==0) h1D_cross[iy]->Scale(A_pb); //// for test
@@ -264,7 +267,7 @@ void draw_cross_pt_integ_middle(bool sysByHand=false, bool noPtWeight=false, boo
 */
 
   //// for ATLAS
-  const int tmpPtBin = 4; // < 6.5
+  const int tmpPtBin = 4; // < 6.5 GeV
   for (int iy = 0; iy < nRap; iy++) {
     for (int ipt=0; ipt < tmpPtBin; ipt ++ ){ 
       h1D_cross[iy]->SetBinContent(ipt+1,-532);
@@ -274,9 +277,52 @@ void draw_cross_pt_integ_middle(bool sysByHand=false, bool noPtWeight=false, boo
 	//////////////////////////////////////////////////////////////////
 	
   //// integrate the rapidity for ATLAS!!!
-  const int fwrap_init = 0;
-  const int bwrap_init = 3;
-  const int bwrap_final = 6;
+  int fwrap_init, bwrap_init, bwrap_final;
+  if (maxrap==193) {
+    if (isPA==0) {
+      fwrap_init = 1; // y_CM = 1.5-1.93
+      bwrap_init = 4; // y_CM = -0.9-0
+      bwrap_final = 7; // y_CM = -1.93--1.5
+    } else {
+      fwrap_init = 0; // y_CM = 1.5-1.93
+      bwrap_init = 3; // y_CM = -0.9-0
+      bwrap_final = 6; // y_CM = -1.93--1.5
+    }
+  } else if (maxrap==150) {
+    if (isPA==0) {
+      fwrap_init = 2; // y_CM = 0.9-1.5
+      bwrap_init = 4; // y_CM = -0.9-0
+      bwrap_final = 6; // y_CM = -1.5--0.9
+    } else {
+      fwrap_init = 1; // y_CM = 0.9-1.5
+      bwrap_init = 3; // y_CM = -0.9-0
+      bwrap_final = 5; // y_CM = -1.5--0.9
+    }
+  } else if (maxrap==300){
+    if (isPA==0) {
+      fwrap_init = 2; // y_CM = 0.9-1.5
+      bwrap_init = 6; // y_CM = -1.5--0.9
+      bwrap_final = nRap; // arbitrary
+    } else {
+      fwrap_init = 1; // y_CM = 0.9-1.5
+      bwrap_init = 5; // y_CM = -1.5-0.9
+      bwrap_final = nRap; // arbitrary
+    }
+  } else if (maxrap==386){ 
+    if (isPA==0) {
+      fwrap_init = 1; // y_CM = 1.5-1.93
+      bwrap_init = 7; // y_CM = -1.93--1.5
+      bwrap_final = nRap; // arbitrary
+    } else {
+      fwrap_init = 0; // y_CM = 0.9-1.5
+      bwrap_init = 6; // y_CM = -1.93--1.5
+      bwrap_final = nRap; // arbitrary 
+    }
+  
+  } else {
+    cout << " *** ERROR : select maxrap among 150 or 193 " << endl; return;
+  }
+  cout << "max rap = " << (maxrap/100.) << endl;
 
   //// systematcis
 /*
@@ -405,15 +451,24 @@ void draw_cross_pt_integ_middle(bool sysByHand=false, bool noPtWeight=false, boo
 	g_cross_sys[fwrap_init]->GetYaxis()->SetTitle("B x d^{2}#sigma/dp_{T}dy [#mub/(GeV/c)]");
 	g_cross_sys[fwrap_init]->GetYaxis()->CenterTitle("");
 	if (isLog) {
-		g_cross_sys[fwrap_init]->SetMinimum(0.00001);
-    g_cross_sys[fwrap_init]->SetMaximum(1000000.);
+		if (isPrompt) {
+      g_cross_sys[fwrap_init]->SetMinimum(0.0002);
+      g_cross_sys[fwrap_init]->SetMaximum(20.);
+    } else {
+      g_cross_sys[fwrap_init]->SetMinimum(0.0004);
+      g_cross_sys[fwrap_init]->SetMaximum(2.);
+    }
   }
   else {
-    g_cross_sys[fwrap_init]->SetMinimum(0.0);
-    if (isPrompt) g_cross_sys[fwrap_init]->SetMaximum(20);
-    else g_cross_sys[fwrap_init]->SetMaximum(2);
-	  g_cross_sys[fwrap_init]->GetXaxis()->SetLimits(0.0, 30.);
+    if (isPrompt) {
+      g_cross_sys[fwrap_init]->SetMinimum(-0.05);
+      g_cross_sys[fwrap_init]->SetMaximum(1.5);
+    } else {
+      g_cross_sys[fwrap_init]->SetMinimum(-0.01);
+      g_cross_sys[fwrap_init]->SetMaximum(0.4);
+	  }
 	}
+  g_cross_sys[fwrap_init]->GetXaxis()->SetLimits(0.0, 30.);
 	g_cross_sys[fwrap_init]->SetFillColor(kViolet-9);
 	SetGraphStyleFinal(g_cross[fwrap_init],	8,2);
 	g_cross[fwrap_init]->SetMarkerSize(2.1);
@@ -423,15 +478,24 @@ void draw_cross_pt_integ_middle(bool sysByHand=false, bool noPtWeight=false, boo
 	g_cross_sys[bwrap_init]->GetYaxis()->SetTitle("B x d^{2}#sigma/dp_{T}dy [#mub/(GeV/c)]");
 	g_cross_sys[bwrap_init]->GetYaxis()->CenterTitle("");
 	if (isLog) {
-		g_cross_sys[bwrap_init]->SetMinimum(0.00001);
-    g_cross_sys[bwrap_init]->SetMaximum(1000000.);
+		if (isPrompt) {
+      g_cross_sys[bwrap_init]->SetMinimum(0.0002);
+      g_cross_sys[bwrap_init]->SetMaximum(20.);
+    } else {
+      g_cross_sys[bwrap_init]->SetMinimum(0.0004);
+      g_cross_sys[bwrap_init]->SetMaximum(2.);
+    }
   }
   else {
-    g_cross_sys[bwrap_init]->SetMinimum(0.0);
-    if (isPrompt) g_cross_sys[bwrap_init]->SetMaximum(20);
-    else g_cross_sys[bwrap_init]->SetMaximum(2);
-	  g_cross_sys[bwrap_init]->GetXaxis()->SetLimits(0.0, 30.);
+    if (isPrompt) {
+      g_cross_sys[bwrap_init]->SetMinimum(-0.05);
+      g_cross_sys[bwrap_init]->SetMaximum(1.5);
+    } else {
+      g_cross_sys[bwrap_init]->SetMinimum(-0.01);
+      g_cross_sys[bwrap_init]->SetMaximum(0.4);
+	  }
 	}
+	g_cross_sys[bwrap_init]->GetXaxis()->SetLimits(0.0, 30.);
 	g_cross_sys[bwrap_init]->SetFillColor(kViolet-9);
 	SetGraphStyleFinal(g_cross[bwrap_init],	8,2);
 	g_cross[bwrap_init]->SetMarkerSize(2.1);
@@ -454,23 +518,25 @@ void draw_cross_pt_integ_middle(bool sysByHand=false, bool noPtWeight=false, boo
 	else globtex->DrawLatex(0.91, 0.80, "Global uncertainty : 3.5 \%");
 	CMS_lumi( c_fw, isPA, iPos );
 	c_fw->Update();
+/*
   if (isPA==0){
     if (noPtWeight) {
-    	c_fw->SaveAs(Form("plot_cross/pp_fw_cross_pt_integ_middle_isPrompt%d_isLog%d_isScale%d_noPtWeight.pdf",(int)isPrompt,(int)isLog,(int)isScale));
-    	c_fw->SaveAs(Form("plot_cross/pp_fw_cross_pt_integ_middle_isPrompt%d_isLog%d_isScale%d_noPtWeight.png",(int)isPrompt,(int)isLog,(int)isScale));
+    	c_fw->SaveAs(Form("plot_cross/pp_fw_cross_pt_integ_middle_isPrompt%d_isLog%d_isScale%d_maxrap%.0f_noPtWeight.pdf",(int)isPrompt,(int)isLog,(int)isScale,maxrap));
+    	c_fw->SaveAs(Form("plot_cross/pp_fw_cross_pt_integ_middle_isPrompt%d_isLog%d_isScale%d_maxrap%.0f_noPtWeight.png",(int)isPrompt,(int)isLog,(int)isScale,maxrap));
 	  } else {
-    	c_fw->SaveAs(Form("plot_cross/pp_fw_cross_pt_integ_middle_isPrompt%d_isLog%d_isScale%d.pdf",(int)isPrompt,(int)isLog,(int)isScale));
-    	c_fw->SaveAs(Form("plot_cross/pp_fw_cross_pt_integ_middle_isPrompt%d_isLog%d_isScale%d.png",(int)isPrompt,(int)isLog,(int)isScale));
+    	c_fw->SaveAs(Form("plot_cross/pp_fw_cross_pt_integ_middle_isPrompt%d_isLog%d_isScale%d_maxrap%.0f.pdf",(int)isPrompt,(int)isLog,(int)isScale,maxrap));
+    	c_fw->SaveAs(Form("plot_cross/pp_fw_cross_pt_integ_middle_isPrompt%d_isLog%d_isScale%d_maxrap%.0f.png",(int)isPrompt,(int)isLog,(int)isScale,maxrap));
     }
   } else {
     if (noPtWeight) {
-    	c_fw->SaveAs(Form("plot_cross/pA_fw_cross_pt_integ_middle_isPrompt%d_isLog%d_isScale%d_noPtWeight.pdf",(int)isPrompt,(int)isLog,(int)isScale));
-    	c_fw->SaveAs(Form("plot_cross/pA_fw_cross_pt_integ_middle_isPrompt%d_isLog%d_isScale%d_noPtWeight.png",(int)isPrompt,(int)isLog,(int)isScale));
+    	c_fw->SaveAs(Form("plot_cross/pA_fw_cross_pt_integ_middle_isPrompt%d_isLog%d_isScale%d_maxrap%.0f_noPtWeight.pdf",(int)isPrompt,(int)isLog,(int)isScale,maxrap));
+    	c_fw->SaveAs(Form("plot_cross/pA_fw_cross_pt_integ_middle_isPrompt%d_isLog%d_isScale%d_maxrap%.0f_noPtWeight.png",(int)isPrompt,(int)isLog,(int)isScale,maxrap));
 	  } else {
-    	c_fw->SaveAs(Form("plot_cross/pA_fw_cross_pt_integ_middle_isPrompt%d_isLog%d_isScale%d.pdf",(int)isPrompt,(int)isLog,(int)isScale));
-    	c_fw->SaveAs(Form("plot_cross/pA_fw_cross_pt_integ_middle_isPrompt%d_isLog%d_isScale%d.png",(int)isPrompt,(int)isLog,(int)isScale));
+    	c_fw->SaveAs(Form("plot_cross/pA_fw_cross_pt_integ_middle_isPrompt%d_isLog%d_isScale%d_maxrap%.0f.pdf",(int)isPrompt,(int)isLog,(int)isScale,maxrap));
+    	c_fw->SaveAs(Form("plot_cross/pA_fw_cross_pt_integ_middle_isPrompt%d_isLog%d_isScale%d_maxrap%.0f.png",(int)isPrompt,(int)isLog,(int)isScale,maxrap));
     }
   }
+*/
   legBLFW->Clear();
 	
   ////////  Backward
@@ -491,23 +557,25 @@ void draw_cross_pt_integ_middle(bool sysByHand=false, bool noPtWeight=false, boo
 	else globtex->DrawLatex(0.91, 0.80, "Global uncertainty : 3.5 \%");
 	CMS_lumi( c_bw, isPA, iPos );
 	c_bw->Update();
+/*
   if (isPA==0){
     if (noPtWeight) {
-    	c_bw->SaveAs(Form("plot_cross/pp_bw_cross_pt_integ_middle_isPrompt%d_isLog%d_isScale%d_noPtWeight.pdf",(int)isPrompt,(int)isLog,(int)isScale));
-    	c_bw->SaveAs(Form("plot_cross/pp_bw_cross_pt_integ_middle_isPrompt%d_isLog%d_isScale%d_noPtWeight.png",(int)isPrompt,(int)isLog,(int)isScale));
+    	c_bw->SaveAs(Form("plot_cross/pp_bw_cross_pt_integ_middle_isPrompt%d_isLog%d_isScale%d_maxrap%.0f_noPtWeight.pdf",(int)isPrompt,(int)isLog,(int)isScale,maxrap));
+    	c_bw->SaveAs(Form("plot_cross/pp_bw_cross_pt_integ_middle_isPrompt%d_isLog%d_isScale%d_maxrap%.0f_noPtWeight.png",(int)isPrompt,(int)isLog,(int)isScale,maxrap));
 	  } else {
-    	c_bw->SaveAs(Form("plot_cross/pp_bw_cross_pt_integ_middle_isPrompt%d_isLog%d_isScale%d.pdf",(int)isPrompt,(int)isLog,(int)isScale));
-    	c_bw->SaveAs(Form("plot_cross/pp_bw_cross_pt_integ_middle_isPrompt%d_isLog%d_isScale%d.png",(int)isPrompt,(int)isLog,(int)isScale));
+    	c_bw->SaveAs(Form("plot_cross/pp_bw_cross_pt_integ_middle_isPrompt%d_isLog%d_isScale%d_maxrap%.0f.pdf",(int)isPrompt,(int)isLog,(int)isScale,maxrap));
+    	c_bw->SaveAs(Form("plot_cross/pp_bw_cross_pt_integ_middle_isPrompt%d_isLog%d_isScale%d_maxrap%.0f.png",(int)isPrompt,(int)isLog,(int)isScale,maxrap));
     }
   } else {
     if (noPtWeight) {
-    	c_bw->SaveAs(Form("plot_cross/pA_bw_cross_pt_integ_middle_isPrompt%d_isLog%d_isScale%d_noPtWeight.pdf",(int)isPrompt,(int)isLog,(int)isScale));
-    	c_bw->SaveAs(Form("plot_cross/pA_bw_cross_pt_integ_middle_isPrompt%d_isLog%d_isScale%d_noPtWeight.png",(int)isPrompt,(int)isLog,(int)isScale));
+    	c_bw->SaveAs(Form("plot_cross/pA_bw_cross_pt_integ_middle_isPrompt%d_isLog%d_isScale%d_maxrap%.0f_noPtWeight.pdf",(int)isPrompt,(int)isLog,(int)isScale,maxrap));
+    	c_bw->SaveAs(Form("plot_cross/pA_bw_cross_pt_integ_middle_isPrompt%d_isLog%d_isScale%d_maxrap%.0f_noPtWeight.png",(int)isPrompt,(int)isLog,(int)isScale,maxrap));
 	  } else {
-    	c_bw->SaveAs(Form("plot_cross/pA_bw_cross_pt_integ_middle_isPrompt%d_isLog%d_isScale%d.pdf",(int)isPrompt,(int)isLog,(int)isScale));
-    	c_bw->SaveAs(Form("plot_cross/pA_bw_cross_pt_integ_middle_isPrompt%d_isLog%d_isScale%d.png",(int)isPrompt,(int)isLog,(int)isScale));
+    	c_bw->SaveAs(Form("plot_cross/pA_bw_cross_pt_integ_middle_isPrompt%d_isLog%d_isScale%d_maxrap%.0f.pdf",(int)isPrompt,(int)isLog,(int)isScale,maxrap));
+    	c_bw->SaveAs(Form("plot_cross/pA_bw_cross_pt_integ_middle_isPrompt%d_isLog%d_isScale%d_maxrap%.0f.png",(int)isPrompt,(int)isLog,(int)isScale,maxrap));
     }
   }
+*/
 	legBLBW->Clear();
   	
 	///////////////////////////////////////////////////////////////////
@@ -515,15 +583,15 @@ void draw_cross_pt_integ_middle(bool sysByHand=false, bool noPtWeight=false, boo
 	TFile *outFile;
   if (isPA==0) {
     if (noPtWeight) {
-      outFile = new TFile(Form("plot_cross/pp_cross_pt_integ_middle_isPrompt%d_isLog%d_isScale%d_noPtWeight.root",(int)isPrompt,(int)isLog,(int)isScale),"RECREATE");
+      outFile = new TFile(Form("plot_cross/pp_cross_pt_integ_middle_isPrompt%d_isLog%d_isScale%d_maxrap%.0f_noPtWeight.root",(int)isPrompt,(int)isLog,(int)isScale,maxrap),"RECREATE");
     } else {
-      outFile = new TFile(Form("plot_cross/pp_cross_pt_integ_middle_isPrompt%d_isLog%d_isScale%d.root",(int)isPrompt,(int)isLog,(int)isScale),"RECREATE");
+      outFile = new TFile(Form("plot_cross/pp_cross_pt_integ_middle_isPrompt%d_isLog%d_isScale%d_maxrap%.0f.root",(int)isPrompt,(int)isLog,(int)isScale,maxrap),"RECREATE");
     }
   }else {
     if (noPtWeight) {
-      outFile = new TFile(Form("plot_cross/pA_cross_pt_integ_middle_isPrompt%d_isLog%d_isScale%d_noPtWeight.root",(int)isPrompt,(int)isLog,(int)isScale),"RECREATE");
+      outFile = new TFile(Form("plot_cross/pA_cross_pt_integ_middle_isPrompt%d_isLog%d_isScale%d_maxrap%.0f_noPtWeight.root",(int)isPrompt,(int)isLog,(int)isScale,maxrap),"RECREATE");
     } else {
-      outFile = new TFile(Form("plot_cross/pA_cross_pt_integ_middle_isPrompt%d_isLog%d_isScale%d.root",(int)isPrompt,(int)isLog,(int)isScale),"RECREATE");
+      outFile = new TFile(Form("plot_cross/pA_cross_pt_integ_middle_isPrompt%d_isLog%d_isScale%d_maxrap%.0f.root",(int)isPrompt,(int)isLog,(int)isScale,maxrap),"RECREATE");
     }
   }
 
