@@ -7,7 +7,7 @@ void formPtArr(Double_t binmin, Double_t binmax, TString* arr);
 
 void CMS_lumi( TPad* pad, int iPeriod, int iPosX );
 
-void draw_RpPb_pt(bool sysByHand=true, bool noPtWeight=false, bool isPrompt=true)
+void draw_RpPb_pt(bool sysByHand=false, bool noPtWeight=false, bool isPrompt=true)
 {
   gROOT->Macro("./tdrstyle_kyo.C");
   //cmsTextFont   = 42;  // for b.hong
@@ -56,14 +56,14 @@ void draw_RpPb_pt(bool sysByHand=true, bool noPtWeight=false, bool isPrompt=true
   Double_t eysys_pp[nRap][nPt]; //absolute y sys error
   
   Double_t px_pA[nRap][nPt] = { //x point (mean pT)
-    {2.49530, 3.48529, 4.47275, 5.68792, 6.9644, 7.96271, 9.1754, 11.5315, 17.7588}, 
-    {0.00000, 3.53123, 4.5027, 5.71709, 6.96523, 7.9693, 9.17314, 11.4952, 17.6927}, 
-    {0.00000, 0.00000, 0.00000, 0.00000, 7.01977, 7.99712, 9.19936, 11.5743, 17.7732}, 
-    {0.00000, 0.00000, 0.00000, 0.00000, 7.12292, 8.01305, 9.22816, 11.6279, 17.8879}, 
-    {0.00000, 0.00000, 0.00000, 0.00000, 7.05476, 8.00208, 9.21589, 11.5645, 17.7176}, 
-    {0.00000, 0.00000, 0.00000, 5.82095, 6.97886, 7.96732, 9.18979, 11.5158, 17.4116}, 
-    {0.00000, 3.52893, 4.48328, 5.69351, 6.96188, 7.95707, 9.14886, 11.4747, 17.231}, 
-    {2.49481, 3.47853, 4.46938, 5.6761, 6.96419, 7.97702, 9.16158, 11.5077, 17.3061} 
+    {2.525, 3.51255, 4.4772, 5.70327, 6.96635, 7.96061, 9.17243, 11.5938, 18.0681},
+    {0, 0, 4.52793, 5.74033, 6.97622, 7.98335, 9.19458, 11.4927, 17.6693},
+    {0, 0, 0, 0, 7.018, 8.00224, 9.19714, 11.5483, 17.6577},
+    {0, 0, 0, 0, 7.11111, 8.02103, 9.24485, 11.6204, 17.8454},
+    {0, 0, 0, 0, 7.05329, 8.00998, 9.20583, 11.5222, 17.4633},
+    {0, 0, 0, 5.84477, 6.98466, 7.97917, 9.17551, 11.5322, 17.34},
+    {0, 0, 4.52204, 5.72881, 6.97074, 7.95284, 9.14157, 11.4976, 17.3058},
+    {2.51699, 3.4959, 4.47636, 5.68624, 6.97338, 7.97824, 9.1805, 11.4841, 16.8762}
   };
 	Double_t ex[nPt] = {0,0,0,0,0,0,0,0,0}; // x stat error
   Double_t exsys[nPt] = {0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4}; // x sys error
@@ -149,6 +149,7 @@ void draw_RpPb_pt(bool sysByHand=true, bool noPtWeight=false, bool isPrompt=true
       pytmp[iy][ipt] = pytmp[iy][ipt]/A_pb;
       eytmp[iy][ipt] = eytmp[iy][ipt]/A_pb;
       eysys[iy][ipt] = eysys[iy][ipt]/A_pb;
+      cout << "" << endl;
       cout << "R_pPb["<<iy<<"]["<<ipt<<"] = "<< pytmp[iy][ipt] << endl;; 
       cout << "stat.["<<iy<<"]["<<ipt<<"] = " << eytmp[iy][ipt]<<endl;
       cout << "sys.["<<iy<<"]["<<ipt<<"] = " << eysys[iy][ipt]<<endl;
@@ -181,10 +182,10 @@ void draw_RpPb_pt(bool sysByHand=true, bool noPtWeight=false, bool isPrompt=true
     g_RpPb_sys[iy]->GetYaxis()->SetLabelSize(0.055);
     g_RpPb_sys[iy]->GetYaxis()->CenterTitle();
     g_RpPb_sys[iy]->GetXaxis()->SetLimits(0.,20.0);
-    //g_RpPb_sys[iy]->SetMinimum(0.5);
-    //g_RpPb_sys[iy]->SetMaximum(1.5);
-    g_RpPb_sys[iy]->SetMinimum(0.0);
-    g_RpPb_sys[iy]->SetMaximum(1.8);
+//    g_RpPb_sys[iy]->SetMinimum(0.5);
+//    g_RpPb_sys[iy]->SetMaximum(1.5);
+    g_RpPb_sys[iy]->SetMinimum(0.4);
+    g_RpPb_sys[iy]->SetMaximum(1.6);
   } 
   g_RpPb_sys[0]->SetFillColor(kTeal-9);
   g_RpPb_sys[1]->SetFillColor(kRed-9);
@@ -194,19 +195,19 @@ void draw_RpPb_pt(bool sysByHand=true, bool noPtWeight=false, bool isPrompt=true
   g_RpPb_sys[5]->SetFillColor(kTeal-9);
   g_RpPb_sys[6]->SetFillColor(kViolet-9);
   SetGraphStyleFinal(g_RpPb[0],  0,5);
-  g_RpPb[0]->SetMarkerSize(2.5);
+  g_RpPb[0]->SetMarkerSize(2.3);
   SetGraphStyleFinal(g_RpPb[1],  1,3);
-  g_RpPb[1]->SetMarkerSize(1.7);
+  g_RpPb[1]->SetMarkerSize(1.5);
   SetGraphStyleFinal(g_RpPb[2],  2,0);
-  g_RpPb[2]->SetMarkerSize(1.7);
+  g_RpPb[2]->SetMarkerSize(1.5);
   SetGraphStyleFinal(g_RpPb[3],  2,0);
-  g_RpPb[3]->SetMarkerSize(1.7);
+  g_RpPb[3]->SetMarkerSize(1.5);
   SetGraphStyleFinal(g_RpPb[4],  1,3);
-  g_RpPb[4]->SetMarkerSize(1.7);
+  g_RpPb[4]->SetMarkerSize(1.5);
   SetGraphStyleFinal(g_RpPb[5],  0,5);
-  g_RpPb[5]->SetMarkerSize(2.5);
+  g_RpPb[5]->SetMarkerSize(2.3);
   SetGraphStyleFinal(g_RpPb[6],  8,2);
-  g_RpPb[6]->SetMarkerSize(2.1);
+  g_RpPb[6]->SetMarkerSize(1.9);
   
   //////////////////////////////////////////////////////////////////
   //// draw
@@ -267,20 +268,22 @@ void draw_RpPb_pt(bool sysByHand=true, bool noPtWeight=false, bool isPrompt=true
   }
 */  
   for (Int_t iy = 0; iy < nRapRpPb; iy++) { 
-    if (iy< 3) pad_all[iy]->cd();
+//    if (iy< 3) pad_all[iy]->cd();
+    //// reverse the order for forward
+    if (iy==0) pad_all[2]->cd();
+    else if (iy==1) pad_all[1]->cd();
+    else if (iy==2) pad_all[0]->cd();
     else pad_all[iy+1]->cd();
     g_RpPb_sys[iy]->Draw("A2");
     g_RpPb[iy]->Draw("P");
     dashedLine(0.,1.,20.,1.,1,1);
     globtex->SetTextAlign(32); //3:right 2:vertical center
-    //globtex->SetTextAlign(12); //3:right 2:vertical center
 	  globtex->SetTextFont(42);
-	  if (iy==0 || iy==3) globtex->SetTextSize(0.063);
+	  //if (iy==0 || iy==3) globtex->SetTextSize(0.063);
+	  if (iy==2 || iy==3) globtex->SetTextSize(0.063);
 	  else globtex->SetTextSize(0.078);
     if (iy<3) globtex->DrawLatex(0.9, 0.09, rapArr[iy].Data());
     else globtex->DrawLatex(0.9, 0.24, rapArr[iy].Data());
-//    if (iy<3) globtex->DrawLatex(0.1, 0.9, rapArr[iy].Data());
-//    else globtex->DrawLatex(0.1, 0.9, rapArr[iy].Data());
   }
   pad_all[3]->cd();
   emptybox->Draw("l");
@@ -347,7 +350,7 @@ void draw_RpPb_pt(bool sysByHand=true, bool noPtWeight=false, bool isPrompt=true
   globtex->SetTextAlign(12); //1:left 2:vertical center
 	globtex->SetTextSize(0.07);
 	globtex->SetTextFont(42);
-  globtex->DrawLatex(0.08, 0.18, "Global uncertainty : 13.5 \%");
+  globtex->DrawLatex(0.08, 0.18, "Global uncertainty : 5.3 \%");
 
 /*
   // lumiText here

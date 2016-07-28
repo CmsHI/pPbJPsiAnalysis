@@ -7,10 +7,11 @@ void formPtArr(Double_t binmin, Double_t binmax, TString* arr);
 
 void CMS_lumi( TPad* pad, int iPeriod, int iPosX );
 
-void draw_cross_rap(bool sysByHand=true, bool noPtWeight=false, bool isScale=false, int isPA = 1, bool isPrompt=false)
+void draw_cross_rap(bool sysByHand=false, bool noPtWeight=false, bool isScale=false, int isPA = 0, bool isPrompt=false)
 {
 	gROOT->Macro("./tdrstyle_kyo.C");
   gStyle->SetTitleYOffset(1.38); //KYO
+  if (isPA==0) gStyle->SetTitleYOffset(1.5); //KYO
 	int iPos=0;
 
 	//// pileup rejection!!
@@ -19,7 +20,7 @@ void draw_cross_rap(bool sysByHand=true, bool noPtWeight=false, bool isScale=fal
 	cout << " *** pileReg = " << pileReg << endl;
 	
 	//// zvtx correction!!
-  const Double_t zvtxCor = 1.064; // not used anymore
+  //const Double_t zvtxCor = 1.064; // not used anymore
 
 	//// BR and lumi info.
 	const Double_t br = 0.0593 ;
@@ -70,7 +71,7 @@ void draw_cross_rap(bool sysByHand=true, bool noPtWeight=false, bool isScale=fal
 	else { scaleF_low = 1.0; scaleF_high = 1.0; }
 	cout << " *** scaleF_low : " <<scaleF_low<<", scaleF_high = "<<scaleF_high<<endl;
 	
-  //// 1) y_CM array (from forward to backward)
+  //// 1) y_CM array (from backward to forward)
 	//Double_t rapArrNumFB_pA[nRapTmp] = {1.93, 1.5, 0.9, 0., -0.9, -1.5, -1.93, -2.4, -2.87};// for pt dist.
 	Double_t rapArrNumBF_pA[nRapTmp] = {-2.87, -2.4, -1.93, -1.5, -0.9, 0., 0.9, 1.5, 1.93};// for rap dist.
 	//Double_t rapArrNumFB_pp[nRapTmp] = {2.4, 1.93, 1.5, 0.9, 0., -0.9, -1.5, -1.93, -2.4};// for pt dist.
@@ -109,8 +110,8 @@ void draw_cross_rap(bool sysByHand=true, bool noPtWeight=false, bool isScale=fal
 	//////////////////////////////////////////////////////////////	
 	//// read-in sys. file 
 	TFile * fSys;
-  if (isPA==0) fSys = new TFile("../TotalSys/TotSys_8rap9pt2gev.root"); //tmp
-  else fSys = new TFile("../TotalSys/TotSys_8rap9pt2gev.root"); //tmp
+  if (isPA==0) fSys = new TFile("../TotalSys/TotSys_8rap9pt_pp_etOpt0.root");
+  else fSys = new TFile("../TotalSys/TotSys_8rap9pt_pA_etOpt0.root");
 	TH2D* h2D_SysErr;
   if (isPrompt) h2D_SysErr = (TH2D*)fSys->Get("hTotalPR");
 	else h2D_SysErr = (TH2D*)fSys->Get("hTotalNP");
@@ -142,7 +143,7 @@ void draw_cross_rap(bool sysByHand=true, bool noPtWeight=false, bool isScale=fal
 	if (nbinsY != nPt) { cout << " *** Error!!! nbinsY != nPt"; return; };
 
   //////////////////////////////////////////////////////////////////////////////////////
-	////  projection to 1D hist : iy=0 refers to forwards !!! (ordering here)
+	////  projection to 1D hist : iy=0 refers to """"BACKWARD""""" !!! (ordering here)
 	TH1D* h1D_CorrY_lab[nPt]; // in y_lab(1st)
 	TH1D* h1D_CorrY[nPt];  // in y_CM
 	TH1D* h1D_SysErr_lab[nPt];
@@ -182,7 +183,7 @@ void draw_cross_rap(bool sysByHand=true, bool noPtWeight=false, bool isScale=fal
 		}
 	}
 /*
-  //// read sys values from hist	
+  //// check sys values from hist	
 	for (Int_t iy = 0; iy < nRap; iy++) {
 		for (int ipt=0; ipt <nPt; ipt ++ ){ 
 			eysysrel[iy][ipt] = h1D_SysErr[iy]->GetBinContent(ipt+1);
@@ -200,7 +201,7 @@ void draw_cross_rap(bool sysByHand=true, bool noPtWeight=false, bool isScale=fal
     h1D_cross[ipt]->Scale(1,"width"); // rapbin
 		h1D_cross[ipt]->Scale(1./lumi_mub); // lumi
 		//h1D_cross[ipt]->Scale(1./br); //br
-		h1D_cross[ipt]->Scale(zvtxCor);	 // z vertex correction 
+		//h1D_cross[ipt]->Scale(zvtxCor);	 // z vertex correction 
 		h1D_cross[ipt]->Scale(pileReg); //pileup correction	
 	}
 	
@@ -208,8 +209,9 @@ void draw_cross_rap(bool sysByHand=true, bool noPtWeight=false, bool isScale=fal
 
 	const int lowpt_init=4;
 	const int highpt_init=7;	
-	
-	//// find the largest sys among pt bins	to be merged
+
+/*	
+	//// find the MAX of sys among pt bins	to be merged
 	for (Int_t iy=0; iy<nRap; iy++){
 		eysysrel_lowpt[iy]=-532;
 		for (Int_t ipt = lowpt_init; ipt < highpt_init; ipt++) {
@@ -222,12 +224,37 @@ void draw_cross_rap(bool sysByHand=true, bool noPtWeight=false, bool isScale=fal
 			if(eysysrel_highpt[iy]<h1D_SysErr[ipt]->GetBinContent(iy+1)) eysysrel_highpt[iy] = h1D_SysErr[ipt]->GetBinContent(iy+1);
 		}
 	}	
+*/
+  //// take proper error propagation for sys
+	double tmpsys[nRap][nPt];
+  for (Int_t iy=0; iy<nRap; iy++){
+		eysysrel_lowpt[iy]= 0;
+		for (Int_t ipt = lowpt_init; ipt < highpt_init; ipt++) {
+			tmpsys[iy][ipt] = h1D_SysErr[ipt]->GetBinContent(iy+1);
+      cout << iy << "th iy, "<<ipt<<"th ipt tmpssys = " << tmpsys[iy][ipt] << endl;
+      eysysrel_lowpt[iy] += tmpsys[iy][ipt]*tmpsys[iy][ipt]; 
+		}
+    //cout << "eysysrel_lowpt[iy]" << eysysrel_lowpt[iy] << endl;
+    eysysrel_lowpt[iy] = TMath::Sqrt(eysysrel_lowpt[iy]);
+    cout << "eysysrel_lowpt[iy]" << eysysrel_lowpt[iy] << endl;
+  }	
+  for (Int_t iy=0; iy<nRap; iy++){
+		eysysrel_highpt[iy]= 0;
+		for (Int_t ipt = highpt_init; ipt < nPt; ipt++) {
+			tmpsys[iy][ipt] = h1D_SysErr[ipt]->GetBinContent(iy+1);
+      cout << iy << "th iy, "<<ipt<<"th ipt tmpssys = " << tmpsys[iy][ipt] << endl;
+      eysysrel_highpt[iy] += tmpsys[iy][ipt]*tmpsys[iy][ipt]; 
+		}
+    cout << "eysysrel_highpt[iy]" << eysysrel_highpt[iy] << endl;
+    eysysrel_highpt[iy] = TMath::Sqrt(eysysrel_highpt[iy]);
+    cout << "eysysrel_highpt[iy]" << eysysrel_highpt[iy] << endl;
+  }	
 
   //// pt bin merging
 	cout << "1) low pT bin starts from : " << ptArr[lowpt_init].Data() << endl;
 	for (Int_t ipt = lowpt_init+1; ipt < highpt_init; ipt++) {
 		h1D_cross[lowpt_init]->Add(h1D_cross[ipt]);
-		cout << ", merging : " << ptArr[ipt].Data() << endl; 
+    cout << ", merging : " << ptArr[ipt].Data() << endl; 
 	}
 	cout << "2) high pT bin starts from : " << ptArr[highpt_init].Data() << endl;
 	for (Int_t ipt = highpt_init+1; ipt < nPt; ipt++) {
@@ -342,7 +369,7 @@ void draw_cross_rap(bool sysByHand=true, bool noPtWeight=false, bool isScale=fal
   else globtex->DrawLatex(0.93, 0.85, "Non-prompt J/#psi");
 	globtex->SetTextSize(0.035);
 	globtex->SetTextFont(42);
-  if (isPA==0) globtex->DrawLatex(0.93, 0.79, "Global uncertainty : 10 \%");
+  if (isPA==0) globtex->DrawLatex(0.93, 0.79, "Global uncertainty : 4 \%");
 	else globtex->DrawLatex(0.93, 0.79, "Global uncertainty : 3.5 \%");
 	//globtex->DrawLatex(0.89, 0.80, "Global uncertainty : 3.5 \%");
 	CMS_lumi( c1, isPA, iPos );

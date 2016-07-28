@@ -8,7 +8,7 @@ void formEtArr(Double_t min, Double_t max, TString* arr);
 
 void CMS_lumi( TPad* pad, int iPeriod, int iPosX );
 
-void draw_RFB_ethf(bool sysByHand=true, bool noPtWeight = false, bool isPrompt=false)
+void draw_RFB_ethf(bool sysByHand=true, bool noPtWeight = false, bool isPrompt=true)
 {
 	gROOT->Macro("./tdrstyle_kyo.C");
   int isPA = 1;	
@@ -52,16 +52,16 @@ void draw_RFB_ethf(bool sysByHand=true, bool noPtWeight = false, bool isPrompt=f
 	Double_t eysys[nHist][nEt]; //absolute y sys error
 	Double_t eysysrel[nHist][nEt]; //relative y sys error
 	Double_t eysysrelPR[nHist][nEt]={
-		{ 0.05299, 0.06155, 0.06715}, //1.5-1.93 low
-    { 0.05088, 0.05442, 0.05913}, //1.5-1.93
-		{ 0.03741, 0.04958, 0.04227}, //0.9-1.5
-		{ 0.04425, 0.04528, 0.05314} //0.0-0.9
+		{ 6.607602e-02, 6.308565e-02, 6.567717e-02}, //1.5-1.93 low
+    { 6.208894e-02, 5.714427e-02, 6.547308e-02}, //1.5-1.93
+		{ 5.046793e-02, 5.150824e-02, 4.854059e-02}, //0.9-1.5
+		{ 4.877380e-02, 5.661788e-02, 5.087595e-02} //0.0-0.9
 	};
 	Double_t eysysrelNP[nHist][nEt]={
-    { 0.04971, 0.06138, 0.06459}, // 1.5-1.93 low
-    { 0.05188, 0.05442, 0.05999}, //0.5-1.93
-    { 0.03694, 0.04952, 0.04221}, //0.9-1.5
-    { 0.04242, 0.04349, 0.05162} //0.0-0.9
+    { 1.118566e-01, 1.325494e-01, 9.796744e-02}, // 1.5-1.93 low
+    { 7.919457e-02, 6.651956e-02, 8.322826e-02}, //0.5-1.93
+    { 7.027312e-02, 7.035414e-02, 5.352782e-02}, //0.9-1.5
+    { 8.805486e-02, 1.057997e-01, 9.301805e-02} //0.0-0.9
 	};
 	for (int inh=0; inh< nHist; inh++){
     for (int iet=0; iet<nEt; iet++){	
@@ -275,38 +275,38 @@ void draw_RFB_ethf(bool sysByHand=true, bool noPtWeight = false, bool isPrompt=f
 	}
 
 	
-	gRFB_sys[0]->GetXaxis()->SetTitle("E_{T}^{HF |#eta|>4} [GeV]");
-	gRFB_sys[0]->GetXaxis()->CenterTitle();
-	gRFB_sys[0]->GetYaxis()->SetTitle("R_{FB}");
-	gRFB_sys[0]->GetYaxis()->CenterTitle();
-	gRFB_sys[0]->GetXaxis()->SetLimits(0.,50.0);
-	//gRFB_sys[0]->SetMinimum(0.5);
-	//gRFB_sys[0]->SetMaximum(1.15);
-	gRFB_sys[0]->SetMinimum(0.0);
-	gRFB_sys[0]->SetMaximum(1.5);
+	for (int inh=0; inh< nHist; inh++){
+  	gRFB_sys[inh]->GetXaxis()->SetTitle("E_{T}^{HF |#eta|>4} [GeV]");
+  	gRFB_sys[inh]->GetXaxis()->CenterTitle();
+  	gRFB_sys[inh]->GetYaxis()->SetTitle("R_{FB}");
+  	gRFB_sys[inh]->GetYaxis()->CenterTitle();
+  	gRFB_sys[inh]->GetXaxis()->SetLimits(0.,50.0);
+  	gRFB_sys[inh]->SetMinimum(0.5);
+  	gRFB_sys[inh]->SetMaximum(1.15);
+  }
+	//gRFB_sys[0]->SetMinimum(0.0);
+	//gRFB_sys[0]->SetMaximum(1.5);
 	gRFB_sys[0]->SetFillColor(kViolet-9);
-	gRFB_sys[0]->Draw("A2");
+	//gRFB_sys[0]->Draw("A2");
 	gRFB_sys[1]->SetFillColor(kTeal-9);
-	gRFB_sys[1]->Draw("2");
+	//gRFB_sys[1]->Draw("2");
 	gRFB_sys[2]->SetFillColor(kRed-10);
-	gRFB_sys[2]->Draw("2");
+	//gRFB_sys[2]->Draw("2");
 	gRFB_sys[3]->SetFillColor(kBlue-10);
-	gRFB_sys[3]->Draw("2");
+	//gRFB_sys[3]->Draw("2");
 
 	SetGraphStyleFinal(gRFB[0], 8, 2); //1.5-1.93 low
 	SetGraphStyleFinal(gRFB[1], 0, 5); //1.5-1.93
 	SetGraphStyleFinal(gRFB[2], 1, 3); //0.9-1.5
 	SetGraphStyleFinal(gRFB[3], 2, 0); //0-0.9
 	gRFB[0]->SetMarkerSize(2.1);
-	gRFB[0]->Draw("P");
+	//gRFB[0]->Draw("P");
 	gRFB[1]->SetMarkerSize(2.5);
-	gRFB[1]->Draw("P");
+	//gRFB[1]->Draw("P");
 	gRFB[2]->SetMarkerSize(1.7);
-	gRFB[2]->Draw("P");
+	//gRFB[2]->Draw("P");
 	gRFB[3]->SetMarkerSize(1.7);
-	gRFB[3]->Draw("P");
-
-	dashedLine(0.,1.,50.,1.,1,1);
+	//gRFB[3]->Draw("P");
 
   legBL->SetHeader("6.5 < p_{T} < 30 GeV/c");	
   //TLegendEntry *le1=legBL->AddEntry("le1","0 < |y_{CM}| < 0.9, 6.5 < p_{T} < 30 GeV/c","lpf");
@@ -331,8 +331,8 @@ void draw_RFB_ethf(bool sysByHand=true, bool noPtWeight = false, bool isPrompt=f
 	le3->SetMarkerStyle(kFullDiamond);
 	le3->SetMarkerColor(kGreen+3);
 	le3->SetMarkerSize(2.5);
-	legBL->Draw();
-	
+	//legBL->Draw();
+  
   legUL->SetHeader("5 < p_{T} < 6.5 GeV/c");	
   TLegendEntry *le4=legUL->AddEntry("le4","1.5 < |y_{CM}| < 1.93","lpf");
 	le4->SetFillColor(kViolet-9);
@@ -341,17 +341,59 @@ void draw_RFB_ethf(bool sysByHand=true, bool noPtWeight = false, bool isPrompt=f
 	le4->SetMarkerStyle(kFullTriangleDown);
 	le4->SetMarkerColor(kViolet-6);
 	le4->SetMarkerSize(2.1);
+	//legUL->Draw();
 
-	legUL->Draw();
   
+  ///////////////////////////////////////////////////////////////////
+  //// step by step	
+  ///////////////////////////////////////////////////////////////////
+  
+  //// STEP1
+  gRFB_sys[3]->Draw("A2");
+	gRFB[3]->Draw("P");
+	dashedLine(0.,1.,50.,1.,1,1);
+	CMS_lumi( c1, isPA, iPos );
+	c1->Update();
 	globtex->SetTextSize(0.055);
 	globtex->SetTextFont(42);
 	if (isPrompt) globtex->DrawLatex(0.88, 0.84, "Prompt J/#psi");
 	else globtex->DrawLatex(0.88, 0.84, "Non-prompt J/#psi");
+	legBL->Draw();
+	legUL->Draw();
 
-	CMS_lumi( c1, isPA, iPos );
-	c1->Update();
+  if (noPtWeight) {
+  	c1->SaveAs(Form("plot_RFB/RFB_ethf_isPrompt%d_noPtWeight_STEP1.pdf",(int)isPrompt));
+  	c1->SaveAs(Form("plot_RFB/RFB_ethf_isPrompt%d_noPtWeight_STEP1.png",(int)isPrompt));
+  } else {
+  	c1->SaveAs(Form("plot_RFB/RFB_ethf_isPrompt%d_STEP1.pdf",(int)isPrompt));
+  	c1->SaveAs(Form("plot_RFB/RFB_ethf_isPrompt%d_STEP1.png",(int)isPrompt));
+  }
 
+  //// STEP2
+  gRFB_sys[2]->Draw("2");
+	gRFB[2]->Draw("P");
+  if (noPtWeight) {
+  	c1->SaveAs(Form("plot_RFB/RFB_ethf_isPrompt%d_noPtWeight_STEP2.pdf",(int)isPrompt));
+  	c1->SaveAs(Form("plot_RFB/RFB_ethf_isPrompt%d_noPtWeight_STEP2.png",(int)isPrompt));
+  } else {
+  	c1->SaveAs(Form("plot_RFB/RFB_ethf_isPrompt%d_STEP2.pdf",(int)isPrompt));
+  	c1->SaveAs(Form("plot_RFB/RFB_ethf_isPrompt%d_STEP2.png",(int)isPrompt));
+  }
+  
+  //// STEP3
+  gRFB_sys[1]->Draw("2");
+	gRFB[1]->Draw("P");
+  if (noPtWeight) {
+  	c1->SaveAs(Form("plot_RFB/RFB_ethf_isPrompt%d_noPtWeight_STEP3.pdf",(int)isPrompt));
+  	c1->SaveAs(Form("plot_RFB/RFB_ethf_isPrompt%d_noPtWeight_STEP3.png",(int)isPrompt));
+  } else {
+  	c1->SaveAs(Form("plot_RFB/RFB_ethf_isPrompt%d_STEP3.pdf",(int)isPrompt));
+  	c1->SaveAs(Form("plot_RFB/RFB_ethf_isPrompt%d_STEP3.png",(int)isPrompt));
+  }
+  
+  //// STEP4 && Final
+  gRFB_sys[0]->Draw("2");
+	gRFB[0]->Draw("P");
   if (noPtWeight) {
   	c1->SaveAs(Form("plot_RFB/RFB_ethf_isPrompt%d_noPtWeight.pdf",(int)isPrompt));
   	c1->SaveAs(Form("plot_RFB/RFB_ethf_isPrompt%d_noPtWeight.png",(int)isPrompt));
@@ -359,7 +401,8 @@ void draw_RFB_ethf(bool sysByHand=true, bool noPtWeight = false, bool isPrompt=f
   	c1->SaveAs(Form("plot_RFB/RFB_ethf_isPrompt%d.pdf",(int)isPrompt));
   	c1->SaveAs(Form("plot_RFB/RFB_ethf_isPrompt%d.png",(int)isPrompt));
   }
-	
+
+
   ///////////////////////////////////////////////////////////////////
 	//// save as a root file
 	TFile *outFile;
@@ -371,7 +414,7 @@ void draw_RFB_ethf(bool sysByHand=true, bool noPtWeight = false, bool isPrompt=f
 		gRFB[inh]->Write();	
 	}
 	outFile->Close();
-	
+  
   return;
 
 } // end of main func.

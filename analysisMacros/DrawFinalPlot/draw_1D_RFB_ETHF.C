@@ -35,7 +35,7 @@ void formEtArr(Double_t min, Double_t max, string* arr);
 void CMS_lumi( TPad* pad, int iPeriod, int iPosX );
 
 //// runCode // 0=merged, 1=1stRun, 2=2ndRun
-void draw_1D_RFB_ETHF(char* dirName = "6rap3pt", int runCode=0, bool isZoomIn = true, bool isPrompt=false)
+void draw_1D_RFB_ETHF(char* dirName = "6rap3pt", int runCode=0, bool isZoomIn = true, bool isPrompt=true)
 {
 	//gROOT->Macro("./JpsiStyleForFinalResult.C");
 	gROOT->Macro("./tdrstyle_kyo.C");
@@ -399,31 +399,31 @@ void draw_1D_RFB_ETHF(char* dirName = "6rap3pt", int runCode=0, bool isZoomIn = 
 		gRFB_sys[0]->SetMaximum(1.4);
 	}
 	gRFB_sys[0]->SetFillColor(kViolet-9);
-	gRFB_sys[0]->Draw("A2");
+//	gRFB_sys[0]->Draw("A2");
 	gRFB_sys[1]->SetFillColor(kTeal+7);
-	gRFB_sys[1]->Draw("2");
+//	gRFB_sys[1]->Draw("2");
 	gRFB_sys[2]->SetFillColor(kRed-9);
-	gRFB_sys[2]->Draw("2");
+//	gRFB_sys[2]->Draw("2");
 	gRFB_sys[3]->SetFillColor(kAzure-9);
-	gRFB_sys[3]->Draw("2");
+//	gRFB_sys[3]->Draw("2");
 
 	SetGraphStyle(gRFB[0], 8, 2); //1.5-1.93 low
 	SetGraphStyle(gRFB[1], 0, 5); //1.5-1.93
 	SetGraphStyle(gRFB[2], 1, 3); //0.9-1.5
 	SetGraphStyle(gRFB[3], 2, 0); //0-0.9
 	gRFB[0]->SetMarkerSize(1.6);
-	gRFB[0]->Draw("P");
+//	gRFB[0]->Draw("P");
 	gRFB[1]->SetMarkerSize(2.1);
-	gRFB[1]->Draw("P");
-	gRFB[2]->Draw("P");
-	gRFB[3]->Draw("P");
+//	gRFB[1]->Draw("P");
+//	gRFB[2]->Draw("P");
+//	gRFB[3]->Draw("P");
 
 	dashedLine(0.,1.,50.,1.,1,1);
-	legBL -> AddEntry(gRFB[0],"1.5 < |y_{CM}| < 1.93,   5 < p_{T} < 6.5 GeV/c","lp");
-	legBL -> AddEntry(gRFB[1],"1.5 < |y_{CM}| < 1.93,  6.5 < p_{T} < 30 GeV/c","lp");
-	legBL -> AddEntry(gRFB[2],"0.9 < |y_{CM}| < 1.5,   6.5 < p_{T} < 30 GeV/c","lp");
-	legBL -> AddEntry(gRFB[3],"0.0 < |y_{CM}| < 0.9,   6.5 < p_{T} < 30 GeV/c","lp");
-	legBL->Draw();
+//	legBL -> AddEntry(gRFB[0],"1.5 < |y_{CM}| < 1.93,   5 < p_{T} < 6.5 GeV/c","lp");
+//	legBL -> AddEntry(gRFB[1],"1.5 < |y_{CM}| < 1.93,  6.5 < p_{T} < 30 GeV/c","lp");
+//	legBL -> AddEntry(gRFB[2],"0.9 < |y_{CM}| < 1.5,   6.5 < p_{T} < 30 GeV/c","lp");
+//	legBL -> AddEntry(gRFB[3],"0.0 < |y_{CM}| < 0.9,   6.5 < p_{T} < 30 GeV/c","lp");
+//	legBL->Draw();
 	globtex->SetTextSize(0.045);
 	globtex->SetTextFont(62);
 	if (isPrompt) globtex->DrawLatex(0.88, 0.86, "Prompt J/#psi");
@@ -431,8 +431,17 @@ void draw_1D_RFB_ETHF(char* dirName = "6rap3pt", int runCode=0, bool isZoomIn = 
 
 	CMS_lumi( c1, iPeriod, iPos );
 	c1->Update();
-	c1->SaveAs(Form("RFB_%s/RFB_ETHF_isPrompt%d_%s.pdf",dirName,(int)isPrompt,runstring.c_str()));
-	c1->SaveAs(Form("RFB_%s/RFB_ETHF_isPrompt%d_%s.png",dirName,(int)isPrompt,runstring.c_str()));
+
+  //// STEP by STEP
+	gRFB_sys[0]->Draw("A2");
+	legBL -> AddEntry(gRFB[0],"1.5 < |y_{CM}| < 1.93,   5 < p_{T} < 6.5 GeV/c","lp");
+	legBL->Draw();
+	c1->SaveAs(Form("RFB_%s/RFB_ETHF_isPrompt%d_%s_STEP1.pdf",dirName,(int)isPrompt,runstring.c_str()));
+	c1->SaveAs(Form("RFB_%s/RFB_ETHF_isPrompt%d_%s_STEP1.png",dirName,(int)isPrompt,runstring.c_str()));
+
+
+//	c1->SaveAs(Form("RFB_%s/RFB_ETHF_isPrompt%d_%s.pdf",dirName,(int)isPrompt,runstring.c_str()));
+//	c1->SaveAs(Form("RFB_%s/RFB_ETHF_isPrompt%d_%s.png",dirName,(int)isPrompt,runstring.c_str()));
 
 	///////////////////////////////////////////////////////////////////
 	// save as a root file

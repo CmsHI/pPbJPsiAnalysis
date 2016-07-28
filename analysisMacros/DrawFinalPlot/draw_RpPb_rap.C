@@ -7,7 +7,7 @@ void formPtArr(Double_t binmin, Double_t binmax, TString* arr);
 
 void CMS_lumi( TPad* pad, int iPeriod, int iPosX );
 
-void draw_RpPb_rap(bool sysByHand=true, bool noPtWeight=false, bool isPrompt=true)
+void draw_RpPb_rap(bool sysByHand=false, bool noPtWeight=false, bool isPrompt=false)
 {
   gROOT->Macro("./tdrstyle_kyo.C");
   //cmsTextFont   = 42;  // for b.hong
@@ -17,7 +17,7 @@ void draw_RpPb_rap(bool sysByHand=true, bool noPtWeight=false, bool isPrompt=tru
 //	int iPos=11;//left corner
 //	int iPos=0.;//outOfFrame
   
-	double pxshift = 0.1;
+	double pxshift = 0.15;
   
   //// BR and lumi info.
   const Double_t br = 0.0593 ;
@@ -70,7 +70,8 @@ void draw_RpPb_rap(bool sysByHand=true, bool noPtWeight=false, bool isPrompt=tru
   Double_t eysys_highpt_pp[nRap]; //absolute y sys error
   
 	Double_t ex[nRapRpPb] = {0,0,0,0,0,0,0}; // x stat error
-  Double_t exsys[nRapRpPb] = {0.08,0.08,0.08,0.08,0.08,0.08,0.08}; // x sys error
+  //Double_t exsys[nRapRpPb] = {0.08,0.08,0.08,0.08,0.08,0.08,0.08}; // x sys error
+  Double_t exsys[nRapRpPb] = {0.075,0.075,0.075,0.075,0.075,0.075,0.075}; // x sys error
   
   //// 1) y_CM array (from forward to backward)
   //Double_t rapArrNumFB[nRapTmp] = {1.93, 1.5, 0.9, 0., -0.9, -1.5, -1.93, -2.4, -2.87};// for pt dist.
@@ -165,6 +166,7 @@ void draw_RpPb_rap(bool sysByHand=true, bool noPtWeight=false, bool isPrompt=tru
     pytmp_lowpt[iy] = pytmp_lowpt[iy]/A_pb;
     eytmp_lowpt[iy] = eytmp_lowpt[iy]/A_pb;
     eysys_lowpt[iy] = eysys_lowpt[iy]/A_pb;
+    cout << "" << endl;
     cout << "R_pPb_lowpt["<<iy<<"] = "<< pytmp_lowpt[iy] << endl;; 
     cout << "stat._lowpt["<<iy<<"] = " << eytmp_lowpt[iy]<<endl;
     cout << "sys_lowpt.["<<iy<<"] = " << eysys_lowpt[iy]<<endl;
@@ -174,6 +176,7 @@ void draw_RpPb_rap(bool sysByHand=true, bool noPtWeight=false, bool isPrompt=tru
     pytmp_highpt[iy] = pytmp_highpt[iy]/A_pb;
     eytmp_highpt[iy] = eytmp_highpt[iy]/A_pb;
     eysys_highpt[iy] = eysys_highpt[iy]/A_pb;
+    cout << "" << endl;
     cout << "R_pPb_highpt["<<iy<<"] = "<< pytmp_highpt[iy] << endl;; 
     cout << "stat._highpt["<<iy<<"] = " << eytmp_highpt[iy]<<endl;
     cout << "sys_highpt.["<<iy<<"] = " << eysys_highpt[iy]<<endl;
@@ -191,12 +194,13 @@ void draw_RpPb_rap(bool sysByHand=true, bool noPtWeight=false, bool isPrompt=tru
   g_RpPb_sys_lowpt->GetXaxis()->CenterTitle();
   g_RpPb_sys_lowpt->GetYaxis()->SetTitle("R_{pPb}");
   g_RpPb_sys_lowpt->GetYaxis()->CenterTitle();
-  g_RpPb_sys_lowpt->GetXaxis()->SetLimits(-2.4,1.93);
+  //g_RpPb_sys_lowpt->GetXaxis()->SetLimits(-2.4,1.93);
+  g_RpPb_sys_lowpt->GetXaxis()->SetLimits(-2.4,2.1);
   //g_RpPb_sys_lowpt->GetXaxis()->SetLimits(-2.4,2.4);
   //g_RpPb_sys_lowpt->SetMinimum(0.5);
   //g_RpPb_sys_lowpt->SetMaximum(1.5);
-  g_RpPb_sys_lowpt->SetMinimum(0.0);
-  g_RpPb_sys_lowpt->SetMaximum(1.5);
+  g_RpPb_sys_lowpt->SetMinimum(0.4);
+  g_RpPb_sys_lowpt->SetMaximum(1.6);
 
   g_RpPb_sys_lowpt->SetFillColor(kRed-9);
   g_RpPb_sys_highpt->SetFillColor(kTeal-9);
@@ -250,7 +254,7 @@ void draw_RpPb_rap(bool sysByHand=true, bool noPtWeight=false, bool isPrompt=tru
 	else globtex->DrawLatex(0.21, 0.84, "Non-prompt J/#psi");
 	globtex->SetTextSize(0.035);
 	globtex->SetTextFont(42);
-  globtex->DrawLatex(0.21, 0.78, "Global uncertainty : 13.5 \%");
+  globtex->DrawLatex(0.21, 0.78, "Global uncertainty : 5.3 \%");
 	
   CMS_lumi( c1, isPA, iPos );
 
