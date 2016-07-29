@@ -30,7 +30,18 @@ void comp_RpPb_rap_ATLAS(bool isPrompt = true)
   else inFile= new TFile("plot_RpPb/RpPb_rap_isPrompt0.root");
 	TGraphAsymmErrors* g_RpPb_sys_highpt = (TGraphAsymmErrors*)inFile->Get("g_RpPb_sys_highpt"); 
 	TGraphAsymmErrors* g_RpPb_highpt = (TGraphAsymmErrors*)inFile->Get("g_RpPb_highpt"); 
-  
+ 
+  //// remove pxshift
+	double pxshift = 0.15;
+  const int nRap = 7;
+  double dummyX, dummyY;
+  for (int iy=0; iy<nRap; iy++) { 
+    g_RpPb_sys_highpt->GetPoint(iy, dummyX, dummyY);
+    g_RpPb_sys_highpt->SetPoint(iy, dummyX-pxshift, dummyY);
+    g_RpPb_highpt->GetPoint(iy, dummyX, dummyY);
+    g_RpPb_highpt->SetPoint(iy, dummyX-pxshift, dummyY);
+  }
+
   g_RpPb_sys_highpt->GetXaxis()->SetTitle("y_{CM}");
   g_RpPb_sys_highpt->GetXaxis()->CenterTitle();
   g_RpPb_sys_highpt->GetYaxis()->SetTitle("R_{pPb}");

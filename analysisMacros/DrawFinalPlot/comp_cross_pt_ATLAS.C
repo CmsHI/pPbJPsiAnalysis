@@ -9,7 +9,7 @@ void formPtArr(Double_t binmin, Double_t binmax, TString* arr);
 void getMeanPtBins( Double_t* binArr, TF1* func);
 void CMS_lumi( TPad* pad, int iPeriod, int iPosX );
 
-void comp_cross_pt_ATLAS(bool isShift=false, bool isPrompt = true, bool isLog=true)
+void comp_cross_pt_ATLAS(bool isShift=false, bool isPrompt = false, bool isLog=false)
 {
 	gROOT->Macro("./tdrstyle_kyo.C");
 	int isPA = 1;
@@ -189,6 +189,7 @@ void comp_cross_pt_ATLAS(bool isShift=false, bool isPrompt = true, bool isLog=tr
 	if (isPrompt) g_cross_atlas_fwrap = new TGraphAsymmErrors(nPtATLAS, atlas_px, atlas_py_pr_fw, atlas_ex, atlas_ex, atlas_ey_pr_fw, atlas_ey_pr_fw);	
 	else g_cross_atlas_fwrap = new TGraphAsymmErrors(nPtATLAS, atlas_px, atlas_py_np_fw, atlas_ex, atlas_ex, atlas_ey_np_fw, atlas_ey_np_fw);	
 	SetGraphStyleFinal(g_cross_atlas_fwrap,9,10);
+	g_cross_atlas_fwrap->SetMarkerSize(1.7);
 	TF1 *expoFunc_fw = new TF1("expoFunc_fw","[0]*exp(-[1]*x)", 8, 30);
 	expoFunc_fw->SetParameter(0,10);
 	expoFunc_fw->SetParameter(1,1.5);
@@ -201,6 +202,7 @@ void comp_cross_pt_ATLAS(bool isShift=false, bool isPrompt = true, bool isLog=tr
   if (isPrompt) g_cross_atlas_fwrap_shift =  new TGraphAsymmErrors(nPtATLAS, atlas_px_fwShift, atlas_py_pr_fw, atlas_ex, atlas_ex, atlas_ey_pr_fw, atlas_ey_pr_fw);
   else g_cross_atlas_fwrap_shift =  new TGraphAsymmErrors(nPtATLAS, atlas_px_fwShift, atlas_py_np_fw, atlas_ex, atlas_ex, atlas_ey_np_fw, atlas_ey_np_fw);
    SetGraphStyleFinal(g_cross_atlas_fwrap_shift,9,10);
+	g_cross_atlas_fwrap_shift->SetMarkerSize(1.7);
 	
 	TGraphAsymmErrors* g_cross_atlas_sys_fwrap_shift;
   if (isPrompt) g_cross_atlas_sys_fwrap_shift = new TGraphAsymmErrors(nPtATLAS, atlas_px_fwShift, atlas_py_pr_fw, atlas_exsys, atlas_exsys, atlas_eysys01_pr_fw, atlas_eysys01_pr_fw);
@@ -220,13 +222,13 @@ void comp_cross_pt_ATLAS(bool isShift=false, bool isPrompt = true, bool isLog=tr
 	else g_cross_atlas_sys_bwrap = new TGraphAsymmErrors(nPtATLAS, atlas_px, atlas_py_np_bw, atlas_exsys, atlas_exsys, atlas_eysys01_np_bw, atlas_eysys01_np_bw);	
 	g_cross_atlas_sys_bwrap->SetFillColor(kGray);
 
-	SetGraphStyleFinal(g_cross_fwrap,1,3);
-
-	g_cross_fwrap->Draw("P");
+	//SetGraphStyleFinal(g_cross_fwrap,1,3);
+	//g_cross_fwrap->Draw("P");
 
 	if (isPrompt) g_cross_atlas_bwrap = new TGraphAsymmErrors(nPtATLAS, atlas_px, atlas_py_pr_bw, atlas_ex, atlas_ex, atlas_ey_pr_bw, atlas_ey_pr_bw);	
 	else g_cross_atlas_bwrap = new TGraphAsymmErrors(nPtATLAS, atlas_px, atlas_py_np_bw, atlas_ex, atlas_ex, atlas_ey_np_bw, atlas_ey_np_bw);	
 	SetGraphStyleFinal(g_cross_atlas_bwrap,9,11);
+	g_cross_atlas_bwrap->SetMarkerSize(1.7);
 	TF1 *expoFunc_bw = new TF1("expoFunc_bw","[0]*exp(-[1]*x)", 8, 30);
 	expoFunc_bw->SetParameter(0,10000);
 	expoFunc_bw->SetParameter(1,1.5);
@@ -240,6 +242,7 @@ void comp_cross_pt_ATLAS(bool isShift=false, bool isPrompt = true, bool isLog=tr
         if (isPrompt) g_cross_atlas_bwrap_shift  =  new TGraphAsymmErrors(nPtATLAS, atlas_px_bwShift, atlas_py_pr_bw, atlas_ex, atlas_ex, atlas_ey_pr_bw, atlas_ey_pr_bw);
         else g_cross_atlas_bwrap_shift  =  new TGraphAsymmErrors(nPtATLAS, atlas_px_bwShift, atlas_py_np_bw, atlas_ex, atlas_ex, atlas_ey_np_bw, atlas_ey_np_bw);
 				SetGraphStyleFinal(g_cross_atlas_bwrap_shift,9,11);
+	      g_cross_atlas_bwrap_shift->SetMarkerSize(1.7);
 
         TGraphAsymmErrors* g_cross_atlas_sys_bwrap_shift;
         if (isPrompt) g_cross_atlas_sys_bwrap_shift = new TGraphAsymmErrors(nPtATLAS, atlas_px_bwShift, atlas_py_pr_bw, atlas_exsys, atlas_exsys, atlas_eysys01_pr_bw, atlas_eysys01_pr_bw);
@@ -262,8 +265,8 @@ void comp_cross_pt_ATLAS(bool isShift=false, bool isPrompt = true, bool isLog=tr
 
 	SetGraphStyleFinal(g_cross_fwrap,1,3);
 	SetGraphStyleFinal(g_cross_bwrap,1,13);
-	g_cross_fwrap->Draw("P");
-	g_cross_bwrap->Draw("P");
+	g_cross_fwrap->SetMarkerSize(1.7);
+	g_cross_bwrap->SetMarkerSize(1.7);
 
 	//// re-draw
 	if ( isShift)  { 

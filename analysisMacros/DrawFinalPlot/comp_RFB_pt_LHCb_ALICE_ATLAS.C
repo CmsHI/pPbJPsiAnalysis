@@ -66,8 +66,8 @@ int comp_RFB_pt_LHCb_ALICE_ATLAS()
 	///////////////////// ALICE ////////////////////////
 	///////////////////////////////////////////////////
 
-	Double_t alice_px[] = {0.5, 1.5, 2.5, 3.5, 4.5, 5.5, 6.5, 8, 10, 13};
-	//Double_t alice_px[] = {0.7, 1.7, 2.7, 3.7, 4.7, 5.7, 6.7, 8.2, 10.2, 13.2}; ////bins shifted by 0.2
+	//Double_t alice_px[] = {0.5, 1.5, 2.5, 3.5, 4.5, 5.5, 6.5, 8, 10, 13};
+	Double_t alice_px[] = {0.7, 1.7, 2.7, 3.7, 4.7, 5.7, 6.7, 8.2, 10.2, 13.2}; ////bins shifted by 0.2
 	Double_t alice_ex[] = {0., 0., 0., 0., 0., 0., 0., 0., 0., 0.};
 	Double_t alice_exsys[] = {0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2};
 	Double_t alice_RFB[] = {0.62, 0.57, 0.57, 0.64, 0.69, 0.76, 0.81, 0.69, 0.82, 0.95};
@@ -153,18 +153,15 @@ int comp_RFB_pt_LHCb_ALICE_ATLAS()
 
 	// 2) lhcb
 	gRFB_lhcb_pr_sys = new TGraphAsymmErrors(nBin_lhcb, lhcb_px, lhcb_py_pr, lhcb_exsys, lhcb_exsys, lhcb_eysys_pr, lhcb_eysys_pr);	
-	//	gRFB_lhcb_pr_sys->SetFillColor(kBlue-9);
 	gRFB_lhcb_pr_sys->SetFillColor(kGray);
-	gRFB_lhcb_pr_sys->SetFillStyle(3001);
-	gRFB_lhcb_pr_sys->Draw("2");
+	//gRFB_lhcb_pr_sys->SetFillStyle(3001);
 
 	gRFB_lhcb_pr = new TGraphAsymmErrors(nBin_lhcb, lhcb_px, lhcb_py_pr, lhcb_ex, lhcb_ex, lhcb_ey_pr, lhcb_ey_pr);	
-	SetGraphStyle(gRFB_lhcb_pr,2,10);
+	SetGraphStyleFinal(gRFB_lhcb_pr,2,10);
 	gRFB_lhcb_pr->SetLineColor(1);
 	gRFB_lhcb_pr->SetMarkerColor(1);
 	gRFB_lhcb_pr->SetMarkerSize(1.5);
 	//gRFB_lhcb_pr->SetMarkerStyle(20);
-	gRFB_lhcb_pr->Draw("PSAME");
 
 	//3) ALICE
 	gRFB_alice = new TGraphAsymmErrors(nBin_alice, alice_px, alice_RFB, alice_ex, alice_ex, alice_ey_stat, alice_ey_stat);	
@@ -175,42 +172,44 @@ int comp_RFB_pt_LHCb_ALICE_ATLAS()
 
 	gRFB_alice_sys = new TGraphAsymmErrors(nBin_alice, alice_px, alice_RFB, alice_exsys, alice_exsys, alice_ey_sys, alice_ey_sys);	
 	gRFB_alice_sys->SetFillColor(kGray);
-	gRFB_alice_sys->SetFillStyle(3001);
-	gRFB_alice_sys->SetMarkerSize(1.5);
-	gRFB_alice_sys->SetMarkerColor(1);
-	gRFB_alice_sys->SetLineColor(1);
-	gRFB_alice_sys->SetLineWidth(1);
-	gRFB_alice_sys->Draw("2SAME");
-	gRFB_alice->Draw("PSAME");
+	//gRFB_alice_sys->SetMarkerSize(1.5);
+	//gRFB_alice_sys->SetMarkerColor(1);
+	//gRFB_alice_sys->SetLineColor(1);
+	//gRFB_alice_sys->SetLineWidth(1);
 	
 	//4) ATLAS
 	gRFB_atlas_pr = new TGraphAsymmErrors(nBin_atlas, atlas_px, atlas_RFB_pr, atlas_ex, atlas_ex, atlas_ey_stat_pr, atlas_ey_stat_pr);	
 	gRFB_atlas_pr->SetMarkerSize(2.0);
 	gRFB_atlas_pr->SetMarkerStyle(27);
-	//gRFB_atlas_pr->SetMarkerColor(1);
-	//gRFB_atlas_pr->SetLineColor(1);
-	gRFB_atlas_pr->SetMarkerColor(2);
-	gRFB_atlas_pr->SetLineColor(2);
+	gRFB_atlas_pr->SetMarkerColor(1);
+	gRFB_atlas_pr->SetLineColor(1);
+	//gRFB_atlas_pr->SetMarkerColor(2);
+	//gRFB_atlas_pr->SetLineColor(2);
 
 	gRFB_atlas_sys_pr = new TGraphAsymmErrors(nBin_atlas, atlas_px, atlas_RFB_pr, atlas_exsys, atlas_exsys, atlas_ey_sys_pr, atlas_ey_sys_pr);	
 	gRFB_atlas_sys_pr->SetFillColor(kGray);
-	gRFB_atlas_sys_pr->SetFillStyle(3001);
-	gRFB_atlas_sys_pr->SetMarkerSize(0);
-	gRFB_atlas_sys_pr->SetLineColor(1);
-	gRFB_atlas_sys_pr->SetLineWidth(1);
-	gRFB_atlas_sys_pr->Draw("2SAME");
-	gRFB_atlas_pr->Draw("PSAME");
+	//gRFB_atlas_sys_pr->SetMarkerSize(0);
+	//gRFB_atlas_sys_pr->SetLineColor(1);
+	//gRFB_atlas_sys_pr->SetLineWidth(1);
 
 	// 1) CMS
-	gRFB_pr_sys_0->SetLineColor(kGreen-2);
-	gRFB_pr_sys_0->SetFillColor(kGreen-7);
-	gRFB_pr_sys_0->SetFillStyle(3001);
-	gRFB_pr_0->SetMarkerSize(1.5);
-	gRFB_pr_0->SetMarkerColor(kGreen-2);
-	gRFB_pr_0->SetMarkerStyle(kFullSquare);
-	gRFB_pr_0->SetLineColor(kGreen-2);
-	gRFB_pr_sys_0->Draw("2SAME");
-	gRFB_pr_0->Draw("PSAME");
+	//gRFB_pr_sys_0->SetLineColor(kGreen+3);
+	//gRFB_pr_sys_0->SetFillColor(kTeal-9);
+	//gRFB_pr_0->SetMarkerSize(1.5);
+	//gRFB_pr_0->SetMarkerColor(kGreen+3);
+	//gRFB_pr_0->SetMarkerStyle(kFullSquare);
+	//gRFB_pr_0->SetLineColor(kGreen+3);
+
+
+  /////////////////////////////////	
+	gRFB_lhcb_pr_sys->Draw("2");
+	gRFB_alice_sys->Draw("2");
+	gRFB_atlas_sys_pr->Draw("2");
+  gRFB_pr_sys_0->Draw("2");
+	gRFB_lhcb_pr->Draw("P");
+	gRFB_alice->Draw("P");
+	gRFB_atlas_pr->Draw("P");
+	gRFB_pr_0->Draw("P");
 
 	dashedLine(0.0,1.0,30.0,1.0,1,1);
 	legUL->AddEntry(gRFB_pr_0,"1.5 < |y_{CM}| < 1.93","lp");
@@ -222,7 +221,7 @@ int comp_RFB_pt_LHCb_ALICE_ATLAS()
 	globtex->SetTextSize(0.035);
 	globtex->SetTextFont(42);
 	globtex->SetTextAlign(12); //1:left, 2:vertical center
-	globtex->DrawLatex(0.89, 0.17, "inclusive J/#psi");
+	globtex->DrawLatex(0.69, 0.17, "inclusive J/#psi");
 	
 	globtex->SetTextSize(0.055);
 	globtex->SetTextFont(42);
@@ -253,46 +252,45 @@ int comp_RFB_pt_LHCb_ALICE_ATLAS()
 	// 2) lhcb
 	gRFB_lhcb_np_sys = new TGraphAsymmErrors(nBin_lhcb, lhcb_px, lhcb_py_np, lhcb_exsys, lhcb_exsys, lhcb_eysys_np, lhcb_eysys_np);	
 	gRFB_lhcb_np_sys->SetFillColor(kGray);
-	gRFB_lhcb_np_sys->SetFillStyle(3001);
-	gRFB_lhcb_np_sys->Draw("2");
 	
 	gRFB_lhcb_np = new TGraphAsymmErrors(nBin_lhcb, lhcb_px, lhcb_py_np, lhcb_ex, lhcb_ex, lhcb_ey_np, lhcb_ey_np);	
-	SetGraphStyle(gRFB_lhcb_np,2,10);
+	SetGraphStyleFinal(gRFB_lhcb_np,2,10);
 	gRFB_lhcb_np->SetMarkerSize(1.5);
 	gRFB_lhcb_np->SetLineColor(1);
 	gRFB_lhcb_np->SetMarkerColor(1);
-	gRFB_lhcb_np->Draw("PSAME");
 
 	// 3) ATLAS
 	gRFB_atlas_np = new TGraphAsymmErrors(nBin_atlas, atlas_px, atlas_RFB_np, atlas_ex, atlas_ex, atlas_ey_stat_np, atlas_ey_stat_np);	
  	gRFB_atlas_np->SetMarkerSize(2.0);
 	gRFB_atlas_np->SetMarkerStyle(27);
-	//gRFB_atlas_np->SetMarkerColor(1);
-	//gRFB_atlas_np->SetLineColor(1);
-	gRFB_atlas_np->SetMarkerColor(2);
-	gRFB_atlas_np->SetLineColor(2);
+	gRFB_atlas_np->SetMarkerColor(1);
+	gRFB_atlas_np->SetLineColor(1);
+	//gRFB_atlas_np->SetMarkerColor(2);
+	//gRFB_atlas_np->SetLineColor(2);
 
  	gRFB_atlas_sys_np = new TGraphAsymmErrors(nBin_atlas, atlas_px, atlas_RFB_np, atlas_exsys, atlas_exsys, atlas_ey_sys_np, atlas_ey_sys_np);	
 	gRFB_atlas_sys_np->SetFillColor(kGray);
-	gRFB_atlas_sys_np->SetFillStyle(3001);
 	gRFB_atlas_sys_np->SetMarkerSize(0);
 	gRFB_atlas_sys_np->SetLineColor(1);
 	gRFB_atlas_sys_np->SetLineWidth(1);
-	gRFB_atlas_sys_np->Draw("2SAME");
-	gRFB_atlas_np->Draw("PSAME");
 	
   // 1) CMS
-	gRFB_np_sys_0->SetLineColor(kGreen-2);
-	gRFB_np_sys_0->SetFillColor(kGreen-7);
-	gRFB_np_sys_0->SetFillStyle(3001);
-	gRFB_np_0->SetMarkerSize(1.5);
-	gRFB_np_0->SetMarkerColor(kGreen-2);
-	gRFB_np_0->SetMarkerStyle(kFullSquare);
-	gRFB_np_0->SetLineColor(kGreen-2);
-	gRFB_np_sys_0->Draw("2SAME");
-	gRFB_np_0->Draw("PSAME");
+	//gRFB_np_sys_0->SetLineColor(kGreen+3);
+	//gRFB_np_sys_0->SetFillColor(kTeal-9);
+	//gRFB_np_0->SetMarkerSize(1.5);
+	//gRFB_np_0->SetMarkerColor(kGreen+3);
+	//gRFB_np_0->SetMarkerStyle(kFullSquare);
+	//gRFB_np_0->SetLineColor(kGreen+3);
 
-	dashedLine(0.0,1.0,30.0,1.0,1,1);
+  /////////////////////////////////	
+	gRFB_lhcb_np_sys->Draw("2");
+	gRFB_atlas_sys_np->Draw("2");
+  gRFB_np_sys_0->Draw("2");
+	gRFB_lhcb_np->Draw("P");
+	gRFB_atlas_np->Draw("P");
+	gRFB_np_0->Draw("P");
+	
+  dashedLine(0.0,1.0,30.0,1.0,1,1);
 	
 	legUL->Draw("SAME");
 	legBR2 -> AddEntry(gRFB_atlas_np,"ATLAS: |y_{CM}|<1.94","lp");
