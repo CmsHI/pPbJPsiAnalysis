@@ -32,8 +32,8 @@ void comp_RpPb_pt_ALICE(bool isPrompt = true)
 	TGraphAsymmErrors* g_RpPb_fw = (TGraphAsymmErrors*)inFile->Get("g_RpPb_0"); 
 	TGraphAsymmErrors* g_RpPb_sys_bw = (TGraphAsymmErrors*)inFile->Get("g_RpPb_sys_6"); 
 	TGraphAsymmErrors* g_RpPb_bw = (TGraphAsymmErrors*)inFile->Get("g_RpPb_6"); 
-  g_RpPb_fw->SetMarkerSize(3.3);
-  g_RpPb_bw->SetMarkerSize(3.3);
+  g_RpPb_fw->SetMarkerSize(2.1);
+  g_RpPb_bw->SetMarkerSize(1.4);
 	
 	///////////////////////////////////////////////////
 	///////////////////// ALICE ////////////////////////
@@ -63,9 +63,10 @@ void comp_RpPb_pt_ALICE(bool isPrompt = true)
   g_RpPb_ALICE_fw_sys01->GetXaxis()->CenterTitle();
   g_RpPb_ALICE_fw_sys01->GetYaxis()->SetTitle("R_{pPb}");
   g_RpPb_ALICE_fw_sys01->GetYaxis()->CenterTitle();
-  g_RpPb_ALICE_fw_sys01->GetXaxis()->SetLimits(0.,20.0);
-  g_RpPb_ALICE_fw_sys01->SetMinimum(0.5);
-  g_RpPb_ALICE_fw_sys01->SetMaximum(1.8);
+  g_RpPb_ALICE_fw_sys01->GetXaxis()->SetLimits(0.,32.0);
+  //g_RpPb_ALICE_fw_sys01->SetMinimum(0.5);
+  g_RpPb_ALICE_fw_sys01->SetMinimum(0.0);
+  g_RpPb_ALICE_fw_sys01->SetMaximum(2.0);
   g_RpPb_ALICE_fw_sys01->SetLineColor(kGray);
   g_RpPb_ALICE_fw_sys01->SetFillColor(kWhite);
   g_RpPb_ALICE_fw_sys01->SetFillStyle(4000);
@@ -74,14 +75,15 @@ void comp_RpPb_pt_ALICE(bool isPrompt = true)
   
   g_RpPb_ALICE_fw_sys02->SetFillColor(kGray);
   SetGraphStyleFinal(g_RpPb_ALICE_fw, 9, 10);
+  g_RpPb_ALICE_fw->SetMarkerSize(1.7);
  
   g_RpPb_ALICE_bw_sys01->GetXaxis()->SetTitle("p_{T} [GeV/c]");
   g_RpPb_ALICE_bw_sys01->GetXaxis()->CenterTitle();
   g_RpPb_ALICE_bw_sys01->GetYaxis()->SetTitle("R_{pPb}");
   g_RpPb_ALICE_bw_sys01->GetYaxis()->CenterTitle();
-  g_RpPb_ALICE_bw_sys01->GetXaxis()->SetLimits(0.,20.0);
-  g_RpPb_ALICE_bw_sys01->SetMinimum(0.5);
-  g_RpPb_ALICE_bw_sys01->SetMaximum(1.8);
+  g_RpPb_ALICE_bw_sys01->GetXaxis()->SetLimits(0.,32.0);
+  g_RpPb_ALICE_bw_sys01->SetMinimum(0.0);
+  g_RpPb_ALICE_bw_sys01->SetMaximum(2.0);
   g_RpPb_ALICE_bw_sys01->SetLineColor(kGray);
   g_RpPb_ALICE_bw_sys01->SetFillColor(kWhite);
   g_RpPb_ALICE_bw_sys01->SetFillStyle(4000);
@@ -90,6 +92,7 @@ void comp_RpPb_pt_ALICE(bool isPrompt = true)
   
   g_RpPb_ALICE_bw_sys02->SetFillColor(kGray);
   SetGraphStyleFinal(g_RpPb_ALICE_bw, 9, 10);
+  g_RpPb_ALICE_bw->SetMarkerSize(1.7);
  
   //////////////////////////////////////////////////////////////
   
@@ -105,11 +108,11 @@ void comp_RpPb_pt_ALICE(bool isPrompt = true)
   
   g_RpPb_ALICE_fw_sys01->Draw("A5");
   g_RpPb_ALICE_fw_sys02->Draw("2");
-  g_RpPb_sys_fw->Draw("2");
+  g_RpPb_sys_fw->Draw("5");
   g_RpPb_ALICE_fw->Draw("p");
   g_RpPb_fw->Draw("p");
   
-  dashedLine(0.,1.,20.,1.,1,1);
+  dashedLine(0.,1.,32.,1.,1,1);
 	
   TLegend *legBL_fw = new TLegend(0.47,0.21,0.8,0.32);
 	SetLegendStyle(legBL_fw);
@@ -140,18 +143,18 @@ void comp_RpPb_pt_ALICE(bool isPrompt = true)
   
   g_RpPb_ALICE_bw_sys01->Draw("A5");
   g_RpPb_ALICE_bw_sys02->Draw("2");
-  g_RpPb_sys_bw->Draw("2");
+  g_RpPb_sys_bw->Draw("5");
   g_RpPb_ALICE_bw->Draw("p");
   g_RpPb_bw->Draw("p");
   
-  dashedLine(0.,1.,20.,1.,1,1);
+  dashedLine(0.,1.,32.,1.,1,1);
 	
   TLegend *legBL_bw = new TLegend(0.47,0.21,0.8,0.32);
 	SetLegendStyle(legBL_bw);
 	legBL_bw->SetTextSize(0.037);
   legBL_bw->SetTextFont(42);
-	legBL_bw -> AddEntry(g_RpPb_fw, "-2.4 < y_{CM} < -1.87","lp");
-	legBL_bw -> AddEntry(g_RpPb_ALICE_fw,"ALICE: -4.46 < y_{CM} < -2.96","lp");
+	legBL_bw -> AddEntry(g_RpPb_bw, "-2.4 < y_{CM} < -1.87","lp");
+	legBL_bw -> AddEntry(g_RpPb_ALICE_bw,"ALICE: -4.46 < y_{CM} < -2.96","lp");
 	legBL_bw -> Draw();
 	globtex->SetTextSize(0.037);
 	globtex->SetTextFont(42);

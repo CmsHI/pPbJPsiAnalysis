@@ -17,7 +17,8 @@ void draw_RpPb_rap(bool sysByHand=false, bool noPtWeight=false, bool isPrompt=fa
 //	int iPos=11;//left corner
 //	int iPos=0.;//outOfFrame
   
-	double pxshift = 0.15;
+	//double pxshift = 0.15;
+	double pxshift = 0.01;
   
   //// BR and lumi info.
   const Double_t br = 0.0593 ;
@@ -70,7 +71,11 @@ void draw_RpPb_rap(bool sysByHand=false, bool noPtWeight=false, bool isPrompt=fa
   Double_t eysys_highpt_pp[nRap]; //absolute y sys error
   
 	Double_t ex[nRapRpPb] = {0,0,0,0,0,0,0}; // x stat error
-  //Double_t exsys[nRapRpPb] = {0.08,0.08,0.08,0.08,0.08,0.08,0.08}; // x sys error
+  Double_t exlow_lowpt[nRapRpPb]; //x binWidth
+  Double_t exhigh_lowpt[nRapRpPb]; //x binWidth
+  Double_t exlow_highpt[nRapRpPb]; //x binWidth
+  Double_t exhigh_highpt[nRapRpPb]; //x binWidth
+  //Double_t exsys[nRapRpPb] = {0.05,0.05,0.05,0.05,0.05,0.05,0.05}; // x sys error
   Double_t exsys[nRapRpPb] = {0.075,0.075,0.075,0.075,0.075,0.075,0.075}; // x sys error
   
   //// 1) y_CM array (from forward to backward)
@@ -98,6 +103,14 @@ void draw_RpPb_rap(bool sysByHand=false, bool noPtWeight=false, bool isPrompt=fa
   for (Int_t ipt=0; ipt<nPt; ipt++) {
     formPtArr(ptArrNum[ipt], ptArrNum[ipt+1], &ptArr[ipt]);
     cout << ipt <<"th ptArr = " << ptArr[ipt] << endl;
+  }
+  
+  //// ex calculation
+  for (Int_t iy=0; iy<nRapRpPb; iy++) {
+    exlow_lowpt[iy] = (rapArrNumBF[iy]+rapArrNumBF[iy+1])/2.-rapArrNumBF[iy]; 
+    exhigh_lowpt[iy] = rapArrNumBF[iy+1]-(rapArrNumBF[iy]+rapArrNumBF[iy+1])/2.; 
+    exlow_highpt[iy] = (rapArrNumBF[iy]+rapArrNumBF[iy+1])/2.-rapArrNumBF[iy]+pxshift; 
+    exhigh_highpt[iy] = rapArrNumBF[iy+1]-(rapArrNumBF[iy]+rapArrNumBF[iy+1])/2.-pxshift; 
   }
 
   //// read our result
@@ -182,14 +195,22 @@ void draw_RpPb_rap(bool sysByHand=false, bool noPtWeight=false, bool isPrompt=fa
     cout << "sys_highpt.["<<iy<<"] = " << eysys_highpt[iy]<<endl;
   }
   TGraphAsymmErrors* g_RpPb_sys_lowpt;
+  TGraphAsymmErrors* g_RpPb_sys_lowpt_line;
   TGraphAsymmErrors* g_RpPb_lowpt;
   TGraphAsymmErrors* g_RpPb_sys_highpt;
+  TGraphAsymmErrors* g_RpPb_sys_highpt_line;
   TGraphAsymmErrors* g_RpPb_highpt;
    
-  g_RpPb_sys_lowpt = new TGraphAsymmErrors(nRapRpPb, pxtmp_lowpt_pp, pytmp_lowpt, exsys, exsys, eysys_lowpt, eysys_lowpt);
+  //g_RpPb_sys_lowpt = new TGraphAsymmErrors(nRapRpPb, pxtmp_lowpt_pp, pytmp_lowpt, exsys, exsys, eysys_lowpt, eysys_lowpt);
+  g_RpPb_sys_lowpt = new TGraphAsymmErrors(nRapRpPb, pxtmp_lowpt_pp, pytmp_lowpt, exlow_lowpt, exhigh_lowpt, eysys_lowpt, eysys_lowpt);
+  g_RpPb_sys_lowpt_line = new TGraphAsymmErrors(nRapRpPb, pxtmp_lowpt_pp, pytmp_lowpt, exlow_lowpt, exhigh_lowpt, eysys_lowpt, eysys_lowpt);
   g_RpPb_lowpt = new TGraphAsymmErrors(nRapRpPb, pxtmp_lowpt_pp, pytmp_lowpt, ex, ex, eytmp_lowpt, eytmp_lowpt);
-  g_RpPb_sys_highpt = new TGraphAsymmErrors(nRapRpPb, pxtmp_highpt_pp, pytmp_highpt, exsys, exsys, eysys_highpt, eysys_highpt);
+  //g_RpPb_lowpt = new TGraphAsymmErrors(nRapRpPb, pxtmp_lowpt_pp, pytmp_lowpt, exlow_lowpt, exhigh_lowpt, eytmp_lowpt, eytmp_lowpt);
+  //g_RpPb_sys_highpt = new TGraphAsymmErrors(nRapRpPb, pxtmp_highpt_pp, pytmp_highpt, exsys, exsys, eysys_highpt, eysys_highpt);
+  g_RpPb_sys_highpt = new TGraphAsymmErrors(nRapRpPb, pxtmp_highpt_pp, pytmp_highpt, exlow_highpt, exhigh_highpt, eysys_highpt, eysys_highpt);
+  g_RpPb_sys_highpt_line = new TGraphAsymmErrors(nRapRpPb, pxtmp_highpt_pp, pytmp_highpt, exlow_highpt, exhigh_highpt, eysys_highpt, eysys_highpt);
   g_RpPb_highpt = new TGraphAsymmErrors(nRapRpPb, pxtmp_highpt_pp, pytmp_highpt, ex, ex, eytmp_highpt, eytmp_highpt);
+  //g_RpPb_highpt = new TGraphAsymmErrors(nRapRpPb, pxtmp_highpt_pp, pytmp_highpt, exlow_highpt, exhigh_highpt, eytmp_highpt, eytmp_highpt);
 	g_RpPb_sys_lowpt -> SetName("g_RpPb_sys_lowpt");
 	g_RpPb_lowpt -> SetName("g_RpPb_lowpt");
 	g_RpPb_sys_highpt -> SetName("g_RpPb_sys_highpt");
@@ -199,18 +220,27 @@ void draw_RpPb_rap(bool sysByHand=false, bool noPtWeight=false, bool isPrompt=fa
   g_RpPb_sys_lowpt->GetYaxis()->SetTitle("R_{pPb}");
   g_RpPb_sys_lowpt->GetYaxis()->CenterTitle();
   //g_RpPb_sys_lowpt->GetXaxis()->SetLimits(-2.4,1.93);
-  g_RpPb_sys_lowpt->GetXaxis()->SetLimits(-2.4,2.1);
-  //g_RpPb_sys_lowpt->GetXaxis()->SetLimits(-2.4,2.4);
+  g_RpPb_sys_lowpt->GetXaxis()->SetLimits(-2.5,2.1);
   //g_RpPb_sys_lowpt->SetMinimum(0.5);
   //g_RpPb_sys_lowpt->SetMaximum(1.5);
-  g_RpPb_sys_lowpt->SetMinimum(0.4);
-  g_RpPb_sys_lowpt->SetMaximum(1.6);
+  g_RpPb_sys_lowpt->SetMinimum(0.0);
+  g_RpPb_sys_lowpt->SetMaximum(1.8);
 
-  g_RpPb_sys_lowpt->SetFillColor(kRed-9);
-  g_RpPb_sys_highpt->SetFillColor(kTeal-9);
+  //g_RpPb_sys_lowpt->SetFillColor(kRed-10);
+  g_RpPb_sys_lowpt->SetFillColorAlpha(kRed-10,0.5);
+  g_RpPb_sys_lowpt_line->SetFillColorAlpha(kRed-10,0.);
+  g_RpPb_sys_lowpt_line->SetLineColor(kPink-6);
+  //g_RpPb_sys_highpt->SetFillColor(kGreen-10);
+  g_RpPb_sys_highpt->SetFillColorAlpha(kGreen-10,0.5);
+  g_RpPb_sys_highpt_line->SetFillColorAlpha(kGreen-10,0.);
+  g_RpPb_sys_highpt_line->SetLineColor(kGreen+3);
+
   SetGraphStyleFinal(g_RpPb_lowpt,1,3);
+  g_RpPb_lowpt->SetMarkerSize(1.4);
+  //g_RpPb_lowpt->SetMarkerSize(1.9);
   SetGraphStyleFinal(g_RpPb_highpt,0,5);
-  g_RpPb_highpt->SetMarkerSize(3.3);
+  g_RpPb_highpt->SetMarkerSize(2.1);
+  //g_RpPb_highpt->SetMarkerSize(3.1);
 
   //////////////////////////////////////////////////////////////////
   //// draw
@@ -231,25 +261,28 @@ void draw_RpPb_rap(bool sysByHand=false, bool noPtWeight=false, bool isPrompt=fa
   
   g_RpPb_sys_lowpt->Draw("A2");
   g_RpPb_sys_highpt->Draw("2");
+  g_RpPb_sys_lowpt_line->Draw("5");
+  g_RpPb_sys_highpt_line->Draw("5");
   g_RpPb_lowpt->Draw("P");
   g_RpPb_highpt->Draw("P");
-  dashedLine(-2.4,1.,1.93,1.,1,1);
+  dashedLine(-2.5,1.,2.1,1.,1,1);
 
 	TLegendEntry *le1=legBR->AddEntry("le1","6.5 < p_{T} < 10 GeV/c","lpf");
   le1->SetFillColor(kRed-10);
   le1->SetFillStyle(1001);
   le1->SetLineColor(kPink-6);
+  le1->SetLineWidth(1);
   le1->SetMarkerStyle(kFullSquare);
   le1->SetMarkerColor(kPink-6);
-  le1->SetMarkerSize(2.1);
+  le1->SetMarkerSize(1.9);
 	//legBR->Draw();
 	TLegendEntry *le2=legBR->AddEntry("le2","10 < p_{T} < 30 GeV/c","lpf");
-  le2->SetFillColor(kTeal-9);
+  le2->SetFillColor(kGreen-10);
   le2->SetFillStyle(1001);
   le2->SetLineColor(kGreen+3);
   le2->SetMarkerStyle(kFullDiamond);
   le2->SetMarkerColor(kGreen+3);
-  le2->SetMarkerSize(3.3);
+  le2->SetMarkerSize(3.1);
 	legBR->Draw();
 	
   globtex->SetTextSize(0.055);

@@ -30,14 +30,29 @@ void comp_RpPb_rap_Bmeson(bool isPrompt = false)
   else inFile= new TFile("plot_RpPb/RpPb_rap_isPrompt0.root");
 	TGraphAsymmErrors* g_RpPb_sys_highpt = (TGraphAsymmErrors*)inFile->Get("g_RpPb_sys_highpt"); 
 	TGraphAsymmErrors* g_RpPb_highpt = (TGraphAsymmErrors*)inFile->Get("g_RpPb_highpt"); 
+  g_RpPb_highpt->SetMarkerSize(2.1);
+  
+	double pxshift = 0.15;
+  const int nRap = 8; 
+  const int nRapTmp = nRap + 1;
+  const int nRapRpPb = 7;
+  
+  //// ex calculation
+  Double_t exlow[nRapRpPb]; //x binWidth
+  Double_t exhigh[nRapRpPb]; //x binWidth
+  Double_t rapArrNumBF[nRapTmp] = {-2.4, -1.93, -1.5, -0.9, 0., 0.9, 1.5, 1.93, 2.4};// for rap dist.
+  for (Int_t iy=0; iy<nRapRpPb; iy++) {
+    exlow[iy] = (rapArrNumBF[iy]+rapArrNumBF[iy+1])/2.-rapArrNumBF[iy]; 
+    exhigh[iy] = rapArrNumBF[iy+1]-(rapArrNumBF[iy]+rapArrNumBF[iy+1])/2.; 
+  }
   
   //// remove pxshift
-	double pxshift = 0.15;
-  const int nRap = 7;
   double dummyX, dummyY;
-  for (int iy=0; iy<nRap; iy++) { 
+  for (int iy=0; iy<nRapRpPb; iy++) { 
     g_RpPb_sys_highpt->GetPoint(iy, dummyX, dummyY);
     g_RpPb_sys_highpt->SetPoint(iy, dummyX-pxshift, dummyY);
+    g_RpPb_sys_highpt->SetPointEXlow(iy, exlow[iy]);
+    g_RpPb_sys_highpt->SetPointEXhigh(iy, exhigh[iy]);
     g_RpPb_highpt->GetPoint(iy, dummyX, dummyY);
     g_RpPb_highpt->SetPoint(iy, dummyX-pxshift, dummyY);
   }
@@ -76,6 +91,7 @@ void comp_RpPb_rap_Bmeson(bool isPrompt = false)
   g_RpPb_Bmeson_sys->SetFillColor(kGray);
   
   SetGraphStyleFinal(g_RpPb_Bmeson, 9, 10);
+  g_RpPb_Bmeson->SetMarkerSize(1.7);
  
   //////////////////////////////////////////////////////////////
   
@@ -89,7 +105,7 @@ void comp_RpPb_rap_Bmeson(bool isPrompt = false)
   ////// actual draw
   g_RpPb_Bmeson_sysFONLL->Draw("A5");
   g_RpPb_Bmeson_sys->Draw("2");
-  g_RpPb_sys_highpt->Draw("2");
+  g_RpPb_sys_highpt->Draw("5");
   g_RpPb_Bmeson->Draw("p");
   g_RpPb_highpt->Draw("p");
   

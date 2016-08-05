@@ -11,11 +11,12 @@ void CMS_lumi( TPad* pad, int iPeriod, int iPosX );
 void draw_RFB_ethf(bool sysByHand=true, bool noPtWeight = false, bool isPrompt=true)
 {
 	gROOT->Macro("./tdrstyle_kyo.C");
+  //gStyle->SetTitleXOffset(1.13);
   int isPA = 1;	
 	int iPos=0;
 
-	//double pxshift = 1.;
-	double pxshift = 1.3;
+	//double pxshift = 1.3;
+	double pxshift = 0.1;
 
 	// BR and lumi info.
 	const Double_t br = 0.0593 ;
@@ -45,10 +46,14 @@ void draw_RFB_ethf(bool sysByHand=true, bool noPtWeight = false, bool isPrompt=t
   Double_t pxtmp[nHist][nEt]; //x point to fill temporarily
 	Double_t pytmp[nHist][nEt]; //y point to fill temporarily
 	Double_t eytmp[nHist][nEt]; //y point error to fill temporarily
-	
-  Double_t px[nEt] = {9.4, 24.3, 37.2};  //x point (mean E_T)
+
+  //char* xlabel[nEt] = {"0-20","20-30","30-120"};	
+  TString xlabel[nEt] = {"0-20","20-30","30-120"};	
+  //Double_t px[nEt] = {9.4, 24.3, 37.2};  //x point (mean E_T)
+  Double_t px[nEt] = {0.35, 1.35, 2.35};  //x point (mean E_T)
 	Double_t ex[nEt] = {0.,0.,0.}; // x stat error (0)
-	Double_t exsys[nEt] = {0.65, 0.65, 0.65}; //x sys err (bot width)
+	//Double_t exsys[nEt] = {0.65, 0.65, 0.65}; //x sys err (bot width)
+	Double_t exsys[nEt] = {0.05, 0.05, 0.05}; //x sys err (bot width)
 	Double_t eysys[nHist][nEt]; //absolute y sys error
 	Double_t eysysrel[nHist][nEt]; //relative y sys error
 	Double_t eysysrelPR[nHist][nEt]={
@@ -221,13 +226,16 @@ void draw_RFB_ethf(bool sysByHand=true, bool noPtWeight = false, bool isPrompt=t
 	
 	//////////////////////////////////////////////////////////////////
 	
-	TLegend *legBL = new TLegend(0.20, 0.16, 0.45, 0.36);
-	//TLegend *legUL = new TLegend(0.20, 0.78, 0.45, 0.88);
-	TLegend *legUL = new TLegend(0.53, 0.16, 0.78, 0.26);
+	//TLegend *legBL = new TLegend(0.20, 0.16, 0.45, 0.36);
+	//TLegend *legUL = new TLegend(0.53, 0.16, 0.78, 0.26);
+	TLegend *legBL = new TLegend(0.21, 0.17, 0.46, 0.37);
+	TLegend *legUL = new TLegend(0.58, 0.17, 0.83, 0.27);
 	SetLegendStyle(legBL);	
 	SetLegendStyle(legUL);	
-	legBL->SetTextSize(0.032);
-	legUL->SetTextSize(0.032);
+	//legBL->SetTextSize(0.032);
+	//legUL->SetTextSize(0.032);
+	legBL->SetTextSize(0.037);
+	legUL->SetTextSize(0.037);
 	
 	TLatex* globtex = new TLatex();
 	globtex->SetNDC();
@@ -237,6 +245,27 @@ void draw_RFB_ethf(bool sysByHand=true, bool noPtWeight = false, bool isPrompt=t
   
   TCanvas* c1 = new TCanvas("c1","c1",600,600);
 	c1->cd();
+  
+  //// dummy hist. for xlabel
+  TH1D* hdummy = new TH1D("hdummy","",nEt,0,nEt);
+	for (int iet=0; iet<nEt;iet++){
+    hdummy->GetXaxis()->SetBinLabel(iet+1,xlabel[iet]);
+  	hdummy->GetXaxis()->SetTitle("E_{T}^{HF |#eta|>4} [GeV]");
+  	hdummy->GetXaxis()->CenterTitle();
+  	hdummy->GetYaxis()->SetTitle("R_{FB}");
+  	hdummy->GetYaxis()->CenterTitle();
+    //hdummy->SetTitleSize(0.048,"x");
+    hdummy->SetLabelSize(0.07,"x");
+    cout << "OFFSET" << hdummy->GetLabelOffset("x")<<endl;
+    hdummy->SetLabelOffset(0.003,"x");
+  	//hdummy->GetXaxis()->SetLimits(0.,50.0);
+  	hdummy->GetXaxis()->SetLimits(0.,3.0);
+  	//hdummy->SetMinimum(0.5);
+  	//hdummy->SetMaximum(1.15);
+  	hdummy->SetMinimum(0.0);
+  	hdummy->SetMaximum(1.8);
+  }
+  hdummy->Draw();
 
 	//////////////////////////////////////////////////////////////////
 	//// convert to TGraphAsymErrors
@@ -274,39 +303,37 @@ void draw_RFB_ethf(bool sysByHand=true, bool noPtWeight = false, bool isPrompt=t
 		}
 	}
 
-	
+/*	
 	for (int inh=0; inh< nHist; inh++){
   	gRFB_sys[inh]->GetXaxis()->SetTitle("E_{T}^{HF |#eta|>4} [GeV]");
   	gRFB_sys[inh]->GetXaxis()->CenterTitle();
   	gRFB_sys[inh]->GetYaxis()->SetTitle("R_{FB}");
   	gRFB_sys[inh]->GetYaxis()->CenterTitle();
-  	gRFB_sys[inh]->GetXaxis()->SetLimits(0.,50.0);
-  	gRFB_sys[inh]->SetMinimum(0.5);
-  	gRFB_sys[inh]->SetMaximum(1.15);
+  	//gRFB_sys[inh]->GetXaxis()->SetLimits(0.,50.0);
+  	gRFB_sys[inh]->GetXaxis()->SetLimits(0.,3.0);
+  	//gRFB_sys[inh]->SetMinimum(0.5);
+  	//gRFB_sys[inh]->SetMaximum(1.15);
+  	gRFB_sys[inh]->SetMinimum(0.0);
+  	gRFB_sys[inh]->SetMaximum(1.8);
   }
-	//gRFB_sys[0]->SetMinimum(0.0);
-	//gRFB_sys[0]->SetMaximum(1.5);
-	gRFB_sys[0]->SetFillColor(kViolet-9);
-	//gRFB_sys[0]->Draw("A2");
-	gRFB_sys[1]->SetFillColor(kTeal-9);
-	//gRFB_sys[1]->Draw("2");
+*/
+	gRFB_sys[0]->SetFillColor(kMagenta-10);
+	gRFB_sys[0]->SetLineColor(kViolet-6);
+	gRFB_sys[1]->SetFillColor(kGreen-10);
+	gRFB_sys[1]->SetLineColor(kGreen+3);
 	gRFB_sys[2]->SetFillColor(kRed-10);
-	//gRFB_sys[2]->Draw("2");
+	gRFB_sys[2]->SetLineColor(kPink-6);
 	gRFB_sys[3]->SetFillColor(kBlue-10);
-	//gRFB_sys[3]->Draw("2");
+	gRFB_sys[3]->SetLineColor(kBlue-3);
 
-	SetGraphStyleFinal(gRFB[0], 8, 2); //1.5-1.93 low
+	SetGraphStyleFinal(gRFB[0], 8, 6); //1.5-1.93 low
 	SetGraphStyleFinal(gRFB[1], 0, 5); //1.5-1.93
 	SetGraphStyleFinal(gRFB[2], 1, 3); //0.9-1.5
 	SetGraphStyleFinal(gRFB[3], 2, 0); //0-0.9
-	gRFB[0]->SetMarkerSize(2.1);
-	//gRFB[0]->Draw("P");
-	gRFB[1]->SetMarkerSize(2.5);
-	//gRFB[1]->Draw("P");
-	gRFB[2]->SetMarkerSize(1.7);
-	//gRFB[2]->Draw("P");
-	gRFB[3]->SetMarkerSize(1.7);
-	//gRFB[3]->Draw("P");
+	gRFB[0]->SetMarkerSize(1.4);
+	gRFB[1]->SetMarkerSize(2.1);
+	gRFB[2]->SetMarkerSize(1.4);
+	gRFB[3]->SetMarkerSize(1.4);
 
   legBL->SetHeader("6.5 < p_{T} < 30 GeV/c");	
   //TLegendEntry *le1=legBL->AddEntry("le1","0 < |y_{CM}| < 0.9, 6.5 < p_{T} < 30 GeV/c","lpf");
@@ -325,7 +352,7 @@ void draw_RFB_ethf(bool sysByHand=true, bool noPtWeight = false, bool isPrompt=t
 	le2->SetMarkerColor(kPink-6);
 	le2->SetMarkerSize(1.7);
 	TLegendEntry *le3=legBL->AddEntry("le3","1.5 < |y_{CM}| < 1.93","lpf");
-	le3->SetFillColor(kTeal-9);
+	le3->SetFillColor(kGreen-10);
 	le3->SetFillStyle(1001);
 	le3->SetLineColor(kGreen+3);
 	le3->SetMarkerStyle(kFullDiamond);
@@ -335,10 +362,10 @@ void draw_RFB_ethf(bool sysByHand=true, bool noPtWeight = false, bool isPrompt=t
   
   legUL->SetHeader("5 < p_{T} < 6.5 GeV/c");	
   TLegendEntry *le4=legUL->AddEntry("le4","1.5 < |y_{CM}| < 1.93","lpf");
-	le4->SetFillColor(kViolet-9);
+	le4->SetFillColor(kMagenta-10);
 	le4->SetFillStyle(1001);
 	le4->SetLineColor(kViolet-6);
-	le4->SetMarkerStyle(kFullTriangleDown);
+	le4->SetMarkerStyle(kFullCross);
 	le4->SetMarkerColor(kViolet-6);
 	le4->SetMarkerSize(2.1);
 	//legUL->Draw();
@@ -349,9 +376,14 @@ void draw_RFB_ethf(bool sysByHand=true, bool noPtWeight = false, bool isPrompt=t
   ///////////////////////////////////////////////////////////////////
   
   //// STEP1
-  gRFB_sys[3]->Draw("A2");
+  //gRFB_sys[3]->Draw("A5");
+  gRFB_sys[3]->Draw("5");
 	gRFB[3]->Draw("P");
-	dashedLine(0.,1.,50.,1.,1,1);
+	//dashedLine(0.,1.,50.,1.,1,1);
+	dashedLine(0.,1.,3.,1.,1,1);
+	//solidLine(1.,0.,1.,1.8,1,1);
+	//solidLine(2.,0.,2.,1.8,1,1);
+	//solidLine(3.,0.,3.,1.8,1,1);
 	CMS_lumi( c1, isPA, iPos );
 	c1->Update();
 	globtex->SetTextSize(0.055);
@@ -370,7 +402,7 @@ void draw_RFB_ethf(bool sysByHand=true, bool noPtWeight = false, bool isPrompt=t
   }
 
   //// STEP2
-  gRFB_sys[2]->Draw("2");
+  gRFB_sys[2]->Draw("5");
 	gRFB[2]->Draw("P");
   if (noPtWeight) {
   	c1->SaveAs(Form("plot_RFB/RFB_ethf_isPrompt%d_noPtWeight_STEP2.pdf",(int)isPrompt));
@@ -381,7 +413,7 @@ void draw_RFB_ethf(bool sysByHand=true, bool noPtWeight = false, bool isPrompt=t
   }
   
   //// STEP3
-  gRFB_sys[1]->Draw("2");
+  gRFB_sys[1]->Draw("5");
 	gRFB[1]->Draw("P");
   if (noPtWeight) {
   	c1->SaveAs(Form("plot_RFB/RFB_ethf_isPrompt%d_noPtWeight_STEP3.pdf",(int)isPrompt));
@@ -392,7 +424,7 @@ void draw_RFB_ethf(bool sysByHand=true, bool noPtWeight = false, bool isPrompt=t
   }
   
   //// STEP4 && Final
-  gRFB_sys[0]->Draw("2");
+  gRFB_sys[0]->Draw("5");
 	gRFB[0]->Draw("P");
   if (noPtWeight) {
   	c1->SaveAs(Form("plot_RFB/RFB_ethf_isPrompt%d_noPtWeight.pdf",(int)isPrompt));

@@ -47,6 +47,3 @@ root -l -b -q 'draw_cross_rap.C+(0,0,0,0,false)'
 root -l -b -q 'draw_cross_rap.C+(0,0,0,1,true)'
 root -l -b -q 'draw_cross_rap.C+(0,0,0,1,false)'
 
-
-
-

@@ -10,7 +10,7 @@ void CMS_lumi( TPad* pad, int iPeriod, int iPosX );
 //// maxrap = 193 (0 < y < 1.93) in fwrap, (-1.93 < 0 < 0 ) in bwrap [used for R_FB] 
 /// maxrap = 300 (-1.5 < y < 1.5) in fwrap, (do NOT use bwrap) [used for ATLAS R_pPb]
 /// maxrap = 386 (-1.93 < y < 1.93) in fwrap, (do NOT use bwrap) [used for B R_pPb]
-void draw_cross_pt_integ_middle(bool sysByHand=false, bool noPtWeight=false, bool isScale=false, bool isLog=false, int isPA = 0, bool isPrompt=true, double maxrap=300)
+void draw_cross_pt_integ_middle(bool sysByHand=false, bool noPtWeight=false, bool isScale=false, bool isLog=false, int isPA = 1, bool isPrompt=true, double maxrap=300)
 {
 	gROOT->Macro("./tdrstyle_kyo.C");
   gStyle->SetTitleYOffset(1.38); //KYO
@@ -108,8 +108,10 @@ void draw_cross_pt_integ_middle(bool sysByHand=false, bool noPtWeight=false, boo
 		{2.5, 3.5, 4.5, 5.75, 7, 8, 9.25, 12., 22}
 	};
   Double_t ex[nPt] = {0,0,0,0,0,0,0,0,0}; // x stat error
-	Double_t exsys[nPt] = {0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4}; // x sys error
-	Double_t eysysrel[nRap][nPt]; //relative y sys error
+	Double_t exlow[nRap][nPt]; // x binWidth
+  Double_t exhigh[nRap][nPt]; // x binWidth
+  Double_t exsys[nPt] = {0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4}; // x sys error
+	//Double_t eysysrel[nRap][nPt]; //relative y sys error
 	Double_t eysys[nRap][nPt]; //absolute y sys error
 	for (Int_t iy=0; iy<nRap; iy++) {
 	  for (Int_t ipt=0; ipt<nPt; ipt++) {
@@ -164,6 +166,14 @@ void draw_cross_pt_integ_middle(bool sysByHand=false, bool noPtWeight=false, boo
 		formPtArr(ptArrNum[ipt], ptArrNum[ipt+1], &ptArr[ipt]);
 		cout << ipt <<"th ptArr = " << ptArr[ipt] << endl;
 	}
+  
+  //// ex calculation
+  for (Int_t iy=0; iy<nRap; iy++) {
+    for (Int_t ipt=0; ipt<nPt; ipt++) {
+      exlow[iy][ipt] = px[iy][ipt]-ptArrNum[ipt];
+      exhigh[iy][ipt] = ptArrNum[ipt+1]-px[iy][ipt];
+    }
+  }
 
 	//////////////////////////////////////////////////////////////	
 	//// read-in sys. file 
@@ -213,67 +223,13 @@ void draw_cross_pt_integ_middle(bool sysByHand=false, bool noPtWeight=false, boo
 		}
 	}
   //// read sys values from hist	
-	for (Int_t iy = 0; iy < nRap; iy++) {
-		for (int ipt=0; ipt <nPt; ipt ++ ){ 
-			eysysrel[iy][ipt] = h1D_SysErr[iy]->GetBinContent(ipt+1);
-//			cout << "eysysrel["<<iy<<"]["<<ipt<<"] = "<<eysysrel[iy][ipt]<<endl;
-		}
-	}
+	//for (Int_t iy = 0; iy < nRap; iy++) {
+	//	for (int ipt=0; ipt <nPt; ipt ++ ){ 
+	//		eysysrel[iy][ipt] = h1D_SysErr[iy]->GetBinContent(ipt+1);
+	//	}
+	//}
 	
-  //////////////////////////////////////////////////////////////////////////////////////
-	//////////////////////////////////////////////////////////////////////////////////////
-	//// calcualte cross-section = corrY/(dPt*dY*lumi)
-	TH1D* h1D_cross[nRap]; 
-	for (Int_t iy = 0; iy < nRap; iy++) {
-		h1D_cross[iy] = (TH1D*)h1D_CorrY[iy]->Clone(Form("h1D_cross_%d",iy));
-		//// normalization
-		h1D_cross[iy]->Scale(1,"width"); //pT bin 
-		//h1D_cross[iy]->Scale(1./rapBinW[iy]); //rap bin
-		h1D_cross[iy]->Scale(1./(maxrap/100.)); //for ATLAS !!
-		h1D_cross[iy]->Scale(1./lumi_mub); // lumi
-		// h1D_cross[iy]->Scale(1./br); //br
-    // if (isPA==0) h1D_cross[iy]->Scale(A_pb); //// for test
-		// h1D_cross[iy]->Scale(zvtxCor); // z vertex correction	
-    if (isPA==1) h1D_cross[iy]->Scale(pileReg);	// pileup correction
-		h1D_cross[iy]->Scale(scaleF[iy]); // scaling for drawing
-	}
-		
-	//// set values as zero for unused bins
-/*
-	for (Int_t iy = 0; iy < nRap; iy++) {
-		if (iy>=1 && iy<=6) {
-			h1D_cross[iy]->SetBinContent(1,-532);
-			h1D_cross[iy]->SetBinError(1,0);
-			h1D_cross[iy]->SetBinContent(2,-532);
-			h1D_cross[iy]->SetBinError(2,0);
-		}
-		if (iy>=2 && iy<=5) {
-			h1D_cross[iy]->SetBinContent(3,-532);
-			h1D_cross[iy]->SetBinError(3,0);
-		}
-    if (isPA==0) {
-  		if (iy>=2 && iy<=5) {
-	  		h1D_cross[iy]->SetBinContent(4,-532);
-	  		h1D_cross[iy]->SetBinError(4,0);
-	  	}
-    }
-    else {
-  		if (iy>=2 && iy<=4) {
-	  		h1D_cross[iy]->SetBinContent(4,-532);
-	  		h1D_cross[iy]->SetBinError(4,0);
-	  	}
-    }
-	}
-*/
-
-  //// for ATLAS
-  const int tmpPtBin = 4; // < 6.5 GeV
-  for (int iy = 0; iy < nRap; iy++) {
-    for (int ipt=0; ipt < tmpPtBin; ipt ++ ){ 
-      h1D_cross[iy]->SetBinContent(ipt+1,-532);
-      h1D_cross[iy]->SetBinError(ipt+1,0);
-    }
-  }
+	//////////////////////////////////////////////////////////////////
 	//////////////////////////////////////////////////////////////////
 	
   //// integrate the rapidity for ATLAS!!!
@@ -314,7 +270,7 @@ void draw_cross_pt_integ_middle(bool sysByHand=false, bool noPtWeight=false, boo
       bwrap_init = 7; // y_CM = -1.93--1.5
       bwrap_final = nRap; // arbitrary
     } else {
-      fwrap_init = 0; // y_CM = 0.9-1.5
+      fwrap_init = 0; // y_CM = 1.5-1.93
       bwrap_init = 6; // y_CM = -1.93--1.5
       bwrap_final = nRap; // arbitrary 
     }
@@ -324,6 +280,7 @@ void draw_cross_pt_integ_middle(bool sysByHand=false, bool noPtWeight=false, boo
   }
   cout << "max rap = " << (maxrap/100.) << endl;
 
+	//////////////////////////////////////////////////////////////////
   //// systematcis
 /*
 	/// find the MAX of sys among rap bins
@@ -341,36 +298,80 @@ void draw_cross_pt_integ_middle(bool sysByHand=false, bool noPtWeight=false, boo
   //// take proper error propagation for sys
   double tmpsys[nRap][nPt];
 	for (int ipt=0; ipt < nPt; ipt ++ ){ 
-    eysysrel[fwrap_init][ipt] = 0;
+    eysys[fwrap_init][ipt] = 0;
 		for (Int_t iy = fwrap_init; iy < bwrap_init; iy++) {
-			tmpsys[iy][ipt] = h1D_SysErr[iy]->GetBinContent(ipt+1);
+      //// from relative error to absolute error
+			//tmpsys[iy][ipt] = h1D_SysErr[iy]->GetBinContent(ipt+1);
+			tmpsys[iy][ipt] = h1D_SysErr[iy]->GetBinContent(ipt+1)*h1D_CorrY[iy]->GetBinContent(ipt+1);
 		  cout << "fw : " << iy << "th iy, "<<ipt<<"th ipt tmpssys = " << tmpsys[iy][ipt] << endl;
-      eysysrel[fwrap_init][ipt] += tmpsys[iy][ipt]*tmpsys[iy][ipt];
+      eysys[fwrap_init][ipt] += tmpsys[iy][ipt]*tmpsys[iy][ipt];
     }
-    eysysrel[fwrap_init][ipt] = TMath::Sqrt(eysysrel[fwrap_init][ipt]);
-    cout << "fw : eysysrel[fwrap_init]["<<ipt<<"] = " << eysysrel[fwrap_init][ipt] << endl;
+    eysys[fwrap_init][ipt] = TMath::Sqrt(eysys[fwrap_init][ipt]);
+    cout << "fw : eysys[fwrap_init]["<<ipt<<"] = " << eysys[fwrap_init][ipt] << endl;
     
-    eysysrel[bwrap_init][ipt] = 0;
+    eysys[bwrap_init][ipt] = 0;
 		for (Int_t iy = bwrap_init; iy < bwrap_final; iy++) {
-			tmpsys[iy][ipt] = h1D_SysErr[iy]->GetBinContent(ipt+1);
+			tmpsys[iy][ipt] = h1D_SysErr[iy]->GetBinContent(ipt+1)*h1D_CorrY[iy]->GetBinContent(ipt+1);
 		  cout << "bw : " << iy << "th iy, "<<ipt<<"th ipt tmpssys = " << tmpsys[iy][ipt] << endl;
-      eysysrel[bwrap_init][ipt] += tmpsys[iy][ipt]*tmpsys[iy][ipt];
+      eysys[bwrap_init][ipt] += tmpsys[iy][ipt]*tmpsys[iy][ipt];
 		}
-    eysysrel[bwrap_init][ipt] = TMath::Sqrt(eysysrel[bwrap_init][ipt]);
-    cout << "bw : eysysrel[bwrap_init]["<<ipt<<"] = " << eysysrel[bwrap_init][ipt] << endl;
+    eysys[bwrap_init][ipt] = TMath::Sqrt(eysys[bwrap_init][ipt]);
+    cout << "bw : eysys[bwrap_init]["<<ipt<<"] = " << eysys[bwrap_init][ipt] << endl;
   } 
-  
-  //// merge cross-sections
+  //// rap bin merging
 	cout << "1) fw rap bin starts from : " << rapArr[fwrap_init].Data() << endl;
 	for (Int_t iy = fwrap_init+1; iy < bwrap_init; iy++) {
-		h1D_cross[fwrap_init]->Add(h1D_cross[iy]);
+		h1D_CorrY[fwrap_init]->Add(h1D_CorrY[iy]);
 		cout << ", merging : " << rapArr[iy].Data() << endl; 
 	}
 	cout << "2) bw rap bin starts from : " << rapArr[bwrap_init].Data() << endl;
 	for (Int_t iy = bwrap_init+1; iy < bwrap_final; iy++) {
-		h1D_cross[bwrap_init]->Add(h1D_cross[iy]);
+		h1D_CorrY[bwrap_init]->Add(h1D_CorrY[iy]);
 		cout << ", merging : " << rapArr[iy].Data() << endl; 
 	}
+  
+  //////////////////////////////////////////////////////////////////////////////////////
+	//////////////////////////////////////////////////////////////////////////////////////
+	//// calcualte cross-section = corrY/(dPt*dY*lumi)
+	TH1D* h1D_cross[nRap]; 
+	for (Int_t iy = 0; iy < nRap; iy++) {
+		h1D_cross[iy] = (TH1D*)h1D_CorrY[iy]->Clone(Form("h1D_cross_%d",iy));
+		//// normalization
+		h1D_cross[iy]->Scale(1,"width"); //pT bin 
+		//h1D_cross[iy]->Scale(1./rapBinW[iy]); //rap bin
+		h1D_cross[iy]->Scale(1./(maxrap/100.)); //for ATLAS !!
+		h1D_cross[iy]->Scale(1./lumi_mub); // lumi
+		// h1D_cross[iy]->Scale(1./br); //br
+		// h1D_cross[iy]->Scale(zvtxCor); // z vertex correction	
+    if (isPA==1) h1D_cross[iy]->Scale(pileReg);	// pileup correction
+		h1D_cross[iy]->Scale(scaleF[iy]); // scaling for drawing
+	}
+	
+  //// syst. nomalization
+  for (Int_t iy=0; iy<nRap; iy++){
+	  for (int ipt=0; ipt < nPt; ipt ++ ){ 
+      eysys[iy][ipt] /= ptBinW[ipt]; //pT bin 
+      //eysys[iy][ipt] /= rapBinW[iy]; //rapbin
+      eysys[iy][ipt] /= (maxrap/100.); //rapbin
+      eysys[iy][ipt] /= lumi_mub; //lumi
+      if (isPA==1) eysys[iy][ipt] *= pileReg; //pileup correction 
+      eysys[iy][ipt] *= scaleF[iy]; // scaling for drawing
+    } 
+  } 
+  	
+	//// set values as zero for unused bins
+  //// for ATLAS
+  const int tmpPtBin = 4; // < 6.5 GeV
+  for (int iy = 0; iy < nRap; iy++) {
+    for (int ipt=0; ipt < tmpPtBin; ipt ++ ){ 
+      h1D_cross[iy]->SetBinContent(ipt+1,-532);
+      h1D_cross[iy]->SetBinError(ipt+1,0);
+    }
+  }
+
+
+
+
 
   //////////////////////////////////////////////////////////////////
 
@@ -414,8 +415,9 @@ void draw_cross_pt_integ_middle(bool sysByHand=false, bool noPtWeight=false, boo
 			g_cross_sys[iy]->GetPoint(ipt, pxtmp[iy][ipt], pytmp[iy][ipt]);
 			g_cross_sys[iy]->SetPoint(ipt, px[iy][ipt], pytmp[iy][ipt]);
 			//// absolute error calculation 
-			eysys[iy][ipt]=eysysrel[iy][ipt]*pytmp[iy][ipt];
-			g_cross_sys[iy]->SetPointError(ipt, exsys[ipt], exsys[ipt], eysys[iy][ipt], eysys[iy][ipt]);
+			//eysys[iy][ipt]=eysysrel[iy][ipt]*pytmp[iy][ipt];
+			//g_cross_sys[iy]->SetPointError(ipt, exsys[ipt], exsys[ipt], eysys[iy][ipt], eysys[iy][ipt]);
+			g_cross_sys[iy]->SetPointError(ipt, exlow[iy][ipt], exhigh[iy][ipt], eysys[iy][ipt], eysys[iy][ipt]);
 			g_cross[iy]->GetPoint(ipt, pxtmp[iy][ipt], pytmp[iy][ipt]);
 			eytmp[iy][ipt] = g_cross[iy]-> GetErrorY(ipt);
 			g_cross[iy]->SetPoint(ipt, px[iy][ipt], pytmp[iy][ipt]);

@@ -22,8 +22,8 @@ int comp_RFB_pt_LHCb_ALICE_ATLAS()
 	const Double_t pPb_lumi_mub_err = pPb_lumi_nb_err * 1000; // (nb)^{-1} -> {#mub}^{-1}
   
   // read our results
-	TFile *inFile_pr = new TFile("./plot_RFB/RFB_pt_isPrompt1.root");
-	TFile *inFile_np = new TFile("./plot_RFB/RFB_pt_isPrompt0.root");
+	TFile *inFile_pr = new TFile("./plot_RFB/RFB_pt_fineBinTest_isPrompt1.root");
+	TFile *inFile_np = new TFile("./plot_RFB/RFB_pt_fineBinTest_isPrompt0.root");
 	TGraphAsymmErrors* gRFB_pr_sys_0 = (TGraphAsymmErrors*)inFile_pr->Get("gRFB_sys_0"); 	
 	TGraphAsymmErrors* gRFB_pr_0 = (TGraphAsymmErrors*)inFile_pr->Get("gRFB_0"); 	
 	TGraphAsymmErrors* gRFB_np_sys_0 = (TGraphAsymmErrors*)inFile_np->Get("gRFB_sys_0"); 	
@@ -142,11 +142,11 @@ int comp_RFB_pt_LHCb_ALICE_ATLAS()
 	gPad->SetLogy(0);
 
 	TH1D *dummy = new TH1D("","",50,0.,400.);
-	dummy->SetMinimum(0.5);
-	dummy->SetMaximum(1.4);
+	dummy->SetMinimum(0.0);
+	dummy->SetMaximum(2.0);
 	dummy->GetXaxis()->CenterTitle();
 	dummy->GetYaxis()->CenterTitle();
-	dummy->GetXaxis()->SetLimits(0.0, 30.0);
+	dummy->GetXaxis()->SetLimits(0.0, 32.0);
 	dummy->SetXTitle("p_{T} [GeV/c]");
 	dummy->SetYTitle("R_{FB}");
 	dummy->Draw();
@@ -194,7 +194,7 @@ int comp_RFB_pt_LHCb_ALICE_ATLAS()
 
 	// 1) CMS
 	//gRFB_pr_sys_0->SetLineColor(kGreen+3);
-	//gRFB_pr_sys_0->SetFillColor(kTeal-9);
+	//gRFB_pr_sys_0->SetFillColor(kGreen-10);
 	//gRFB_pr_0->SetMarkerSize(1.5);
 	//gRFB_pr_0->SetMarkerColor(kGreen+3);
 	//gRFB_pr_0->SetMarkerStyle(kFullSquare);
@@ -205,13 +205,13 @@ int comp_RFB_pt_LHCb_ALICE_ATLAS()
 	gRFB_lhcb_pr_sys->Draw("2");
 	gRFB_alice_sys->Draw("2");
 	gRFB_atlas_sys_pr->Draw("2");
-  gRFB_pr_sys_0->Draw("2");
+  gRFB_pr_sys_0->Draw("5");
 	gRFB_lhcb_pr->Draw("P");
 	gRFB_alice->Draw("P");
 	gRFB_atlas_pr->Draw("P");
 	gRFB_pr_0->Draw("P");
 
-	dashedLine(0.0,1.0,30.0,1.0,1,1);
+	dashedLine(0.0,1.0,32.0,1.0,1,1);
 	legUL->AddEntry(gRFB_pr_0,"1.5 < |y_{CM}| < 1.93","lp");
 	legUL->Draw("SAME");
 	legBR->AddEntry(gRFB_atlas_pr,"ATLAS: |y_{CM}|<1.94","lp");
@@ -241,10 +241,11 @@ int comp_RFB_pt_LHCb_ALICE_ATLAS()
 	gPad->SetLogy(0);
 
 	TH1D *dummynp = new TH1D("","",50,0.,400.);
-	dummynp->SetMinimum(0.5);
-	dummynp->SetMaximum(1.4);
+	dummynp->SetMinimum(0.0);
+	dummynp->SetMaximum(2.0);
 	dummynp->GetXaxis()->CenterTitle();
-	dummynp->GetXaxis()->SetLimits(0.0, 30.0);
+	dummynp->GetYaxis()->CenterTitle();
+	dummynp->GetXaxis()->SetLimits(0.0, 32.0);
 	dummynp->SetXTitle("p_{T} [GeV/c]");
 	dummynp->SetYTitle("R_{FB}");
 	dummynp->Draw();
@@ -276,7 +277,7 @@ int comp_RFB_pt_LHCb_ALICE_ATLAS()
 	
   // 1) CMS
 	//gRFB_np_sys_0->SetLineColor(kGreen+3);
-	//gRFB_np_sys_0->SetFillColor(kTeal-9);
+	//gRFB_np_sys_0->SetFillColor(kGreen-10);
 	//gRFB_np_0->SetMarkerSize(1.5);
 	//gRFB_np_0->SetMarkerColor(kGreen+3);
 	//gRFB_np_0->SetMarkerStyle(kFullSquare);
@@ -285,12 +286,12 @@ int comp_RFB_pt_LHCb_ALICE_ATLAS()
   /////////////////////////////////	
 	gRFB_lhcb_np_sys->Draw("2");
 	gRFB_atlas_sys_np->Draw("2");
-  gRFB_np_sys_0->Draw("2");
+  gRFB_np_sys_0->Draw("5");
 	gRFB_lhcb_np->Draw("P");
 	gRFB_atlas_np->Draw("P");
 	gRFB_np_0->Draw("P");
 	
-  dashedLine(0.0,1.0,30.0,1.0,1,1);
+  dashedLine(0.0,1.0,32.0,1.0,1,1);
 	
 	legUL->Draw("SAME");
 	legBR2 -> AddEntry(gRFB_atlas_np,"ATLAS: |y_{CM}|<1.94","lp");

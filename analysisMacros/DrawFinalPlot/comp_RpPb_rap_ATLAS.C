@@ -6,7 +6,7 @@ void formAbsRapArr(Double_t binmin, Double_t binmax, TString* arr);
 void formPtArr(Double_t binmin, Double_t binmax, TString* arr);
 void CMS_lumi( TPad* pad, int iPeriod, int iPosX );
 
-void comp_RpPb_rap_ATLAS(bool isPrompt = true)
+void comp_RpPb_rap_ATLAS(bool isPrompt = false)
 {
 	gROOT->Macro("./tdrstyle_kyo.C");
 	int isPA = 10;
@@ -30,60 +30,84 @@ void comp_RpPb_rap_ATLAS(bool isPrompt = true)
   else inFile= new TFile("plot_RpPb/RpPb_rap_isPrompt0.root");
 	TGraphAsymmErrors* g_RpPb_sys_highpt = (TGraphAsymmErrors*)inFile->Get("g_RpPb_sys_highpt"); 
 	TGraphAsymmErrors* g_RpPb_highpt = (TGraphAsymmErrors*)inFile->Get("g_RpPb_highpt"); 
- 
-  //// remove pxshift
+  g_RpPb_highpt->SetMarkerSize(2.1);
+  
 	double pxshift = 0.15;
-  const int nRap = 7;
+  const int nRap = 8; 
+  const int nRapTmp = nRap + 1;
+  const int nRapRpPb = 7;
+  
+  //// ex calculation
+  Double_t exlow[nRapRpPb]; //x binWidth
+  Double_t exhigh[nRapRpPb]; //x binWidth
+  Double_t rapArrNumBF[nRapTmp] = {-2.4, -1.93, -1.5, -0.9, 0., 0.9, 1.5, 1.93, 2.4};// for rap dist.
+  for (Int_t iy=0; iy<nRapRpPb; iy++) {
+    exlow[iy] = (rapArrNumBF[iy]+rapArrNumBF[iy+1])/2.-rapArrNumBF[iy]; 
+    exhigh[iy] = rapArrNumBF[iy+1]-(rapArrNumBF[iy]+rapArrNumBF[iy+1])/2.; 
+  }
+  
+  //// remove pxshift
   double dummyX, dummyY;
-  for (int iy=0; iy<nRap; iy++) { 
+  for (int iy=0; iy<nRapRpPb; iy++) { 
     g_RpPb_sys_highpt->GetPoint(iy, dummyX, dummyY);
     g_RpPb_sys_highpt->SetPoint(iy, dummyX-pxshift, dummyY);
+    g_RpPb_sys_highpt->SetPointEXlow(iy, exlow[iy]);
+    g_RpPb_sys_highpt->SetPointEXhigh(iy, exhigh[iy]);
     g_RpPb_highpt->GetPoint(iy, dummyX, dummyY);
     g_RpPb_highpt->SetPoint(iy, dummyX-pxshift, dummyY);
   }
-
-  g_RpPb_sys_highpt->GetXaxis()->SetTitle("y_{CM}");
-  g_RpPb_sys_highpt->GetXaxis()->CenterTitle();
-  g_RpPb_sys_highpt->GetYaxis()->SetTitle("R_{pPb}");
-  g_RpPb_sys_highpt->GetYaxis()->CenterTitle();
-  g_RpPb_sys_highpt->GetXaxis()->SetLimits(-2.4,2.1);
-  g_RpPb_sys_highpt->SetMinimum(0.6);
-  g_RpPb_sys_highpt->SetMaximum(2.0);
 	
   ///////////////////////////////////////////////////
 	///////////////////// ATLAS ////////////////////////
 	///////////////////////////////////////////////////
+	TFile *inFileATLAS;
+  if (isPrompt) inFileATLAS = new TFile("ATLAS_Jpsi_RpPb/RpPb_PromptJpsi_dRap.root");
+  else inFileATLAS= new TFile("ATLAS_Jpsi_RpPb/RpPb_NonPromptJpsi_dRap.root");
+  cout << "inFileATLAS = " << inFileATLAS << endl;
+	TGraphAsymmErrors* g_RpPb_ATLAS_sys;
+	TGraphAsymmErrors* g_RpPb_ATLAS;
+  if (isPrompt) { 
+     g_RpPb_ATLAS_sys = (TGraphAsymmErrors*)inFileATLAS->Get("RpPb_p_syst"); 
+     g_RpPb_ATLAS = (TGraphAsymmErrors*)inFileATLAS->Get("RpPb_p"); 
+  }else {
+     g_RpPb_ATLAS_sys = (TGraphAsymmErrors*)inFileATLAS->Get("RpPb_np_syst"); 
+     g_RpPb_ATLAS = (TGraphAsymmErrors*)inFileATLAS->Get("RpPb_np"); 
+  }
+  cout << "g_RpPb_ATLAS_sys = " << g_RpPb_ATLAS_sys << endl;
+  cout << "g_RpPb_ATLAS = " << g_RpPb_ATLAS << endl;
+  
   TCanvas *c1 = new TCanvas("c1","c1",600,600);
 /*	
   const int nRapATLAS = 5;
   double px_ATLAS[nRapATLAS] = {-2.395, -1.465, -0.5, 0.5, 1.465};
   double rppb_ATLAS[nRapATLAS] = {1.47, 1.37, 1.04, 1.10, 1.21};
+  double ex_ATLAS[nRapATLAS] = {0,0,0,0,0};
   double exsys_ATLAS[nRapATLAS] = {0.47, 0.465, 0.5, 0.5, 0.465};
   double ey_ATLAS[nRapATLAS] = {0.18, 0.13, 0.11, 0.10, 0.14};
   double eysys_ATLAS[nRapATLAS] = {0.22, 0.20, 0.15, 0.17, 0.18};
-  double eysysFONLLlow_ATLAS[nRapATLAS] = {0.37,0.33,0.26,0.27,0.30};
-  double eysysFONLLhigh_ATLAS[nRapATLAS] = {0.42,0.37,0.29,0.31,0.34};
   TGraphAsymmErrors* g_RpPb_ATLAS_sys = new TGraphAsymmErrors(nRapATLAS, px_ATLAS, rppb_ATLAS, exsys_ATLAS, exsys_ATLAS, eysys_ATLAS, eysys_ATLAS);	
-  TGraphAsymmErrors* g_RpPb_ATLAS_sysFONLL = new TGraphAsymmErrors(nRapATLAS, px_ATLAS, rppb_ATLAS, exsys_ATLAS, exsys_ATLAS, eysysFONLLlow_ATLAS, eysysFONLLhigh_ATLAS);	
-  TGraphAsymmErrors* g_RpPb_ATLAS = new TGraphAsymmErrors(nRapATLAS, px_ATLAS, rppb_ATLAS, exsys_ATLAS, exsys_ATLAS, ey_ATLAS, ey_ATLAS);	
- 
-  g_RpPb_ATLAS_sysFONLL->GetXaxis()->SetTitle("y_{CM}");
-  g_RpPb_ATLAS_sysFONLL->GetXaxis()->CenterTitle();
-  g_RpPb_ATLAS_sysFONLL->GetYaxis()->SetTitle("R_{pPb}");
-  g_RpPb_ATLAS_sysFONLL->GetYaxis()->CenterTitle();
-  g_RpPb_ATLAS_sysFONLL->GetXaxis()->SetLimits(-3.0,2.1);
-  g_RpPb_ATLAS_sysFONLL->SetMinimum(0.0);
-  g_RpPb_ATLAS_sysFONLL->SetMaximum(2.0);
-  g_RpPb_ATLAS_sysFONLL->SetLineColor(kGray);
-  g_RpPb_ATLAS_sysFONLL->SetFillColor(kWhite);
-  g_RpPb_ATLAS_sysFONLL->SetFillStyle(4000);
-  g_RpPb_ATLAS_sysFONLL->SetLineWidth(3);
-  g_RpPb_ATLAS_sysFONLL->SetLineStyle(7);
+  TGraphAsymmErrors* g_RpPb_ATLAS = new TGraphAsymmErrors(nRapATLAS, px_ATLAS, rppb_ATLAS, ex_ATLAS, ex_ATLAS, ey_ATLAS, ey_ATLAS);	
+  g_RpPb_ATLAS->SetMarkerSize(1.7);
+ */ 
+  g_RpPb_ATLAS_sys->GetXaxis()->SetTitle("y_{CM}");
+  g_RpPb_ATLAS_sys->GetXaxis()->CenterTitle();
+  g_RpPb_ATLAS_sys->GetYaxis()->SetTitle("R_{pPb}");
+  g_RpPb_ATLAS_sys->GetYaxis()->CenterTitle();
+  g_RpPb_ATLAS_sys->GetXaxis()->SetTitleOffset(1.15);
+  g_RpPb_ATLAS_sys->GetXaxis()->SetLimits(-2.5,2.1);
+  g_RpPb_ATLAS_sys->SetMinimum(0.0);
+  g_RpPb_ATLAS_sys->SetMaximum(2.0);
+  g_RpPb_ATLAS_sys->SetLineColor(kGray);
+  g_RpPb_ATLAS_sys->SetFillColor(kWhite);
+  g_RpPb_ATLAS_sys->SetFillStyle(4000);
+  g_RpPb_ATLAS_sys->SetLineWidth(3);
+  g_RpPb_ATLAS_sys->SetLineStyle(7);
   
   g_RpPb_ATLAS_sys->SetFillColor(kGray);
   
   SetGraphStyleFinal(g_RpPb_ATLAS, 9, 10);
-*/ 
+  g_RpPb_ATLAS->SetMarkerSize(1.7);
+ 
   //////////////////////////////////////////////////////////////
   
   TLatex* globtex = new TLatex();
@@ -94,13 +118,12 @@ void comp_RpPb_rap_ATLAS(bool isPrompt = true)
 	globtex->SetTextSize(0.04);
 
   ////// actual draw
-  //g_RpPb_ATLAS_sysFONLL->Draw("A5");
-  //g_RpPb_ATLAS_sys->Draw("2");
-  g_RpPb_sys_highpt->Draw("A2");
-  //g_RpPb_ATLAS->Draw("p");
+  g_RpPb_ATLAS_sys->Draw("A5");
+  g_RpPb_sys_highpt->Draw("5");
+  g_RpPb_ATLAS->Draw("p");
   g_RpPb_highpt->Draw("p");
   
-  dashedLine(-2.4,1.,2.1,1.,1,1);
+  dashedLine(-2.5,1.,2.1,1.,1,1);
 	
   //TLegend *legBL = new TLegend(0.50,0.18,0.90,0.25);
   TLegend *legBL = new TLegend(0.18,0.18,0.77,0.32);
@@ -109,9 +132,8 @@ void comp_RpPb_rap_ATLAS(bool isPrompt = true)
 	legBL->SetTextSize(0.043);
   legBL->SetTextFont(42);
 	legBL -> AddEntry(g_RpPb_highpt,"10 < p_{T} < 30 GeV/c","lp");
-	//legBL -> AddEntry(g_RpPb_highpt,"Non-prompt J/#psi: 10 < p_{T} < 30 GeV/c","lp");
-	//legBL -> AddEntry(g_RpPb_ATLAS,"B^{+}: 10 < p_{T} < 60 GeV/c","lp");
-	//legBL -> Draw();
+	legBL -> AddEntry(g_RpPb_ATLAS,"ATLAS: 8 < p_{T} < 30 GeV/c","lp");
+	legBL -> Draw();
   
   globtex->SetTextSize(0.055); 
   globtex->SetTextFont(42);

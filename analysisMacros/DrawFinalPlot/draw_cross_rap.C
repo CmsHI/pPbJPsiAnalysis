@@ -7,7 +7,7 @@ void formPtArr(Double_t binmin, Double_t binmax, TString* arr);
 
 void CMS_lumi( TPad* pad, int iPeriod, int iPosX );
 
-void draw_cross_rap(bool sysByHand=false, bool noPtWeight=false, bool isScale=false, int isPA = 0, bool isPrompt=false)
+void draw_cross_rap(bool sysByHand=false, bool noPtWeight=false, bool isScale=false, int isPA = 1, bool isPrompt=true)
 {
 	gROOT->Macro("./tdrstyle_kyo.C");
   gStyle->SetTitleYOffset(1.38); //KYO
@@ -59,9 +59,11 @@ void draw_cross_rap(bool sysByHand=false, bool noPtWeight=false, bool isScale=fa
 	Double_t eytmp[nRap]; //y point error to fill remporarily
 
 	Double_t ex[nRap] = {0.0 ,0.0 ,0.0 ,0.0 ,0.0 ,0.0 ,0.0 ,0.0}; // x stat error
+	Double_t exlow[nRap]; // x binWidth
+	Double_t exhigh[nRap]; //x binWidth
 	Double_t exsys[nRap] = {0.08, 0.08, 0.08, 0.08, 0.08, 0.08, 0.08, 0.08}; // x sys error
-	Double_t eysysrel_lowpt[nRap]; //relative y sys error
-	Double_t eysysrel_highpt[nRap]; //relative y sys error
+	//Double_t eysysrel_lowpt[nRap]; //relative y sys error
+	//Double_t eysysrel_highpt[nRap]; //relative y sys error
 	Double_t eysys_lowpt[nRap]; //absolute y sys error
 	Double_t eysys_highpt[nRap]; //absolute y sys error
 	
@@ -85,14 +87,12 @@ void draw_cross_rap(bool sysByHand=false, bool noPtWeight=false, bool isScale=fa
 	for (Int_t iy=0; iy<nRap; iy++) {
     //rapBinW[iy] = rapArrNumBF[iy]-rapArrNumBF[iy+1];
     rapBinW[iy] = rapArrNumBF[iy+1]-rapArrNumBF[iy];
-		//cout << iy <<"th rapBinW = " << rapBinW[iy] <<endl;
 	}
 	//// 2) pt array
 	Double_t ptArrNum[nPtTmp] = {2.0, 3.0, 4.0, 5.0, 6.5, 7.5, 8.5, 10., 14., 30.};
 	Double_t ptBinW[nPt];
 	for (Int_t ipt=0; ipt<nPt; ipt++) {
 		ptBinW[ipt] = ptArrNum[ipt+1]-ptArrNum[ipt]; 
-		//cout << ipt <<"th ptBinW = " << ptBinW[ipt] <<endl;
 	}
 	//// array string
 	TString rapArr[nRap];
@@ -106,6 +106,12 @@ void draw_cross_rap(bool sysByHand=false, bool noPtWeight=false, bool isScale=fa
 		formPtArr(ptArrNum[ipt], ptArrNum[ipt+1], &ptArr[ipt]);
 		cout << ipt <<"th ptArr = " << ptArr[ipt] << endl;
 	}
+  
+  //// ex calculation
+  for (Int_t iy=0; iy<nRap; iy++) {
+    exlow[iy] = (rapArrNumBF[iy]+rapArrNumBF[iy+1])/2.-rapArrNumBF[iy]; 
+    exhigh[iy] = rapArrNumBF[iy+1]-(rapArrNumBF[iy]+rapArrNumBF[iy+1])/2.; 
+  }
 
 	//////////////////////////////////////////////////////////////	
 	//// read-in sys. file 
@@ -115,7 +121,6 @@ void draw_cross_rap(bool sysByHand=false, bool noPtWeight=false, bool isScale=fa
 	TH2D* h2D_SysErr;
   if (isPrompt) h2D_SysErr = (TH2D*)fSys->Get("hTotalPR");
 	else h2D_SysErr = (TH2D*)fSys->Get("hTotalNP");
-//	cout << " *** h2D_SysErr = " <<  h2D_SysErr << endl;	
 
 	//////////////////////////////////////////////////////////////	
 	//// read-in corr-yield file
@@ -182,36 +187,16 @@ void draw_cross_rap(bool sysByHand=false, bool noPtWeight=false, bool isScale=fa
 		  }
 		}
 	}
-/*
-  //// check sys values from hist	
-	for (Int_t iy = 0; iy < nRap; iy++) {
-		for (int ipt=0; ipt <nPt; ipt ++ ){ 
-			eysysrel[iy][ipt] = h1D_SysErr[iy]->GetBinContent(ipt+1);
-//			cout << "eysysrel["<<iy<<"]["<<ipt<<"] = "<<eysysrel[iy][ipt]<<endl;
-		}
-	}
-*/	
-	//////////////////////////////////////////////////////////////////////////////////////
-	//////////////////////////////////////////////////////////////////////////////////////
-  //// calcualte cross-section = corrY/(dPt*dY*lumi)
-	TH1D* h1D_cross[nPt]; 
-	for (Int_t ipt = 0; ipt < nPt; ipt++) {
-		h1D_cross[ipt] = (TH1D*)h1D_CorrY[ipt]->Clone(Form("h1D_cross_%d",ipt));
-		//// normalization (no pT bin)
-    h1D_cross[ipt]->Scale(1,"width"); // rapbin
-		h1D_cross[ipt]->Scale(1./lumi_mub); // lumi
-		//h1D_cross[ipt]->Scale(1./br); //br
-		//h1D_cross[ipt]->Scale(zvtxCor);	 // z vertex correction 
-		h1D_cross[ipt]->Scale(pileReg); //pileup correction	
-	}
 	
 	//////////////////////////////////////////////////////////////////
+  ///////////////////////// pT bin merging /////////////////////////
+  //////////////////////////////////////////////////////////////////
 
 	const int lowpt_init=4;
 	const int highpt_init=7;	
 
 /*	
-	//// find the MAX of sys among pt bins	to be merged
+	//// find the MAX of sys among pt bins to be merged
 	for (Int_t iy=0; iy<nRap; iy++){
 		eysysrel_lowpt[iy]=-532;
 		for (Int_t ipt = lowpt_init; ipt < highpt_init; ipt++) {
@@ -227,41 +212,69 @@ void draw_cross_rap(bool sysByHand=false, bool noPtWeight=false, bool isScale=fa
 */
   //// take proper error propagation for sys
 	double tmpsys[nRap][nPt];
+  
   for (Int_t iy=0; iy<nRap; iy++){
-		eysysrel_lowpt[iy]= 0;
+		eysys_lowpt[iy]= 0;
 		for (Int_t ipt = lowpt_init; ipt < highpt_init; ipt++) {
-			tmpsys[iy][ipt] = h1D_SysErr[ipt]->GetBinContent(iy+1);
-      cout << iy << "th iy, "<<ipt<<"th ipt tmpssys = " << tmpsys[iy][ipt] << endl;
-      eysysrel_lowpt[iy] += tmpsys[iy][ipt]*tmpsys[iy][ipt]; 
+      //// from relative error to absolute error
+			//tmpsys[iy][ipt] = h1D_SysErr[ipt]->GetBinContent(iy+1);
+			tmpsys[iy][ipt] = h1D_SysErr[ipt]->GetBinContent(iy+1)*h1D_CorrY[ipt]->GetBinContent(iy+1);
+      //cout << iy << "th iy, "<<ipt<<"th ipt tmpssys = " << tmpsys[iy][ipt] << endl;
+      eysys_lowpt[iy] += tmpsys[iy][ipt]*tmpsys[iy][ipt]; 
 		}
-    //cout << "eysysrel_lowpt[iy]" << eysysrel_lowpt[iy] << endl;
-    eysysrel_lowpt[iy] = TMath::Sqrt(eysysrel_lowpt[iy]);
-    cout << "eysysrel_lowpt[iy]" << eysysrel_lowpt[iy] << endl;
+    eysys_lowpt[iy] = TMath::Sqrt(eysys_lowpt[iy]);
+    //cout << "eysys_lowpt[iy] = " << eysys_lowpt[iy] << endl;
   }	
+  
   for (Int_t iy=0; iy<nRap; iy++){
-		eysysrel_highpt[iy]= 0;
+		eysys_highpt[iy]= 0;
 		for (Int_t ipt = highpt_init; ipt < nPt; ipt++) {
-			tmpsys[iy][ipt] = h1D_SysErr[ipt]->GetBinContent(iy+1);
-      cout << iy << "th iy, "<<ipt<<"th ipt tmpssys = " << tmpsys[iy][ipt] << endl;
-      eysysrel_highpt[iy] += tmpsys[iy][ipt]*tmpsys[iy][ipt]; 
+      //// from relative error to absolute error
+			//tmpsys[iy][ipt] = h1D_SysErr[ipt]->GetBinContent(iy+1);
+			tmpsys[iy][ipt] = h1D_SysErr[ipt]->GetBinContent(iy+1)*h1D_CorrY[ipt]->GetBinContent(iy+1);
+      //cout << iy << "th iy, "<<ipt<<"th ipt tmpssys = " << tmpsys[iy][ipt] << endl;
+      eysys_highpt[iy] += tmpsys[iy][ipt]*tmpsys[iy][ipt]; 
 		}
-    cout << "eysysrel_highpt[iy]" << eysysrel_highpt[iy] << endl;
-    eysysrel_highpt[iy] = TMath::Sqrt(eysysrel_highpt[iy]);
-    cout << "eysysrel_highpt[iy]" << eysysrel_highpt[iy] << endl;
+    eysys_highpt[iy] = TMath::Sqrt(eysys_highpt[iy]);
+    //cout << "eysys_highpt[iy] = " << eysys_highpt[iy] << endl;
   }	
 
   //// pt bin merging
 	cout << "1) low pT bin starts from : " << ptArr[lowpt_init].Data() << endl;
 	for (Int_t ipt = lowpt_init+1; ipt < highpt_init; ipt++) {
-		h1D_cross[lowpt_init]->Add(h1D_cross[ipt]);
+		h1D_CorrY[lowpt_init]->Add(h1D_CorrY[ipt]);
     cout << ", merging : " << ptArr[ipt].Data() << endl; 
 	}
 	cout << "2) high pT bin starts from : " << ptArr[highpt_init].Data() << endl;
 	for (Int_t ipt = highpt_init+1; ipt < nPt; ipt++) {
-		h1D_cross[highpt_init]->Add(h1D_cross[ipt]);
+		h1D_CorrY[highpt_init]->Add(h1D_CorrY[ipt]);
 		cout << ", merging : " << ptArr[ipt].Data() << endl; 
 	}
 
+  //////////////////////////////////////////////////////////////////////////////////////
+  //////////////////// calcualte cross-section = corrY/(dY*lumi) ///////////////////////
+	//////////////////////////////////////////////////////////////////////////////////////
+	
+  TH1D* h1D_cross[nPt]; 
+	for (Int_t ipt = 0; ipt < nPt; ipt++) {
+    h1D_cross[ipt] = (TH1D*)h1D_CorrY[ipt]->Clone(Form("h1D_cross_%d",ipt));
+		//// value normalization (no pT bin)
+    h1D_cross[ipt]->Scale(1,"width"); // rapbin
+		h1D_cross[ipt]->Scale(1./lumi_mub); // lumi
+		//h1D_cross[ipt]->Scale(1./br); //br
+		if (isPA==1) h1D_cross[ipt]->Scale(pileReg); //pileup correction	
+	}
+  
+  //// syst. nomalization
+  for (Int_t iy=0; iy<nRap; iy++){
+    eysys_lowpt[iy] /= rapBinW[iy]; //rapbin
+    eysys_lowpt[iy] /= lumi_mub; //lumi
+    if (isPA==1) eysys_lowpt[iy] *= pileReg; //pileup correction 
+    eysys_highpt[iy] /= rapBinW[iy]; //rapbin
+    eysys_highpt[iy] /= lumi_mub; //lumi
+    if (isPA==1) eysys_highpt[iy] *= pileReg; //pileup correction 
+  }
+  	
 	//// scaling for drawing
 	h1D_cross[lowpt_init]->Scale(scaleF_low);
 	h1D_cross[highpt_init]->Scale(scaleF_high);
@@ -303,8 +316,9 @@ void draw_cross_rap(bool sysByHand=false, bool noPtWeight=false, bool isScale=fa
 	g_cross_sys_lowpt->SetName("g_cross_sys_lowpt");
 	for (Int_t iy=0; iy<nRap; iy++){
 		//// absolute error calculation
-		eysys_lowpt[iy]=eysysrel_lowpt[iy]*pytmp_lowpt[iy];
-		g_cross_sys_lowpt->SetPointError(iy, exsys[iy], exsys[iy], scaleF_low*eysys_lowpt[iy], scaleF_low*eysys_lowpt[iy]);
+		//eysys_lowpt[iy]=eysysrel_lowpt[iy]*pytmp_lowpt[iy];
+		//g_cross_sys_lowpt->SetPointError(iy, exsys[iy], exsys[iy], scaleF_low*eysys_lowpt[iy], scaleF_low*eysys_lowpt[iy]);
+		g_cross_sys_lowpt->SetPointError(iy, exlow[iy], exhigh[iy], scaleF_low*eysys_lowpt[iy], scaleF_low*eysys_lowpt[iy]);
     cout << "" << endl;
 		cout << "cross_lowpt["<<iy<<"] = " << pytmp_lowpt[iy]<<endl;
 		cout << "stat._lowpt["<<iy<<"] = " << eytmp[iy]<<endl;
@@ -326,8 +340,9 @@ void draw_cross_rap(bool sysByHand=false, bool noPtWeight=false, bool isScale=fa
 	g_cross_sys_highpt->SetName("g_cross_sys_highpt");
 	for (Int_t iy=0; iy<nRap; iy++){
 		//// absolute error calculation
-		eysys_highpt[iy]=eysysrel_highpt[iy]*pytmp_highpt[iy];
-		g_cross_sys_highpt->SetPointError(iy, exsys[iy], exsys[iy], scaleF_high*eysys_highpt[iy], scaleF_high*eysys_highpt[iy]);
+		//eysys_highpt[iy]=eysysrel_highpt[iy]*pytmp_highpt[iy];
+		//g_cross_sys_highpt->SetPointError(iy, exsys[iy], exsys[iy], scaleF_high*eysys_highpt[iy], scaleF_high*eysys_highpt[iy]);
+		g_cross_sys_highpt->SetPointError(iy, exlow[iy], exhigh[iy], scaleF_high*eysys_highpt[iy], scaleF_high*eysys_highpt[iy]);
     cout << "" << endl;
 		cout << "cross_highpt["<<iy<<"] = " << pytmp_highpt[iy]<<endl;
 		cout << "stat._highpt["<<iy<<"] = " << eytmp[iy]<<endl;
@@ -338,8 +353,10 @@ void draw_cross_rap(bool sysByHand=false, bool noPtWeight=false, bool isScale=fa
 	g_cross_sys_lowpt->GetXaxis()->CenterTitle();	
 	g_cross_sys_lowpt->GetYaxis()->SetTitle("B x d#sigma/dy [#mub]");	
 	g_cross_sys_lowpt->GetYaxis()->CenterTitle();	
-  if (isPA==0) { g_cross_sys_lowpt->GetXaxis()->SetLimits(-2.4,2.4);}
-  else { g_cross_sys_lowpt->GetXaxis()->SetLimits(-2.87,1.93);}	
+  //if (isPA==0) { g_cross_sys_lowpt->GetXaxis()->SetLimits(-2.4,2.4);}
+  //else { g_cross_sys_lowpt->GetXaxis()->SetLimits(-2.87,1.93);}	
+  if (isPA==0) { g_cross_sys_lowpt->GetXaxis()->SetLimits(-2.5,2.5);}
+  else { g_cross_sys_lowpt->GetXaxis()->SetLimits(-3.0,2.1);}	
   g_cross_sys_lowpt->SetMinimum(0.0);	
 	if (isPA==0) {
     if (isPrompt) g_cross_sys_lowpt->SetMaximum(0.02);	
@@ -348,14 +365,19 @@ void draw_cross_rap(bool sysByHand=false, bool noPtWeight=false, bool isScale=fa
     if (isPrompt) g_cross_sys_lowpt->SetMaximum(4.);	
 		else g_cross_sys_lowpt->SetMaximum(1.2);	
 	}
-	g_cross_sys_lowpt->SetFillColor(kRed-9);	
-	g_cross_sys_lowpt->Draw("A2");
-	g_cross_sys_highpt->SetFillColor(kTeal-9);	
-	g_cross_sys_highpt->Draw("2");
+	g_cross_sys_lowpt->SetFillColor(kRed-10);	
+	g_cross_sys_lowpt->SetLineColor(kPink-6);	
+	//g_cross_sys_lowpt->Draw("A2");
+	g_cross_sys_lowpt->Draw("A5");
+	g_cross_sys_highpt->SetFillColor(kGreen-10);	
+	g_cross_sys_highpt->SetLineColor(kGreen+3);	
+	//g_cross_sys_highpt->Draw("2");
+	g_cross_sys_highpt->Draw("5");
 	SetGraphStyleFinal(g_cross_lowpt,1,3);
+	g_cross_lowpt->SetMarkerSize(1.4);
 	g_cross_lowpt->Draw("P");
 	SetGraphStyleFinal(g_cross_highpt,0,5);
-	g_cross_highpt->SetMarkerSize(3.3);
+	g_cross_highpt->SetMarkerSize(2.1);
 	g_cross_highpt->Draw("P");
 
 	if (isScale && scaleF_low != 1.0) legUL -> AddEntry(g_cross_lowpt,Form("6.5 < p_{T} < 10 GeV/c [x%1.f]",scaleF_low), "lp");

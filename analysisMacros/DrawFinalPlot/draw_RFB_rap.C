@@ -7,7 +7,7 @@ void formPtArr(Double_t binmin, Double_t binmax, TString* arr);
 
 void CMS_lumi( TPad* pad, int iPeriod, int iPosX );
 
-void draw_RFB_rap(bool sysByHand=true,  bool noPtWeight=false, bool isPrompt = false)
+void draw_RFB_rap(bool sysByHand=true,  bool noPtWeight=false, bool isPrompt = true)
 {
 	gROOT->Macro("./tdrstyle_kyo.C");
 	int isPA = 1;  // 0:pp, 1:pPb

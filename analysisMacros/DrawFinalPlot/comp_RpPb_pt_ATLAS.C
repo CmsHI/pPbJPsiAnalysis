@@ -9,7 +9,7 @@ void formPtArr(Double_t binmin, Double_t binmax, TString* arr);
 void getMeanPtBins( Double_t* binArr, TF1* func);
 void CMS_lumi( TPad* pad, int iPeriod, int iPosX );
 
-void comp_RpPb_pt_ATLAS(bool isPrompt = false)
+void comp_RpPb_pt_ATLAS(bool isPrompt = true)
 {
 	gROOT->Macro("./tdrstyle_kyo.C");
 	int isPA = 10;
@@ -67,7 +67,36 @@ void comp_RpPb_pt_ATLAS(bool isPrompt = false)
     cout << "syst.["<<ipt<<"] ="  << eysys_rppb[ipt] << endl;
   }
 	Double_t exsys[nPt] = {0.4,0.4,0.4,0.4,0.4};
+	Double_t exlow[nPt];
+	Double_t exhigh[nPt];
+	Double_t ptArrNum[nPt+1] = {6.5, 7.5, 8.5, 10., 14., 30.};
 	
+  //// ex calculation
+  for (Int_t ipt=0; ipt<nPt; ipt++) {
+    exlow[ipt] = pxtmp[ipt]-ptArrNum[ipt];
+    exhigh[ipt] = ptArrNum[ipt+1]-pxtmp[ipt];
+  }
+	
+  ///////////////////////////////////////////////////
+	///////////////////// ATLAS ////////////////////////
+	///////////////////////////////////////////////////
+	TFile *inFileATLAS;
+  if (isPrompt) inFileATLAS = new TFile("ATLAS_Jpsi_RpPb/RpPb_PromptJpsi_dpT.root");
+  else inFileATLAS= new TFile("ATLAS_Jpsi_RpPb/RpPb_NonPromptJpsi_dpT.root");
+  cout << "inFileATLAS = " << inFileATLAS << endl;
+	TGraphAsymmErrors* g_RpPb_ATLAS_sys;
+	TGraphAsymmErrors* g_RpPb_ATLAS;
+  if (isPrompt) { 
+     g_RpPb_ATLAS_sys = (TGraphAsymmErrors*)inFileATLAS->Get("RpPb_p_syst"); 
+     g_RpPb_ATLAS = (TGraphAsymmErrors*)inFileATLAS->Get("RpPb_p"); 
+  }else {
+     g_RpPb_ATLAS_sys = (TGraphAsymmErrors*)inFileATLAS->Get("RpPb_np_syst"); 
+     g_RpPb_ATLAS = (TGraphAsymmErrors*)inFileATLAS->Get("RpPb_np"); 
+  }
+  cout << "g_RpPb_ATLAS_sys = " << g_RpPb_ATLAS_sys << endl;
+  cout << "g_RpPb_ATLAS = " << g_RpPb_ATLAS << endl;
+  
+  
   //////////////////////////////////////////////////////////////
   
   TLatex* globtex = new TLatex();
@@ -78,23 +107,48 @@ void comp_RpPb_pt_ATLAS(bool isPrompt = false)
 	globtex->SetTextSize(0.04);
 
   TCanvas *c1 = new TCanvas("c1","c1",600,600);
-  TGraphAsymmErrors* g_RpPb_sys = new TGraphAsymmErrors(nPt, pxtmp, rppb, exsys, exsys, eysys_rppb, eysys_rppb);	
+  
+  g_RpPb_ATLAS_sys->GetXaxis()->SetTitle("p_{T} [GeV/c]");
+  g_RpPb_ATLAS_sys->GetXaxis()->CenterTitle();
+  g_RpPb_ATLAS_sys->GetYaxis()->SetTitle("R_{pPb}");
+  g_RpPb_ATLAS_sys->GetYaxis()->CenterTitle();
+  g_RpPb_ATLAS_sys->GetXaxis()->SetTitleOffset(1.15);
+  g_RpPb_ATLAS_sys->GetXaxis()->SetLimits(0.,32.);
+  g_RpPb_ATLAS_sys->SetMinimum(0.0);
+  g_RpPb_ATLAS_sys->SetMaximum(2.0);
+  g_RpPb_ATLAS_sys->SetLineColor(kGray);
+  g_RpPb_ATLAS_sys->SetFillColor(kWhite);
+  g_RpPb_ATLAS_sys->SetFillStyle(4000);
+  g_RpPb_ATLAS_sys->SetLineWidth(3);
+  g_RpPb_ATLAS_sys->SetLineStyle(7);
+  
+  g_RpPb_ATLAS_sys->SetFillColor(kGray);
+  
+  SetGraphStyleFinal(g_RpPb_ATLAS, 9, 10);
+  g_RpPb_ATLAS->SetMarkerSize(1.7);
+  
+  //TGraphAsymmErrors* g_RpPb_sys = new TGraphAsymmErrors(nPt, pxtmp, rppb, exsys, exsys, eysys_rppb, eysys_rppb);	
+  TGraphAsymmErrors* g_RpPb_sys = new TGraphAsymmErrors(nPt, pxtmp, rppb, exlow, exhigh, eysys_rppb, eysys_rppb);	
   TGraphAsymmErrors* g_RpPb = new TGraphAsymmErrors(nPt, pxtmp, rppb, exsys, exsys, ey_rppb, ey_rppb);	
   g_RpPb_sys->GetXaxis()->SetTitle("p_{T} [GeV/c]");
   g_RpPb_sys->GetXaxis()->CenterTitle();
   g_RpPb_sys->GetYaxis()->SetTitle("R_{pPb}");
   g_RpPb_sys->GetYaxis()->CenterTitle();
   g_RpPb_sys->GetXaxis()->SetLimits(0.,30.0);
-  g_RpPb_sys->SetMinimum(0.6);
+  g_RpPb_sys->SetMinimum(0.0);
   g_RpPb_sys->SetMaximum(2.0);
-  g_RpPb_sys->SetFillColor(kTeal-9);
-  g_RpPb_sys->Draw("A2");
+  g_RpPb_sys->SetFillColor(kGreen-10);
 
   SetGraphStyleFinal(g_RpPb, 0, 5);
-  g_RpPb->SetMarkerSize(3.3);
+  g_RpPb->SetMarkerSize(2.1);
+  
+  ////// actual draw
+  g_RpPb_ATLAS_sys->Draw("A5");
+  g_RpPb_sys->Draw("5");
+  g_RpPb_ATLAS->Draw("p");
   g_RpPb->Draw("p");
   
-  dashedLine(0.,1.,30.,1.,1,1);
+  dashedLine(0.,1.,32.,1.,1,1);
 	
   TLegend *legBL = new TLegend(0.19,0.18,0.54,0.25);
 	SetLegendStyle(legBL);

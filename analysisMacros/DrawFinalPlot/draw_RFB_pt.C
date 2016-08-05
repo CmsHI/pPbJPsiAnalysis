@@ -36,17 +36,27 @@ void draw_RFB_pt(bool sysByHand=false, bool noPtWeight=false, bool isPrompt=true
   Double_t pxtmp[nRapRFB][nPtRFB]; //x point to fill remporarily
 	Double_t pytmp[nRapRFB][nPtRFB]; //y point to fill remporarily
 	Double_t eytmp[nRapRFB][nPtRFB]; //y point error to fill remporarily
-	
+/*	
+  /// 2015 PAS
   Double_t px[nRapRFB][nPtRFB] = { // x point (mean pT)
     {5.740347, 7.90416, 13.21239}, // 1.5-1.93
     {-531, 7.95946, 13.31027}, //0.9-1.5
     {-531, 8.25131, 13.61970} //0.0-0.9
 	};
+*/
+  Double_t px[nRapRFB][nPtRFB] = { // x point (mean pT)
+    {5.50494, 7.59243, 13.2826}, // 1.5-1.93
+    {-531, 7.69327, 13.2588}, //0.9-1.5
+    {-531, 8.13648, 13.5598} //0.0-0.9
+	};
+
   Double_t ex[nPtRFB] = {0.,0.,0.}; // x stat error (0)
+  Double_t exlow[nRapRFB][nPtRFB];
+  Double_t exhigh[nRapRFB][nPtRFB];
 	//Double_t exsys[nPtRFB] = {0.25,0.25,0.25}; // x sys err (box width)
 	Double_t exsys[nPtRFB] = {0.3,0.3,0.3}; // x sys err (box width)
   Double_t eysys[nRapRFB][nPtRFB]; //absolute y sys error
-	Double_t eysysrel[nRapRFB][nPtRFB]; //relative y sys error
+	//Double_t eysysrel[nRapRFB][nPtRFB]; //relative y sys error
 	/*
   Double_t eysysrelPR[nRapRFB][nPtRFB] = {
 	  {0.04529, 0.04795, 0.06486}, //1.5-1.03
@@ -140,39 +150,51 @@ void draw_RFB_pt(bool sysByHand=false, bool noPtWeight=false, bool isPrompt=true
 		cout << iy <<"th rapAbsArr = " << rapAbsArr[iy] << endl;
 	}
 	Double_t ptArrRFBNum[nPtRFB+1] = {5.0, 6.5, 10., 30.};
+  
+  //// ex calculation
+  for (Int_t iy=0; iy<nRapRFB; iy++) {
+    for (Int_t ipt=0; ipt<nPtRFB; ipt++) {
+      exlow[iy][ipt] = px[iy][ipt]-ptArrRFBNum[ipt]; 
+      exhigh[iy][ipt] = ptArrRFBNum[ipt+1]-px[iy][ipt]; 
+      //cout << iy<<"th y, "<<ipt<<"th pt"<<endl;
+      //cout << "exlow = "<< exlow[iy][ipt] << endl;
+      //cout << "exhigh = " <<exhigh[iy][ipt] << endl;
+    }
+  }
 	
   //// take proper error propagataion for sys (merge pT bins (KYO - byHand))
-	double tmpPRsys01, tmpPRsys02, tmpPRsys03;
-	double actPRsys01, actPRsys02, actPRsys03;
+	double tmpsys01, tmpsys02, tmpsys03;
+	double actsys01, actsys02, actsys03;
 	for (int iy=0; iy<nRapRFB*2; iy++){
 		h1D_RFBSys_tmp[iy]= new TH1D(Form("h1D_RFBSys_tmp_%d",iy),Form("h1D_RFBSys_tmp_%d",iy),nPtRFB,ptArrRFBNum);
 		h1D_RFBSys_tmp[iy]->Sumw2();
-		actPRsys01=0; actPRsys02=0; actPRsys03=0;
+		actsys01=0; actsys02=0; actsys03=0;
 		//// 1) pT 5-6.5 GeV
-		tmpPRsys01=0; tmpPRsys02=0;tmpPRsys03=0;
+		tmpsys01=0; tmpsys02=0;tmpsys03=0;
 		if (iy==0 || iy==nRapRFB*2-1){
-			actPRsys01=h1D_SysErr[iy]->GetBinContent(4);	
-			h1D_RFBSys_tmp[iy]->SetBinContent(1,actPRsys01);
+			//// from relative error to absolute error
+      //actsys01=h1D_SysErr[iy]->GetBinContent(4);
+			actsys01=h1D_SysErr[iy]->GetBinContent(4)*h1D_CorrY[iy]->GetBinContent(4);	
+			h1D_RFBSys_tmp[iy]->SetBinContent(1,actsys01);
 		} else {
 			h1D_RFBSys_tmp[iy]->SetBinContent(1,0.);
 		}
 		//// 2) pT 6.5-10. GeV
-		tmpPRsys01=0; tmpPRsys02=0;tmpPRsys03=0;
-		tmpPRsys01=h1D_SysErr[iy]->GetBinContent(5);	
-		tmpPRsys02=h1D_SysErr[iy]->GetBinContent(6);	
-		tmpPRsys03=h1D_SysErr[iy]->GetBinContent(7);	
-		actPRsys02=TMath::Sqrt( TMath::Power(tmpPRsys01,2) + TMath::Power(tmpPRsys02,2) +TMath::Power(tmpPRsys03,2) );
-		h1D_RFBSys_tmp[iy]->SetBinContent(2,actPRsys02);
+		tmpsys01=0; tmpsys02=0;tmpsys03=0;
+		//// from relative error to absolute error
+		tmpsys01=h1D_SysErr[iy]->GetBinContent(5)*h1D_CorrY[iy]->GetBinContent(5);	
+		tmpsys02=h1D_SysErr[iy]->GetBinContent(6)*h1D_CorrY[iy]->GetBinContent(6);	
+		tmpsys03=h1D_SysErr[iy]->GetBinContent(7)*h1D_CorrY[iy]->GetBinContent(7);	
+		actsys02=TMath::Sqrt( TMath::Power(tmpsys01,2) + TMath::Power(tmpsys02,2) +TMath::Power(tmpsys03,2) );
+		h1D_RFBSys_tmp[iy]->SetBinContent(2,actsys02);
 		//// 3) pT 10.-30. GeV
-		tmpPRsys01=0; tmpPRsys02=0;tmpPRsys03=0;
-		tmpPRsys01=h1D_SysErr[iy]->GetBinContent(8);	
-		tmpPRsys02=h1D_SysErr[iy]->GetBinContent(9);	
-		actPRsys03=TMath::Sqrt( TMath::Power(tmpPRsys01,2) + TMath::Power(tmpPRsys02,2) );
-		h1D_RFBSys_tmp[iy]->SetBinContent(3,actPRsys03);
-		//for (int ipt=0; ipt<nPtRFB; ipt++){
-		//	cout << iy<<"th rap, pT merged PR CorrYield = " << h1D_RFB_tmp[iy]->GetBinContent(ipt+1) <<endl;
-		//}
-	}
+		tmpsys01=0; tmpsys02=0;tmpsys03=0;
+		//// from relative error to absolute error
+		tmpsys01=h1D_SysErr[iy]->GetBinContent(8)*h1D_CorrY[iy]->GetBinContent(8);	
+		tmpsys02=h1D_SysErr[iy]->GetBinContent(9)*h1D_CorrY[iy]->GetBinContent(9);	
+		actsys03=TMath::Sqrt( TMath::Power(tmpsys01,2) + TMath::Power(tmpsys02,2) );
+		h1D_RFBSys_tmp[iy]->SetBinContent(3,actsys03);
+  }
 	//TCanvas *ctmp = new TCanvas("ctmp","",1200,800); ctmp->Divide(3,2);
   //for (int iy=0; iy<nRapRFB*2; iy++){
   //  ctmp->cd(iy+1);
@@ -230,15 +252,17 @@ void draw_RFB_pt(bool sysByHand=false, bool noPtWeight=false, bool isPrompt=true
 		h1D_RFB[iy]->Divide(h1D_RFB_tmp[2*nRapRFB-iy-1]); 
 	}
 	//// sys F/B calculation
+  Double_t dummy;
   for (int iy=0; iy<nRapRFB; iy++){
 		for (int ipt=0; ipt<nPtRFB; ipt++){
-      eysysrel[iy][ipt] = TMath::Sqrt(h1D_RFBSys_tmp[iy]->GetBinContent(ipt+1)*h1D_RFBSys_tmp[iy]->GetBinContent(ipt+1)+ h1D_RFBSys_tmp[2*nRapRFB-iy-1]->GetBinContent(ipt+1)*h1D_RFBSys_tmp[2*nRapRFB-iy-1]->GetBinContent(ipt+1)); 
+      //eysysrel[iy][ipt] = TMath::Sqrt(h1D_RFBSys_tmp[iy]->GetBinContent(ipt+1)*h1D_RFBSys_tmp[iy]->GetBinContent(ipt+1)+ h1D_RFBSys_tmp[2*nRapRFB-iy-1]->GetBinContent(ipt+1)*h1D_RFBSys_tmp[2*nRapRFB-iy-1]->GetBinContent(ipt+1)); 
+      DivideValue(h1D_RFB_tmp[iy]->GetBinContent(ipt+1),h1D_RFBSys_tmp[iy]->GetBinContent(ipt+1),h1D_RFB_tmp[2*nRapRFB-iy-1]->GetBinContent(ipt+1),h1D_RFBSys_tmp[2*nRapRFB-iy-1]->GetBinContent(ipt+1),&dummy,&eysys[iy][ipt]);
       cout << "FW bin = " << h1D_RFBSys_tmp[iy]->GetBinContent(ipt+1) << endl;
       cout << "BW bin = " << h1D_RFBSys_tmp[2*nRapRFB-iy-1]->GetBinContent(ipt+1) << endl;
-      cout << "eysysrel["<<iy<<"]["<<ipt<<"] = " << eysysrel[iy][ipt] << endl;
+      cout << "dummy = " << dummy << endl;
+      cout << "eysys["<<iy<<"]["<<ipt<<"] = " << eysys[iy][ipt] << endl;
 	  }
 	}
-	
   //////////////////////////////////////////////////////////////////
 
 	TLegend *legBR = new TLegend(0.50, 0.18, 0.70, 0.39);
@@ -252,8 +276,8 @@ void draw_RFB_pt(bool sysByHand=false, bool noPtWeight=false, bool isPrompt=true
   globtex->SetTextFont(42);
 	globtex->SetTextSize(0.04);
 
-	TCanvas* c1 = new TCanvas("c1","c1",600,600);
-	c1->cd();
+	//TCanvas* c1 = new TCanvas("c1","c1",600,600);
+	//c1->cd();
 	
 	//////////////////////////////////////////////////////////////////
 	//// convert to TGraphAsymErrors
@@ -268,25 +292,25 @@ void draw_RFB_pt(bool sysByHand=false, bool noPtWeight=false, bool isPrompt=true
 			gRFB_sys[iy]->GetPoint(ipt, pxtmp[iy][ipt], pytmp[iy][ipt]);
 			gRFB_sys[iy]->SetPoint(ipt, px[iy][ipt], pytmp[iy][ipt]);
 			//// absolute err calculation
-      eysys[iy][ipt]=eysysrel[iy][ipt]*pytmp[iy][ipt];
-			gRFB_sys[iy]->SetPointError(ipt, exsys[ipt], exsys[ipt], eysys[iy][ipt], eysys[iy][ipt]);
+      //eysys[iy][ipt]=eysysrel[iy][ipt]*pytmp[iy][ipt];
+			//gRFB_sys[iy]->SetPointError(ipt, exsys[ipt], exsys[ipt], eysys[iy][ipt], eysys[iy][ipt]);
+			gRFB_sys[iy]->SetPointError(ipt, exlow[iy][ipt], exhigh[iy][ipt], eysys[iy][ipt], eysys[iy][ipt]);
 		}
+	  gRFB_sys[iy]->GetXaxis()->SetTitle("p_{T} [GeV/c]");
+	  gRFB_sys[iy]->GetXaxis()->CenterTitle();
+	  gRFB_sys[iy]->GetYaxis()->SetTitle("R_{FB}");
+	  gRFB_sys[iy]->GetYaxis()->CenterTitle();
+	  gRFB_sys[iy]->GetXaxis()->SetLimits(0.,32.0);
+	  gRFB_sys[iy]->SetMinimum(0.0);
+	  gRFB_sys[iy]->SetMaximum(1.8);
 	}
-	gRFB_sys[0]->GetXaxis()->SetTitle("p_{T} [GeV/c]");
-	gRFB_sys[0]->GetXaxis()->CenterTitle();
-	gRFB_sys[0]->GetYaxis()->SetTitle("R_{FB}");
-	gRFB_sys[0]->GetYaxis()->CenterTitle();
-	gRFB_sys[0]->GetXaxis()->SetLimits(0.,17.0);
-	gRFB_sys[0]->SetMinimum(0.5);
-	gRFB_sys[0]->SetMaximum(1.15);
-//	gRFB_sys[0]->SetMinimum(0.0);
-//	gRFB_sys[0]->SetMaximum(1.5);
-	gRFB_sys[0]->SetFillColor(kTeal-9);
-	gRFB_sys[0]->Draw("A2");
+	
+  gRFB_sys[0]->SetFillColor(kGreen-10);
 	gRFB_sys[1]->SetFillColor(kRed-10);
-	gRFB_sys[1]->Draw("2");
 	gRFB_sys[2]->SetFillColor(kBlue-10);
-	gRFB_sys[2]->Draw("2");
+	gRFB_sys[0]->SetLineColor(kGreen+3);
+	gRFB_sys[1]->SetLineColor(kPink-6);
+	gRFB_sys[2]->SetLineColor(kBlue-3);
 
 	//// 2) RFB graph
 	TGraphAsymmErrors*gRFB[nRapRFB]; 
@@ -308,13 +332,18 @@ void draw_RFB_pt(bool sysByHand=false, bool noPtWeight=false, bool isPrompt=true
 	SetGraphStyleFinal(gRFB[0], 0, 5); //1.5-1.93
 	SetGraphStyleFinal(gRFB[1], 1, 3); //0.9-1.5
 	SetGraphStyleFinal(gRFB[2], 2, 0); //0-0.9
-	gRFB[0]->SetMarkerSize(3.3);
-	gRFB[0]->Draw("P");
-	gRFB[1]->Draw("P");
-	gRFB[2]->Draw("P");
+	gRFB[0]->SetMarkerSize(2.6);
+	gRFB[1]->SetMarkerSize(1.4);
+	gRFB[2]->SetMarkerSize(1.4);
 
-	dashedLine(0.,1.,17.,1.,1,1);
-	TLegendEntry *le1=legBR->AddEntry("le1",Form("  %s", rapAbsArr[2].Data()),"lpf");
+  ///////////////// CANVAS 1  
+  TCanvas* c1 = new TCanvas("c1","c1",600,600);
+  c1->cd(); 
+  gRFB_sys[0]->Draw("A5");
+  gRFB[0]->Draw("P");
+	dashedLine(0.,1.,32.,1.,1,1);
+	
+  TLegendEntry *le1=legBR->AddEntry("le1",Form("  %s", rapAbsArr[2].Data()),"lpf");
 	le1->SetFillColor(kBlue-10);
 	le1->SetFillStyle(1001);
 	le1->SetLineColor(kBlue-3);
@@ -329,14 +358,21 @@ void draw_RFB_pt(bool sysByHand=false, bool noPtWeight=false, bool isPrompt=true
 	le2->SetMarkerColor(kPink-6);
 	le2->SetMarkerSize(2.1);
 	TLegendEntry *le3=legBR->AddEntry("le3",Form("  %s", rapAbsArr[0].Data()),"lpf");
-	le3->SetFillColor(kTeal-9);
+	le3->SetFillColor(kGreen-10);
 	le3->SetFillStyle(1001);
 	le3->SetLineColor(kGreen+3);
 	le3->SetMarkerStyle(kFullDiamond);
 	le3->SetMarkerColor(kGreen+3);
 	le3->SetMarkerSize(3.3);
 
-	legBR->Draw();
+	//legBR->Draw();
+
+  globtex->SetTextAlign(32); //3:right 2:vertical center
+	globtex->SetTextFont(42);
+  globtex->SetTextSize(0.05);
+  globtex->DrawLatex(0.9, 0.23, rapAbsArr[0].Data());
+	
+	globtex->SetTextAlign(12); //1:left, 2:vertical center
 	globtex->SetTextSize(0.055);
 	globtex->SetTextFont(42);
 	if (isPrompt) globtex->DrawLatex(0.21, 0.84, "Prompt J/#psi");
@@ -345,14 +381,68 @@ void draw_RFB_pt(bool sysByHand=false, bool noPtWeight=false, bool isPrompt=true
 	CMS_lumi( c1, isPA, iPos );
 	c1->Update();
 
-  if (noPtWeight) {	
-    c1->SaveAs(Form("plot_RFB/RFB_pt_isPrompt%d_noPtWeight.pdf",(int)isPrompt));
-    c1->SaveAs(Form("plot_RFB/RFB_pt_isPrompt%d_noPtWeight.png",(int)isPrompt));
-  } else {
-    c1->SaveAs(Form("plot_RFB/RFB_pt_isPrompt%d.pdf",(int)isPrompt));
-    c1->SaveAs(Form("plot_RFB/RFB_pt_isPrompt%d.png",(int)isPrompt));
-  }
+  ///////////////// CANVAS 2	
+  
+  TCanvas* c2 = new TCanvas("c2","c2",600,600);
+	c2->cd();
+	gRFB_sys[1]->Draw("A5");
+	gRFB[1]->Draw("P");
+	dashedLine(0.,1.,32.,1.,1,1);
+	//legBR->Draw();
+  
+  globtex->SetTextAlign(32); //3:right 2:vertical center
+	globtex->SetTextFont(42);
+  globtex->SetTextSize(0.05);
+  globtex->DrawLatex(0.9, 0.23, rapAbsArr[1].Data());
+  
+	globtex->SetTextAlign(12); //1:left, 2:vertical center
+  globtex->SetTextSize(0.055);
+	globtex->SetTextFont(42);
+	if (isPrompt) globtex->DrawLatex(0.21, 0.84, "Prompt J/#psi");
+	else globtex->DrawLatex(0.21, 0.84, "Non-prompt J/#psi");
 	
+  CMS_lumi( c2, isPA, iPos );
+	c2->Update();
+	
+  ///////////////// CANVAS 3	
+  
+  TCanvas* c3 = new TCanvas("c3","c3",600,600);
+	c3->cd();
+	gRFB_sys[2]->Draw("A5");
+	gRFB[2]->Draw("P");
+	dashedLine(0.,1.,32.,1.,1,1);
+	///legBR->Draw();
+  
+  globtex->SetTextAlign(32); //3:right 2:vertical center
+	globtex->SetTextFont(42);
+  globtex->SetTextSize(0.05);
+  globtex->DrawLatex(0.9, 0.23, rapAbsArr[2].Data());
+
+	globtex->SetTextAlign(12); //1:left, 2:vertical center
+  globtex->SetTextSize(0.055);
+	globtex->SetTextFont(42);
+	if (isPrompt) globtex->DrawLatex(0.21, 0.84, "Prompt J/#psi");
+	else globtex->DrawLatex(0.21, 0.84, "Non-prompt J/#psi");
+
+  CMS_lumi( c3, isPA, iPos );
+	c3->Update();
+
+  if (noPtWeight) {	
+    c1->SaveAs(Form("plot_RFB/RFB_pt_isPrompt%d_noPtWeight_rap1.pdf",(int)isPrompt));
+    c1->SaveAs(Form("plot_RFB/RFB_pt_isPrompt%d_noPtWeight_rap1.png",(int)isPrompt));
+    c2->SaveAs(Form("plot_RFB/RFB_pt_isPrompt%d_noPtWeight_rap2.pdf",(int)isPrompt));
+    c2->SaveAs(Form("plot_RFB/RFB_pt_isPrompt%d_noPtWeight_rap2.png",(int)isPrompt));
+    c3->SaveAs(Form("plot_RFB/RFB_pt_isPrompt%d_noPtWeight_rap3.pdf",(int)isPrompt));
+    c3->SaveAs(Form("plot_RFB/RFB_pt_isPrompt%d_noPtWeight_rap3.png",(int)isPrompt));
+  } else {
+    c1->SaveAs(Form("plot_RFB/RFB_pt_isPrompt%d_rap1.pdf",(int)isPrompt));
+    c1->SaveAs(Form("plot_RFB/RFB_pt_isPrompt%d_rap1.png",(int)isPrompt));
+    c2->SaveAs(Form("plot_RFB/RFB_pt_isPrompt%d_rap2.pdf",(int)isPrompt));
+    c2->SaveAs(Form("plot_RFB/RFB_pt_isPrompt%d_rap2.png",(int)isPrompt));
+    c3->SaveAs(Form("plot_RFB/RFB_pt_isPrompt%d_rap3.pdf",(int)isPrompt));
+    c3->SaveAs(Form("plot_RFB/RFB_pt_isPrompt%d_rap3.png",(int)isPrompt));
+  }
+  
 	///////////////////////////////////////////////////////////////////
 	//// save as a root file
 	TFile *outFile;

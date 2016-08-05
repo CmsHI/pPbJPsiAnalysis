@@ -64,8 +64,17 @@ void comp_RpPb_pt_Bmeson(bool isPrompt = false)
     cout << "syst.["<<ipt<<"] ="  << eysys_rppb[ipt] << endl;
   }
 	Double_t exsys[nPt] = {0.4,0.4,0.4,0.4,0.4};
+	Double_t exlow[nPt];
+	Double_t exhigh[nPt];
+	Double_t ptArrNum[nPt+1] = {6.5, 7.5, 8.5, 10., 14., 30.};
 	
-	///////////////////////////////////////////////////
+  //// ex calculation
+  for (Int_t ipt=0; ipt<nPt; ipt++) {
+    exlow[ipt] = pxtmp[ipt]-ptArrNum[ipt];
+    exhigh[ipt] = ptArrNum[ipt+1]-pxtmp[ipt];
+  }
+	
+  ///////////////////////////////////////////////////
 	///////////////////// Bmeson ////////////////////////
 	///////////////////////////////////////////////////
   TCanvas *c1 = new TCanvas("c1","c1",600,600);
@@ -87,7 +96,7 @@ void comp_RpPb_pt_Bmeson(bool isPrompt = false)
   g_RpPb_Bmeson_sysFONLL->GetXaxis()->CenterTitle();
   g_RpPb_Bmeson_sysFONLL->GetYaxis()->SetTitle("R_{pPb}");
   g_RpPb_Bmeson_sysFONLL->GetYaxis()->CenterTitle();
-  g_RpPb_Bmeson_sysFONLL->GetXaxis()->SetLimits(0.,60.0);
+  g_RpPb_Bmeson_sysFONLL->GetXaxis()->SetLimits(0.,62.0);
   g_RpPb_Bmeson_sysFONLL->SetMinimum(0.0);
   g_RpPb_Bmeson_sysFONLL->SetMaximum(2.0);
   g_RpPb_Bmeson_sysFONLL->SetLineColor(kGray);
@@ -100,7 +109,8 @@ void comp_RpPb_pt_Bmeson(bool isPrompt = false)
   //g_RpPb_Bmeson_sys->SetFillStyle(3001);
   
   SetGraphStyleFinal(g_RpPb_Bmeson, 9, 10);
- 
+  g_RpPb_Bmeson->SetMarkerSize(1.7);
+   
   //////////////////////////////////////////////////////////////
   
   TLatex* globtex = new TLatex();
@@ -110,23 +120,25 @@ void comp_RpPb_pt_Bmeson(bool isPrompt = false)
   globtex->SetTextFont(42);
 	globtex->SetTextSize(0.04);
 
-  TGraphAsymmErrors* g_RpPb_sys = new TGraphAsymmErrors(nPt, pxtmp, rppb, exsys, exsys, eysys_rppb, eysys_rppb);	
+  //// our results
+  TGraphAsymmErrors* g_RpPb_sys = new TGraphAsymmErrors(nPt, pxtmp, rppb, exlow, exhigh, eysys_rppb, eysys_rppb);	
   TGraphAsymmErrors* g_RpPb = new TGraphAsymmErrors(nPt, pxtmp, rppb, exsys, exsys, ey_rppb, ey_rppb);	
   
-  g_RpPb_sys->SetFillColor(kTeal-9);
+  g_RpPb_sys->SetFillColor(kGreen-10);
+  g_RpPb_sys->SetLineColor(kGreen+3);
 
   SetGraphStyleFinal(g_RpPb, 0, 5);
-  //g_RpPb->SetMarkerSize(3.3);
-  g_RpPb->SetMarkerSize(2.5);
+  //g_RpPb->SetMarkerSize(2.5);
+  g_RpPb->SetMarkerSize(2.1);
   
   ////// actual draw
   g_RpPb_Bmeson_sysFONLL->Draw("A5");
   g_RpPb_Bmeson_sys->Draw("2");
-  g_RpPb_sys->Draw("2");
+  g_RpPb_sys->Draw("5");
   g_RpPb_Bmeson->Draw("p");
   g_RpPb->Draw("p");
   
-  dashedLine(0.,1.,30.,1.,1,1);
+  dashedLine(0.,1.,62.,1.,1,1);
 	
   //TLegend *legBL = new TLegend(0.50,0.18,0.90,0.25);
   TLegend *legBL = new TLegend(0.18,0.18,0.77,0.32);
