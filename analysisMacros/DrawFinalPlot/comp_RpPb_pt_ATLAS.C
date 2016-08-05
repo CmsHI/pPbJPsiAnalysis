@@ -150,11 +150,13 @@ void comp_RpPb_pt_ATLAS(bool isPrompt = true)
   
   dashedLine(0.,1.,32.,1.,1,1);
 	
-  TLegend *legBL = new TLegend(0.19,0.18,0.54,0.25);
+  //TLegend *legBL = new TLegend(0.19,0.18,0.54,0.25);
+  TLegend *legBL = new TLegend(0.18,0.18,0.77,0.32);
 	SetLegendStyle(legBL);
 	legBL->SetTextSize(0.043);
   legBL->SetTextFont(42);
 	legBL -> AddEntry(g_RpPb,"-1.5 < y_{CM} < 1.5","lp");
+	legBL -> AddEntry(g_RpPb_ATLAS,"ATLAS: -1.5 < y_{CM} < 1.5","lp");
 	legBL -> Draw();
   
   globtex->SetTextSize(0.055); 

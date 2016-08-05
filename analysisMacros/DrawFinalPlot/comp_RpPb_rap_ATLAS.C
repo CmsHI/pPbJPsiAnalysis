@@ -30,9 +30,11 @@ void comp_RpPb_rap_ATLAS(bool isPrompt = false)
   else inFile= new TFile("plot_RpPb/RpPb_rap_isPrompt0.root");
 	TGraphAsymmErrors* g_RpPb_sys_highpt = (TGraphAsymmErrors*)inFile->Get("g_RpPb_sys_highpt"); 
 	TGraphAsymmErrors* g_RpPb_highpt = (TGraphAsymmErrors*)inFile->Get("g_RpPb_highpt"); 
+  g_RpPb_sys_highpt->SetFillColor(kGreen-10);
   g_RpPb_highpt->SetMarkerSize(2.1);
   
-	double pxshift = 0.15;
+	//double pxshift = 0.15;
+	double pxshift = 0.0;
   const int nRap = 8; 
   const int nRapTmp = nRap + 1;
   const int nRapRpPb = 7;
