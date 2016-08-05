@@ -12,7 +12,7 @@ float getSF(float mupt1=0, float mueta1=0, float mupt2=0, float mueta2=0, int is
 //read TNP plots for useSF
 
 //// pPb, old acc cut (PAS)
-TFile* fTnp_pa_old = new TFile("../Efficiency/tagAndProbe/tnpRate_nominal_fitRatio_5etaBin.root"); //priv (eta4-5 tagpt5)
+TFile* fTnp_pa_old = new TFile("../Efficiency/tagAndProbe/tnpRate_nominal_fitRatio_5etaBin.root","READ"); //priv (eta4-5 tagpt5)
 TF1* hTnp_pa_old_eta1 = (TF1*)fTnp_pa_old->Get("ferrScale_ieta1");
 TF1* hTnp_pa_old_eta2 = (TF1*)fTnp_pa_old->Get("ferrScale_ieta2");
 TF1* hTnp_pa_old_eta3 = (TF1*)fTnp_pa_old->Get("ferrScale_ieta3");
@@ -20,9 +20,9 @@ TF1* hTnp_pa_old_eta4 = (TF1*)fTnp_pa_old->Get("ferrScale_ieta4");
 TF1* hTnp_pa_old_eta5 = (TF1*)fTnp_pa_old->Get("ferrScale_ieta5");
 
 //// pPb, new acc cut
-//TFile* fTnp_pa_new = new TFile("../Efficiency/tagAndProbe/output_official_5eta_cutG_all_nominal_v1_20160516.root"); // 20160516 (off8M tagpt3)
-//TFile* fTnp_pa_new = new TFile("../Efficiency/tagAndProbe/output_official_5eta_cutG_all_nominal_v2_20160621.root"); // 20160621 (off8M, eta4-5 tagpt5)
-TFile* fTnp_pa_new = new TFile("../Efficiency/tagAndProbe/output_official_5eta_cutG_all_nominal_v3.root"); // 20160626 (off8M, tagpt5)
+//TFile* fTnp_pa_new = new TFile("../Efficiency/tagAndProbe/output_official_5eta_cutG_all_nominal_v1_20160516.root","READ"); // 20160516 (off8M tagpt3)
+//TFile* fTnp_pa_new = new TFile("../Efficiency/tagAndProbe/output_official_5eta_cutG_all_nominal_v2_20160621.root","READ"); // 20160621 (off8M, eta4-5 tagpt5)
+TFile* fTnp_pa_new = new TFile("../Efficiency/tagAndProbe/output_official_5eta_cutG_all_nominal_v3.root","READ"); // 20160626 (off8M, tagpt5)
 TF1* hTnp_pa_new_eta1 = (TF1*)fTnp_pa_new->Get("func_1");
 TF1* hTnp_pa_new_eta2 = (TF1*)fTnp_pa_new->Get("func_2");
 TF1* hTnp_pa_new_eta3 = (TF1*)fTnp_pa_new->Get("func_3");
@@ -30,10 +30,11 @@ TF1* hTnp_pa_new_eta4 = (TF1*)fTnp_pa_new->Get("func_4");
 TF1* hTnp_pa_new_eta5 = (TF1*)fTnp_pa_new->Get("func_5");
 
 //// pp new TNP
-//TFile* fTnp_pp_new = new TFile("../Efficiency/tagAndProbe/output_pp_5eta_cutG_all_nominal_v5.root"); //20160620 (off tagpt3)
-//TFile* fTnp_pp_new = new TFile("../Efficiency/tagAndProbe/output_pp_5eta_cutG_all_nominal_v6.root"); //20160621 (off, eta4-5 tagpt5)
-//TFile* fTnp_pp_new = new TFile("../Efficiency/tagAndProbe/output_pp_5eta_cutG_all_nominal_v7.root"); //20160626 (off, tagpt5)
-TFile* fTnp_pp_new = new TFile("../Efficiency/tagAndProbe/output_pp_5eta_cutG_all_nominal_v8.root"); //20160626 (off, tagpt5, tuned 20160727)
+//TFile* fTnp_pp_new = new TFile("../Efficiency/tagAndProbe/output_pp_5eta_cutG_all_nominal_v5.root","READ"); //20160620 (off tagpt3)
+//TFile* fTnp_pp_new = new TFile("../Efficiency/tagAndProbe/output_pp_5eta_cutG_all_nominal_v6.root","READ"); //20160621 (off, eta4-5 tagpt5)
+//TFile* fTnp_pp_new = new TFile("../Efficiency/tagAndProbe/output_pp_5eta_cutG_all_nominal_v7.root","READ"); //20160626 (off, tagpt5)
+//TFile* fTnp_pp_new = new TFile("../Efficiency/tagAndProbe/output_pp_5eta_cutG_all_nominal_v8.root","READ"); //20160727 (off, tagpt5, tuned)
+TFile* fTnp_pp_new = new TFile("../Efficiency/tagAndProbe/output_pp_5eta_cutG_all_L2Single_v8.root","READ"); //20160803 (off8M, tagpt5, OR_L2_trig)
 TF1* hTnp_pp_new_eta1 = (TF1*)fTnp_pp_new->Get("func_1");
 TF1* hTnp_pp_new_eta2 = (TF1*)fTnp_pp_new->Get("func_2");
 TF1* hTnp_pp_new_eta3 = (TF1*)fTnp_pp_new->Get("func_3");
@@ -86,8 +87,8 @@ int rootAna_efficiency_ptWeight(int MrapNpt = 89, int isPA =1, int accCutType = 
 
   //////// read zVtx functions for weight : ratio = (Data)/(pythia)
   TFile* fZvtx;
-  if (accCutType==1) { fZvtx = new TFile(Form("../Efficiency/zVtx201604/zVtx_G1_%s_isPrompt%d_isNewAccCut0_isOfficial1.root",szPA.Data(), (int)isPrompt));
-  } else { fZvtx = new TFile(Form("../Efficiency/zVtx201604/zVtx_G1_%s_isPrompt%d_isNewAccCut1_isOfficial1.root",szPA.Data(), (int)isPrompt)); }
+  if (accCutType==1) { fZvtx = new TFile(Form("../Efficiency/zVtx201604/zVtx_G1_%s_isPrompt%d_isNewAccCut0_isOfficial1.root",szPA.Data(), (int)isPrompt),"READ");
+  } else { fZvtx = new TFile(Form("../Efficiency/zVtx201604/zVtx_G1_%s_isPrompt%d_isNewAccCut1_isOfficial1.root",szPA.Data(), (int)isPrompt),"READ"); }
   cout << "fZvtx = " << fZvtx << endl;
   TF1* gRatio = (TF1*)fZvtx->Get("gRatio");
   
@@ -95,32 +96,32 @@ int rootAna_efficiency_ptWeight(int MrapNpt = 89, int isPA =1, int accCutType = 
   ////// read-in HiOniaTrees
   if (isPA==0){
     if (isPrompt) {
-      f1 = new TFile("/home/storage/OniaTree/Onia5TeV/ppOfficialMC/OniaTree_JpsiMM_5p02TeV_TuneCUETP8M1_Trk_HINppWinter16DR-75X_mcRun2_asymptotic_ppAt5TeV_v3-v1.root"); //official
-      //f1 = new TFile("/home/songkyo/kyo/ppDataSample/EfficiencySamplePrivate/OniaTree_JpsiMM_pp5p02TeV_TuneCUETP8M1_Trk_noCUT.root"); //private
+      f1 = new TFile("/home/storage/OniaTree/Onia5TeV/ppOfficialMC/OniaTree_JpsiMM_5p02TeV_TuneCUETP8M1_Trk_HINppWinter16DR-75X_mcRun2_asymptotic_ppAt5TeV_v3-v1.root","READ"); //official
+      //f1 = new TFile("/home/songkyo/kyo/ppDataSample/EfficiencySamplePrivate/OniaTree_JpsiMM_pp5p02TeV_TuneCUETP8M1_Trk_noCUT.root","READ"); //private
     }
     else {
-      f1 = new TFile("/home/storage/OniaTree/Onia5TeV/ppOfficialMC/OniaTree_BJpsiMM_5p02TeV_TuneCUETP8M1_Trk_HINppWinter16DR-75X_mcRun2_asymptotic_ppAt5TeV_v3-v1.root"); //official
-      //f1 = new TFile("/home/songkyo/kyo/ppDataSample/EfficiencySamplePrivate/OniaTree_BJpsiMM_pp5p02TeV_TuneCUETP8M1_Trk_noCUT.root"); //private
+      f1 = new TFile("/home/storage/OniaTree/Onia5TeV/ppOfficialMC/OniaTree_BJpsiMM_5p02TeV_TuneCUETP8M1_Trk_HINppWinter16DR-75X_mcRun2_asymptotic_ppAt5TeV_v3-v1.root","READ"); //official
+      //f1 = new TFile("/home/songkyo/kyo/ppDataSample/EfficiencySamplePrivate/OniaTree_BJpsiMM_pp5p02TeV_TuneCUETP8M1_Trk_noCUT.root","READ"); //private
     }
   }
   else if (isPA==1){
     if (isPrompt) {
-      f1 = new TFile("/home/songkyo/kyo/pPbDataSample/EfficiencySample/MCJPsiWithFSR_pa_1st_run_STARTHI53_V27_ext1_nocut.root"); // official 8M
-      //f1 = new TFile("/home/songkyo/kyo/pPbDataSample/EfficiencySamplePrivate/tot_PromptJpsi_PYTHIAboosted_1st_STARTHI53_V27_noAccCut_sglTrig_genMatch-v2.root"); // private
+      f1 = new TFile("/home/songkyo/kyo/pPbDataSample/EfficiencySample/MCJPsiWithFSR_pa_1st_run_STARTHI53_V27_ext1_nocut.root","READ"); // official 8M
+      //f1 = new TFile("/home/songkyo/kyo/pPbDataSample/EfficiencySamplePrivate/tot_PromptJpsi_PYTHIAboosted_1st_STARTHI53_V27_noAccCut_sglTrig_genMatch-v2.root","READ"); // private
     }
     else {
-      f1 = new TFile("/home/songkyo/kyo/pPbDataSample/EfficiencySample/MCinclBtoJPsiMuMu_pa_1st_run_STARTHI53_V27_ext1_nocut.root"); // official 8M
-      //f1 = new TFile("/home/songkyo/kyo/pPbDataSample/EfficiencySamplePrivate/tot_B2Jpsi_PYTHIAboosted_1st_STARTHI53_V27_noAccCut_sglTrig_genMatch-v2.root"); // private
+      f1 = new TFile("/home/songkyo/kyo/pPbDataSample/EfficiencySample/MCinclBtoJPsiMuMu_pa_1st_run_STARTHI53_V27_ext1_nocut.root","READ"); // official 8M
+      //f1 = new TFile("/home/songkyo/kyo/pPbDataSample/EfficiencySamplePrivate/tot_B2Jpsi_PYTHIAboosted_1st_STARTHI53_V27_noAccCut_sglTrig_genMatch-v2.root","READ"); // private
     }
   }
   else {
     if (isPrompt) {
-      f1 = new TFile("/home/songkyo/kyo/pPbDataSample/EfficiencySample/MCJPsiWithFSR_pa_2nd_run_STARTHI53_V27_ext1_nocut.root"); // official 8M
-      //f1 = new TFile("/home/songkyo/kyo/pPbDataSample/EfficiencySamplePrivate/tot_PromptJpsi_PYTHIAboosted_2nd_STARTHI53_V27_noAccCut_sglTrig_genMatch-v2.root"); // private
+      f1 = new TFile("/home/songkyo/kyo/pPbDataSample/EfficiencySample/MCJPsiWithFSR_pa_2nd_run_STARTHI53_V27_ext1_nocut.root","READ"); // official 8M
+      //f1 = new TFile("/home/songkyo/kyo/pPbDataSample/EfficiencySamplePrivate/tot_PromptJpsi_PYTHIAboosted_2nd_STARTHI53_V27_noAccCut_sglTrig_genMatch-v2.root","READ"); // private
     }
     else {
-      f1 = new TFile("/home/songkyo/kyo/pPbDataSample/EfficiencySample/MCinclBtoJPsiMuMu_pa_2nd_run_STARTHI53_V27_ext1_nocut.root"); // official 8M
-      //f1 = new TFile("/home/songkyo/kyo/pPbDataSample/EfficiencySamplePrivate/tot_B2Jpsi_PYTHIAboosted_2nd_STARTHI53_V27_noAccCut_sglTrig_genMatch-v2.root"); // private
+      f1 = new TFile("/home/songkyo/kyo/pPbDataSample/EfficiencySample/MCinclBtoJPsiMuMu_pa_2nd_run_STARTHI53_V27_ext1_nocut.root","READ"); // official 8M
+      //f1 = new TFile("/home/songkyo/kyo/pPbDataSample/EfficiencySamplePrivate/tot_B2Jpsi_PYTHIAboosted_2nd_STARTHI53_V27_noAccCut_sglTrig_genMatch-v2.root","READ"); // private
     }
   }
   cout << "f1 = " << f1->GetName() <<endl;
@@ -197,8 +198,8 @@ int rootAna_efficiency_ptWeight(int MrapNpt = 89, int isPA =1, int accCutType = 
   //Double_t lowPt_6rap[] = {5.0, 6.5, 6.5, 6.5, 6.5, 5.0};
   double ptWeight;
   TFile* inFile;
-  if (isPA==0) { inFile= new TFile(Form("dir_fitRatio/%s_fitRatio_%s.root",szPA.Data(),szPrompt.Data()));}
-  else { inFile= new TFile(Form("dir_fitRatio/pA_fitRatio_%s.root",szPrompt.Data()));}
+  if (isPA==0) { inFile= new TFile(Form("dir_fitRatio/%s_fitRatio_%s.root",szPA.Data(),szPrompt.Data()),"READ");}
+  else { inFile= new TFile(Form("dir_fitRatio/pA_fitRatio_%s.root",szPrompt.Data()),"READ");}
   TF1* funct[nRap];
   for(int iy=0;iy<nRap;iy++){
     if (isPA==0) funct[iy]=(TF1*) inFile->Get(Form("funct_%s_%s_%d",szPrompt.Data(),szPA.Data(),iy));

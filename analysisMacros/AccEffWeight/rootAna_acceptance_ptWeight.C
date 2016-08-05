@@ -41,15 +41,15 @@ int rootAna_acceptance_ptWeight(int MrapNpt=89, int isPA = 1, int accCutType =2,
   TFile* f1;
   if (isPA==0) {  // for pp
     if (isPrompt){
-      f1 = new TFile("/home/storage/OniaTree/Onia5TeV/ppOfficialMC/OniaTree_JpsiMM_5p02TeV_TuneCUETP8M1_nofilter_pp502Fall15-MCRUN2_71_V1-v1_GENONLY.root");
+      f1 = new TFile("/home/storage/OniaTree/Onia5TeV/ppOfficialMC/OniaTree_JpsiMM_5p02TeV_TuneCUETP8M1_nofilter_pp502Fall15-MCRUN2_71_V1-v1_GENONLY.root","READ");
     } else  { 
-      f1 = new TFile("/home/storage/OniaTree/Onia5TeV/ppOfficialMC/OniaTree_BJpsiMM_5p02TeV_TuneCUETP8M1_nofilter_pp502Fall15-MCRUN2_71_V1-v1_GENONLY.root");
+      f1 = new TFile("/home/storage/OniaTree/Onia5TeV/ppOfficialMC/OniaTree_BJpsiMM_5p02TeV_TuneCUETP8M1_nofilter_pp502Fall15-MCRUN2_71_V1-v1_GENONLY.root","READ");
     }
   } else { //for Pbp and pPb
     if (isPrompt){
-      f1 = new TFile("/home/songkyo/kyo/pPbDataSample/AcceptanceSample/MCJPsiWithFSR_pa_1st_run_STARTHI53_V27_GENONLY.root");
+      f1 = new TFile("/home/songkyo/kyo/pPbDataSample/AcceptanceSample/MCJPsiWithFSR_pa_1st_run_STARTHI53_V27_GENONLY.root","READ");
     } else {
-      f1 = new TFile("/home/songkyo/kyo/pPbDataSample/AcceptanceSample/MCinclBtoJPsiMuMu_pa_1st_run_STARTHI53_V27_GENONLY.root");
+      f1 = new TFile("/home/songkyo/kyo/pPbDataSample/AcceptanceSample/MCinclBtoJPsiMuMu_pa_1st_run_STARTHI53_V27_GENONLY.root","READ");
     }
   }
   TTree * myTree;
@@ -130,7 +130,7 @@ int rootAna_acceptance_ptWeight(int MrapNpt=89, int isPA = 1, int accCutType =2,
   //Double_t lowPt_8rap_pp[] = {2.0, 4.0, 6.5, 6.5, 6.5, 6.5, 4.0, 2.0};
   //Double_t lowPt_6rap[] = {5.0, 6.5, 6.5, 6.5, 6.5, 5.0};
   float ptWeight;
-  TFile* inFile = new TFile(Form("dir_fitRatio/%s_fitRatio_%s.root",szPA.Data(),szPrompt.Data()));
+  TFile* inFile = new TFile(Form("dir_fitRatio/%s_fitRatio_%s.root",szPA.Data(),szPrompt.Data()),"READ");
   TF1* funct[nRap];
   for(int iy=0;iy<nRap;iy++){
 	  //// iy=0 refers to forwards !!!
