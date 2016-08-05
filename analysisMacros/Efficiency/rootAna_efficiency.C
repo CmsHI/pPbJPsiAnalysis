@@ -12,7 +12,7 @@ float getSF(float mupt1=0, float mueta1=0, float mupt2=0, float mueta2=0, int is
 //read TNP plots for useSF
 
 //// pPb, old acc cut (PAS)
-TFile* fTnp_pa_old = new TFile("../Efficiency/tagAndProbe/tnpRate_nominal_fitRatio_5etaBin.root"); //priv (eta4-5 tagpt5)
+TFile* fTnp_pa_old = new TFile("../Efficiency/tagAndProbe/tnpRate_nominal_fitRatio_5etaBin.root","READ"); //priv (eta4-5 tagpt5)
 TF1* hTnp_pa_old_eta1 = (TF1*)fTnp_pa_old->Get("ferrScale_ieta1");
 TF1* hTnp_pa_old_eta2 = (TF1*)fTnp_pa_old->Get("ferrScale_ieta2");
 TF1* hTnp_pa_old_eta3 = (TF1*)fTnp_pa_old->Get("ferrScale_ieta3");
@@ -20,9 +20,9 @@ TF1* hTnp_pa_old_eta4 = (TF1*)fTnp_pa_old->Get("ferrScale_ieta4");
 TF1* hTnp_pa_old_eta5 = (TF1*)fTnp_pa_old->Get("ferrScale_ieta5");
 
 //// pPb, new acc cut
-//TFile* fTnp_pa_new = new TFile("../Efficiency/tagAndProbe/output_official_5eta_cutG_all_nominal_v1_20160516.root"); // 20160516 (off8M tagpt3)
-//TFile* fTnp_pa_new = new TFile("../Efficiency/tagAndProbe/output_official_5eta_cutG_all_nominal_v2_20160621.root"); // 20160621 (off8M, eta4-5 tagpt5)
-TFile* fTnp_pa_new = new TFile("../Efficiency/tagAndProbe/output_official_5eta_cutG_all_nominal_v3.root"); // 20160626 (off8M, tagpt5)
+//TFile* fTnp_pa_new = new TFile("../Efficiency/tagAndProbe/output_official_5eta_cutG_all_nominal_v1_20160516.root","READ"); // 20160516 (off8M tagpt3)
+//TFile* fTnp_pa_new = new TFile("../Efficiency/tagAndProbe/output_official_5eta_cutG_all_nominal_v2_20160621.root","READ"); // 20160621 (off8M, eta4-5 tagpt5)
+TFile* fTnp_pa_new = new TFile("../Efficiency/tagAndProbe/output_official_5eta_cutG_all_nominal_v3.root","READ"); // 20160626 (off8M, tagpt5)
 TF1* hTnp_pa_new_eta1 = (TF1*)fTnp_pa_new->Get("func_1");
 TF1* hTnp_pa_new_eta2 = (TF1*)fTnp_pa_new->Get("func_2");
 TF1* hTnp_pa_new_eta3 = (TF1*)fTnp_pa_new->Get("func_3");
@@ -30,10 +30,11 @@ TF1* hTnp_pa_new_eta4 = (TF1*)fTnp_pa_new->Get("func_4");
 TF1* hTnp_pa_new_eta5 = (TF1*)fTnp_pa_new->Get("func_5");
 
 //// pp new TNP
-//TFile* fTnp_pp_new = new TFile("../Efficiency/tagAndProbe/output_pp_5eta_cutG_all_nominal_v5.root"); //20160620 (off tagpt3)
-//TFile* fTnp_pp_new = new TFile("../Efficiency/tagAndProbe/output_pp_5eta_cutG_all_nominal_v6.root"); //20160621 (off, eta4-5 tagpt5)
-//TFile* fTnp_pp_new = new TFile("../Efficiency/tagAndProbe/output_pp_5eta_cutG_all_nominal_v7.root"); //20160626 (off, tagpt5)
-TFile* fTnp_pp_new = new TFile("../Efficiency/tagAndProbe/output_pp_5eta_cutG_all_nominal_v8.root"); //20160626 (off, tagpt5, tuned 20160727)
+//TFile* fTnp_pp_new = new TFile("../Efficiency/tagAndProbe/output_pp_5eta_cutG_all_nominal_v5.root","READ"); //20160620 (off tagpt3)
+//TFile* fTnp_pp_new = new TFile("../Efficiency/tagAndProbe/output_pp_5eta_cutG_all_nominal_v6.root","READ"); //20160621 (off, eta4-5 tagpt5)
+//TFile* fTnp_pp_new = new TFile("../Efficiency/tagAndProbe/output_pp_5eta_cutG_all_nominal_v7.root","READ"); //20160626 (off, tagpt5)
+//TFile* fTnp_pp_new = new TFile("../Efficiency/tagAndProbe/output_pp_5eta_cutG_all_nominal_v8.root","READ"); //20160727 (off, tagpt5, tuned)
+TFile* fTnp_pp_new = new TFile("../Efficiency/tagAndProbe/output_pp_5eta_cutG_all_L2Single_v8.root","READ"); //20160803 (off8M, tagpt5, OR_L2_trig)
 TF1* hTnp_pp_new_eta1 = (TF1*)fTnp_pp_new->Get("func_1");
 TF1* hTnp_pp_new_eta2 = (TF1*)fTnp_pp_new->Get("func_2");
 TF1* hTnp_pp_new_eta3 = (TF1*)fTnp_pp_new->Get("func_3");
@@ -81,10 +82,11 @@ int rootAna_efficiency(int MrapNpt = 89, int isPA =1, int accCutType = 2, bool i
 
   //////// read zVtx functions for weight : ratio = (Data)/(pythia)
   TFile* fZvtx;
-  if (accCutType==1) { fZvtx = new TFile(Form("../Efficiency/zVtx201604/zVtx_G1_%s_isPrompt%d_isNewAccCut0_isOfficial1.root",szPA.Data(), (int)isPrompt));
-  } else { fZvtx = new TFile(Form("../Efficiency/zVtx201604/zVtx_G1_%s_isPrompt%d_isNewAccCut1_isOfficial1.root",szPA.Data(), (int)isPrompt)); }
+  if (accCutType==1) { fZvtx = new TFile(Form("../Efficiency/zVtx201604/zVtx_G1_%s_isPrompt%d_isNewAccCut0_isOfficial1.root",szPA.Data(), (int)isPrompt),"READ");
+  } else { fZvtx = new TFile(Form("../Efficiency/zVtx201604/zVtx_G1_%s_isPrompt%d_isNewAccCut1_isOfficial1.root",szPA.Data(), (int)isPrompt),"READ"); }
   cout << "fZvtx = " << fZvtx << endl;
   TF1* gRatio = (TF1*)fZvtx->Get("gRatio");
+  fZvtx->Close();
   
   TFile *f1;
   ////// read-in HiOniaTrees
@@ -491,7 +493,8 @@ int rootAna_efficiency(int MrapNpt = 89, int isPA =1, int accCutType = 2, bool i
   Gen_QQ_mupl_4mom =0;
   Gen_QQ_mumi_4mom =0;
   } //end of event loop
-  
+ 
+   
   // (Num/Den) to get efficiency (B : binomial error)
   h2D_Eff_pt_y->Divide(h2D_Num_pt_y,h2D_Den_pt_y,1,1,"B");
   if (MrapNpt==89) h2D_Eff_pt_y_fine->Divide(h2D_Num_pt_y_fine,h2D_Den_pt_y_fine,1,1,"B");
@@ -514,6 +517,26 @@ int rootAna_efficiency(int MrapNpt = 89, int isPA =1, int accCutType = 2, bool i
     h2D_Eff_pt_y_fine->Write();
   }
   outFile->Close();
+
+  delete h2D_Den_pt_y; 
+  delete h2D_Num_pt_y; 
+  delete h2D_Eff_pt_y; 
+  delete h2D_Den_pt_y_fine; 
+  delete h2D_Num_pt_y_fine; 
+  delete h2D_Eff_pt_y_fine; 
+  delete h1D_zVtx;
+  delete dimu_RECO;
+  delete mupl_RECO;
+  delete mumi_RECO;
+  delete dimu_GEN;
+  delete mupl_GEN;
+  delete mumi_GEN;
+  delete fTnp_pa_old; 
+  delete fTnp_pa_new; 
+  delete fTnp_pp_new; 
+  delete fZvtx;
+  delete f1;
+  delete outFile;
 
   return 0;
 
