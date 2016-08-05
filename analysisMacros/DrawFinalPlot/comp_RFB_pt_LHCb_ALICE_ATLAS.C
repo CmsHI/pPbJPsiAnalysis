@@ -22,8 +22,8 @@ int comp_RFB_pt_LHCb_ALICE_ATLAS()
 	const Double_t pPb_lumi_mub_err = pPb_lumi_nb_err * 1000; // (nb)^{-1} -> {#mub}^{-1}
   
   // read our results
-	TFile *inFile_pr = new TFile("./plot_RFB/RFB_pt_fineBinTest_isPrompt1.root");
-	TFile *inFile_np = new TFile("./plot_RFB/RFB_pt_fineBinTest_isPrompt0.root");
+	TFile *inFile_pr = new TFile("./plot_RFB/RFB_pt_isPrompt1.root");
+	TFile *inFile_np = new TFile("./plot_RFB/RFB_pt_isPrompt0.root");
 	TGraphAsymmErrors* gRFB_pr_sys_0 = (TGraphAsymmErrors*)inFile_pr->Get("gRFB_sys_0"); 	
 	TGraphAsymmErrors* gRFB_pr_0 = (TGraphAsymmErrors*)inFile_pr->Get("gRFB_0"); 	
 	TGraphAsymmErrors* gRFB_np_sys_0 = (TGraphAsymmErrors*)inFile_np->Get("gRFB_sys_0"); 	
