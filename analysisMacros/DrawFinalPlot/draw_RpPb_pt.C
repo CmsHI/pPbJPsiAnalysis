@@ -102,9 +102,6 @@ void draw_RpPb_pt(bool sysByHand=false, bool noPtWeight=false, bool isPrompt=tru
     for (Int_t ipt=0; ipt<nPt; ipt++) {
       exlow[iy][ipt] = px_pA[iy][ipt]-ptArrNum[ipt]; 
       exhigh[iy][ipt] = ptArrNum[ipt+1]-px_pA[iy][ipt]; 
-      cout << iy<<"th y, "<<ipt<<"th pt"<<endl;
-      cout << "exlow = "<< exlow[iy][ipt] << endl;
-      cout << "exhigh = " <<exhigh[iy][ipt] << endl;
     }
   }
 
@@ -155,6 +152,7 @@ void draw_RpPb_pt(bool sysByHand=false, bool noPtWeight=false, bool isPrompt=tru
   } 
   //// NOTE :: Divide different rapidity ranges in pPb and pp!! (due to y shift)  
   for (Int_t iy = 0; iy < nRapRpPb; iy++) { 
+    cout << "::: for excel ::: iy= " << iy << endl;
     for (Int_t ipt = 0; ipt < nPt; ipt++) { 
       DivideValue(pytmp_pA[iy][ipt], eytmp_pA[iy][ipt], pytmp_pp[iy+1][ipt], eytmp_pp[iy+1][ipt], &pytmp[iy][ipt], &eytmp[iy][ipt]); //actual values
       DivideValue(pytmp_pA[iy][ipt], eysys_pA[iy][ipt], pytmp_pp[iy+1][ipt], eysys_pp[iy+1][ipt], &dummy1, &eysys[iy][ipt]); // syst.
@@ -162,10 +160,11 @@ void draw_RpPb_pt(bool sysByHand=false, bool noPtWeight=false, bool isPrompt=tru
       pytmp[iy][ipt] = pytmp[iy][ipt]/A_pb;
       eytmp[iy][ipt] = eytmp[iy][ipt]/A_pb;
       eysys[iy][ipt] = eysys[iy][ipt]/A_pb;
-      cout << "" << endl;
-      cout << "R_pPb["<<iy<<"]["<<ipt<<"] = "<< pytmp[iy][ipt] << endl;; 
-      cout << "stat.["<<iy<<"]["<<ipt<<"] = " << eytmp[iy][ipt]<<endl;
-      cout << "sys.["<<iy<<"]["<<ipt<<"] = " << eysys[iy][ipt]<<endl;
+      //cout << "" << endl;
+      //cout << "R_pPb["<<iy<<"]["<<ipt<<"] = "<< pytmp[iy][ipt] << endl;; 
+      //cout << "stat.["<<iy<<"]["<<ipt<<"] = " << eytmp[iy][ipt]<<endl;
+      //cout << "sys.["<<iy<<"]["<<ipt<<"] = " << eysys[iy][ipt]<<endl;
+      cout << pytmp[iy][ipt] <<"\t"<<eytmp[iy][ipt] << "\t "<<eysys[iy][ipt]<<endl;
     }
   } 
 

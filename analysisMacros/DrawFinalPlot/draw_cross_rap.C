@@ -15,9 +15,10 @@ void draw_cross_rap(bool sysByHand=false, bool noPtWeight=false, bool isScale=fa
 	int iPos=0;
 
 	//// pileup rejection!!
-	const Double_t pileReg = 128234./123240.;
-	const Double_t pileRegRelErr = 0.23;
-	cout << " *** pileReg = " << pileReg << endl;
+	Double_t pileReg;
+  if (isPA==0) pileReg = 1;
+  else pileReg = 128234./123240.;
+	//const Double_t pileRegRelErr = 0.23;
 	
 	//// zvtx correction!!
   //const Double_t zvtxCor = 1.064; // not used anymore
@@ -42,6 +43,7 @@ void draw_cross_rap(bool sysByHand=false, bool noPtWeight=false, bool isScale=fa
     cout << "select among isPA = 0, or 1"<< endl; return ;
   }
 	cout << "isPA = " << isPA << ", and lumi_mub = " << lumi_mub <<"+-" <<lumi_mub_err <<  endl;
+	cout << " *** pileReg = " << pileReg << endl;
 
 	/////////////////////////////////////////////////////////////////////////
 	//// bin center & systematic uncertainties by hand  
@@ -56,7 +58,8 @@ void draw_cross_rap(bool sysByHand=false, bool noPtWeight=false, bool isScale=fa
 	Double_t pxtmp_highpt[nRap]; //x point to fill remporarily
 	Double_t pytmp_lowpt[nRap]; //y point to fill remporarily
 	Double_t pytmp_highpt[nRap]; //y point to fill remporarily
-	Double_t eytmp[nRap]; //y point error to fill remporarily
+	Double_t eytmp_lowpt[nRap]; //y point error to fill remporarily
+	Double_t eytmp_highpt[nRap]; //y point error to fill remporarily
 
 	Double_t ex[nRap] = {0.0 ,0.0 ,0.0 ,0.0 ,0.0 ,0.0 ,0.0 ,0.0}; // x stat error
 	Double_t exlow[nRap]; // x binWidth
@@ -262,17 +265,17 @@ void draw_cross_rap(bool sysByHand=false, bool noPtWeight=false, bool isScale=fa
     h1D_cross[ipt]->Scale(1,"width"); // rapbin
 		h1D_cross[ipt]->Scale(1./lumi_mub); // lumi
 		//h1D_cross[ipt]->Scale(1./br); //br
-		if (isPA==1) h1D_cross[ipt]->Scale(pileReg); //pileup correction	
+    h1D_cross[ipt]->Scale(pileReg); //pileup correction	
 	}
   
   //// syst. nomalization
   for (Int_t iy=0; iy<nRap; iy++){
     eysys_lowpt[iy] /= rapBinW[iy]; //rapbin
     eysys_lowpt[iy] /= lumi_mub; //lumi
-    if (isPA==1) eysys_lowpt[iy] *= pileReg; //pileup correction 
+    eysys_lowpt[iy] *= pileReg; //pileup correction 
     eysys_highpt[iy] /= rapBinW[iy]; //rapbin
     eysys_highpt[iy] /= lumi_mub; //lumi
-    if (isPA==1) eysys_highpt[iy] *= pileReg; //pileup correction 
+    eysys_highpt[iy] *= pileReg; //pileup correction 
   }
   	
 	//// scaling for drawing
@@ -309,7 +312,7 @@ void draw_cross_rap(bool sysByHand=false, bool noPtWeight=false, bool isScale=fa
 		g_cross_lowpt->SetPointEXlow(iy,ex[iy]);
 		g_cross_lowpt->SetPointEXhigh(iy,ex[iy]);
 		g_cross_lowpt->GetPoint(iy, pxtmp_lowpt[iy], pytmp_lowpt[iy]);
-		eytmp[iy] = g_cross_lowpt-> GetErrorY(iy);
+		eytmp_lowpt[iy] = g_cross_lowpt-> GetErrorY(iy);
 	}
 	//// 2) sys_lowpt
 	TGraphAsymmErrors* g_cross_sys_lowpt = new TGraphAsymmErrors(h1D_cross[lowpt_init]);
@@ -319,10 +322,10 @@ void draw_cross_rap(bool sysByHand=false, bool noPtWeight=false, bool isScale=fa
 		//eysys_lowpt[iy]=eysysrel_lowpt[iy]*pytmp_lowpt[iy];
 		//g_cross_sys_lowpt->SetPointError(iy, exsys[iy], exsys[iy], scaleF_low*eysys_lowpt[iy], scaleF_low*eysys_lowpt[iy]);
 		g_cross_sys_lowpt->SetPointError(iy, exlow[iy], exhigh[iy], scaleF_low*eysys_lowpt[iy], scaleF_low*eysys_lowpt[iy]);
-    cout << "" << endl;
-		cout << "cross_lowpt["<<iy<<"] = " << pytmp_lowpt[iy]<<endl;
-		cout << "stat._lowpt["<<iy<<"] = " << eytmp[iy]<<endl;
-		cout << "syst._lowpt["<<iy<<"] = " << eysys_lowpt[iy]<<endl;
+		//cout << "" << endl;
+		//cout << "cross_lowpt["<<iy<<"] = " << pytmp_lowpt[iy]<<endl;
+		//cout << "stat._lowpt["<<iy<<"] = " << eytmp_lowpt[iy]<<endl;
+		//cout << "syst._lowpt["<<iy<<"] = " << eysys_lowpt[iy]<<endl;
 	}
 	
 	//// 3) cross_highpt
@@ -332,7 +335,7 @@ void draw_cross_rap(bool sysByHand=false, bool noPtWeight=false, bool isScale=fa
 		g_cross_highpt->SetPointEXlow(iy,ex[iy]);
 		g_cross_highpt->SetPointEXhigh(iy,ex[iy]);
 		g_cross_highpt->GetPoint(iy, pxtmp_highpt[iy], pytmp_highpt[iy]);
-		eytmp[iy] = g_cross_highpt-> GetErrorY(iy);
+		eytmp_highpt[iy] = g_cross_highpt-> GetErrorY(iy);
 	}
 	
 	//// 4) sys_highpt
@@ -343,11 +346,18 @@ void draw_cross_rap(bool sysByHand=false, bool noPtWeight=false, bool isScale=fa
 		//eysys_highpt[iy]=eysysrel_highpt[iy]*pytmp_highpt[iy];
 		//g_cross_sys_highpt->SetPointError(iy, exsys[iy], exsys[iy], scaleF_high*eysys_highpt[iy], scaleF_high*eysys_highpt[iy]);
 		g_cross_sys_highpt->SetPointError(iy, exlow[iy], exhigh[iy], scaleF_high*eysys_highpt[iy], scaleF_high*eysys_highpt[iy]);
-    cout << "" << endl;
-		cout << "cross_highpt["<<iy<<"] = " << pytmp_highpt[iy]<<endl;
-		cout << "stat._highpt["<<iy<<"] = " << eytmp[iy]<<endl;
-		cout << "syst._highpt["<<iy<<"] = " << eysys_highpt[iy]<<endl;
+    //cout << "" << endl;
+		//cout << "cross_highpt["<<iy<<"] = " << pytmp_highpt[iy]<<endl;
+		//cout << "stat._highpt["<<iy<<"] = " << eytmp_highpt[iy]<<endl;
+		//cout << "syst._highpt["<<iy<<"] = " << eysys_highpt[iy]<<endl;
 	}
+  
+  cout << "::: for excel ::: " << endl;
+	for (Int_t iy=0; iy<nRap; iy++){
+    cout << pytmp_lowpt[nRap-1-iy] <<"\t"<<eytmp_lowpt[nRap-1-iy] << "\t "<<eysys_lowpt[nRap-1-iy]<<endl;
+    cout << pytmp_highpt[nRap-1-iy] <<"\t"<<eytmp_highpt[nRap-1-iy] << "\t "<<eysys_highpt[nRap-1-iy]<<endl;
+	}
+
 	
 	g_cross_sys_lowpt->GetXaxis()->SetTitle("y_{CM}");	
 	g_cross_sys_lowpt->GetXaxis()->CenterTitle();	

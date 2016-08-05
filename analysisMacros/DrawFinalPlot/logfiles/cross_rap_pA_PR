@@ -1,0 +1,47 @@
+
+Processing draw_cross_rap.C+(0,0,0,1,true)...
+isPA = 1, and lumi_mub = 34622+-1200
+ *** pileReg = 1.04052
+ *** scaleF_low : 1, scaleF_high = 1
+0th rapArr = -2.87 < y_{CM} < -2.40
+1th rapArr = -2.40 < y_{CM} < -1.93
+2th rapArr = -1.93 < y_{CM} < -1.50
+3th rapArr = -1.50 < y_{CM} < -0.90
+4th rapArr = -0.90 < y_{CM} < 0
+5th rapArr = 0 < y_{CM} < 0.90
+6th rapArr = 0.90 < y_{CM} < 1.50
+7th rapArr = 1.50 < y_{CM} < 1.93
+0th ptArr = 2 < p_{T} < 3 GeV/c
+1th ptArr = 3 < p_{T} < 4 GeV/c
+2th ptArr = 4 < p_{T} < 5 GeV/c
+3th ptArr = 5 < p_{T} < 6.5 GeV/c
+4th ptArr = 6.5 < p_{T} < 7.5 GeV/c
+5th ptArr = 7.5 < p_{T} < 8.5 GeV/c
+6th ptArr = 8.5 < p_{T} < 10 GeV/c
+7th ptArr = 10 < p_{T} < 14 GeV/c
+8th ptArr = 14 < p_{T} < 30 GeV/c
+1) low pT bin starts from : 6.5 < p_{T} < 7.5 GeV/c
+, merging : 7.5 < p_{T} < 8.5 GeV/c
+, merging : 8.5 < p_{T} < 10 GeV/c
+2) high pT bin starts from : 10 < p_{T} < 14 GeV/c
+, merging : 14 < p_{T} < 30 GeV/c
+::: for excel ::: 
+1.83163	0.0431834	 0.0611321
+0.354544	0.0139352	 0.0141186
+2.07029	0.026926	 0.0408942
+0.419208	0.00976008	 0.0101913
+2.37254	0.0557521	 0.0545269
+0.460734	0.00903442	 0.00927531
+2.46416	0.0596301	 0.0392202
+0.478948	0.00982311	 0.00740039
+2.42385	0.0595833	 0.0468052
+0.455051	0.0134465	 0.00935648
+2.08093	0.0399874	 0.0389464
+0.373249	0.0105022	 0.0088434
+1.75926	0.029313	 0.0355153
+0.302034	0.00866898	 0.00662721
+1.43805	0.0335085	 0.0441952
+0.236677	0.00959807	 0.00902226
+34.6 nb^{-1} (pPb 5.02 TeV)
+Info in <TCanvas::Print>: pdf file plot_cross/pA_cross_rap_isPrompt1_isScale0.pdf has been created
+Info in <TCanvas::Print>: png file plot_cross/pA_cross_rap_isPrompt1_isScale0.png has been created

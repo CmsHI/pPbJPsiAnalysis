@@ -20,9 +20,10 @@ void draw_cross_pt_integ_middle(bool sysByHand=false, bool noPtWeight=false, boo
 	int iPos=0.;//outOfFrame
 
 	// pileup rejection!!
-	const Double_t pileReg = 128234./123240.;
-	const Double_t pileRegRelErr = 0.23;
-	cout << " *** pileReg = " << pileReg << endl;
+	Double_t pileReg;
+  if (isPA==0) pileReg = 1;
+  else pileReg = 128234./123240.;
+	//const Double_t pileRegRelErr = 0.23;
 
 	//// zvtx correction!!
 	//const Double_t zvtxCor = 1.064; // not used anymore!!
@@ -47,6 +48,7 @@ void draw_cross_pt_integ_middle(bool sysByHand=false, bool noPtWeight=false, boo
     cout << "select among isPA = 0 or 1"<< endl; return ;
   }
 	cout << "isPA = " << isPA << ", and lumi_mub = " << lumi_mub <<"+-" <<lumi_mub_err <<  endl;
+	cout << " *** pileReg = " << pileReg << endl;
 
   //double A_pb =208;
 
@@ -303,20 +305,20 @@ void draw_cross_pt_integ_middle(bool sysByHand=false, bool noPtWeight=false, boo
       //// from relative error to absolute error
 			//tmpsys[iy][ipt] = h1D_SysErr[iy]->GetBinContent(ipt+1);
 			tmpsys[iy][ipt] = h1D_SysErr[iy]->GetBinContent(ipt+1)*h1D_CorrY[iy]->GetBinContent(ipt+1);
-		  cout << "fw : " << iy << "th iy, "<<ipt<<"th ipt tmpssys = " << tmpsys[iy][ipt] << endl;
+		  //cout << "fw : " << iy << "th iy, "<<ipt<<"th ipt tmpssys = " << tmpsys[iy][ipt] << endl;
       eysys[fwrap_init][ipt] += tmpsys[iy][ipt]*tmpsys[iy][ipt];
     }
     eysys[fwrap_init][ipt] = TMath::Sqrt(eysys[fwrap_init][ipt]);
-    cout << "fw : eysys[fwrap_init]["<<ipt<<"] = " << eysys[fwrap_init][ipt] << endl;
+    //cout << "fw : eysys[fwrap_init]["<<ipt<<"] = " << eysys[fwrap_init][ipt] << endl;
     
     eysys[bwrap_init][ipt] = 0;
 		for (Int_t iy = bwrap_init; iy < bwrap_final; iy++) {
 			tmpsys[iy][ipt] = h1D_SysErr[iy]->GetBinContent(ipt+1)*h1D_CorrY[iy]->GetBinContent(ipt+1);
-		  cout << "bw : " << iy << "th iy, "<<ipt<<"th ipt tmpssys = " << tmpsys[iy][ipt] << endl;
+		  //cout << "bw : " << iy << "th iy, "<<ipt<<"th ipt tmpssys = " << tmpsys[iy][ipt] << endl;
       eysys[bwrap_init][ipt] += tmpsys[iy][ipt]*tmpsys[iy][ipt];
 		}
     eysys[bwrap_init][ipt] = TMath::Sqrt(eysys[bwrap_init][ipt]);
-    cout << "bw : eysys[bwrap_init]["<<ipt<<"] = " << eysys[bwrap_init][ipt] << endl;
+    //cout << "bw : eysys[bwrap_init]["<<ipt<<"] = " << eysys[bwrap_init][ipt] << endl;
   } 
   //// rap bin merging
 	cout << "1) fw rap bin starts from : " << rapArr[fwrap_init].Data() << endl;
@@ -343,7 +345,7 @@ void draw_cross_pt_integ_middle(bool sysByHand=false, bool noPtWeight=false, boo
 		h1D_cross[iy]->Scale(1./lumi_mub); // lumi
 		// h1D_cross[iy]->Scale(1./br); //br
 		// h1D_cross[iy]->Scale(zvtxCor); // z vertex correction	
-    if (isPA==1) h1D_cross[iy]->Scale(pileReg);	// pileup correction
+    h1D_cross[iy]->Scale(pileReg);	// pileup correction
 		h1D_cross[iy]->Scale(scaleF[iy]); // scaling for drawing
 	}
 	
@@ -354,7 +356,7 @@ void draw_cross_pt_integ_middle(bool sysByHand=false, bool noPtWeight=false, boo
       //eysys[iy][ipt] /= rapBinW[iy]; //rapbin
       eysys[iy][ipt] /= (maxrap/100.); //rapbin
       eysys[iy][ipt] /= lumi_mub; //lumi
-      if (isPA==1) eysys[iy][ipt] *= pileReg; //pileup correction 
+      eysys[iy][ipt] *= pileReg; //pileup correction 
       eysys[iy][ipt] *= scaleF[iy]; // scaling for drawing
     } 
   } 
@@ -411,6 +413,8 @@ void draw_cross_pt_integ_middle(bool sysByHand=false, bool noPtWeight=false, boo
 		g_cross[iy] = new TGraphAsymmErrors(h1D_cross[iy]);
 		g_cross_sys[iy]->SetName(Form("g_cross_sys_%d",iy));
 		g_cross[iy]->SetName(Form("g_cross_%d",iy));
+    if (iy==fwrap_init) cout << "::: for excel ::: fwrap_init = " << iy << endl;
+    if (iy==bwrap_init) cout << "::: for excel ::: bwrap_init = " << iy << endl;
 		for (Int_t ipt=0; ipt<nPt; ipt++ ){
 			g_cross_sys[iy]->GetPoint(ipt, pxtmp[iy][ipt], pytmp[iy][ipt]);
 			g_cross_sys[iy]->SetPoint(ipt, px[iy][ipt], pytmp[iy][ipt]);
@@ -428,16 +432,10 @@ void draw_cross_pt_integ_middle(bool sysByHand=false, bool noPtWeight=false, boo
 			//cout << "stat.["<<iy<<"]["<<ipt<<"] = " << eytmp[iy][ipt]<<endl;
 			//cout << "sys.["<<iy<<"]["<<ipt<<"] = " << eysys[iy][ipt]<<endl;
 		  if (iy==fwrap_init) {
-        cout << "" << endl;
-        cout << "fw cross["<<fwrap_init<<"]["<<ipt<<"] = " << pytmp[fwrap_init][ipt]<<endl;
-  		  cout << "fw stat.["<<fwrap_init<<"]["<<ipt<<"] = " << eytmp[fwrap_init][ipt]<<endl;
-  		  cout << "fw sys.["<<fwrap_init<<"]["<<ipt<<"] = " << eysys[fwrap_init][ipt]<<endl;
+        cout << pytmp[iy][ipt] <<"\t"<<eytmp[iy][ipt] << "\t "<<eysys[iy][ipt]<<endl;
       }
       if (iy==bwrap_init){
-  		  cout << "" << endl;
-        cout << "bw cross["<<bwrap_init<<"]["<<ipt<<"] = " << pytmp[bwrap_init][ipt]<<endl;
-  		  cout << "bw stat.["<<bwrap_init<<"]["<<ipt<<"] = " << eytmp[bwrap_init][ipt]<<endl;
-  		  cout << "bw sys.["<<bwrap_init<<"]["<<ipt<<"] = " << eysys[bwrap_init][ipt]<<endl;
+        cout << pytmp[iy][ipt] <<"\t"<<eytmp[iy][ipt] << "\t "<<eysys[iy][ipt]<<endl;
       }
 		}
 	}

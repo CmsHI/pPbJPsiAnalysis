@@ -15,9 +15,10 @@ void draw_cross_pt(bool sysByHand=false, bool noPtWeight=false, bool isScale=tru
 	int iPos=0.;//outOfFrame
 
 	//// pileup rejection!!
-	const Double_t pileReg = 128234./123240.;
-	const Double_t pileRegRelErr = 0.23;
-	cout << " *** pileReg = " << pileReg << endl;
+	Double_t pileReg;
+  if (isPA==0) pileReg = 1;
+  else pileReg = 128234./123240.;
+	//const Double_t pileRegRelErr = 0.23;
 
 	//// zvtx correction!!
 	//const Double_t zvtxCor = 1.064; // not used anymore!!
@@ -42,6 +43,7 @@ void draw_cross_pt(bool sysByHand=false, bool noPtWeight=false, bool isScale=tru
     cout << "select among isPA = 0 or 1"<< endl; return ;
   }
 	cout << "isPA = " << isPA << ", and lumi_mub = " << lumi_mub <<"+-" <<lumi_mub_err <<  endl;
+	cout << " *** pileReg = " << pileReg << endl;
 
 	/////////////////////////////////////////////////////////////////////////
 	//// bin center & systematic uncertainties by hand  
@@ -228,7 +230,7 @@ void draw_cross_pt(bool sysByHand=false, bool noPtWeight=false, bool isScale=tru
 		h1D_cross[iy]->Scale(1./rapBinW[iy]); //rap bin
 		h1D_cross[iy]->Scale(1./lumi_mub); // lumi
 		// h1D_cross[iy]->Scale(1./br); //br
-    if (isPA==1) h1D_cross[iy]->Scale(pileReg);	// pileup correction
+    h1D_cross[iy]->Scale(pileReg);	// pileup correction
 		h1D_cross[iy]->Scale(scaleF[iy]); // scaling for drawing
 	}
 		
@@ -305,6 +307,7 @@ void draw_cross_pt(bool sysByHand=false, bool noPtWeight=false, bool isScale=tru
 		g_cross[iy] = new TGraphAsymmErrors(h1D_cross[iy]);
 		g_cross_sys[iy]->SetName(Form("g_cross_sys_%d",iy));
 		g_cross[iy]->SetName(Form("g_cross_%d",iy));
+    cout << "::: for excel ::: iy= " << iy << endl;
 		for (Int_t ipt=0; ipt<nPt; ipt++ ){
 			g_cross_sys[iy]->GetPoint(ipt, pxtmp[iy][ipt], pytmp[iy][ipt]);
 			g_cross_sys[iy]->SetPoint(ipt, px[iy][ipt], pytmp[iy][ipt]);
@@ -317,10 +320,11 @@ void draw_cross_pt(bool sysByHand=false, bool noPtWeight=false, bool isScale=tru
 			g_cross[iy]->SetPoint(ipt, px[iy][ipt], pytmp[iy][ipt]);
 			g_cross[iy]->SetPointEXlow(ipt, ex[ipt]);
 			g_cross[iy]->SetPointEXhigh(ipt, ex[ipt]);
-			cout << "" << endl;
-      cout << "cross["<<iy<<"]["<<ipt<<"] = " << pytmp[iy][ipt]<<endl;
-			cout << "stat.["<<iy<<"]["<<ipt<<"] = " << eytmp[iy][ipt]<<endl;
-			cout << "sys.["<<iy<<"]["<<ipt<<"] = " << eysys[iy][ipt]<<endl;
+			//cout << "" << endl;
+      //cout << "cross["<<iy<<"]["<<ipt<<"] = " << pytmp[iy][ipt]<<endl;
+			//cout << "stat.["<<iy<<"]["<<ipt<<"] = " << eytmp[iy][ipt]<<endl;
+			//cout << "sys.["<<iy<<"]["<<ipt<<"] = " << eysys[iy][ipt]<<endl;
+      cout << pytmp[iy][ipt] <<"\t"<<eytmp[iy][ipt] << "\t "<<eysys[iy][ipt]<<endl;
 		}
 	}
 

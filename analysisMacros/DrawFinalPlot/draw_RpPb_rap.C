@@ -179,21 +179,21 @@ void draw_RpPb_rap(bool sysByHand=false, bool noPtWeight=false, bool isPrompt=fa
     pytmp_lowpt[iy] = pytmp_lowpt[iy]/A_pb;
     eytmp_lowpt[iy] = eytmp_lowpt[iy]/A_pb;
     eysys_lowpt[iy] = eysys_lowpt[iy]/A_pb;
-    cout << "" << endl;
-    cout << "R_pPb_lowpt["<<iy<<"] = "<< pytmp_lowpt[iy] << endl;; 
-    cout << "stat._lowpt["<<iy<<"] = " << eytmp_lowpt[iy]<<endl;
-    cout << "sys_lowpt.["<<iy<<"] = " << eysys_lowpt[iy]<<endl;
     DivideValue(pytmp_highpt_pA[iy+1], eytmp_highpt_pA[iy+1], pytmp_highpt_pp[iy], eytmp_highpt_pp[iy], &pytmp_highpt[iy], &eytmp_highpt[iy]); //actual values
     DivideValue(pytmp_highpt_pA[iy+1], eysys_highpt_pA[iy+1], pytmp_highpt_pp[iy], eysys_highpt_pp[iy], &dummy1, &eysys_highpt[iy]); // syst.
     //// nomarlize by A_pb = 208.
     pytmp_highpt[iy] = pytmp_highpt[iy]/A_pb;
     eytmp_highpt[iy] = eytmp_highpt[iy]/A_pb;
     eysys_highpt[iy] = eysys_highpt[iy]/A_pb;
-    cout << "" << endl;
-    cout << "R_pPb_highpt["<<iy<<"] = "<< pytmp_highpt[iy] << endl;; 
-    cout << "stat._highpt["<<iy<<"] = " << eytmp_highpt[iy]<<endl;
-    cout << "sys_highpt.["<<iy<<"] = " << eysys_highpt[iy]<<endl;
   }
+  
+  cout << "::: for excel ::: " << endl;
+	for (Int_t iy=0; iy<nRap; iy++){
+    cout << pytmp_lowpt[nRap-1-iy] <<"\t"<<eytmp_lowpt[nRap-1-iy] << "\t "<<eysys_lowpt[nRap-1-iy]<<endl;
+    cout << pytmp_highpt[nRap-1-iy] <<"\t"<<eytmp_highpt[nRap-1-iy] << "\t "<<eysys_highpt[nRap-1-iy]<<endl;
+	}
+  
+  
   TGraphAsymmErrors* g_RpPb_sys_lowpt;
   TGraphAsymmErrors* g_RpPb_sys_lowpt_line;
   TGraphAsymmErrors* g_RpPb_lowpt;
