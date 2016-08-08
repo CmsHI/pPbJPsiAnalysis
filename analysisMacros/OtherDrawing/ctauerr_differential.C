@@ -5,7 +5,7 @@ void formRapLabArr(Double_t binmin, Double_t binmax, TString* arr);
 void formAbsRapArr(Double_t binmin, Double_t binmax, TString* arr);
 void formPtArr(Double_t binmin, Double_t binmax, TString* arr);
 
-void ctauerr_differential(TString szPA = "pa", bool isSmall =true, bool isAddNP=true, double rapmin=-2.4, double rapmax=-1.97, double ptmin=2.0, double ptmax=3.0)
+void ctauerr_differential(TString szPA = "pa", bool isSmall =true, bool isAddNP=false, double rapmin=-1.47, double rapmax=-0.47, double ptmin=6.5, double ptmax=7.5)
 {
   gROOT->Macro("../Style.C");
 	//gStyle->SetPaintTextFormat(".3f");
@@ -25,6 +25,7 @@ void ctauerr_differential(TString szPA = "pa", bool isSmall =true, bool isAddNP=
 //  else if (ptmin==2.0 || ptmin==3.0 || ptmin==4.0) { binmax=0.5; }
 //  else if (ptmin==5.0 || ptmin==6.5 || ptmin==7.5) { binmax=0.3; }
 //  else if (ptmin==8.5 || ptmin==10.0 || ptmin==14.0) { binmax=0.1; }
+  //binmax = 0.12; // tmp
 	
   //// read-in root file
   TFile *fData;
@@ -159,6 +160,8 @@ void ctauerr_differential(TString szPA = "pa", bool isSmall =true, bool isAddNP=
 	legUR->AddEntry(h1D_01,Form("%s Data",szPA.Data()),"pl");
 	legUR->AddEntry(h1D_02,Form("%s MC prompt",szPA.Data()),"lf");
 	if (isAddNP) legUR->AddEntry(h1D_03,Form("%s MC non-prompt",szPA.Data()),"lf");
+	//legUR->AddEntry(h1D_01,"pPb Data","pl");
+	//legUR->AddEntry(h1D_02,"pPb MC","lf");
   
   //latex box for beam, rapidity, pT info
   TLatex* latex = new TLatex();
@@ -168,7 +171,9 @@ void ctauerr_differential(TString szPA = "pa", bool isSmall =true, bool isAddNP=
 	
 	c01->cd();
 	gPad->SetLogy(0);
-	h1D_01->Draw("pe");
+	//h1D_01->SetMinimum(0);
+	//h1D_01->SetMaximum(1);
+  h1D_01->Draw("pe");
 	h1D_02->Draw("hist same");
 	if (isAddNP) h1D_03->Draw("hist same");
 	h1D_01->Draw("pe same");
@@ -179,6 +184,8 @@ void ctauerr_differential(TString szPA = "pa", bool isSmall =true, bool isAddNP=
 	
 	c02->cd();
 	gPad->SetLogy(1);
+	//h1D_01->SetMinimum(0.0003);
+	//h1D_01->SetMaximum(0.3);
 	h1D_01->Draw("pe");
 	h1D_02->Draw("hist same");
 	if (isAddNP) h1D_03->Draw("hist same");

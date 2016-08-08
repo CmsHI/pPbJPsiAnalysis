@@ -66,6 +66,8 @@ void draw_RpPb_pt(bool sysByHand=false, bool noPtWeight=false, bool isPrompt=tru
     {2.51699, 3.4959, 4.47636, 5.68624, 6.97338, 7.97824, 9.1805, 11.4841, 16.8762}
   };
 	Double_t ex[nPt] = {0,0,0,0,0,0,0,0,0}; // x stat error
+	Double_t exlow[nRap][nPt];
+	Double_t exhigh[nRap][nPt];
   Double_t exsys[nPt] = {0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4}; // x sys error
   
   //// 1) y_CM array (from forward to backward)
@@ -93,6 +95,14 @@ void draw_RpPb_pt(bool sysByHand=false, bool noPtWeight=false, bool isPrompt=tru
   for (Int_t ipt=0; ipt<nPt; ipt++) {
     formPtArr(ptArrNum[ipt], ptArrNum[ipt+1], &ptArr[ipt]);
     cout << ipt <<"th ptArr = " << ptArr[ipt] << endl;
+  }
+  
+  //// ex calculation
+  for (Int_t iy=0; iy<nRap; iy++) {
+    for (Int_t ipt=0; ipt<nPt; ipt++) {
+      exlow[iy][ipt] = px_pA[iy][ipt]-ptArrNum[ipt]; 
+      exhigh[iy][ipt] = ptArrNum[ipt+1]-px_pA[iy][ipt]; 
+    }
   }
 
   //// read our result
@@ -142,6 +152,7 @@ void draw_RpPb_pt(bool sysByHand=false, bool noPtWeight=false, bool isPrompt=tru
   } 
   //// NOTE :: Divide different rapidity ranges in pPb and pp!! (due to y shift)  
   for (Int_t iy = 0; iy < nRapRpPb; iy++) { 
+    cout << "::: for excel ::: iy= " << iy << endl;
     for (Int_t ipt = 0; ipt < nPt; ipt++) { 
       DivideValue(pytmp_pA[iy][ipt], eytmp_pA[iy][ipt], pytmp_pp[iy+1][ipt], eytmp_pp[iy+1][ipt], &pytmp[iy][ipt], &eytmp[iy][ipt]); //actual values
       DivideValue(pytmp_pA[iy][ipt], eysys_pA[iy][ipt], pytmp_pp[iy+1][ipt], eysys_pp[iy+1][ipt], &dummy1, &eysys[iy][ipt]); // syst.
@@ -149,20 +160,49 @@ void draw_RpPb_pt(bool sysByHand=false, bool noPtWeight=false, bool isPrompt=tru
       pytmp[iy][ipt] = pytmp[iy][ipt]/A_pb;
       eytmp[iy][ipt] = eytmp[iy][ipt]/A_pb;
       eysys[iy][ipt] = eysys[iy][ipt]/A_pb;
-      cout << "" << endl;
-      cout << "R_pPb["<<iy<<"]["<<ipt<<"] = "<< pytmp[iy][ipt] << endl;; 
-      cout << "stat.["<<iy<<"]["<<ipt<<"] = " << eytmp[iy][ipt]<<endl;
-      cout << "sys.["<<iy<<"]["<<ipt<<"] = " << eysys[iy][ipt]<<endl;
+      //cout << "" << endl;
+      //cout << "R_pPb["<<iy<<"]["<<ipt<<"] = "<< pytmp[iy][ipt] << endl;; 
+      //cout << "stat.["<<iy<<"]["<<ipt<<"] = " << eytmp[iy][ipt]<<endl;
+      //cout << "sys.["<<iy<<"]["<<ipt<<"] = " << eysys[iy][ipt]<<endl;
+      cout << pytmp[iy][ipt] <<"\t"<<eytmp[iy][ipt] << "\t "<<eysys[iy][ipt]<<endl;
     }
   } 
+
+	//// set values as zero for unused bins
+	for (Int_t iy = 0; iy < nRapRpPb; iy++) {
+		if (iy>=1 && iy<=6) {
+			pytmp[iy][0]=-532;
+	    eytmp[iy][0]=0; eysys[iy][0]=0;
+      exlow[iy][0]=0; exhigh[iy][0]=0;
+			pytmp[iy][1]=-532;
+			eytmp[iy][1]=0; eysys[iy][1]=0;
+      exlow[iy][1]=0; exhigh[iy][1]=0;
+		}
+		if (iy>=2 && iy<=5) {
+			pytmp[iy][2]=-532;
+	    eytmp[iy][2]=0; eysys[iy][2]=0;
+      exlow[iy][2]=0; exhigh[iy][2]=0;
+		}
+  	if (iy>=2 && iy<=4) {
+			pytmp[iy][3]=-532;
+	    eytmp[iy][3]=0; eysys[iy][3]=0;
+      exlow[iy][3]=0; exhigh[iy][3]=0;
+		}
+	}
+
+  ////////////////////////////////////////////////////////////////
  
   TGraphAsymmErrors* g_RpPb_sys[nRapRpPb];
   TGraphAsymmErrors* g_RpPb[nRapRpPb];
    
   for (Int_t iy = 0; iy < nRapRpPb; iy++) { 
   //for (Int_t iy = 0; iy < 1; iy++) { 
-    g_RpPb_sys[iy] = new TGraphAsymmErrors(nPt, px_pA[iy], pytmp[iy], exsys, exsys, eysys[iy], eysys[iy]);
+    //g_RpPb_sys[iy] = new TGraphAsymmErrors(nPt, px_pA[iy], pytmp[iy], exsys, exsys, eysys[iy], eysys[iy]);
+    g_RpPb_sys[iy] = new TGraphAsymmErrors(nPt, px_pA[iy], pytmp[iy], exlow[iy], exhigh[iy], eysys[iy], eysys[iy]);
     g_RpPb[iy] = new TGraphAsymmErrors(nPt, px_pA[iy], pytmp[iy], ex, ex, eytmp[iy], eytmp[iy]);
+    //g_RpPb[iy] = new TGraphAsymmErrors(nPt, px_pA[iy], pytmp[iy], exlow[iy], exhigh[iy], eytmp[iy], eytmp[iy]);
+		g_RpPb_sys[iy] -> SetName(Form("g_RpPb_sys_%d",iy));
+		g_RpPb[iy] -> SetName(Form("g_RpPb_%d",iy));
     g_RpPb_sys[iy]->GetXaxis()->SetTitle("p_{T} [GeV/c]");
     g_RpPb_sys[iy]->GetXaxis()->SetTitleOffset(0.9);
     if (iy==0 || iy==3) {
@@ -181,33 +221,51 @@ void draw_RpPb_pt(bool sysByHand=false, bool noPtWeight=false, bool isPrompt=tru
     g_RpPb_sys[iy]->GetYaxis()->SetTitleSize(0.075);
     g_RpPb_sys[iy]->GetYaxis()->SetLabelSize(0.055);
     g_RpPb_sys[iy]->GetYaxis()->CenterTitle();
-    g_RpPb_sys[iy]->GetXaxis()->SetLimits(0.,20.0);
-//    g_RpPb_sys[iy]->SetMinimum(0.5);
-//    g_RpPb_sys[iy]->SetMaximum(1.5);
-    g_RpPb_sys[iy]->SetMinimum(0.4);
-    g_RpPb_sys[iy]->SetMaximum(1.6);
+    g_RpPb_sys[iy]->GetXaxis()->SetLimits(0.,31.0);
+    g_RpPb_sys[iy]->SetMinimum(0.0);
+    g_RpPb_sys[iy]->SetMaximum(1.8);
+//    g_RpPb_sys[iy]->SetMinimum(0.4);
+//    g_RpPb_sys[iy]->SetMaximum(1.6);
   } 
-  g_RpPb_sys[0]->SetFillColor(kTeal-9);
-  g_RpPb_sys[1]->SetFillColor(kRed-9);
-  g_RpPb_sys[2]->SetFillColor(kAzure-9);
-  g_RpPb_sys[3]->SetFillColor(kAzure-9);
-  g_RpPb_sys[4]->SetFillColor(kRed-9);
-  g_RpPb_sys[5]->SetFillColor(kTeal-9);
-  g_RpPb_sys[6]->SetFillColor(kViolet-9);
+
+  g_RpPb_sys[0]->SetFillColor(kGreen-10);
+  g_RpPb_sys[1]->SetFillColor(kRed-10);
+  g_RpPb_sys[2]->SetFillColor(kBlue-10);
+  g_RpPb_sys[3]->SetFillColor(kBlue-10);
+  g_RpPb_sys[4]->SetFillColor(kRed-10);
+  g_RpPb_sys[5]->SetFillColor(kGreen-10);
+  g_RpPb_sys[6]->SetFillColor(kMagenta-10);
+ 
+  g_RpPb_sys[0]->SetLineColor(kGreen+3);
+  g_RpPb_sys[1]->SetLineColor(kPink-6);
+  g_RpPb_sys[2]->SetLineColor(kBlue-3);
+  g_RpPb_sys[3]->SetLineColor(kBlue-3);
+  g_RpPb_sys[4]->SetLineColor(kPink-6);
+  g_RpPb_sys[5]->SetLineColor(kGreen+3);
+  g_RpPb_sys[6]->SetLineColor(kViolet-6);
+ /* 
+  g_RpPb_sys[0]->SetFillColor(kWhite);
+  g_RpPb_sys[1]->SetFillColor(kWhite);
+  g_RpPb_sys[2]->SetFillColor(kWhite);
+  g_RpPb_sys[3]->SetFillColor(kWhite);
+  g_RpPb_sys[4]->SetFillColor(kWhite);
+  g_RpPb_sys[5]->SetFillColor(kWhite);
+  g_RpPb_sys[6]->SetFillColor(kWhite);
+  */
   SetGraphStyleFinal(g_RpPb[0],  0,5);
-  g_RpPb[0]->SetMarkerSize(2.3);
+  g_RpPb[0]->SetMarkerSize(1.8);
   SetGraphStyleFinal(g_RpPb[1],  1,3);
-  g_RpPb[1]->SetMarkerSize(1.5);
+  g_RpPb[1]->SetMarkerSize(1.1);
   SetGraphStyleFinal(g_RpPb[2],  2,0);
-  g_RpPb[2]->SetMarkerSize(1.5);
+  g_RpPb[2]->SetMarkerSize(1.1);
   SetGraphStyleFinal(g_RpPb[3],  2,0);
-  g_RpPb[3]->SetMarkerSize(1.5);
+  g_RpPb[3]->SetMarkerSize(1.1);
   SetGraphStyleFinal(g_RpPb[4],  1,3);
-  g_RpPb[4]->SetMarkerSize(1.5);
+  g_RpPb[4]->SetMarkerSize(1.1);
   SetGraphStyleFinal(g_RpPb[5],  0,5);
-  g_RpPb[5]->SetMarkerSize(2.3);
-  SetGraphStyleFinal(g_RpPb[6],  8,2);
-  g_RpPb[6]->SetMarkerSize(1.9);
+  g_RpPb[5]->SetMarkerSize(1.8);
+  SetGraphStyleFinal(g_RpPb[6],  8,6);
+  g_RpPb[6]->SetMarkerSize(1.3);
   
   //////////////////////////////////////////////////////////////////
   //// draw
@@ -233,7 +291,8 @@ void draw_RpPb_pt(bool sysByHand=false, bool noPtWeight=false, bool isPrompt=tru
 	emptybox->SetLineColor(kBlack);
 	emptybox->SetLineWidth(1);
   
-  TCanvas* c_all = new TCanvas("c_all","c_all",1050,600);
+  //TCanvas* c_all = new TCanvas("c_all","c_all",1050,600);
+  TCanvas* c_all = new TCanvas("c_all","c_all",1200,700);
   c_all->Divide(4,2);
   TVirtualPad* pad_all[nRap]; // 8 pads
   pad_all[0] = new TPad("pad_all_0", "",0, 0.506, 0.29, 1);
@@ -274,9 +333,10 @@ void draw_RpPb_pt(bool sysByHand=false, bool noPtWeight=false, bool isPrompt=tru
     else if (iy==1) pad_all[1]->cd();
     else if (iy==2) pad_all[0]->cd();
     else pad_all[iy+1]->cd();
-    g_RpPb_sys[iy]->Draw("A2");
+    //g_RpPb_sys[iy]->Draw("A2");
+    g_RpPb_sys[iy]->Draw("A5");
     g_RpPb[iy]->Draw("P");
-    dashedLine(0.,1.,20.,1.,1,1);
+    dashedLine(0.,1.,31.,1.,1,1);
     globtex->SetTextAlign(32); //3:right 2:vertical center
 	  globtex->SetTextFont(42);
 	  //if (iy==0 || iy==3) globtex->SetTextSize(0.063);
@@ -304,14 +364,14 @@ void draw_RpPb_pt(bool sysByHand=false, bool noPtWeight=false, bool isPrompt=tru
 	leFW2->SetMarkerColor(kPink-6);
 	leFW2->SetMarkerSize(2.1);
 	TLegendEntry *leFW3=legBRFW->AddEntry("leFW3",Form("  %s", rapArr[2].Data()),"lpf");
-	leFW3->SetFillColor(kBlue-10);
+	leFW3->SetFillColor(kAzure-9);
 	leFW3->SetFillStyle(1001);
 	leFW3->SetLineColor(kBlue-3);
 	leFW3->SetMarkerStyle(kFullCircle);
 	leFW3->SetMarkerColor(kBlue-3);
 	leFW3->SetMarkerSize(2.1);
 	TLegendEntry *leBW1=legBRBW->AddEntry("leBW1",Form("  %s", rapArr[3].Data()),"lpf");
-	leBW1->SetFillColor(kBlue-10);
+	leBW1->SetFillColor(kAzure-9);
 	leBW1->SetFillStyle(1001);
 	leBW1->SetLineColor(kBlue-3);
 	leBW1->SetMarkerStyle(kFullCircle);

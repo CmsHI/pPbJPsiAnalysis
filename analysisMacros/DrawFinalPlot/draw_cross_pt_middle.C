@@ -7,7 +7,7 @@ void formPtArr(Double_t binmin, Double_t binmax, TString* arr);
 
 void CMS_lumi( TPad* pad, int iPeriod, int iPosX );
 
-void draw_cross_pt_middle(bool sysByHand=false, bool noPtWeight=false, bool isScale=true, bool isLog=true, int isPA = 1, bool isPrompt=false)
+void draw_cross_pt_middle(bool sysByHand=false, bool noPtWeight=false, bool isScale=true, bool isLog=false, int isPA = 1, bool isPrompt=false)
 {
 	gROOT->Macro("./tdrstyle_kyo.C");
   gStyle->SetTitleYOffset(1.38); //KYO
@@ -17,9 +17,10 @@ void draw_cross_pt_middle(bool sysByHand=false, bool noPtWeight=false, bool isSc
 	int iPos=0.;//outOfFrame
 
 	// pileup rejection!!
-	const Double_t pileReg = 128234./123240.;
-	const Double_t pileRegRelErr = 0.23;
-	cout << " *** pileReg = " << pileReg << endl;
+	Double_t pileReg;
+  if (isPA==0) pileReg = 1;
+  else pileReg = 128234./123240.;
+	//const Double_t pileRegRelErr = 0.23;
 
 	//// zvtx correction!!
 	//const Double_t zvtxCor = 1.064; // not used anymore!!
@@ -44,6 +45,7 @@ void draw_cross_pt_middle(bool sysByHand=false, bool noPtWeight=false, bool isSc
     cout << "select among isPA = 0 or 1"<< endl; return ;
   }
 	cout << "isPA = " << isPA << ", and lumi_mub = " << lumi_mub <<"+-" <<lumi_mub_err <<  endl;
+	cout << " *** pileReg = " << pileReg << endl;
   //double A_pb =208;
 
 	/////////////////////////////////////////////////////////////////////////
@@ -229,7 +231,7 @@ void draw_cross_pt_middle(bool sysByHand=false, bool noPtWeight=false, bool isSc
 		// h1D_cross[iy]->Scale(1./br); //br
 		// if (isPA==0) h1D_cross[iy]->Scale(A_pb); //// for test
 		// h1D_cross[iy]->Scale(zvtxCor); // z vertex correction	
-    if (isPA==1) h1D_cross[iy]->Scale(pileReg);	// pileup correction
+    h1D_cross[iy]->Scale(pileReg);	// pileup correction
 		h1D_cross[iy]->Scale(scaleF[iy]); // scaling for drawing
 	}
 		
@@ -297,6 +299,7 @@ void draw_cross_pt_middle(bool sysByHand=false, bool noPtWeight=false, bool isSc
 		g_cross[iy] = new TGraphAsymmErrors(h1D_cross[iy]);
 		g_cross_sys[iy]->SetName(Form("g_cross_sys_%d",iy));
 		g_cross[iy]->SetName(Form("g_cross_%d",iy));
+    cout << "::: for excel ::: iy= " << iy << endl;
 		for (Int_t ipt=0; ipt<nPt; ipt++ ){
 			g_cross_sys[iy]->GetPoint(ipt, pxtmp[iy][ipt], pytmp[iy][ipt]);
 			g_cross_sys[iy]->SetPoint(ipt, px[iy][ipt], pytmp[iy][ipt]);
@@ -308,10 +311,7 @@ void draw_cross_pt_middle(bool sysByHand=false, bool noPtWeight=false, bool isSc
 			g_cross[iy]->SetPoint(ipt, px[iy][ipt], pytmp[iy][ipt]);
 			g_cross[iy]->SetPointEXlow(ipt, ex[ipt]);
 			g_cross[iy]->SetPointEXhigh(ipt, ex[ipt]);
-			cout << "" << endl;
-      cout << "cross["<<iy<<"]["<<ipt<<"] = " << pytmp[iy][ipt]<<endl;
-			cout << "stat.["<<iy<<"]["<<ipt<<"] = " << eytmp[iy][ipt]<<endl;
-			cout << "sys.["<<iy<<"]["<<ipt<<"] = " << eysys[iy][ipt]<<endl;
+      cout << pytmp[iy][ipt] <<"\t"<<eytmp[iy][ipt] << "\t "<<eysys[iy][ipt]<<endl;
 		}
 	}
 
@@ -347,11 +347,11 @@ void draw_cross_pt_middle(bool sysByHand=false, bool noPtWeight=false, bool isSc
         if (isPrompt) g_cross_sys[iy]->SetMaximum(0.16);
         else g_cross_sys[iy]->SetMaximum(0.016);
   		} else {
-        if (isPrompt) g_cross_sys[iy]->SetMaximum(20);
+        if (isPrompt) g_cross_sys[iy]->SetMaximum(32);
         else g_cross_sys[iy]->SetMaximum(2);
   	  }
   	}
-	  g_cross_sys[iy]->GetXaxis()->SetLimits(0.0, 20.);
+	  g_cross_sys[iy]->GetXaxis()->SetLimits(0.0, 32.);
 	}
 
   //// different color scheme for pp and pA
@@ -439,6 +439,7 @@ void draw_cross_pt_middle(bool sysByHand=false, bool noPtWeight=false, bool isSc
 	else globtex->DrawLatex(0.91, 0.80, "Global uncertainty : 3.5 \%");
 	CMS_lumi( c_fw, isPA, iPos );
 	c_fw->Update();
+/*
   if (isPA==0){
     if (noPtWeight) {
     	c_fw->SaveAs(Form("plot_cross/pp_fw_cross_pt_middle_isPrompt%d_isLog%d_isScale%d_noPtWeight.pdf",(int)isPrompt,(int)isLog,(int)isScale));
@@ -456,6 +457,7 @@ void draw_cross_pt_middle(bool sysByHand=false, bool noPtWeight=false, bool isSc
     	c_fw->SaveAs(Form("plot_cross/pA_fw_cross_pt_middle_isPrompt%d_isLog%d_isScale%d.png",(int)isPrompt,(int)isLog,(int)isScale));
     }
   }
+*/
   legBLFW->Clear();
 	
   ////////  Backward
@@ -489,6 +491,7 @@ void draw_cross_pt_middle(bool sysByHand=false, bool noPtWeight=false, bool isSc
 	else globtex->DrawLatex(0.91, 0.80, "Global uncertainty : 3.5 \%");
 	CMS_lumi( c_bw, isPA, iPos );
 	c_bw->Update();
+/*
   if (isPA==0){
     if (noPtWeight) {
     	c_bw->SaveAs(Form("plot_cross/pp_bw_cross_pt_middle_isPrompt%d_isLog%d_isScale%d_noPtWeight.pdf",(int)isPrompt,(int)isLog,(int)isScale));
@@ -506,6 +509,7 @@ void draw_cross_pt_middle(bool sysByHand=false, bool noPtWeight=false, bool isSc
     	c_bw->SaveAs(Form("plot_cross/pA_bw_cross_pt_middle_isPrompt%d_isLog%d_isScale%d.png",(int)isPrompt,(int)isLog,(int)isScale));
     }
   }
+*/
 	legBLBW->Clear();
   	
 	///////////////////////////////////////////////////////////////////

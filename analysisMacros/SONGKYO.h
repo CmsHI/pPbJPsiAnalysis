@@ -141,8 +141,8 @@ void SetGraphStyle2(TGraph* gr, Int_t c, Int_t m) {
 
 void SetGraphStyleFinal(TGraph* gr, Int_t c, Int_t m) {
   Int_t colorArr[] = { kGreen+3, kPink-6, kBlue-3, kRed-4, kBlue, kOrange+8, kGreen+3, kAzure+9, kViolet-6, kBlack };
-  Int_t markerFullArr[] = {kFullCircle, kFullTriangleUp, kFullTriangleDown, kFullSquare, kFullStar, kFullDiamond};
-  Int_t markerOpenArr[] = {kOpenCircle, kOpenTriangleUp, kOpenTriangleDown, kOpenSquare, kOpenStar, kOpenDiamond};
+  Int_t markerFullArr[] = {kFullCircle, kFullTriangleUp, kFullTriangleDown, kFullSquare, kFullStar, kFullDiamond, kFullCross};
+  Int_t markerOpenArr[] = {kOpenCircle, kOpenTriangleUp, kOpenTriangleDown, kOpenSquare, kOpenStar, kOpenDiamond, kOpenCross};
 
   gr-> SetMarkerColor(colorArr[c]);
   if(m<10) gr-> SetMarkerStyle(markerFullArr[m]);

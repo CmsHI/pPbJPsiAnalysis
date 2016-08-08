@@ -12,14 +12,13 @@ void draw_cross_pt(bool sysByHand=false, bool noPtWeight=false, bool isScale=tru
 	gROOT->Macro("./tdrstyle_kyo.C");
   gStyle->SetTitleYOffset(1.38); //KYO
 
-//	int iPos=33;//right corner
-//	int iPos=11;//left corner
 	int iPos=0.;//outOfFrame
 
-	// pileup rejection!!
-	const Double_t pileReg = 128234./123240.;
-	const Double_t pileRegRelErr = 0.23;
-	cout << " *** pileReg = " << pileReg << endl;
+	//// pileup rejection!!
+	Double_t pileReg;
+  if (isPA==0) pileReg = 1;
+  else pileReg = 128234./123240.;
+	//const Double_t pileRegRelErr = 0.23;
 
 	//// zvtx correction!!
 	//const Double_t zvtxCor = 1.064; // not used anymore!!
@@ -44,7 +43,7 @@ void draw_cross_pt(bool sysByHand=false, bool noPtWeight=false, bool isScale=tru
     cout << "select among isPA = 0 or 1"<< endl; return ;
   }
 	cout << "isPA = " << isPA << ", and lumi_mub = " << lumi_mub <<"+-" <<lumi_mub_err <<  endl;
-  //double A_pb =208;
+	cout << " *** pileReg = " << pileReg << endl;
 
 	/////////////////////////////////////////////////////////////////////////
 	//// bin center & systematic uncertainties by hand  
@@ -60,7 +59,7 @@ void draw_cross_pt(bool sysByHand=false, bool noPtWeight=false, bool isScale=tru
 	Double_t eytmp[nRap][nPt]; //y point error to fill remporarily
 
 	Double_t px[nRap][nPt];
-  Double_t px_pp[nRap][nPt] = { //x point (mean pT) by JB
+  Double_t px_pp[nRap][nPt] = { //x point (mean pT) by JB -- from FW to BW
     {2.54567, 3.50886, 4.48508, 5.69331, 6.97532, 7.97107, 9.17601, 11.5322, 17.4867},
     {0, 0, 4.54938, 5.75633, 6.9727, 7.97359, 9.17558, 11.4729, 17.4391},
     {0, 0, 0, 0, 7.0061, 7.97991, 9.19355, 11.5729, 17.6818},
@@ -70,7 +69,7 @@ void draw_cross_pt(bool sysByHand=false, bool noPtWeight=false, bool isScale=tru
     {0, 0, 4.54198, 5.76465, 6.97492, 7.96787, 9.18318, 11.5223, 17.4279},
     {2.54164, 3.5085, 4.48298, 5.69705, 6.97263, 7.97372, 9.17313, 11.5032, 17.3023}
 	};
-	Double_t px_pA[nRap][nPt] = { //x point (mean pT) by JB
+	Double_t px_pA[nRap][nPt] = { //x point (mean pT) by JB -- from FW to BW
     {2.525, 3.51255, 4.4772, 5.70327, 6.96635, 7.96061, 9.17243, 11.5938, 18.0681},
     {0, 0, 4.52793, 5.74033, 6.97622, 7.98335, 9.19458, 11.4927, 17.6693},
     {0, 0, 0, 0, 7.018, 8.00224, 9.19714, 11.5483, 17.6577},
@@ -103,6 +102,8 @@ void draw_cross_pt(bool sysByHand=false, bool noPtWeight=false, bool isScale=tru
 	};
 */	
   Double_t ex[nPt] = {0,0,0,0,0,0,0,0,0}; // x stat error
+	Double_t exlow[nRap][nPt]; // x binWidth 
+	Double_t exhigh[nRap][nPt]; // x binWidth
 	Double_t exsys[nPt] = {0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4}; // x sys error
 	Double_t eysysrel[nRap][nPt]; //relative y sys error
 	Double_t eysys[nRap][nPt]; //absolute y sys error
@@ -110,7 +111,6 @@ void draw_cross_pt(bool sysByHand=false, bool noPtWeight=false, bool isScale=tru
 	  for (Int_t ipt=0; ipt<nPt; ipt++) {
       if (isPA==0) { px[iy][ipt] = px_pp[iy][ipt]; }
       else { px[iy][ipt] = px_pA[iy][ipt]; }
-      //cout << "px["<<iy<<"]["<<ipt<<"] = " << px[iy][ipt] << endl;
     }
   }
 
@@ -139,14 +139,12 @@ void draw_cross_pt(bool sysByHand=false, bool noPtWeight=false, bool isScale=tru
 	for (Int_t iy=0; iy<nRap; iy++) {
     rapBinW[iy] = rapArrNumFB[iy]-rapArrNumFB[iy+1];
     //rapBinW[iy] = rapArrNumBF[iy+1]-rapArrNumBF[iy];
-    //cout << iy <<"th rapBinW = " << rapBinW[iy] <<endl;
 	}
 	//// 2) pt array
 	Double_t ptArrNum[nPtTmp] = {2.0, 3.0, 4.0, 5.0, 6.5, 7.5, 8.5, 10., 14., 30.};
 	Double_t ptBinW[nPt];
 	for (Int_t ipt=0; ipt<nPt; ipt++) {
 		ptBinW[ipt] = ptArrNum[ipt+1]-ptArrNum[ipt]; 
-		//cout << ipt <<"th ptBinW = " << ptBinW[ipt] <<endl;
 	}
 	//// array string
 	TString rapArr[nRap];
@@ -159,6 +157,14 @@ void draw_cross_pt(bool sysByHand=false, bool noPtWeight=false, bool isScale=tru
 		formPtArr(ptArrNum[ipt], ptArrNum[ipt+1], &ptArr[ipt]);
 		cout << ipt <<"th ptArr = " << ptArr[ipt] << endl;
 	}
+  
+  //// ex calculation
+  for (Int_t iy=0; iy<nRap; iy++) {
+    for (Int_t ipt=0; ipt<nPt; ipt++) {
+      exlow[iy][ipt] = px[iy][ipt]-ptArrNum[ipt]; 
+      exhigh[iy][ipt] = ptArrNum[ipt+1]-px[iy][ipt]; 
+    }
+  }
 
 	//////////////////////////////////////////////////////////////	
 	//// read-in sys. file 
@@ -168,7 +174,6 @@ void draw_cross_pt(bool sysByHand=false, bool noPtWeight=false, bool isScale=tru
 	TH2D* h2D_SysErr;
   if (isPrompt) h2D_SysErr = (TH2D*)fSys->Get("hTotalPR");
 	else h2D_SysErr = (TH2D*)fSys->Get("hTotalNP");
-//	cout << " *** h2D_SysErr = " <<  h2D_SysErr << endl;	
 
 	//////////////////////////////////////////////////////////////	
 	//// read-in corr-yield file
@@ -211,7 +216,6 @@ void draw_cross_pt(bool sysByHand=false, bool noPtWeight=false, bool isScale=tru
 	for (Int_t iy = 0; iy < nRap; iy++) {
 		for (int ipt=0; ipt <nPt; ipt ++ ){ 
 			eysysrel[iy][ipt] = h1D_SysErr[iy]->GetBinContent(ipt+1);
-//			cout << "eysysrel["<<iy<<"]["<<ipt<<"] = "<<eysysrel[iy][ipt]<<endl;
 		}
 	}
 	
@@ -226,9 +230,7 @@ void draw_cross_pt(bool sysByHand=false, bool noPtWeight=false, bool isScale=tru
 		h1D_cross[iy]->Scale(1./rapBinW[iy]); //rap bin
 		h1D_cross[iy]->Scale(1./lumi_mub); // lumi
 		// h1D_cross[iy]->Scale(1./br); //br
-    // if (isPA==0) h1D_cross[iy]->Scale(A_pb); //// for test
-		// h1D_cross[iy]->Scale(zvtxCor); // z vertex correction	
-    if (isPA==1) h1D_cross[iy]->Scale(pileReg);	// pileup correction
+    h1D_cross[iy]->Scale(pileReg);	// pileup correction
 		h1D_cross[iy]->Scale(scaleF[iy]); // scaling for drawing
 	}
 		
@@ -239,42 +241,51 @@ void draw_cross_pt(bool sysByHand=false, bool noPtWeight=false, bool isScale=tru
 			h1D_cross[iy]->SetBinError(1,0);
 			h1D_cross[iy]->SetBinContent(2,-532);
 			h1D_cross[iy]->SetBinError(2,0);
+      exlow[iy][0]=0; exhigh[iy][0]=0;
+      exlow[iy][1]=0; exhigh[iy][1]=0;
 		}
 		if (iy>=2 && iy<=5) {
 			h1D_cross[iy]->SetBinContent(3,-532);
 			h1D_cross[iy]->SetBinError(3,0);
+      exlow[iy][2]=0; exhigh[iy][2]=0;
 		}
     if (isPA==0) {
   		if (iy>=2 && iy<=5) {
 	  		h1D_cross[iy]->SetBinContent(4,-532);
 	  		h1D_cross[iy]->SetBinError(4,0);
+        exlow[iy][3]=0; exhigh[iy][3]=0;
 	  	}
     }
     else {
   		if (iy>=2 && iy<=4) {
 	  		h1D_cross[iy]->SetBinContent(4,-532);
 	  		h1D_cross[iy]->SetBinError(4,0);
+        exlow[iy][3]=0; exhigh[iy][3]=0;
 	  	}
     }
 	}
 
 	//////////////////////////////////////////////////////////////////
 
-//	TLegend *legBLFW = new TLegend(0.15, 0.165, 0.43, 0.315);
-//	TLegend *legBL = new TLegend(0.15, 0.165, 0.43, 0.415);
 	TLegend *legBLFW; 
 	TLegend *legBLBW;
   if (isPA==0) {
-    legBLFW = new TLegend(0.19, 0.165, 0.46, 0.365);
-    legBLBW = new TLegend(0.19, 0.165, 0.46, 0.365);
+    //legBLFW = new TLegend(0.19, 0.165, 0.46, 0.365);
+    //legBLBW = new TLegend(0.19, 0.165, 0.46, 0.365);
+    legBLFW = new TLegend(0.19, 0.160, 0.46, 0.320);
+    legBLBW = new TLegend(0.19, 0.160, 0.46, 0.320);
   } else {
-    legBLFW = new TLegend(0.19, 0.165, 0.46, 0.315);
-    legBLBW = new TLegend(0.19, 0.165, 0.46, 0.415);
+    //legBLFW = new TLegend(0.19, 0.165, 0.46, 0.315);
+    //legBLBW = new TLegend(0.19, 0.165, 0.46, 0.415);
+    legBLFW = new TLegend(0.19, 0.160, 0.46, 0.280);
+    legBLBW = new TLegend(0.19, 0.160, 0.46, 0.360);
   }
 	SetLegendStyle(legBLFW);
 	SetLegendStyle(legBLBW);
-	legBLFW->SetTextSize(0.037); 
-	legBLBW->SetTextSize(0.037); 
+	//legBLFW->SetTextSize(0.037); 
+	//legBLBW->SetTextSize(0.037); 
+	legBLFW->SetTextSize(0.034); 
+	legBLBW->SetTextSize(0.034); 
 	 	
 	TLatex* globtex = new TLatex();
 	globtex->SetNDC();
@@ -296,21 +307,24 @@ void draw_cross_pt(bool sysByHand=false, bool noPtWeight=false, bool isScale=tru
 		g_cross[iy] = new TGraphAsymmErrors(h1D_cross[iy]);
 		g_cross_sys[iy]->SetName(Form("g_cross_sys_%d",iy));
 		g_cross[iy]->SetName(Form("g_cross_%d",iy));
+    cout << "::: for excel ::: iy= " << iy << endl;
 		for (Int_t ipt=0; ipt<nPt; ipt++ ){
 			g_cross_sys[iy]->GetPoint(ipt, pxtmp[iy][ipt], pytmp[iy][ipt]);
 			g_cross_sys[iy]->SetPoint(ipt, px[iy][ipt], pytmp[iy][ipt]);
 			//// absolute error calculation 
 			eysys[iy][ipt]=eysysrel[iy][ipt]*pytmp[iy][ipt];
-			g_cross_sys[iy]->SetPointError(ipt, exsys[ipt], exsys[ipt], eysys[iy][ipt], eysys[iy][ipt]);
+			//g_cross_sys[iy]->SetPointError(ipt, exsys[ipt], exsys[ipt], eysys[iy][ipt], eysys[iy][ipt]);
+			g_cross_sys[iy]->SetPointError(ipt, exlow[iy][ipt], exhigh[iy][ipt], eysys[iy][ipt], eysys[iy][ipt]);
 			g_cross[iy]->GetPoint(ipt, pxtmp[iy][ipt], pytmp[iy][ipt]);
 			eytmp[iy][ipt] = g_cross[iy]-> GetErrorY(ipt);
 			g_cross[iy]->SetPoint(ipt, px[iy][ipt], pytmp[iy][ipt]);
 			g_cross[iy]->SetPointEXlow(ipt, ex[ipt]);
 			g_cross[iy]->SetPointEXhigh(ipt, ex[ipt]);
-			cout << "" << endl;
-      cout << "cross["<<iy<<"]["<<ipt<<"] = " << pytmp[iy][ipt]<<endl;
-			cout << "stat.["<<iy<<"]["<<ipt<<"] = " << eytmp[iy][ipt]<<endl;
-			cout << "sys.["<<iy<<"]["<<ipt<<"] = " << eysys[iy][ipt]<<endl;
+			//cout << "" << endl;
+      //cout << "cross["<<iy<<"]["<<ipt<<"] = " << pytmp[iy][ipt]<<endl;
+			//cout << "stat.["<<iy<<"]["<<ipt<<"] = " << eytmp[iy][ipt]<<endl;
+			//cout << "sys.["<<iy<<"]["<<ipt<<"] = " << eysys[iy][ipt]<<endl;
+      cout << pytmp[iy][ipt] <<"\t"<<eytmp[iy][ipt] << "\t "<<eysys[iy][ipt]<<endl;
 		}
 	}
 
@@ -337,7 +351,8 @@ void draw_cross_pt(bool sysByHand=false, bool noPtWeight=false, bool isScale=tru
         g_cross_sys[iy]->SetMaximum(1000.);
 		  } else {
 		    g_cross_sys[iy]->SetMinimum(0.00001);
-        g_cross_sys[iy]->SetMaximum(1000000.);
+        //g_cross_sys[iy]->SetMaximum(1000000.);
+        g_cross_sys[iy]->SetMaximum(500000.);
   	  }
   	}
   	else {
@@ -350,60 +365,81 @@ void draw_cross_pt(bool sysByHand=false, bool noPtWeight=false, bool isScale=tru
         else g_cross_sys[iy]->SetMaximum(2);
   	  }
   	}
-	  g_cross_sys[iy]->GetXaxis()->SetLimits(0.0, 20.);
+	  //g_cross_sys[iy]->GetXaxis()->SetLimits(0.0, 20.);
+	  g_cross_sys[iy]->GetXaxis()->SetLimits(0.0, 32.);
 	}
 
   //// different color scheme for pp and pA
   if (isPA==0) {
-	  g_cross_sys[0]->SetFillColor(kViolet-9);
-	  g_cross_sys[1]->SetFillColor(kTeal-9);
+	  g_cross_sys[0]->SetFillColor(kMagenta-10);
+	  g_cross_sys[1]->SetFillColor(kGreen-10);
 	  g_cross_sys[2]->SetFillColor(kRed-10);
 	  g_cross_sys[3]->SetFillColor(kBlue-10);
 	  g_cross_sys[4]->SetFillColor(kBlue-10);
 	  g_cross_sys[5]->SetFillColor(kRed-10);
-	  g_cross_sys[6]->SetFillColor(kTeal-9);
-	  g_cross_sys[7]->SetFillColor(kViolet-9);
-	  SetGraphStyleFinal(g_cross[0],	8,2);
-	  g_cross[0]->SetMarkerSize(2.1);
+	  g_cross_sys[6]->SetFillColor(kGreen-10);
+	  g_cross_sys[7]->SetFillColor(kMagenta-10);
+	  
+    g_cross_sys[0]->SetLineColor(kViolet-6);
+	  g_cross_sys[1]->SetLineColor(kGreen+3);
+	  g_cross_sys[2]->SetLineColor(kPink-6);
+	  g_cross_sys[3]->SetLineColor(kBlue-3);
+	  g_cross_sys[4]->SetLineColor(kBlue-3);
+	  g_cross_sys[5]->SetLineColor(kPink-6);
+	  g_cross_sys[6]->SetLineColor(kGreen+3);
+	  g_cross_sys[7]->SetLineColor(kViolet-6);
+
+	  SetGraphStyleFinal(g_cross[0],	8,6);
+	  g_cross[0]->SetMarkerSize(1.4);
 	  SetGraphStyleFinal(g_cross[1],	0,5);
-	  g_cross[1]->SetMarkerSize(2.5);
+	  g_cross[1]->SetMarkerSize(2.1);
 	  SetGraphStyleFinal(g_cross[2],	1,3);
-	  g_cross[2]->SetMarkerSize(1.7);
+	  g_cross[2]->SetMarkerSize(1.4);
 	  SetGraphStyleFinal(g_cross[3],	2,0);
-	  g_cross[3]->SetMarkerSize(1.7);
+	  g_cross[3]->SetMarkerSize(1.4);
 	  SetGraphStyleFinal(g_cross[4],	2,0);
-	  g_cross[4]->SetMarkerSize(1.7);
+	  g_cross[4]->SetMarkerSize(1.4);
 	  SetGraphStyleFinal(g_cross[5],	1,3);
-	  g_cross[5]->SetMarkerSize(1.7);
+	  g_cross[5]->SetMarkerSize(1.4);
 	  SetGraphStyleFinal(g_cross[6],	0,5);
-	  g_cross[6]->SetMarkerSize(2.5);
-	  SetGraphStyleFinal(g_cross[7],	8,2);
-	  g_cross[7]->SetMarkerSize(2.1);
+	  g_cross[6]->SetMarkerSize(2.1);
+	  SetGraphStyleFinal(g_cross[7],	8,6);
+	  g_cross[7]->SetMarkerSize(1.4);
 
   } else {
-	  g_cross_sys[0]->SetFillColor(kTeal-9);
+	  g_cross_sys[0]->SetFillColor(kGreen-10);
 	  g_cross_sys[1]->SetFillColor(kRed-10);
 	  g_cross_sys[2]->SetFillColor(kBlue-10);
 	  g_cross_sys[3]->SetFillColor(kBlue-10);
 	  g_cross_sys[4]->SetFillColor(kRed-10);
-	  g_cross_sys[5]->SetFillColor(kTeal-9);
-	  g_cross_sys[6]->SetFillColor(kViolet-9);
+	  g_cross_sys[5]->SetFillColor(kGreen-10);
+	  g_cross_sys[6]->SetFillColor(kMagenta-10);
 	  g_cross_sys[7]->SetFillColor(kGray);
+	  
+    g_cross_sys[0]->SetLineColor(kGreen+3);
+	  g_cross_sys[1]->SetLineColor(kPink-6);
+	  g_cross_sys[2]->SetLineColor(kBlue-3);
+	  g_cross_sys[3]->SetLineColor(kBlue-3);
+	  g_cross_sys[4]->SetLineColor(kPink-6);
+	  g_cross_sys[5]->SetLineColor(kGreen+3);
+	  g_cross_sys[6]->SetLineColor(kViolet-6);
+	  g_cross_sys[7]->SetLineColor(kBlack);
+
 	  SetGraphStyleFinal(g_cross[0],	0,5);
-	  g_cross[0]->SetMarkerSize(2.5);
+	  g_cross[0]->SetMarkerSize(2.1);
 	  SetGraphStyleFinal(g_cross[1],	1,3);
-	  g_cross[1]->SetMarkerSize(1.7);
+	  g_cross[1]->SetMarkerSize(1.4);
 	  SetGraphStyleFinal(g_cross[2],	2,0);
-	  g_cross[2]->SetMarkerSize(1.7);
+	  g_cross[2]->SetMarkerSize(1.4);
 	  SetGraphStyleFinal(g_cross[3],	2,0);
-	  g_cross[3]->SetMarkerSize(1.7);
+	  g_cross[3]->SetMarkerSize(1.4);
 	  SetGraphStyleFinal(g_cross[4],	1,3);
-	  g_cross[4]->SetMarkerSize(1.7);
+	  g_cross[4]->SetMarkerSize(1.4);
 	  SetGraphStyleFinal(g_cross[5],	0,5);
-	  g_cross[5]->SetMarkerSize(2.5);
-	  SetGraphStyleFinal(g_cross[6],	8,2);
-	  g_cross[6]->SetMarkerSize(2.1);
-	  SetGraphStyleFinal(g_cross[7],	9,1);
+	  g_cross[5]->SetMarkerSize(2.1);
+	  SetGraphStyleFinal(g_cross[6],	8,6);
+	  g_cross[6]->SetMarkerSize(1.4);
+	  SetGraphStyleFinal(g_cross[7],	9,4);
 	  g_cross[7]->SetMarkerSize(2.1);
   }
 	
@@ -414,8 +450,8 @@ void draw_cross_pt(bool sysByHand=false, bool noPtWeight=false, bool isScale=tru
 	else gPad->SetLogy(0);
 	//// 1) cross_sys
 	for (Int_t iy = fw_init; iy < bw_init; iy++) {
-    if (iy==fw_init) g_cross_sys[iy]->Draw("A2");
-    else g_cross_sys[iy]->Draw("2");
+    if (iy==fw_init) g_cross_sys[iy]->Draw("A5");
+    else g_cross_sys[iy]->Draw("5");
 	}
 	//// 2) cross
 	for (Int_t iy = fw_init; iy < bw_init; iy++) {
@@ -423,8 +459,10 @@ void draw_cross_pt(bool sysByHand=false, bool noPtWeight=false, bool isScale=tru
 	}
 	//// leg
   for (Int_t iy = fw_init; iy < bw_init; iy++) {
-		if (isScale && scaleF[iy]!=1.) legBLFW -> AddEntry(g_cross[iy],Form("%s (x%.0f)",rapArr[iy].Data(),scaleF[iy]),"lp");
-		else legBLFW -> AddEntry(g_cross[iy],Form("%s",rapArr[iy].Data()),"lp");
+		if (isScale && scaleF[bw_init-iy-1]!=1.) legBLFW -> AddEntry(g_cross[bw_init-iy-1],Form("%s (x%.0f)",rapArr[bw_init-iy-1].Data(),scaleF[bw_init-iy-1]),"lp");
+		else legBLFW -> AddEntry(g_cross[bw_init-iy-1],Form("%s",rapArr[bw_init-iy-1].Data()),"lp");
+		//if (isScale && scaleF[iy]!=1.) legBLFW -> AddEntry(g_cross[iy],Form("%s (x%.0f)",rapArr[iy].Data(),scaleF[iy]),"lp");
+		//else legBLFW -> AddEntry(g_cross[iy],Form("%s",rapArr[iy].Data()),"lp");
 	}
 	if (isLog) legBLFW->Draw();
 
@@ -464,8 +502,8 @@ void draw_cross_pt(bool sysByHand=false, bool noPtWeight=false, bool isScale=tru
 	else gPad->SetLogy(0);
 	//// 1) cross_sys
 	for (Int_t iy = bw_init; iy < nRap; iy++) {
-    if (iy==bw_init) g_cross_sys[iy]->Draw("A2");
-    else g_cross_sys[iy]->Draw("2");
+    if (iy==bw_init) g_cross_sys[iy]->Draw("A5");
+    else g_cross_sys[iy]->Draw("5");
 	}
 	//// 2) cross
 	for (Int_t iy = bw_init; iy < nRap; iy++) {

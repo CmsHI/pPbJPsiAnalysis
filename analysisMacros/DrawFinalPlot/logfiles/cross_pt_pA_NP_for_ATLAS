@@ -1,0 +1,58 @@
+
+Processing draw_cross_pt_integ_middle.C+(0,0,0,0,1,false,193)...
+isPA = 1, and lumi_mub = 34622+-1200
+ *** pileReg = 1.04052
+scaleF[0] = 1
+scaleF[1] = 1
+scaleF[2] = 1
+scaleF[3] = 1
+scaleF[4] = 1
+scaleF[5] = 1
+scaleF[6] = 1
+scaleF[7] = 1
+0th rapArr = 1.5 < y_{CM} < 1.93
+1th rapArr = 0.9 < y_{CM} < 1.5
+2th rapArr = 0 < y_{CM} < 0.9
+3th rapArr = -0.9 < y_{CM} < 0
+4th rapArr = -1.5 < y_{CM} < -0.9
+5th rapArr = -1.93 < y_{CM} < -1.5
+6th rapArr = -2.4 < y_{CM} < -1.93
+7th rapArr = -2.87 < y_{CM} < -2.4
+0th ptArr = 2 < p_{T} < 3 [GeV/c]
+1th ptArr = 3 < p_{T} < 4 [GeV/c]
+2th ptArr = 4 < p_{T} < 5 [GeV/c]
+3th ptArr = 5 < p_{T} < 6.5 [GeV/c]
+4th ptArr = 6.5 < p_{T} < 7.5 [GeV/c]
+5th ptArr = 7.5 < p_{T} < 8.5 [GeV/c]
+6th ptArr = 8.5 < p_{T} < 10 [GeV/c]
+7th ptArr = 10 < p_{T} < 14 [GeV/c]
+8th ptArr = 14 < p_{T} < 30 [GeV/c]
+max rap = 1.93
+1) fw rap bin starts from : 1.5 < y_{CM} < 1.93
+, merging : 0.9 < y_{CM} < 1.5
+, merging : 0 < y_{CM} < 0.9
+2) bw rap bin starts from : -0.9 < y_{CM} < 0
+, merging : -1.5 < y_{CM} < -0.9
+, merging : -1.93 < y_{CM} < -1.5
+::: for excel ::: fwrap_init = 0
+-532	0	 0.0740309
+-532	0	 0.0383861
+-532	0	 0.0244351
+-532	0	 0.0110368
+0.259179	0.00986525	 0.0121725
+0.161291	0.00518779	 0.00337179
+0.102182	0.00280496	 0.00319038
+0.0376411	0.000922092	 0.000910523
+0.00414278	0.000116562	 0.000101639
+::: for excel ::: bwrap_init = 3
+-532	0	 0
+-532	0	 0
+-532	0	 0
+-532	0	 0.00614035
+0.324227	0.015181	 0.010821
+0.196643	0.0071076	 0.00689209
+0.101913	0.00312895	 0.00270059
+0.0402724	0.000922846	 0.000835836
+0.00416552	0.00015995	 0.000101496
+34.6 nb^{-1} (pPb 5.02 TeV)
+34.6 nb^{-1} (pPb 5.02 TeV)

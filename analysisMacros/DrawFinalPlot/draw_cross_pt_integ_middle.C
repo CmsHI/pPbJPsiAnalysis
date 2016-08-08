@@ -7,7 +7,10 @@ void formPtArr(Double_t binmin, Double_t binmax, TString* arr);
 
 void CMS_lumi( TPad* pad, int iPeriod, int iPosX );
 
-void draw_cross_pt_integ_middle(bool sysByHand=false, bool noPtWeight=false, bool isScale=false, bool isLog=false, int isPA = 1, bool isPrompt=false)
+//// maxrap = 193 (0 < y < 1.93) in fwrap, (-1.93 < 0 < 0 ) in bwrap [used for R_FB] 
+/// maxrap = 300 (-1.5 < y < 1.5) in fwrap, (do NOT use bwrap) [used for ATLAS R_pPb]
+/// maxrap = 386 (-1.93 < y < 1.93) in fwrap, (do NOT use bwrap) [used for B R_pPb]
+void draw_cross_pt_integ_middle(bool sysByHand=false, bool noPtWeight=false, bool isScale=false, bool isLog=false, int isPA = 1, bool isPrompt=true, double maxrap=300)
 {
 	gROOT->Macro("./tdrstyle_kyo.C");
   gStyle->SetTitleYOffset(1.38); //KYO
@@ -17,9 +20,10 @@ void draw_cross_pt_integ_middle(bool sysByHand=false, bool noPtWeight=false, boo
 	int iPos=0.;//outOfFrame
 
 	// pileup rejection!!
-	const Double_t pileReg = 128234./123240.;
-	const Double_t pileRegRelErr = 0.23;
-	cout << " *** pileReg = " << pileReg << endl;
+	Double_t pileReg;
+  if (isPA==0) pileReg = 1;
+  else pileReg = 128234./123240.;
+	//const Double_t pileRegRelErr = 0.23;
 
 	//// zvtx correction!!
 	//const Double_t zvtxCor = 1.064; // not used anymore!!
@@ -44,6 +48,7 @@ void draw_cross_pt_integ_middle(bool sysByHand=false, bool noPtWeight=false, boo
     cout << "select among isPA = 0 or 1"<< endl; return ;
   }
 	cout << "isPA = " << isPA << ", and lumi_mub = " << lumi_mub <<"+-" <<lumi_mub_err <<  endl;
+	cout << " *** pileReg = " << pileReg << endl;
 
   //double A_pb =208;
 
@@ -105,8 +110,10 @@ void draw_cross_pt_integ_middle(bool sysByHand=false, bool noPtWeight=false, boo
 		{2.5, 3.5, 4.5, 5.75, 7, 8, 9.25, 12., 22}
 	};
   Double_t ex[nPt] = {0,0,0,0,0,0,0,0,0}; // x stat error
-	Double_t exsys[nPt] = {0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4}; // x sys error
-	Double_t eysysrel[nRap][nPt]; //relative y sys error
+	Double_t exlow[nRap][nPt]; // x binWidth
+  Double_t exhigh[nRap][nPt]; // x binWidth
+  Double_t exsys[nPt] = {0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4}; // x sys error
+	//Double_t eysysrel[nRap][nPt]; //relative y sys error
 	Double_t eysys[nRap][nPt]; //absolute y sys error
 	for (Int_t iy=0; iy<nRap; iy++) {
 	  for (Int_t ipt=0; ipt<nPt; ipt++) {
@@ -161,6 +168,14 @@ void draw_cross_pt_integ_middle(bool sysByHand=false, bool noPtWeight=false, boo
 		formPtArr(ptArrNum[ipt], ptArrNum[ipt+1], &ptArr[ipt]);
 		cout << ipt <<"th ptArr = " << ptArr[ipt] << endl;
 	}
+  
+  //// ex calculation
+  for (Int_t iy=0; iy<nRap; iy++) {
+    for (Int_t ipt=0; ipt<nPt; ipt++) {
+      exlow[iy][ipt] = px[iy][ipt]-ptArrNum[ipt];
+      exhigh[iy][ipt] = ptArrNum[ipt+1]-px[iy][ipt];
+    }
+  }
 
 	//////////////////////////////////////////////////////////////	
 	//// read-in sys. file 
@@ -210,74 +225,64 @@ void draw_cross_pt_integ_middle(bool sysByHand=false, bool noPtWeight=false, boo
 		}
 	}
   //// read sys values from hist	
-	for (Int_t iy = 0; iy < nRap; iy++) {
-		for (int ipt=0; ipt <nPt; ipt ++ ){ 
-			eysysrel[iy][ipt] = h1D_SysErr[iy]->GetBinContent(ipt+1);
-//			cout << "eysysrel["<<iy<<"]["<<ipt<<"] = "<<eysysrel[iy][ipt]<<endl;
-		}
-	}
+	//for (Int_t iy = 0; iy < nRap; iy++) {
+	//	for (int ipt=0; ipt <nPt; ipt ++ ){ 
+	//		eysysrel[iy][ipt] = h1D_SysErr[iy]->GetBinContent(ipt+1);
+	//	}
+	//}
 	
-  //////////////////////////////////////////////////////////////////////////////////////
-	//////////////////////////////////////////////////////////////////////////////////////
-	//// calcualte cross-section = corrY/(dPt*dY*lumi)
-	TH1D* h1D_cross[nRap]; 
-	for (Int_t iy = 0; iy < nRap; iy++) {
-		h1D_cross[iy] = (TH1D*)h1D_CorrY[iy]->Clone(Form("h1D_cross_%d",iy));
-		//// normalization
-		h1D_cross[iy]->Scale(1,"width"); //pT bin 
-		//h1D_cross[iy]->Scale(1./rapBinW[iy]); //rap bin
-		h1D_cross[iy]->Scale(1./1.93); //for ATLAS !!
-		h1D_cross[iy]->Scale(1./lumi_mub); // lumi
-		// h1D_cross[iy]->Scale(1./br); //br
-    // if (isPA==0) h1D_cross[iy]->Scale(A_pb); //// for test
-		// h1D_cross[iy]->Scale(zvtxCor); // z vertex correction	
-    if (isPA==1) h1D_cross[iy]->Scale(pileReg);	// pileup correction
-		h1D_cross[iy]->Scale(scaleF[iy]); // scaling for drawing
-	}
-		
-	//// set values as zero for unused bins
-/*
-	for (Int_t iy = 0; iy < nRap; iy++) {
-		if (iy>=1 && iy<=6) {
-			h1D_cross[iy]->SetBinContent(1,-532);
-			h1D_cross[iy]->SetBinError(1,0);
-			h1D_cross[iy]->SetBinContent(2,-532);
-			h1D_cross[iy]->SetBinError(2,0);
-		}
-		if (iy>=2 && iy<=5) {
-			h1D_cross[iy]->SetBinContent(3,-532);
-			h1D_cross[iy]->SetBinError(3,0);
-		}
-    if (isPA==0) {
-  		if (iy>=2 && iy<=5) {
-	  		h1D_cross[iy]->SetBinContent(4,-532);
-	  		h1D_cross[iy]->SetBinError(4,0);
-	  	}
-    }
-    else {
-  		if (iy>=2 && iy<=4) {
-	  		h1D_cross[iy]->SetBinContent(4,-532);
-	  		h1D_cross[iy]->SetBinError(4,0);
-	  	}
-    }
-	}
-*/
-
-  //// for ATLAS
-  const int tmpPtBin = 4; // < 6.5
-  for (int iy = 0; iy < nRap; iy++) {
-    for (int ipt=0; ipt < tmpPtBin; ipt ++ ){ 
-      h1D_cross[iy]->SetBinContent(ipt+1,-532);
-      h1D_cross[iy]->SetBinError(ipt+1,0);
-    }
-  }
+	//////////////////////////////////////////////////////////////////
 	//////////////////////////////////////////////////////////////////
 	
   //// integrate the rapidity for ATLAS!!!
-  const int fwrap_init = 0;
-  const int bwrap_init = 3;
-  const int bwrap_final = 6;
+  int fwrap_init, bwrap_init, bwrap_final;
+  if (maxrap==193) {
+    if (isPA==0) {
+      fwrap_init = 1; // y_CM = 1.5-1.93
+      bwrap_init = 4; // y_CM = -0.9-0
+      bwrap_final = 7; // y_CM = -1.93--1.5
+    } else {
+      fwrap_init = 0; // y_CM = 1.5-1.93
+      bwrap_init = 3; // y_CM = -0.9-0
+      bwrap_final = 6; // y_CM = -1.93--1.5
+    }
+  } else if (maxrap==150) {
+    if (isPA==0) {
+      fwrap_init = 2; // y_CM = 0.9-1.5
+      bwrap_init = 4; // y_CM = -0.9-0
+      bwrap_final = 6; // y_CM = -1.5--0.9
+    } else {
+      fwrap_init = 1; // y_CM = 0.9-1.5
+      bwrap_init = 3; // y_CM = -0.9-0
+      bwrap_final = 5; // y_CM = -1.5--0.9
+    }
+  } else if (maxrap==300){
+    if (isPA==0) {
+      fwrap_init = 2; // y_CM = 0.9-1.5
+      bwrap_init = 6; // y_CM = -1.5--0.9
+      bwrap_final = nRap; // arbitrary
+    } else {
+      fwrap_init = 1; // y_CM = 0.9-1.5
+      bwrap_init = 5; // y_CM = -1.5-0.9
+      bwrap_final = nRap; // arbitrary
+    }
+  } else if (maxrap==386){ 
+    if (isPA==0) {
+      fwrap_init = 1; // y_CM = 1.5-1.93
+      bwrap_init = 7; // y_CM = -1.93--1.5
+      bwrap_final = nRap; // arbitrary
+    } else {
+      fwrap_init = 0; // y_CM = 1.5-1.93
+      bwrap_init = 6; // y_CM = -1.93--1.5
+      bwrap_final = nRap; // arbitrary 
+    }
+  
+  } else {
+    cout << " *** ERROR : select maxrap among 150 or 193 " << endl; return;
+  }
+  cout << "max rap = " << (maxrap/100.) << endl;
 
+	//////////////////////////////////////////////////////////////////
   //// systematcis
 /*
 	/// find the MAX of sys among rap bins
@@ -295,36 +300,80 @@ void draw_cross_pt_integ_middle(bool sysByHand=false, bool noPtWeight=false, boo
   //// take proper error propagation for sys
   double tmpsys[nRap][nPt];
 	for (int ipt=0; ipt < nPt; ipt ++ ){ 
-    eysysrel[fwrap_init][ipt] = 0;
+    eysys[fwrap_init][ipt] = 0;
 		for (Int_t iy = fwrap_init; iy < bwrap_init; iy++) {
-			tmpsys[iy][ipt] = h1D_SysErr[iy]->GetBinContent(ipt+1);
-		  cout << "fw : " << iy << "th iy, "<<ipt<<"th ipt tmpssys = " << tmpsys[iy][ipt] << endl;
-      eysysrel[fwrap_init][ipt] += tmpsys[iy][ipt]*tmpsys[iy][ipt];
+      //// from relative error to absolute error
+			//tmpsys[iy][ipt] = h1D_SysErr[iy]->GetBinContent(ipt+1);
+			tmpsys[iy][ipt] = h1D_SysErr[iy]->GetBinContent(ipt+1)*h1D_CorrY[iy]->GetBinContent(ipt+1);
+		  //cout << "fw : " << iy << "th iy, "<<ipt<<"th ipt tmpssys = " << tmpsys[iy][ipt] << endl;
+      eysys[fwrap_init][ipt] += tmpsys[iy][ipt]*tmpsys[iy][ipt];
     }
-    eysysrel[fwrap_init][ipt] = TMath::Sqrt(eysysrel[fwrap_init][ipt]);
-    cout << "fw : eysysrel[fwrap_init]["<<ipt<<"] = " << eysysrel[fwrap_init][ipt] << endl;
+    eysys[fwrap_init][ipt] = TMath::Sqrt(eysys[fwrap_init][ipt]);
+    //cout << "fw : eysys[fwrap_init]["<<ipt<<"] = " << eysys[fwrap_init][ipt] << endl;
     
-    eysysrel[bwrap_init][ipt] = 0;
+    eysys[bwrap_init][ipt] = 0;
 		for (Int_t iy = bwrap_init; iy < bwrap_final; iy++) {
-			tmpsys[iy][ipt] = h1D_SysErr[iy]->GetBinContent(ipt+1);
-		  cout << "bw : " << iy << "th iy, "<<ipt<<"th ipt tmpssys = " << tmpsys[iy][ipt] << endl;
-      eysysrel[bwrap_init][ipt] += tmpsys[iy][ipt]*tmpsys[iy][ipt];
+			tmpsys[iy][ipt] = h1D_SysErr[iy]->GetBinContent(ipt+1)*h1D_CorrY[iy]->GetBinContent(ipt+1);
+		  //cout << "bw : " << iy << "th iy, "<<ipt<<"th ipt tmpssys = " << tmpsys[iy][ipt] << endl;
+      eysys[bwrap_init][ipt] += tmpsys[iy][ipt]*tmpsys[iy][ipt];
 		}
-    eysysrel[bwrap_init][ipt] = TMath::Sqrt(eysysrel[bwrap_init][ipt]);
-    cout << "bw : eysysrel[bwrap_init]["<<ipt<<"] = " << eysysrel[bwrap_init][ipt] << endl;
+    eysys[bwrap_init][ipt] = TMath::Sqrt(eysys[bwrap_init][ipt]);
+    //cout << "bw : eysys[bwrap_init]["<<ipt<<"] = " << eysys[bwrap_init][ipt] << endl;
   } 
-  
-  //// merge cross-sections
+  //// rap bin merging
 	cout << "1) fw rap bin starts from : " << rapArr[fwrap_init].Data() << endl;
 	for (Int_t iy = fwrap_init+1; iy < bwrap_init; iy++) {
-		h1D_cross[fwrap_init]->Add(h1D_cross[iy]);
+		h1D_CorrY[fwrap_init]->Add(h1D_CorrY[iy]);
 		cout << ", merging : " << rapArr[iy].Data() << endl; 
 	}
 	cout << "2) bw rap bin starts from : " << rapArr[bwrap_init].Data() << endl;
 	for (Int_t iy = bwrap_init+1; iy < bwrap_final; iy++) {
-		h1D_cross[bwrap_init]->Add(h1D_cross[iy]);
+		h1D_CorrY[bwrap_init]->Add(h1D_CorrY[iy]);
 		cout << ", merging : " << rapArr[iy].Data() << endl; 
 	}
+  
+  //////////////////////////////////////////////////////////////////////////////////////
+	//////////////////////////////////////////////////////////////////////////////////////
+	//// calcualte cross-section = corrY/(dPt*dY*lumi)
+	TH1D* h1D_cross[nRap]; 
+	for (Int_t iy = 0; iy < nRap; iy++) {
+		h1D_cross[iy] = (TH1D*)h1D_CorrY[iy]->Clone(Form("h1D_cross_%d",iy));
+		//// normalization
+		h1D_cross[iy]->Scale(1,"width"); //pT bin 
+		//h1D_cross[iy]->Scale(1./rapBinW[iy]); //rap bin
+		h1D_cross[iy]->Scale(1./(maxrap/100.)); //for ATLAS !!
+		h1D_cross[iy]->Scale(1./lumi_mub); // lumi
+		// h1D_cross[iy]->Scale(1./br); //br
+		// h1D_cross[iy]->Scale(zvtxCor); // z vertex correction	
+    h1D_cross[iy]->Scale(pileReg);	// pileup correction
+		h1D_cross[iy]->Scale(scaleF[iy]); // scaling for drawing
+	}
+	
+  //// syst. nomalization
+  for (Int_t iy=0; iy<nRap; iy++){
+	  for (int ipt=0; ipt < nPt; ipt ++ ){ 
+      eysys[iy][ipt] /= ptBinW[ipt]; //pT bin 
+      //eysys[iy][ipt] /= rapBinW[iy]; //rapbin
+      eysys[iy][ipt] /= (maxrap/100.); //rapbin
+      eysys[iy][ipt] /= lumi_mub; //lumi
+      eysys[iy][ipt] *= pileReg; //pileup correction 
+      eysys[iy][ipt] *= scaleF[iy]; // scaling for drawing
+    } 
+  } 
+  	
+	//// set values as zero for unused bins
+  //// for ATLAS
+  const int tmpPtBin = 4; // < 6.5 GeV
+  for (int iy = 0; iy < nRap; iy++) {
+    for (int ipt=0; ipt < tmpPtBin; ipt ++ ){ 
+      h1D_cross[iy]->SetBinContent(ipt+1,-532);
+      h1D_cross[iy]->SetBinError(ipt+1,0);
+    }
+  }
+
+
+
+
 
   //////////////////////////////////////////////////////////////////
 
@@ -364,12 +413,15 @@ void draw_cross_pt_integ_middle(bool sysByHand=false, bool noPtWeight=false, boo
 		g_cross[iy] = new TGraphAsymmErrors(h1D_cross[iy]);
 		g_cross_sys[iy]->SetName(Form("g_cross_sys_%d",iy));
 		g_cross[iy]->SetName(Form("g_cross_%d",iy));
+    if (iy==fwrap_init) cout << "::: for excel ::: fwrap_init = " << iy << endl;
+    if (iy==bwrap_init) cout << "::: for excel ::: bwrap_init = " << iy << endl;
 		for (Int_t ipt=0; ipt<nPt; ipt++ ){
 			g_cross_sys[iy]->GetPoint(ipt, pxtmp[iy][ipt], pytmp[iy][ipt]);
 			g_cross_sys[iy]->SetPoint(ipt, px[iy][ipt], pytmp[iy][ipt]);
 			//// absolute error calculation 
-			eysys[iy][ipt]=eysysrel[iy][ipt]*pytmp[iy][ipt];
-			g_cross_sys[iy]->SetPointError(ipt, exsys[ipt], exsys[ipt], eysys[iy][ipt], eysys[iy][ipt]);
+			//eysys[iy][ipt]=eysysrel[iy][ipt]*pytmp[iy][ipt];
+			//g_cross_sys[iy]->SetPointError(ipt, exsys[ipt], exsys[ipt], eysys[iy][ipt], eysys[iy][ipt]);
+			g_cross_sys[iy]->SetPointError(ipt, exlow[iy][ipt], exhigh[iy][ipt], eysys[iy][ipt], eysys[iy][ipt]);
 			g_cross[iy]->GetPoint(ipt, pxtmp[iy][ipt], pytmp[iy][ipt]);
 			eytmp[iy][ipt] = g_cross[iy]-> GetErrorY(ipt);
 			g_cross[iy]->SetPoint(ipt, px[iy][ipt], pytmp[iy][ipt]);
@@ -380,16 +432,10 @@ void draw_cross_pt_integ_middle(bool sysByHand=false, bool noPtWeight=false, boo
 			//cout << "stat.["<<iy<<"]["<<ipt<<"] = " << eytmp[iy][ipt]<<endl;
 			//cout << "sys.["<<iy<<"]["<<ipt<<"] = " << eysys[iy][ipt]<<endl;
 		  if (iy==fwrap_init) {
-        cout << "" << endl;
-        cout << "fw cross["<<fwrap_init<<"]["<<ipt<<"] = " << pytmp[fwrap_init][ipt]<<endl;
-  		  cout << "fw stat.["<<fwrap_init<<"]["<<ipt<<"] = " << eytmp[fwrap_init][ipt]<<endl;
-  		  cout << "fw sys.["<<fwrap_init<<"]["<<ipt<<"] = " << eysys[fwrap_init][ipt]<<endl;
+        cout << pytmp[iy][ipt] <<"\t"<<eytmp[iy][ipt] << "\t "<<eysys[iy][ipt]<<endl;
       }
       if (iy==bwrap_init){
-  		  cout << "" << endl;
-        cout << "bw cross["<<bwrap_init<<"]["<<ipt<<"] = " << pytmp[bwrap_init][ipt]<<endl;
-  		  cout << "bw stat.["<<bwrap_init<<"]["<<ipt<<"] = " << eytmp[bwrap_init][ipt]<<endl;
-  		  cout << "bw sys.["<<bwrap_init<<"]["<<ipt<<"] = " << eysys[bwrap_init][ipt]<<endl;
+        cout << pytmp[iy][ipt] <<"\t"<<eytmp[iy][ipt] << "\t "<<eysys[iy][ipt]<<endl;
       }
 		}
 	}
@@ -405,15 +451,24 @@ void draw_cross_pt_integ_middle(bool sysByHand=false, bool noPtWeight=false, boo
 	g_cross_sys[fwrap_init]->GetYaxis()->SetTitle("B x d^{2}#sigma/dp_{T}dy [#mub/(GeV/c)]");
 	g_cross_sys[fwrap_init]->GetYaxis()->CenterTitle("");
 	if (isLog) {
-		g_cross_sys[fwrap_init]->SetMinimum(0.00001);
-    g_cross_sys[fwrap_init]->SetMaximum(1000000.);
+		if (isPrompt) {
+      g_cross_sys[fwrap_init]->SetMinimum(0.0002);
+      g_cross_sys[fwrap_init]->SetMaximum(20.);
+    } else {
+      g_cross_sys[fwrap_init]->SetMinimum(0.0004);
+      g_cross_sys[fwrap_init]->SetMaximum(2.);
+    }
   }
   else {
-    g_cross_sys[fwrap_init]->SetMinimum(0.0);
-    if (isPrompt) g_cross_sys[fwrap_init]->SetMaximum(20);
-    else g_cross_sys[fwrap_init]->SetMaximum(2);
-	  g_cross_sys[fwrap_init]->GetXaxis()->SetLimits(0.0, 30.);
+    if (isPrompt) {
+      g_cross_sys[fwrap_init]->SetMinimum(-0.05);
+      g_cross_sys[fwrap_init]->SetMaximum(1.5);
+    } else {
+      g_cross_sys[fwrap_init]->SetMinimum(-0.01);
+      g_cross_sys[fwrap_init]->SetMaximum(0.4);
+	  }
 	}
+  g_cross_sys[fwrap_init]->GetXaxis()->SetLimits(0.0, 30.);
 	g_cross_sys[fwrap_init]->SetFillColor(kViolet-9);
 	SetGraphStyleFinal(g_cross[fwrap_init],	8,2);
 	g_cross[fwrap_init]->SetMarkerSize(2.1);
@@ -423,15 +478,24 @@ void draw_cross_pt_integ_middle(bool sysByHand=false, bool noPtWeight=false, boo
 	g_cross_sys[bwrap_init]->GetYaxis()->SetTitle("B x d^{2}#sigma/dp_{T}dy [#mub/(GeV/c)]");
 	g_cross_sys[bwrap_init]->GetYaxis()->CenterTitle("");
 	if (isLog) {
-		g_cross_sys[bwrap_init]->SetMinimum(0.00001);
-    g_cross_sys[bwrap_init]->SetMaximum(1000000.);
+		if (isPrompt) {
+      g_cross_sys[bwrap_init]->SetMinimum(0.0002);
+      g_cross_sys[bwrap_init]->SetMaximum(20.);
+    } else {
+      g_cross_sys[bwrap_init]->SetMinimum(0.0004);
+      g_cross_sys[bwrap_init]->SetMaximum(2.);
+    }
   }
   else {
-    g_cross_sys[bwrap_init]->SetMinimum(0.0);
-    if (isPrompt) g_cross_sys[bwrap_init]->SetMaximum(20);
-    else g_cross_sys[bwrap_init]->SetMaximum(2);
-	  g_cross_sys[bwrap_init]->GetXaxis()->SetLimits(0.0, 30.);
+    if (isPrompt) {
+      g_cross_sys[bwrap_init]->SetMinimum(-0.05);
+      g_cross_sys[bwrap_init]->SetMaximum(1.5);
+    } else {
+      g_cross_sys[bwrap_init]->SetMinimum(-0.01);
+      g_cross_sys[bwrap_init]->SetMaximum(0.4);
+	  }
 	}
+	g_cross_sys[bwrap_init]->GetXaxis()->SetLimits(0.0, 30.);
 	g_cross_sys[bwrap_init]->SetFillColor(kViolet-9);
 	SetGraphStyleFinal(g_cross[bwrap_init],	8,2);
 	g_cross[bwrap_init]->SetMarkerSize(2.1);
@@ -454,23 +518,25 @@ void draw_cross_pt_integ_middle(bool sysByHand=false, bool noPtWeight=false, boo
 	else globtex->DrawLatex(0.91, 0.80, "Global uncertainty : 3.5 \%");
 	CMS_lumi( c_fw, isPA, iPos );
 	c_fw->Update();
+/*
   if (isPA==0){
     if (noPtWeight) {
-    	c_fw->SaveAs(Form("plot_cross/pp_fw_cross_pt_integ_middle_isPrompt%d_isLog%d_isScale%d_noPtWeight.pdf",(int)isPrompt,(int)isLog,(int)isScale));
-    	c_fw->SaveAs(Form("plot_cross/pp_fw_cross_pt_integ_middle_isPrompt%d_isLog%d_isScale%d_noPtWeight.png",(int)isPrompt,(int)isLog,(int)isScale));
+    	c_fw->SaveAs(Form("plot_cross/pp_fw_cross_pt_integ_middle_isPrompt%d_isLog%d_isScale%d_maxrap%.0f_noPtWeight.pdf",(int)isPrompt,(int)isLog,(int)isScale,maxrap));
+    	c_fw->SaveAs(Form("plot_cross/pp_fw_cross_pt_integ_middle_isPrompt%d_isLog%d_isScale%d_maxrap%.0f_noPtWeight.png",(int)isPrompt,(int)isLog,(int)isScale,maxrap));
 	  } else {
-    	c_fw->SaveAs(Form("plot_cross/pp_fw_cross_pt_integ_middle_isPrompt%d_isLog%d_isScale%d.pdf",(int)isPrompt,(int)isLog,(int)isScale));
-    	c_fw->SaveAs(Form("plot_cross/pp_fw_cross_pt_integ_middle_isPrompt%d_isLog%d_isScale%d.png",(int)isPrompt,(int)isLog,(int)isScale));
+    	c_fw->SaveAs(Form("plot_cross/pp_fw_cross_pt_integ_middle_isPrompt%d_isLog%d_isScale%d_maxrap%.0f.pdf",(int)isPrompt,(int)isLog,(int)isScale,maxrap));
+    	c_fw->SaveAs(Form("plot_cross/pp_fw_cross_pt_integ_middle_isPrompt%d_isLog%d_isScale%d_maxrap%.0f.png",(int)isPrompt,(int)isLog,(int)isScale,maxrap));
     }
   } else {
     if (noPtWeight) {
-    	c_fw->SaveAs(Form("plot_cross/pA_fw_cross_pt_integ_middle_isPrompt%d_isLog%d_isScale%d_noPtWeight.pdf",(int)isPrompt,(int)isLog,(int)isScale));
-    	c_fw->SaveAs(Form("plot_cross/pA_fw_cross_pt_integ_middle_isPrompt%d_isLog%d_isScale%d_noPtWeight.png",(int)isPrompt,(int)isLog,(int)isScale));
+    	c_fw->SaveAs(Form("plot_cross/pA_fw_cross_pt_integ_middle_isPrompt%d_isLog%d_isScale%d_maxrap%.0f_noPtWeight.pdf",(int)isPrompt,(int)isLog,(int)isScale,maxrap));
+    	c_fw->SaveAs(Form("plot_cross/pA_fw_cross_pt_integ_middle_isPrompt%d_isLog%d_isScale%d_maxrap%.0f_noPtWeight.png",(int)isPrompt,(int)isLog,(int)isScale,maxrap));
 	  } else {
-    	c_fw->SaveAs(Form("plot_cross/pA_fw_cross_pt_integ_middle_isPrompt%d_isLog%d_isScale%d.pdf",(int)isPrompt,(int)isLog,(int)isScale));
-    	c_fw->SaveAs(Form("plot_cross/pA_fw_cross_pt_integ_middle_isPrompt%d_isLog%d_isScale%d.png",(int)isPrompt,(int)isLog,(int)isScale));
+    	c_fw->SaveAs(Form("plot_cross/pA_fw_cross_pt_integ_middle_isPrompt%d_isLog%d_isScale%d_maxrap%.0f.pdf",(int)isPrompt,(int)isLog,(int)isScale,maxrap));
+    	c_fw->SaveAs(Form("plot_cross/pA_fw_cross_pt_integ_middle_isPrompt%d_isLog%d_isScale%d_maxrap%.0f.png",(int)isPrompt,(int)isLog,(int)isScale,maxrap));
     }
   }
+*/
   legBLFW->Clear();
 	
   ////////  Backward
@@ -491,23 +557,25 @@ void draw_cross_pt_integ_middle(bool sysByHand=false, bool noPtWeight=false, boo
 	else globtex->DrawLatex(0.91, 0.80, "Global uncertainty : 3.5 \%");
 	CMS_lumi( c_bw, isPA, iPos );
 	c_bw->Update();
+/*
   if (isPA==0){
     if (noPtWeight) {
-    	c_bw->SaveAs(Form("plot_cross/pp_bw_cross_pt_integ_middle_isPrompt%d_isLog%d_isScale%d_noPtWeight.pdf",(int)isPrompt,(int)isLog,(int)isScale));
-    	c_bw->SaveAs(Form("plot_cross/pp_bw_cross_pt_integ_middle_isPrompt%d_isLog%d_isScale%d_noPtWeight.png",(int)isPrompt,(int)isLog,(int)isScale));
+    	c_bw->SaveAs(Form("plot_cross/pp_bw_cross_pt_integ_middle_isPrompt%d_isLog%d_isScale%d_maxrap%.0f_noPtWeight.pdf",(int)isPrompt,(int)isLog,(int)isScale,maxrap));
+    	c_bw->SaveAs(Form("plot_cross/pp_bw_cross_pt_integ_middle_isPrompt%d_isLog%d_isScale%d_maxrap%.0f_noPtWeight.png",(int)isPrompt,(int)isLog,(int)isScale,maxrap));
 	  } else {
-    	c_bw->SaveAs(Form("plot_cross/pp_bw_cross_pt_integ_middle_isPrompt%d_isLog%d_isScale%d.pdf",(int)isPrompt,(int)isLog,(int)isScale));
-    	c_bw->SaveAs(Form("plot_cross/pp_bw_cross_pt_integ_middle_isPrompt%d_isLog%d_isScale%d.png",(int)isPrompt,(int)isLog,(int)isScale));
+    	c_bw->SaveAs(Form("plot_cross/pp_bw_cross_pt_integ_middle_isPrompt%d_isLog%d_isScale%d_maxrap%.0f.pdf",(int)isPrompt,(int)isLog,(int)isScale,maxrap));
+    	c_bw->SaveAs(Form("plot_cross/pp_bw_cross_pt_integ_middle_isPrompt%d_isLog%d_isScale%d_maxrap%.0f.png",(int)isPrompt,(int)isLog,(int)isScale,maxrap));
     }
   } else {
     if (noPtWeight) {
-    	c_bw->SaveAs(Form("plot_cross/pA_bw_cross_pt_integ_middle_isPrompt%d_isLog%d_isScale%d_noPtWeight.pdf",(int)isPrompt,(int)isLog,(int)isScale));
-    	c_bw->SaveAs(Form("plot_cross/pA_bw_cross_pt_integ_middle_isPrompt%d_isLog%d_isScale%d_noPtWeight.png",(int)isPrompt,(int)isLog,(int)isScale));
+    	c_bw->SaveAs(Form("plot_cross/pA_bw_cross_pt_integ_middle_isPrompt%d_isLog%d_isScale%d_maxrap%.0f_noPtWeight.pdf",(int)isPrompt,(int)isLog,(int)isScale,maxrap));
+    	c_bw->SaveAs(Form("plot_cross/pA_bw_cross_pt_integ_middle_isPrompt%d_isLog%d_isScale%d_maxrap%.0f_noPtWeight.png",(int)isPrompt,(int)isLog,(int)isScale,maxrap));
 	  } else {
-    	c_bw->SaveAs(Form("plot_cross/pA_bw_cross_pt_integ_middle_isPrompt%d_isLog%d_isScale%d.pdf",(int)isPrompt,(int)isLog,(int)isScale));
-    	c_bw->SaveAs(Form("plot_cross/pA_bw_cross_pt_integ_middle_isPrompt%d_isLog%d_isScale%d.png",(int)isPrompt,(int)isLog,(int)isScale));
+    	c_bw->SaveAs(Form("plot_cross/pA_bw_cross_pt_integ_middle_isPrompt%d_isLog%d_isScale%d_maxrap%.0f.pdf",(int)isPrompt,(int)isLog,(int)isScale,maxrap));
+    	c_bw->SaveAs(Form("plot_cross/pA_bw_cross_pt_integ_middle_isPrompt%d_isLog%d_isScale%d_maxrap%.0f.png",(int)isPrompt,(int)isLog,(int)isScale,maxrap));
     }
   }
+*/
 	legBLBW->Clear();
   	
 	///////////////////////////////////////////////////////////////////
@@ -515,15 +583,15 @@ void draw_cross_pt_integ_middle(bool sysByHand=false, bool noPtWeight=false, boo
 	TFile *outFile;
   if (isPA==0) {
     if (noPtWeight) {
-      outFile = new TFile(Form("plot_cross/pp_cross_pt_integ_middle_isPrompt%d_isLog%d_isScale%d_noPtWeight.root",(int)isPrompt,(int)isLog,(int)isScale),"RECREATE");
+      outFile = new TFile(Form("plot_cross/pp_cross_pt_integ_middle_isPrompt%d_isLog%d_isScale%d_maxrap%.0f_noPtWeight.root",(int)isPrompt,(int)isLog,(int)isScale,maxrap),"RECREATE");
     } else {
-      outFile = new TFile(Form("plot_cross/pp_cross_pt_integ_middle_isPrompt%d_isLog%d_isScale%d.root",(int)isPrompt,(int)isLog,(int)isScale),"RECREATE");
+      outFile = new TFile(Form("plot_cross/pp_cross_pt_integ_middle_isPrompt%d_isLog%d_isScale%d_maxrap%.0f.root",(int)isPrompt,(int)isLog,(int)isScale,maxrap),"RECREATE");
     }
   }else {
     if (noPtWeight) {
-      outFile = new TFile(Form("plot_cross/pA_cross_pt_integ_middle_isPrompt%d_isLog%d_isScale%d_noPtWeight.root",(int)isPrompt,(int)isLog,(int)isScale),"RECREATE");
+      outFile = new TFile(Form("plot_cross/pA_cross_pt_integ_middle_isPrompt%d_isLog%d_isScale%d_maxrap%.0f_noPtWeight.root",(int)isPrompt,(int)isLog,(int)isScale,maxrap),"RECREATE");
     } else {
-      outFile = new TFile(Form("plot_cross/pA_cross_pt_integ_middle_isPrompt%d_isLog%d_isScale%d.root",(int)isPrompt,(int)isLog,(int)isScale),"RECREATE");
+      outFile = new TFile(Form("plot_cross/pA_cross_pt_integ_middle_isPrompt%d_isLog%d_isScale%d_maxrap%.0f.root",(int)isPrompt,(int)isLog,(int)isScale,maxrap),"RECREATE");
     }
   }
 
