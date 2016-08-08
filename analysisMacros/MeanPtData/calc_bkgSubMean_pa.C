@@ -61,19 +61,19 @@ int calc_bkgSubMean_pa(){
 	TFile *fIn[Nfile];
   for(int ifile = 0; ifile<Nfile; ifile++)
   {
-    fIn[ifile]  = new TFile(Form("./dir_meanPt_n20_3pt/pa_meanPt_3pt_wBkg_%d.root",ifile)); //newres && nbin=20
+    fIn[ifile]  = new TFile(Form("./dir_meanPt_n20_9pt/pa_meanPt_9pt_wBkg_%d.root",ifile)); //newres && nbin=20
   }
 //	TFile *fIn = new TFile("./dir_meanPt_cndr_n100_8rap9pt/meanPt_8rap9pt_wBkg.root"); //newres && nbin=100
 
 	/////////////////////////////////////////////////////////////	
 	////////////// binning	
-	//Double_t ptArr[] = {2.0, 3.0, 4.0, 5.0, 6.5, 7.5, 8.5, 10.0, 14.0, 30.0}; // 8rap9pt
-	Double_t ptArr[] = {5.0, 6.0, 10.0, 30.0}; // 8rap3pt
+	Double_t ptArr[] = {2.0, 3.0, 4.0, 5.0, 6.5, 7.5, 8.5, 10.0, 14.0, 30.0}; // 8rap9pt
+	//Double_t ptArr[] = {5.0, 6.5, 7.5, 8.5, 10.0, 14.0, 30.0}; // 8rap3pt
 	const Int_t nPt = sizeof(ptArr)/sizeof(double)-1;
 	cout << "nPt=" << nPt << endl;	
 	// in Ycm (will be change to 1st lab and 2nd lab later)
-	//Double_t yArr[] = {-2.4, -1.97, -1.37, -0.47, 0.43, 1.03, 1.46, 1.93, 2.4}; // 8rap9pt
-	Double_t yArr[] = {-2.4, -1.97, -1.37, -0.47, 0.47, 1.03, 1.46}; // 8rap9pt
+	Double_t yArr[] = {-2.4, -1.97, -1.37, -0.47, 0.43, 1.03, 1.46, 1.93, 2.4}; // 8rap9pt
+	//Double_t yArr[] = {-2.4, -1.97, -1.37, -0.47, 0.43, 1.03, 1.46}; // 8rap9pt
 	const Int_t nRap = sizeof(yArr)/sizeof(double)-1;
 	cout << "nRap=" << nRap << endl;
 	string rapstrArr[nRap];
@@ -132,21 +132,21 @@ int calc_bkgSubMean_pa(){
         hMeanPtBkg[in][ir][ipt] -> Scale(0.8);
         hMeanPt[in][ir][ipt] -> Add(hMeanPtBkg[in][ir][ipt],-1);
 
-        if(nPt==9) MeanVal[in][ir][ipt] = hMeanPt[in][ir][ipt]->GetMean(1);      
+       // if(nPt==9) MeanVal[in][ir][ipt] = hMeanPt[in][ir][ipt]->GetMean(1);      
 
       }
     }
   } 
 
-  if(nPt==3)
+  if(nPt==3 || nPt==9)
   {
     for(int in=0;in<nEt;in++)
     {
-      for(int ir=0;ir<nRap/2;ir++)
+      for(int ir=0;ir<3;ir++)
       {
         for(int ipt=0;ipt<nPt;ipt++)
         {
-          hMeanPt[in][ir][ipt]->Add(hMeanPt[in][nRap-1-ir][ipt],1);
+          hMeanPt[in][ir][ipt]->Add(hMeanPt[in][6-1-ir][ipt],1);
           MeanVal[in][ir][ipt] = hMeanPt[in][ir][ipt]->GetMean(1);  
         }
       }
@@ -155,6 +155,8 @@ int calc_bkgSubMean_pa(){
 
   int nRapc = nRap;
   if(nPt==3) nRapc=nRap/2;
+  if(nPt==9) nRapc=nRap/2;
+  nRapc=3;
   for(int in=0;in<nEt;in++)
   {
    for(int ir=0; ir<nRapc; ir++)
@@ -165,8 +167,8 @@ int calc_bkgSubMean_pa(){
       if(ipt!=nPt-1) cout << MeanVal[in][ir][ipt] << ", ";
       else if(ipt==nPt-1) cout << MeanVal[in][ir][ipt];
     }
-      if(ir!=nRap-1) cout << "}," << endl;
-      else if(ir==nRap-1) cout << "}" << endl;
+      if(ir!=nRapc-1) cout << "}," << endl;
+      else if(ir==nRapc-1) cout << "}" << endl;
    }
   }
   
