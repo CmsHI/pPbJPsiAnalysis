@@ -50,7 +50,7 @@ TF1* hTnp_pp_new_eta5 = (TF1*)fTnp_pp_new->Get("func_5");
 ////// useSF : true=useTNPSF, false=no
 //////////////////////////////////////////////////////////////////////////////////  
 
-int rootAna_efficiency(int MrapNpt = 89, int isPA =1, int accCutType = 2, bool isPrompt = true, bool useZvtxWeight =true, bool useSF=true)
+int rootAna_efficiency(int MrapNpt = 89, int isPA =0, int accCutType = 2, bool isPrompt = true, bool useZvtxWeight =false, bool useSF=false)
 {
   using namespace std;
   int initev =0;
