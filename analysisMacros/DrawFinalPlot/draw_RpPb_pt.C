@@ -196,36 +196,30 @@ void draw_RpPb_pt(bool sysByHand=false, bool noPtWeight=false, bool isPrompt=tru
   TGraphAsymmErrors* g_RpPb[nRapRpPb];
    
   for (Int_t iy = 0; iy < nRapRpPb; iy++) { 
-  //for (Int_t iy = 0; iy < 1; iy++) { 
     //g_RpPb_sys[iy] = new TGraphAsymmErrors(nPt, px_pA[iy], pytmp[iy], exsys, exsys, eysys[iy], eysys[iy]);
     g_RpPb_sys[iy] = new TGraphAsymmErrors(nPt, px_pA[iy], pytmp[iy], exlow[iy], exhigh[iy], eysys[iy], eysys[iy]);
     g_RpPb[iy] = new TGraphAsymmErrors(nPt, px_pA[iy], pytmp[iy], ex, ex, eytmp[iy], eytmp[iy]);
-    //g_RpPb[iy] = new TGraphAsymmErrors(nPt, px_pA[iy], pytmp[iy], exlow[iy], exhigh[iy], eytmp[iy], eytmp[iy]);
 		g_RpPb_sys[iy] -> SetName(Form("g_RpPb_sys_%d",iy));
 		g_RpPb[iy] -> SetName(Form("g_RpPb_%d",iy));
     g_RpPb_sys[iy]->GetXaxis()->SetTitle("p_{T} [GeV/c]");
     g_RpPb_sys[iy]->GetXaxis()->SetTitleOffset(0.9);
-    if (iy==0 || iy==3) {
-      g_RpPb_sys[iy]->GetXaxis()->SetTitleSize(0.067);
-      g_RpPb_sys[iy]->GetXaxis()->SetTitleOffset(1.0);
-      g_RpPb_sys[iy]->GetXaxis()->SetLabelSize(0.05);
-      g_RpPb_sys[iy]->GetXaxis()->SetLabelOffset(0.003);
-    } else {
-      g_RpPb_sys[iy]->GetXaxis()->SetTitleSize(0.075);
-      g_RpPb_sys[iy]->GetXaxis()->SetLabelSize(0.06);
-      g_RpPb_sys[iy]->GetXaxis()->SetLabelOffset(0.004);
-    }
+    g_RpPb_sys[iy]->GetXaxis()->SetTitleSize(0.075);
+    g_RpPb_sys[iy]->GetXaxis()->SetLabelSize(0.06);
+    g_RpPb_sys[iy]->GetXaxis()->SetLabelOffset(0.004);
     g_RpPb_sys[iy]->GetXaxis()->CenterTitle();
-    g_RpPb_sys[iy]->GetYaxis()->SetTitle("R_{pPb}");
-    g_RpPb_sys[iy]->GetYaxis()->SetTitleOffset(1.1);
-    g_RpPb_sys[iy]->GetYaxis()->SetTitleSize(0.075);
-    g_RpPb_sys[iy]->GetYaxis()->SetLabelSize(0.055);
-    g_RpPb_sys[iy]->GetYaxis()->CenterTitle();
-    g_RpPb_sys[iy]->GetXaxis()->SetLimits(0.,31.0);
+    if (iy==2 || iy==3) {
+      g_RpPb_sys[iy]->GetYaxis()->SetTitle("R_{pPb}");
+      g_RpPb_sys[iy]->GetYaxis()->SetTitleOffset(1.1);
+      g_RpPb_sys[iy]->GetYaxis()->SetTitleSize(0.075);
+      g_RpPb_sys[iy]->GetYaxis()->SetLabelSize(0.055);
+      g_RpPb_sys[iy]->GetYaxis()->CenterTitle();
+    } else {
+      g_RpPb_sys[iy]->GetYaxis()->SetTitleSize(0.0);
+      g_RpPb_sys[iy]->GetYaxis()->SetLabelSize(0.0);
+    }
+    g_RpPb_sys[iy]->GetXaxis()->SetLimits(0.,32.0);
     g_RpPb_sys[iy]->SetMinimum(0.0);
     g_RpPb_sys[iy]->SetMaximum(1.8);
-//    g_RpPb_sys[iy]->SetMinimum(0.4);
-//    g_RpPb_sys[iy]->SetMaximum(1.6);
   } 
 
   g_RpPb_sys[0]->SetFillColor(kGreen-10);
@@ -243,15 +237,7 @@ void draw_RpPb_pt(bool sysByHand=false, bool noPtWeight=false, bool isPrompt=tru
   g_RpPb_sys[4]->SetLineColor(kPink-6);
   g_RpPb_sys[5]->SetLineColor(kGreen+3);
   g_RpPb_sys[6]->SetLineColor(kViolet-6);
- /* 
-  g_RpPb_sys[0]->SetFillColor(kWhite);
-  g_RpPb_sys[1]->SetFillColor(kWhite);
-  g_RpPb_sys[2]->SetFillColor(kWhite);
-  g_RpPb_sys[3]->SetFillColor(kWhite);
-  g_RpPb_sys[4]->SetFillColor(kWhite);
-  g_RpPb_sys[5]->SetFillColor(kWhite);
-  g_RpPb_sys[6]->SetFillColor(kWhite);
-  */
+  
   SetGraphStyleFinal(g_RpPb[0],  0,5);
   g_RpPb[0]->SetMarkerSize(1.8);
   SetGraphStyleFinal(g_RpPb[1],  1,3);
@@ -270,12 +256,12 @@ void draw_RpPb_pt(bool sysByHand=false, bool noPtWeight=false, bool isPrompt=tru
   //////////////////////////////////////////////////////////////////
   //// draw
 
-	TLegend *legBRFW = new TLegend(0.50, 0.17, 0.70, 0.38);
-	SetLegendStyle(legBRFW);
-	legBRFW->SetTextSize(0.05);
-	TLegend *legBRBW = new TLegend(0.50, 0.17, 0.70, 0.45);
-	SetLegendStyle(legBRBW);
-	legBRBW->SetTextSize(0.05);
+	//TLegend *legBRFW = new TLegend(0.50, 0.17, 0.70, 0.38);
+	//SetLegendStyle(legBRFW);
+	//legBRFW->SetTextSize(0.05);
+	//TLegend *legBRBW = new TLegend(0.50, 0.17, 0.70, 0.45);
+	//SetLegendStyle(legBRBW);
+	//legBRBW->SetTextSize(0.05);
 	 	
 	TLatex* globtex = new TLatex();
 	globtex->SetNDC();
@@ -285,123 +271,84 @@ void draw_RpPb_pt(bool sysByHand=false, bool noPtWeight=false, bool isPrompt=tru
 	globtex->SetTextSize(0.075);
 
   //// Draw 
-	TBox* emptybox = new TBox(0.0, 0.0, 0.97, 0.86);
+	//TBox* emptybox = new TBox(0.0, 0.0, 0.97, 0.86);
+	TBox* emptybox = new TBox(0.0, 0.0, 1.0, 0.86);
 	emptybox->SetFillColor(kWhite);
 	emptybox->SetFillStyle(4000);
 	emptybox->SetLineColor(kBlack);
 	emptybox->SetLineWidth(1);
   
-  //TCanvas* c_all = new TCanvas("c_all","c_all",1050,600);
-  TCanvas* c_all = new TCanvas("c_all","c_all",1200,700);
-  c_all->Divide(4,2);
-  TVirtualPad* pad_all[nRap]; // 8 pads
-  pad_all[0] = new TPad("pad_all_0", "",0, 0.506, 0.29, 1);
-  pad_all[1] = new TPad("pad_all_1", "",0.29, 0.506, 0.52, 1);
-  pad_all[2] = new TPad("pad_all_2", "",0.52, 0.506, 0.75, 1);
-  pad_all[3] = new TPad("pad_all_3", "",0.75, 0.506, 0.99, 1);
-  pad_all[4] = new TPad("pad_all_4", "",0, 0.0, 0.29, 0.506);
-  pad_all[5] = new TPad("pad_all_5", "",0.29, 0.0, 0.52, 0.506);
-  pad_all[6] = new TPad("pad_all_6", "",0.52, 0.0, 0.75, 0.506);
-  pad_all[7] = new TPad("pad_all_7", "",0.75, 0.0, 0.99, 0.506);
-  for (Int_t iy = 0; iy < nRap; iy++) { 
+  //TCanvas* c_all = new TCanvas("c_all","c_all",1200,700);
+  //TCanvas* c_all = new TCanvas("c_all","c_all",1200,650);
+  TCanvas* c_all = new TCanvas("c_all","c_all",1200,680);
+  //CMS_lumi( c_all, isPA, iPos );
+  c_all->Divide(5,2);
+  const int nPad = 10;
+  double xmargin = 0.00;
+  double ymargin = 0.00;
+  double xpad0 = 0.060;
+  double xpadw = 0.233;
+  TVirtualPad* pad_all[nPad]; // 2 pads for y axis, 8 pads for actual plots
+  pad_all[0] = new TPad("pad_all_0", "",0, 0.506, xpad0, 1.0);
+  pad_all[1] = new TPad("pad_all_1", "",xpad0, 0.506, xpad0+xpadw, 1.0);
+  pad_all[2] = new TPad("pad_all_2", "",xpad0+xpadw, 0.506, xpad0+2*xpadw, 1.0);
+  pad_all[3] = new TPad("pad_all_3", "",xpad0+2*xpadw, 0.506, xpad0+3*xpadw, 1.0);
+  pad_all[4] = new TPad("pad_all_4", "",xpad0+3*xpadw, 0.506, xpad0+4*xpadw, 1.0);
+  pad_all[5] = new TPad("pad_all_5", "",0, 0.0, xpad0, 0.506);
+  pad_all[6] = new TPad("pad_all_6", "",xpad0, 0.0, xpad0+xpadw, 0.506);
+  pad_all[7] = new TPad("pad_all_7", "",xpad0+xpadw, 0.0, xpad0+2*xpadw, 0.506);
+  pad_all[8] = new TPad("pad_all_8", "",xpad0+2*xpadw, 0.0, xpad0+3*xpadw, 0.506);
+  pad_all[9] = new TPad("pad_all_9", "",xpad0+3*xpadw, 0.0, xpad0+4*xpadw, 0.506);
+  //pad_all[5] = new TPad("pad_all_5", "",0, 0.0, 0.07, 0.506);
+  //pad_all[6] = new TPad("pad_all_6", "",0.07, 0.0, 0.293, 0.506);
+  //pad_all[7] = new TPad("pad_all_7", "",0.293, 0.0, 0.526, 0.506);
+  //pad_all[8] = new TPad("pad_all_8", "",0.526, 0.0, 0.759, 0.506);
+  //pad_all[9] = new TPad("pad_all_9", "",0.759, 0.0, 0.992, 0.506);
+  double topmargin = 0.14;
+  double bottommargin = 0.161;
+  for (Int_t iy = 0; iy < nPad; iy++) { 
     pad_all[iy]->Draw();
-    if (iy<=3) { 
-      pad_all[iy]->SetTopMargin(0.14); 
+    if (iy<=4) { 
+      pad_all[iy]->SetTopMargin(topmargin); 
       pad_all[iy]->SetBottomMargin(0.0); 
     }
     else { 
       pad_all[iy]->SetTopMargin(0.0); 
-      pad_all[iy]->SetBottomMargin(0.161); 
+      pad_all[iy]->SetBottomMargin(bottommargin); 
     }
-    if (iy==0 || iy==4) { pad_all[iy]->SetLeftMargin(0.20);}
+    if (iy==0 || iy==5) { 
+      //pad_all[iy]->SetLeftMargin(0.20);
+      //pad_all[iy]->IsTransparent();
+      pad_all[iy]->SetFillStyle(4000);
+      pad_all[iy]->SetFrameFillStyle(4000);
+      //pad_all[iy]->SetFillColorAlpha(kWhite,1.);
+    }
     else {pad_all[iy]->SetLeftMargin(0.0);}
-    if (!(iy==3 || iy==7)) { pad_all[iy]->SetRightMargin(0.0);}
+    if (!(iy==4 || iy==9)) { pad_all[iy]->SetRightMargin(0.0);}
+    pad_all[iy]->SetLeftMargin(0.0);
+    pad_all[iy]->SetRightMargin(0.0);
   }
-/*
-  for (Int_t iy = 0; iy < nRap; iy++) { 
-    pad_all[iy] = c_all->cd(iy+1);
-    if (iy<=3) { pad_all[iy]->SetBottomMargin(0.0); }
-    else { pad_all[iy]->SetTopMargin(0.0); }
-    if (!(iy==0 || iy==4)) { pad_all[iy]->SetLeftMargin(0.0);}
-    if (!(iy==3 || iy==7)) { pad_all[iy]->SetRightMargin(0.0);}
-  }
-*/  
+
   for (Int_t iy = 0; iy < nRapRpPb; iy++) { 
-//    if (iy< 3) pad_all[iy]->cd();
     //// reverse the order for forward
-    if (iy==0) pad_all[2]->cd();
-    else if (iy==1) pad_all[1]->cd();
-    else if (iy==2) pad_all[0]->cd();
-    else pad_all[iy+1]->cd();
-    //g_RpPb_sys[iy]->Draw("A2");
+    if (iy==0) pad_all[3]->cd();
+    else if (iy==1) pad_all[2]->cd();
+    else if (iy==2) pad_all[1]->cd();
+    else pad_all[iy+3]->cd();
     g_RpPb_sys[iy]->Draw("A5");
     g_RpPb[iy]->Draw("P");
-    dashedLine(0.,1.,31.,1.,1,1);
+    dashedLine(0.,1.,32.,1.,1,1);
     globtex->SetTextAlign(32); //3:right 2:vertical center
 	  globtex->SetTextFont(42);
-	  //if (iy==0 || iy==3) globtex->SetTextSize(0.063);
-	  if (iy==2 || iy==3) globtex->SetTextSize(0.063);
-	  else globtex->SetTextSize(0.078);
+	  //if (iy==2 || iy==3) globtex->SetTextSize(0.063);
+	  //else globtex->SetTextSize(0.078);
+	  globtex->SetTextSize(0.078);
     if (iy<3) globtex->DrawLatex(0.9, 0.09, rapArr[iy].Data());
-    else globtex->DrawLatex(0.9, 0.24, rapArr[iy].Data());
+    else globtex->DrawLatex(0.9, 0.25, rapArr[iy].Data());
   }
-  pad_all[3]->cd();
+  pad_all[4]->cd();
   emptybox->Draw("l");
 
-  
-	TLegendEntry *leFW1=legBRFW->AddEntry("leFW1",Form("  %s", rapArr[0].Data()),"lpf");
-	leFW1->SetFillColor(kTeal-9);
-	leFW1->SetFillStyle(1001);
-	leFW1->SetLineColor(kGreen+3);
-	leFW1->SetMarkerStyle(kFullDiamond);
-	leFW1->SetMarkerColor(kGreen+3);
-	leFW1->SetMarkerSize(3.3);
-	TLegendEntry *leFW2=legBRFW->AddEntry("leFW2",Form("  %s", rapArr[1].Data()),"lpf");
-	leFW2->SetFillColor(kRed-10);
-	leFW2->SetFillStyle(1001);
-	leFW2->SetLineColor(kPink-6);
-	leFW2->SetMarkerStyle(kFullSquare);
-	leFW2->SetMarkerColor(kPink-6);
-	leFW2->SetMarkerSize(2.1);
-	TLegendEntry *leFW3=legBRFW->AddEntry("leFW3",Form("  %s", rapArr[2].Data()),"lpf");
-	leFW3->SetFillColor(kAzure-9);
-	leFW3->SetFillStyle(1001);
-	leFW3->SetLineColor(kBlue-3);
-	leFW3->SetMarkerStyle(kFullCircle);
-	leFW3->SetMarkerColor(kBlue-3);
-	leFW3->SetMarkerSize(2.1);
-	TLegendEntry *leBW1=legBRBW->AddEntry("leBW1",Form("  %s", rapArr[3].Data()),"lpf");
-	leBW1->SetFillColor(kAzure-9);
-	leBW1->SetFillStyle(1001);
-	leBW1->SetLineColor(kBlue-3);
-	leBW1->SetMarkerStyle(kFullCircle);
-	leBW1->SetMarkerColor(kBlue-3);
-	leBW1->SetMarkerSize(2.1);
-	TLegendEntry *leBW2=legBRBW->AddEntry("leBW2",Form("  %s", rapArr[4].Data()),"lpf");
-	leBW2->SetFillColor(kRed-10);
-	leBW2->SetFillStyle(1001);
-	leBW2->SetLineColor(kPink-6);
-	leBW2->SetMarkerStyle(kFullSquare);
-	leBW2->SetMarkerColor(kPink-6);
-	leBW2->SetMarkerSize(2.1);
-	TLegendEntry *leBW3=legBRBW->AddEntry("leBW3",Form("  %s", rapArr[5].Data()),"lpf");
-	leBW3->SetFillColor(kTeal-9);
-	leBW3->SetFillStyle(1001);
-	leBW3->SetLineColor(kGreen+3);
-	leBW3->SetMarkerStyle(kFullDiamond);
-	leBW3->SetMarkerColor(kGreen+3);
-	leBW3->SetMarkerSize(3.3);
-	TLegendEntry *leBW4=legBRBW->AddEntry("leBW4",Form("  %s", rapArr[6].Data()),"lpf");
-	leBW4->SetFillColor(kViolet-9);
-	leBW4->SetFillStyle(1001);
-	leBW4->SetLineColor(kViolet-6);
-	leBW4->SetMarkerStyle(kFullCircle);
-	leBW4->SetMarkerColor(kViolet-6);
-	leBW4->SetMarkerSize(2.1);
-
-	//legBRFW->Draw();
-	//legBRBW->Draw();
-	
 	globtex->SetTextAlign(12); //1:left, 2:vertical center
   globtex->SetTextSize(0.09);
 	globtex->SetTextFont(42);
@@ -412,22 +359,49 @@ void draw_RpPb_pt(bool sysByHand=false, bool noPtWeight=false, bool isPrompt=tru
 	globtex->SetTextFont(42);
   globtex->DrawLatex(0.08, 0.18, "Global uncertainty : 5.3 \%");
 
-/*
-  // lumiText here
-    lumiTextTmp = "pPb ";
-    lumiTextTmp += lumi_pPb502TeV;
-    globtex->DrawLatex(0.41, 0.44, lumiTextTmp);
-    lumiTextTmp = ", pp ";
-    lumiTextTmp += lumi_pp502TeV;
-    globtex->DrawLatex(0.41, 0.34, lumiTextTmp);
-    lumiText = " (5.02 TeV)";
-    globtex->DrawLatex(0.41, 0.24, lumiTextTmp);
-*/	
+
+  //////////////////// y axis
+      //g_RpPb_sys[iy]->GetYaxis()->SetTitle("R_{pPb}");
+      //g_RpPb_sys[iy]->GetYaxis()->SetTitleOffset(1.1);
+      //g_RpPb_sys[iy]->GetYaxis()->SetTitleSize(0.075);
+      //g_RpPb_sys[iy]->GetYaxis()->SetLabelSize(0.055);
+  //// 1) Forward 
+  cout << pad_all[1]->GetUxmin() << endl;
+  cout << pad_all[1]->GetUxmax() << endl;
+  pad_all[0]->cd();
+  //cout << g_RpPb_sys[2]->GetYaxis()->GetXmin() << endl;
+  TGaxis *yaxis01 = new TGaxis(1.0,0.0,1.0,1.0-topmargin,0.0,1.8,510,"");
+  yaxis01->SetTitleFont(42);
+  yaxis01->SetLabelFont(42);
+  yaxis01->SetTitle("R_{pPb}");
+  yaxis01->SetTitleOffset(1.1);
+  yaxis01->CenterTitle(1);
+  yaxis01->SetTitleSize(0.075*(0.29/0.07));
+  yaxis01->SetLabelSize(0.055*(0.29/0.07));
+  yaxis01->Draw();  
+  
+  TGaxis *yaxis02 = new TGaxis(1.0,0.0+bottommargin,1.0,1.0,0.0,1.8,510,"");
+  yaxis02->SetTitleFont(42);
+  yaxis02->SetLabelFont(42);
+  yaxis02->SetTitle("R_{pPb}");
+  yaxis02->SetTitleOffset(1.1);
+  yaxis02->CenterTitle(1);
+  yaxis02->SetTitleSize(0.075*(0.29/0.07));
+  yaxis02->SetLabelSize(0.055*(0.29/0.07));
+  pad_all[5]->cd();
+  yaxis02->Draw();  
+
+  c_all->cd();
+  globtex->SetTextColor(kRed);
+	globtex->SetTextSize(0.1);
+  globtex->DrawLatex(0.5, 0.5, "XIA");
+
+  
 
   CMS_lumi( c_all, isPA, iPos );
 	c_all->Update();
 	c_all->Modified();
-
+  
   if (noPtWeight) { 
     c_all->SaveAs(Form("plot_RpPb/all_RpPb_pt_isPrompt%d_noPtWeight.pdf",(int)isPrompt));
     c_all->SaveAs(Form("plot_RpPb/all_RpPb_pt_isPrompt%d_noPtWeight.png",(int)isPrompt));

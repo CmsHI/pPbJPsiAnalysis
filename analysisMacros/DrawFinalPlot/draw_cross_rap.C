@@ -161,7 +161,6 @@ void draw_cross_rap(bool sysByHand=false, bool noPtWeight=false, bool isScale=fa
 	for (Int_t ipt = 0; ipt < nPt; ipt++) {
 		h1D_CorrY_lab[ipt] = h2D_CorrY->ProjectionX(Form("h1D_CorrY_lab_%d",ipt),ipt+1,ipt+1);
 		h1D_SysErr_lab[ipt] = h2D_SysErr->ProjectionX(Form("h1D_SysErr_lab_%d",ipt),ipt+1,ipt+1);
-		
     h1D_CorrY[ipt] = new TH1D(Form("h1D_CorrY_%d",ipt),Form("h1D_CorrY_%d",ipt),nRap,rapArrNumBF);
 		h1D_CorrY[ipt]->Sumw2();
 		h1D_SysErr[ipt] = new TH1D(Form("h1D_SysErr_%d",ipt),Form("h1D_SysErr_%d",ipt),nRap,rapArrNumBF);
@@ -266,6 +265,9 @@ void draw_cross_rap(bool sysByHand=false, bool noPtWeight=false, bool isScale=fa
 		h1D_cross[ipt]->Scale(1./lumi_mub); // lumi
 		//h1D_cross[ipt]->Scale(1./br); //br
     h1D_cross[ipt]->Scale(pileReg); //pileup correction	
+	  //// scaling for drawing
+	  h1D_cross[ipt]->Scale(scaleF_low);
+	  h1D_cross[ipt]->Scale(scaleF_high);
 	}
   
   //// syst. nomalization
@@ -273,20 +275,19 @@ void draw_cross_rap(bool sysByHand=false, bool noPtWeight=false, bool isScale=fa
     eysys_lowpt[iy] /= rapBinW[iy]; //rapbin
     eysys_lowpt[iy] /= lumi_mub; //lumi
     eysys_lowpt[iy] *= pileReg; //pileup correction 
+    eysys_lowpt[iy] *= scaleF_low; //scale for drawing
     eysys_highpt[iy] /= rapBinW[iy]; //rapbin
     eysys_highpt[iy] /= lumi_mub; //lumi
     eysys_highpt[iy] *= pileReg; //pileup correction 
+    eysys_highpt[iy] *= scaleF_high; //scale for drawing
   }
   	
-	//// scaling for drawing
-	h1D_cross[lowpt_init]->Scale(scaleF_low);
-	h1D_cross[highpt_init]->Scale(scaleF_high);
-	TString ptArr_low;
+	//////////////////////////////////////////////////////////////////////
+	
+  TString ptArr_low;
 	TString ptArr_high;
 	formPtArr(ptArrNum[lowpt_init], ptArrNum[highpt_init], &ptArr_low);
 	formPtArr(ptArrNum[highpt_init], ptArrNum[nPt], &ptArr_high);
-	
-	//////////////////////////////////////////////////////////////////////
 
 	TLegend *legUL = new TLegend(0.17, 0.77, 0.56, 0.88);
 	SetLegendStyle(legUL);

@@ -46,9 +46,9 @@ void draw_RFB_pt(bool sysByHand=false, bool noPtWeight=false, bool isPrompt=true
 	};
 */
   Double_t px[nRapRFB][nPtRFB] = { // x point (mean pT)
-    {5.50494, 7, 8, 9, 11, 15}, // 1.5-1.93
-    {-531, 7, 8, 9, 11, 15}, //0.9-1.5
-    {-531, 7, 8, 9, 11, 15} //0.0-0.9
+    {5.75945, 6.97631, 7.97141, 9.17437, 11.5568, 17.6222},
+    {-531, 6.99143, 7.99206, 9.19889, 11.5059, 17.568},
+    {-531, 7.04045, 8.00936, 9.21792, 11.5815, 17.7492}
 	};
 
   //Double_t ex[nPtRFB] = {0.,0.,0.}; // x stat error (0)
@@ -340,6 +340,14 @@ void draw_RFB_pt(bool sysByHand=false, bool noPtWeight=false, bool isPrompt=true
 
 	CMS_lumi( c1, isPA, iPos );
 	c1->Update();
+  
+  if (noPtWeight) {	
+    c1->SaveAs(Form("plot_RFB/RFB_pt_isPrompt%d_noPtWeight_rap1.pdf",(int)isPrompt));
+    c1->SaveAs(Form("plot_RFB/RFB_pt_isPrompt%d_noPtWeight_rap1.png",(int)isPrompt));
+  } else {
+    c1->SaveAs(Form("plot_RFB/RFB_pt_isPrompt%d_rap1.pdf",(int)isPrompt));
+    c1->SaveAs(Form("plot_RFB/RFB_pt_isPrompt%d_rap1.png",(int)isPrompt));
+  }
 
   ///////////////// CANVAS 2	
   
@@ -363,6 +371,14 @@ void draw_RFB_pt(bool sysByHand=false, bool noPtWeight=false, bool isPrompt=true
 	
   CMS_lumi( c2, isPA, iPos );
 	c2->Update();
+  
+  if (noPtWeight) {	
+    c2->SaveAs(Form("plot_RFB/RFB_pt_isPrompt%d_noPtWeight_rap2.pdf",(int)isPrompt));
+    c2->SaveAs(Form("plot_RFB/RFB_pt_isPrompt%d_noPtWeight_rap2.png",(int)isPrompt));
+  } else {
+    c2->SaveAs(Form("plot_RFB/RFB_pt_isPrompt%d_rap2.pdf",(int)isPrompt));
+    c2->SaveAs(Form("plot_RFB/RFB_pt_isPrompt%d_rap2.png",(int)isPrompt));
+  }
 	
   ///////////////// CANVAS 3	
   
@@ -388,17 +404,9 @@ void draw_RFB_pt(bool sysByHand=false, bool noPtWeight=false, bool isPrompt=true
 	c3->Update();
 
   if (noPtWeight) {	
-    c1->SaveAs(Form("plot_RFB/RFB_pt_isPrompt%d_noPtWeight_rap1.pdf",(int)isPrompt));
-    c1->SaveAs(Form("plot_RFB/RFB_pt_isPrompt%d_noPtWeight_rap1.png",(int)isPrompt));
-    c2->SaveAs(Form("plot_RFB/RFB_pt_isPrompt%d_noPtWeight_rap2.pdf",(int)isPrompt));
-    c2->SaveAs(Form("plot_RFB/RFB_pt_isPrompt%d_noPtWeight_rap2.png",(int)isPrompt));
     c3->SaveAs(Form("plot_RFB/RFB_pt_isPrompt%d_noPtWeight_rap3.pdf",(int)isPrompt));
     c3->SaveAs(Form("plot_RFB/RFB_pt_isPrompt%d_noPtWeight_rap3.png",(int)isPrompt));
   } else {
-    c1->SaveAs(Form("plot_RFB/RFB_pt_isPrompt%d_rap1.pdf",(int)isPrompt));
-    c1->SaveAs(Form("plot_RFB/RFB_pt_isPrompt%d_rap1.png",(int)isPrompt));
-    c2->SaveAs(Form("plot_RFB/RFB_pt_isPrompt%d_rap2.pdf",(int)isPrompt));
-    c2->SaveAs(Form("plot_RFB/RFB_pt_isPrompt%d_rap2.png",(int)isPrompt));
     c3->SaveAs(Form("plot_RFB/RFB_pt_isPrompt%d_rap3.pdf",(int)isPrompt));
     c3->SaveAs(Form("plot_RFB/RFB_pt_isPrompt%d_rap3.png",(int)isPrompt));
   }
