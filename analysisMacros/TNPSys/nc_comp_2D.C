@@ -4,8 +4,10 @@
   //gStyle->SetPaintTextFormat(".3f");
   gStyle->SetPaintTextFormat(".5f");
   
-  TFile* f01 = TFile::Open("Total_TnP_sys_8rap9pt_pp_PR.root");
-  TFile* f02 = TFile::Open("../TNPSys_orig/Total_TnP_sys_8rap9pt_pp_PR.root");
+  TFile* f01 = TFile::Open("Total_TnP_sys_8rap9pt_pp_NP.root");
+  TFile* f02 = TFile::Open("Total_TnP_sys_8rap9pt_pp_NP_orig.root");
+  //TFile* f01 = TFile::Open("Total_TnP_sys_6rap2pt_Pbp_PR.root");
+  //TFile* f02 = TFile::Open("../TNPSys_orig/Total_TnP_sys_6rap2pt_Pbp_PR.root");
   
   TCanvas* c1 = new TCanvas("c1","",600,600);
   TH2D* h2D_01 = (TH2D*)f01->Get("htot");
