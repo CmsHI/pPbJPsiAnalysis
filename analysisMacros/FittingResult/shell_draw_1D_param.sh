@@ -18,8 +18,8 @@ EOF
 #sleep 1m
 
 ##### for yield
-yieldName=(nSig_Raw nBkg_Raw nPrompt_Raw nNonPrompt_Raw bFraction)
-#yieldName=(bFraction)
+#yieldName=(nSig_Raw nBkg_Raw nPrompt_Raw nNonPrompt_Raw bFraction)
+yieldName=(bFraction)
 
 ##### for parameters
 parName=(coefExp fracG1 meanSig sigmaSig1 sigmaSig2 sigWidth alpha enne sigmaNPTrue coefExpNPTrue fracRes meanPRResW meanPRResN sigmaPRResW sigmaPRResN fracCtBkg1 fracCtBkg2 fracCtBkg3 lambdam lambdap lambdasym NLL Resolution)
@@ -36,9 +36,9 @@ for yield in ${yieldName[@]}
 do
   echo " *** loop for yield "
 #  root -l 'draw_1D_yield.C+("8rap9pt",0,1,false,"'$yield'")'
-#  root -l 'draw_1D_yield.C+("8rap9pt",1,1,false,"'$yield'")'
-  root -l -b -q 'draw_1D_yield.C+("8rap9pt",0,1,false,"'$yield'")'
-  root -l -b -q 'draw_1D_yield.C+("8rap9pt",1,1,false,"'$yield'")'
+  root -l 'draw_1D_yield.C+("8rap9pt",1,1,false,"'$yield'")'
+#  root -l -b -q 'draw_1D_yield.C+("8rap9pt",0,1,false,"'$yield'")'
+#  root -l -b -q 'draw_1D_yield.C+("8rap9pt",1,1,false,"'$yield'")'
 done
 
 for par in ${parName[@]}
@@ -46,8 +46,8 @@ do
   echo " *** loop for parameters "
 #  root -l 'draw_1D_parameters.C+("8rap9pt",0,1,false,"'$par'")'
 #  root -l 'draw_1D_parameters.C+("8rap9pt",1,1,false,"'$par'")'
-  root -l -b -q 'draw_1D_parameters.C+("8rap9pt",0,1,false,"'$par'")'
-  root -l -b -q 'draw_1D_parameters.C+("8rap9pt",1,1,false,"'$par'")'
+#  root -l -b -q 'draw_1D_parameters.C+("8rap9pt",0,1,false,"'$par'")'
+#  root -l -b -q 'draw_1D_parameters.C+("8rap9pt",1,1,false,"'$par'")'
 done
   
 for chi in ${chiName[@]}
@@ -55,8 +55,8 @@ do
   echo " *** loop for chi2Prob "
 #  root -l 'draw_1D_chi2.C+("8rap9pt",0,1,false,true,"'$chi'")'
 #  root -l 'draw_1D_chi2.C+("8rap9pt",1,1,false,true,"'$chi'")'
-  root -l -b -q 'draw_1D_chi2.C+("8rap9pt",0,1,false,true,"'$chi'")'
-  root -l -b -q 'draw_1D_chi2.C+("8rap9pt",1,1,false,true,"'$chi'")'
+#  root -l -b -q 'draw_1D_chi2.C+("8rap9pt",0,1,false,true,"'$chi'")'
+#  root -l -b -q 'draw_1D_chi2.C+("8rap9pt",1,1,false,true,"'$chi'")'
 done
 
 ### pp

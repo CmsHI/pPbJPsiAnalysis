@@ -4,7 +4,7 @@ void formRapArr(Double_t binmin, Double_t binmax, TString* arr);
 void formAbsRapArr(Double_t binmin, Double_t binmax, TString* arr);
 void formPtArr(Double_t binmin, Double_t binmax, TString* arr);
 
-void draw_1D_acceff(TString szBinning="8rap9pt", int isPA=1, bool isLog=false, bool isNoErr=true)
+void draw_1D_acceff(TString szBinning="8rap9pt", int isPA=1, bool isLog=false)
 {
 	gROOT->Macro("../Style.C");
 
@@ -66,9 +66,9 @@ void draw_1D_acceff(TString szBinning="8rap9pt", int isPA=1, bool isLog=false, b
 	// --- read-in file
 	TFile * f2D_01;
   if (isPA==0) {
-    f2D_01 = new TFile(Form("../FittingResult/totalHist_%s_%s_newcut_nominal_Zvtx0_SF1.root",szPA.Data(),szBinning.Data()));
+    f2D_01 = new TFile(Form("../FittingResult/totalHist_%s_%s_newcut_nominal_Zvtx0_SF1_etOpt0.root",szPA.Data(),szBinning.Data()));
   } else {
-    f2D_01 = new TFile(Form("../FittingResult/totalHist_%s_%s_newcut_nominal_Zvtx1_SF1.root",szPA.Data(),szBinning.Data()));
+    f2D_01 = new TFile(Form("../FittingResult/totalHist_%s_%s_newcut_nominal_Zvtx1_SF1_etOpt0.root",szPA.Data(),szBinning.Data()));
   }
 
 	// --- read-in 2D hist for data reco dist
@@ -172,9 +172,6 @@ void draw_1D_acceff(TString szBinning="8rap9pt", int isPA=1, bool isLog=false, b
 	latex->SetNDC();
 	latex->SetTextAlign(12);
 	latex->SetTextSize(0.04);
-
-	TCanvas* c01 = new TCanvas("c01","c01",200,10,1600,800);
-	c01->Divide(4,2);
   
   TGraphAsymmErrors* g_01[nbinsX];
   TGraphAsymmErrors* g_02[nbinsX];
@@ -184,33 +181,73 @@ void draw_1D_acceff(TString szBinning="8rap9pt", int isPA=1, bool isLog=false, b
 		g_01[iy]->SetName(Form("g_01_%d",iy));
 		g_02[iy]=new TGraphAsymmErrors(h1D_NP_acc[iy]);
 		g_02[iy]->SetName(Form("g_02_%d",iy));
-		
-    c01->cd(iy+1);
-		if (isLog) gPad->SetLogy(1);
-		else gPad->SetLogy(0);
 		SetGraphStyle(g_01[iy],3,0);
 		SetGraphStyle(g_02[iy],4,10);
-		
 		g_01[iy]->GetXaxis()->SetTitle("p_{T} (GeV/c)");
 		g_01[iy]->GetXaxis()->CenterTitle();
 		g_01[iy]->GetXaxis()->SetLimits(0.0,30.0);
-		g_01[iy]->GetYaxis()->SetTitle("Efficiency");
+		g_01[iy]->GetYaxis()->SetTitle("Acceptance x Efficiency");
 		g_01[iy]->GetYaxis()->SetRangeUser(0,0.7);
-		
+		g_02[iy]->GetXaxis()->SetTitle("p_{T} (GeV/c)");
+		g_02[iy]->GetXaxis()->CenterTitle();
+		g_02[iy]->GetXaxis()->SetLimits(0.0,30.0);
+		g_02[iy]->GetYaxis()->SetTitle("Acceptance x Efficiency");
+		g_02[iy]->GetYaxis()->SetRangeUser(0,0.7);
+  }		
+
+
+	//////////////////////////////////////////////////////////////////
+  //// 1) prompt only	
+  TCanvas* c01 = new TCanvas("c01","c01",200,10,1600,800);
+	c01->Divide(4,2);
+	for (Int_t iy = 0; iy < nbinsX; iy++) {
+    c01->cd(iy+1);
+		if (isLog) gPad->SetLogy(1);
+		else gPad->SetLogy(0);
+		g_01[iy]->Draw("AP");
+		if (iy==0) { latex->DrawLatex(0.55,0.85,Form("%s Prompt J/#psi",szPA.Data())); }
+		latex->DrawLatex(0.55,0.23,Form("%s",rapArr[iy].Data()));
+	}
+	c01->Modified();
+	c01->Update();
+	c01->SaveAs(Form("dir_1D_%s/acceff_%s_PR.pdf",szBinning.Data(),szPA.Data()));
+  
+	//////////////////////////////////////////////////////////////////
+  //// 2) non-prompt only	
+  TCanvas* c02 = new TCanvas("c02","c02",200,10,1600,800);
+	c02->Divide(4,2);
+	for (Int_t iy = 0; iy < nbinsX; iy++) {
+    c02->cd(iy+1);
+		if (isLog) gPad->SetLogy(1);
+		else gPad->SetLogy(0);
+		g_02[iy]->Draw("AP");
+		if (iy==0) { latex->DrawLatex(0.55,0.85,Form("%s Non-prompt J/#psi",szPA.Data())); }
+		latex->DrawLatex(0.55,0.23,Form("%s",rapArr[iy].Data()));
+	}
+	c02->Modified();
+	c02->Update();
+	c02->SaveAs(Form("dir_1D_%s/acceff_%s_NP.pdf",szBinning.Data(),szPA.Data()));
+
+	//////////////////////////////////////////////////////////////////
+  //// 3) prompt and non-prompt together 
+	TCanvas* c03 = new TCanvas("c03","c03",200,10,1600,800);
+	c03->Divide(4,2);
+	for (Int_t iy = 0; iy < nbinsX; iy++) {
+    c03->cd(iy+1);
+		if (isLog) gPad->SetLogy(1);
+		else gPad->SetLogy(0);
 		g_01[iy]->Draw("AP");
 		g_02[iy]->Draw("P");
 		if (iy==0) {
 			legBR -> AddEntry(g_01[iy],"prompt J/#psi","lp");
 			legBR -> AddEntry(g_02[iy],"non-prompt J/#psi","lp");
 			legBR->Draw();
-//			if (isPrompt) { latex->DrawLatex(0.19,0.23,Form("%s Prompt J/#psi",szPA.Data())); }
-//			else { latex->DrawLatex(0.19,0.23,Form("%s Non-prompt J/#psi",szPA.Data())); }
 		}
 		latex->DrawLatex(0.55,0.23,Form("%s",rapArr[iy].Data()));
 	}
-	c01->Modified();
-	c01->Update();
-	c01->SaveAs(Form("dir_1D_%s/acceff_%s.pdf",szBinning.Data(),szPA.Data()));
+	c03->Modified();
+	c03->Update();
+	c03->SaveAs(Form("dir_1D_%s/acceff_%s.pdf",szBinning.Data(),szPA.Data()));
 
 	return;
 
