@@ -19,7 +19,7 @@ double fitExp(double *x, double *par);
 double fitStraight(double *x, double *par);
 void formRapArr(Double_t binmin, Double_t binmax, TString* arr);
 
-void fitRatio_dNdPt(int isPA=1, bool isPrompt=false){
+void fitRatio_dNdPt(int isPA=0, bool isPrompt=true){
     gRandom->SetSeed(time(0));
 		gROOT->Macro("../Style.C");
 
@@ -62,41 +62,40 @@ void fitRatio_dNdPt(int isPA=1, bool isPrompt=false){
     for(int iy=0;iy<nRap;iy++){
 		  //if (iy!=0) continue;
       c1->cd(iy+1);
-      if (isPA==0) {
-        if (isPrompt && (iy==0 || iy==2 || iy==3 || iy==4 || iy==7) ) {
-          //funct[iy] = new TF1(Form("funct_%s_%s_%d",szPrompt.Data(),szPA.Data(),iy), fitHevi,0.0,30.0,5);
-          funct[iy] = new TF1(Form("funct_%s_%s_%d",szPrompt.Data(),szPA.Data(),iy), fitHevi,lowPt_pp[iy],30.0,5);
-          funct[iy]->SetParameters(-4.795, 1.653, 0.923, 3.018, 2.369);
-        } else {
-          //funct[iy] = new TF1(Form("funct_%s_%s_%d",szPrompt.Data(),szPA.Data(),iy), fitStraight,0.0,30.0,2); 
-          funct[iy] = new TF1(Form("funct_%s_%s_%d",szPrompt.Data(),szPA.Data(),iy), fitStraight,lowPt_pp[iy],30.0,2); 
-          funct[iy]->SetParameters(0.,0.); 
+      if (isPA==0) {  // pp 
+	
+	if ( (iy <=1) || ( iy>=6) ) {
+          funct[iy] = new TF1(Form("funct_%s_%s_%d",szPrompt.Data(),szPA.Data(),iy), 
+			      "([0] + [1]*x + [2]*x*x + [3]*x*x*x) *(x<7) + [4] + [5]*x", lowPt_pp[iy],30);
+	  
+	  //          funct[iy]->SetParameters(1, 1, 0.1,0.1,0.1);
+          funct[iy]->SetParameters(0, -1.7, 0.34, -0.022, 1.3, -0.038);  // best for the most backward
+	}
+	else {  // mid-rapidities
+	  funct[iy] = new TF1(Form("funct_%s_%s_%d",szPrompt.Data(),szPA.Data(),iy), 
+			      "[0] + [1]*x ", lowPt_pp[iy],30);
+	  //          funct[iy]->SetParameters(1, 1);   
+          funct[iy]->SetParameters(1.2 , -0.25); 
         }
-      } else {
-        if ( (isPrompt && iy!=1) || (!isPrompt && (iy==3 || iy==5)) ) {
-          //funct[iy] = new TF1(Form("funct_%s_%s_%d",szPrompt.Data(),szPA.Data(),iy), fitHevi,0.0,30.0,5);
-          funct[iy] = new TF1(Form("funct_%s_%s_%d",szPrompt.Data(),szPA.Data(),iy), fitHevi,lowPt_pA[iy],30.0,5);
-          funct[iy]->SetParameters(-4.795, 1.653, 0.923, 3.018, 2.369);
-        } else {
-          //funct[iy] = new TF1(Form("funct_%s_%s_%d",szPrompt.Data(),szPA.Data(),iy), fitStraight,0.0,30.0,2); 
-          funct[iy] = new TF1(Form("funct_%s_%s_%d",szPrompt.Data(),szPA.Data(),iy), fitStraight,lowPt_pA[iy],30.0,2); 
-          funct[iy]->SetParameters(0.,0.); 
+	
+	/* legacy (Aug 12th 2016) 
+	   if (isPrompt && (iy==0 || iy==2 || iy==3 || iy==4 || iy==7) ) {
+	   funct[iy] = new TF1(Form("funct_%s_%s_%d",szPrompt.Data(),szPA.Data(),iy), fitHevi,lowPt_pp[iy],30.0,5);
+	   funct[iy]->SetParameters(-4.795, 1.653, 0.923, 3.018, 2.369);
+	   } else {
+	   //funct[iy] = new TF1(Form("funct_%s_%s_%d",szPrompt.Data(),szPA.Data(),iy), fitStraight,0.0,30.0,2); 
+	   funct[iy] = new TF1(Form("funct_%s_%s_%d",szPrompt.Data(),szPA.Data(),iy), fitStraight,lowPt_pp[iy],30.0,2); 
+	   funct[iy]->SetParameters(0.,0.); 
         }
-      }
-      //// bin by bin tunning
-      if (isPA==0) {
-        if (isPrompt) {
-          if (iy==0) {
-            funct[iy]->SetParameter(0, -5.6);
-            funct[iy]->SetParLimits(0,-5.8,-4.0);
+	// fine tuning 
+	if (isPrompt) {
+	if (iy==0) {
+	funct[iy]->SetParameter(0, -5.6);
+	funct[iy]->SetParLimits(0,-5.8,-4.0);
             funct[iy]->SetParameter(1, 0.55);
             funct[iy]->SetParLimits(1, 0.5, 0.8); // the larger, the stiffer at low pT
           }
           else if (iy==2) {
-            //funct[iy]->SetParameter(0, -4.6);
-            //funct[iy]->SetParLimits(0,-4.8,-4.4);
-            //funct[iy]->SetParameter(1, -3.0);
-            //funct[iy]->SetParLimits(1,-3.2, 3.6);
             funct[iy]->SetParameter(0, -4.6);
             funct[iy]->SetParLimits(0,-10.8,-4.4);
             funct[iy]->SetParameter(1, 3.0);
@@ -108,8 +107,21 @@ void fitRatio_dNdPt(int isPA=1, bool isPrompt=false){
             funct[iy]->SetParameter(1, -3.0);
             funct[iy]->SetParLimits(1,-3.2, 0.3);
           }
+	*/
+      }
+      
+      else {   // pPb 
+        if ( (isPrompt && iy!=1) || (!isPrompt && (iy==3 || iy==5)) ) {
+          //funct[iy] = new TF1(Form("funct_%s_%s_%d",szPrompt.Data(),szPA.Data(),iy), fitHevi,0.0,30.0,5);
+          funct[iy] = new TF1(Form("funct_%s_%s_%d",szPrompt.Data(),szPA.Data(),iy), fitHevi,lowPt_pA[iy],30.0,5);
+          funct[iy]->SetParameters(-4.795, 1.653, 0.923, 3.018, 2.369);
+        } else {
+          //funct[iy] = new TF1(Form("funct_%s_%s_%d",szPrompt.Data(),szPA.Data(),iy), fitStraight,0.0,30.0,2); 
+          funct[iy] = new TF1(Form("funct_%s_%s_%d",szPrompt.Data(),szPA.Data(),iy), fitStraight,lowPt_pA[iy],30.0,2); 
+          funct[iy]->SetParameters(0.,0.); 
         }
-      } else { // pA
+	
+	// fine tuning 
         if (isPrompt) {
           if (iy==0) {
             funct[iy]->SetParameter(0, -5.6);
@@ -141,7 +153,10 @@ void fitRatio_dNdPt(int isPA=1, bool isPrompt=false){
             funct[iy]->SetParLimits(1,-3.8, -1.0);
           }
         }
+
+
       }
+      //// bin by bin tunning
       SetGraphStyle(gRatio[iy],0,0);
       //gRatio[iy]->SetMarkerSize(1.6);
       gRatio[iy]->SetMarkerSize(1.3);
