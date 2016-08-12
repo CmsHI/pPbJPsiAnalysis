@@ -7,7 +7,7 @@ void formPtArr(Double_t binmin, Double_t binmax, TString* arr);
 
 void CMS_lumi( TPad* pad, int iPeriod, int iPosX );
 
-void draw_cross_pt(bool sysByHand=false, bool noPtWeight=false, bool isScale=true, bool isLog=true, int isPA = 1, bool isPrompt=false)
+void draw_cross_pt(bool sysByHand=false, bool noPtWeight=true, bool isScale=false, bool isLog=false, int isPA = 0, bool isPrompt=true)
 {
 	gROOT->Macro("./tdrstyle_kyo.C");
   gStyle->SetTitleYOffset(1.38); //KYO
