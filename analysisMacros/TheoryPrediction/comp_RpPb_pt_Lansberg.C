@@ -3,7 +3,8 @@
 
 void CMS_lumi( TPad* pad, int iPeriod, int iPosX );
 
-void comp_RpPb_pt_Vogt(double ptmax=32, bool isLine=true, bool isSmoothened=false)
+//// EPS09LO, EPS09NLO, nCTEQ15
+void comp_RpPb_pt_Lansberg(double ptmax=32, bool isLine=true, bool isSmoothened=false, TString szPDF= "nCTEQ15")
 {
 	gROOT->Macro("./tdrstyle_kyo.C");
 	int isPA = 1;  // 0:pp, 1:pPb
@@ -14,11 +15,12 @@ void comp_RpPb_pt_Vogt(double ptmax=32, bool isLine=true, bool isSmoothened=fals
   ///////////////////////////////////////////////////
 	///////// from Ramona
 	const int nRapRpPb = 7;
-	const int nPtRpPb = 49;
+	//const int nPtRpPb = 49;
+	const int nPtRpPb = 7; // 4, 5, 6.5, 7.5, 8.5, 10, 14,  30 GeV
   Double_t theory_px[nRapRpPb][nPtRpPb]; 
 	Double_t theory_py[nRapRpPb][nPtRpPb];
-	//Double_t theory_exlow_tmp[nRapRpPb][nPtRpPb];
-	//Double_t theory_exhigh_tmp[nRapRpPb][nPtRpPb];
+	Double_t theory_exlow_tmp[nRapRpPb][nPtRpPb];
+	Double_t theory_exhigh_tmp[nRapRpPb][nPtRpPb];
   Double_t theory_exlow[nRapRpPb][nPtRpPb];
   Double_t theory_exhigh[nRapRpPb][nPtRpPb];
 	Double_t theory_eylow_tmp[nRapRpPb][nPtRpPb];
@@ -26,6 +28,7 @@ void comp_RpPb_pt_Vogt(double ptmax=32, bool isLine=true, bool isSmoothened=fals
   Double_t theory_eylow[nRapRpPb][nPtRpPb];
 	Double_t theory_eyhigh[nRapRpPb][nPtRpPb];
   Double_t ptlimit[nRapRpPb] = {4.0, 6.5, 6.5, 6.5, 6.5, 5.0, 4.0};
+  int ipt_init[nRapRpPb] = {0, 2, 2, 2, 2, 1, 0}; // take into acount different pT limit for each rapidity bin (0=4.0, 1=5.0, 2=6.5 GeV)
   
   ///////////////////////////////////////////////////////////////////
   //// read-in txt
@@ -34,61 +37,64 @@ void comp_RpPb_pt_Vogt(double ptmax=32, bool isLine=true, bool isSmoothened=fals
   /// iy=0 (1.5 < y < 1.93) 
   TString inText[nRapRpPb];
   for (int iy=0; iy<nRapRpPb; iy++) {
-    inText[iy] = Form("./fromRamona/kyo_rppb_pt_%1d.dat",iy);
+    inText[iy] = Form("./fromLansberg/pt_%1d_%s.dat",iy+1,szPDF.Data());
     cout << "inText["<<iy<<"] = " << inText[iy] << endl;
   }
-
+  
   string headers;
-  TString pxdum, pydum, eylow_tmpdum, eyhigh_tmpdum;
+  TString ptmindum, ptmaxdum, ppbdum, eylow_tmpdum, eyhigh_tmpdum, ppdum;
   int counts=0;
   
   for (int iy=0; iy<nRapRpPb; iy++) {
     cout << endl << " ************* iy = " << iy << endl;
     std::ifstream f0(inText[iy].Data(),std::ios::in);
     getline(f0, headers); // remove prefix
+    getline(f0, headers); // remove prefix
     counts=0;
     while(!f0.eof()) {
-      f0 >> pxdum >> pydum >> eyhigh_tmpdum >> eylow_tmpdum;
-      cout << pxdum <<"\t"<< pydum <<"\t"<< eyhigh_tmpdum <<"\t"<< eylow_tmpdum << endl;
-      theory_px[iy][counts] =atof(pxdum.Data());
-      theory_py[iy][counts] =atof(pydum.Data());
-      theory_eylow_tmp[iy][counts] =atof(eylow_tmpdum.Data());
-      theory_eyhigh_tmp[iy][counts] =atof(eyhigh_tmpdum.Data());
+      f0 >> ptmindum >> ptmaxdum >> ppbdum >> eylow_tmpdum >> eyhigh_tmpdum >> ppdum;
+      //cout << ptmindum <<"\t"<< ptmaxdum <<"\t"<< ppbdum <<"\t"<< eylow_tmpdum <<"\t"<< eyhigh_tmpdum<<"\t"<< ppdum << endl;
+      theory_px[iy][counts+ipt_init[iy]] =(atof(ptmindum) + atof(ptmaxdum))/2.;
+      theory_py[iy][counts+ipt_init[iy]] = (atof(ppbdum) / atof(ppdum) );
+      theory_exlow_tmp[iy][counts+ipt_init[iy]] = atof(ptmindum);
+      theory_exhigh_tmp[iy][counts+ipt_init[iy]] = atof(ptmaxdum);
+      theory_eylow_tmp[iy][counts+ipt_init[iy]] = ( atof(eylow_tmpdum) / atof(ppdum) );
+      theory_eyhigh_tmp[iy][counts+ipt_init[iy]] = ( atof(eyhigh_tmpdum) / atof(ppdum) );
       counts++;
+      //cout << "counts = " << counts << endl;
     } //end of while file open
   } 
  
   /////////////////////////////////////////////////////////////////////////////////
-  //// set proper ex and ey
+  
+  //// set unused values as zero 
   for (int iy = 0 ; iy < nRapRpPb; iy ++ ) {
-    //cout << endl << " ************* iy = " << iy << endl;
-    for (Int_t ipt=0; ipt<nPtRpPb; ipt++) {
-		  //theory_exlow[iy][ipt] = fabs(theory_px[iy][ipt] - theory_exlow_tmp[iy][ipt]);
-		  //theory_exhigh[iy][ipt] = fabs(theory_px[iy][ipt] - theory_exhigh_tmp[iy][ipt]);
-      theory_exlow[iy][ipt] = 0.5;
-      theory_exhigh[iy][ipt] = 0.5;
-		  theory_eylow[iy][ipt] = fabs(theory_py[iy][ipt] - theory_eylow_tmp[iy][ipt]);
-		  theory_eyhigh[iy][ipt] = fabs(theory_py[iy][ipt] - theory_eyhigh_tmp[iy][ipt]);
-      //cout << "theory_px = " << theory_px[iy][ipt] << ", theory_py = " << theory_py[iy][ipt] << endl; 	
-      //cout << "theory_eylow_tmp = " << theory_eylow_tmp[iy][ipt] <<", theory_eyhigh_tmp = " << theory_eyhigh_tmp[iy][ipt] << endl; 	
-    }
-  }
- 
- //// set unused values as zero 
- for (int iy = 0 ; iy < nRapRpPb; iy ++ ) {
     for (Int_t ipt=nPtRpPb-1; ipt>=0; ipt--) {
-      if (theory_px[iy][ipt] <ptlimit[iy]-1.) {
+      if (ipt <ipt_init[iy]) {
         theory_px[iy][ipt] = theory_px[iy][ipt+1];
         theory_py[iy][ipt] = theory_py[iy][ipt+1];
-        //theory_exlow[iy][ipt] = 0;
-        //theory_exhigh[iy][ipt] = 0;
-        theory_eylow[iy][ipt] = theory_eylow[iy][ipt+1];
-        theory_eyhigh[iy][ipt] = theory_eyhigh[iy][ipt+1];
+        theory_exlow_tmp[iy][ipt] = theory_exlow_tmp[iy][ipt+1];
+        theory_exhigh_tmp[iy][ipt] = theory_exhigh_tmp[iy][ipt+1];
+        theory_eylow_tmp[iy][ipt] = theory_eylow_tmp[iy][ipt+1];
+        theory_eyhigh_tmp[iy][ipt] = theory_eyhigh_tmp[iy][ipt+1];
       }
     }
   }
-  
- 
+
+  //// set proper ex and ey
+  for (int iy = 0 ; iy < nRapRpPb; iy ++ ) {
+    cout << endl << " ************* iy = " << iy << endl;
+    for (Int_t ipt=0; ipt<nPtRpPb; ipt++) {
+		  theory_exlow[iy][ipt] = fabs(theory_px[iy][ipt] - theory_exlow_tmp[iy][ipt]);
+		  theory_exhigh[iy][ipt] = fabs(theory_px[iy][ipt] - theory_exhigh_tmp[iy][ipt]);
+      //theory_exlow[iy][ipt] = 0.5;
+      //theory_exhigh[iy][ipt] = 0.5;
+		  theory_eylow[iy][ipt] = fabs(theory_py[iy][ipt] - theory_eylow_tmp[iy][ipt]);
+		  theory_eyhigh[iy][ipt] = fabs(theory_py[iy][ipt] - theory_eyhigh_tmp[iy][ipt]);
+      cout << "theory_px = " << theory_px[iy][ipt] << ", theory_py = " << theory_py[iy][ipt] << endl; 	
+      cout << "theory_eylow_tmp = " << theory_eylow_tmp[iy][ipt] <<", theory_eyhigh_tmp = " << theory_eyhigh_tmp[iy][ipt] << endl; 	
+    }
+  }
   
   /////////////////////////////////////////////////////////////////////////////////
   /////////////////////////////////////////////////////////////////////////////////
@@ -183,8 +189,8 @@ void comp_RpPb_pt_Vogt(double ptmax=32, bool isLine=true, bool isSmoothened=fals
     dashedLine(0.,1.,32.,1.,1,1);
   }
     
-  c_all->SaveAs("plot_theory/comp_RpPb_pt_Vogt.pdf");
-  c_all->SaveAs("plot_theory/comp_RpPb_pt_Vogt.png");
+  c_all->SaveAs(Form("plot_theory/comp_RpPb_pt_Lansberg_%s.pdf",szPDF.Data()));
+  c_all->SaveAs(Form("plot_theory/comp_RpPb_pt_Lansberg_%s.png",szPDF.Data()));
   #if 0 
   ///////////////////////////////////////////////////////////////////////
 	
@@ -223,7 +229,7 @@ void comp_RpPb_pt_Vogt(double ptmax=32, bool isLine=true, bool isSmoothened=fals
 	le3->SetMarkerStyle(kFullDiamond);
 	le3->SetMarkerColor(kGreen+3);
 	le3->SetMarkerSize(3.3);
-  TLegendEntry *ent3_thr=legBL1->AddEntry("ent3_thr","EPS09 NLO + CEM (Vogt)","f");
+  TLegendEntry *ent3_thr=legBL1->AddEntry("ent3_thr","EPS09 NLO + CEM (Lansberg)","f");
 	ent3_thr->SetFillColor(kYellow);
   ent3_thr->SetFillStyle(3001);
 //  ent3_thr->SetFillStyle(3004);
@@ -245,11 +251,11 @@ void comp_RpPb_pt_Vogt(double ptmax=32, bool isLine=true, bool isSmoothened=fals
 	CMS_lumi( c1, isPA, iPos );
 	c1->Update();
   if (isSmoothened) {
-    c1->SaveAs("plot_theory/comp_RpPb_pt_Vogt_smoothened_rap1.pdf");
-    c1->SaveAs("plot_theory/comp_RpPb_pt_Vogt_smoothened_rap1.png");
+    c1->SaveAs("plot_theory/comp_RpPb_pt_Lansberg_smoothened_rap1.pdf");
+    c1->SaveAs("plot_theory/comp_RpPb_pt_Lansberg_smoothened_rap1.png");
   } else {
-    c1->SaveAs("plot_theory/comp_RpPb_pt_Vogt_rap1.pdf");
-    c1->SaveAs("plot_theory/comp_RpPb_pt_Vogt_rap1.png");
+    c1->SaveAs("plot_theory/comp_RpPb_pt_Lansberg_rap1.pdf");
+    c1->SaveAs("plot_theory/comp_RpPb_pt_Lansberg_rap1.png");
   }
   
   ///////////////// CANVAS 2	
@@ -270,7 +276,7 @@ void comp_RpPb_pt_Vogt(double ptmax=32, bool isLine=true, bool isSmoothened=fals
 	le2->SetMarkerStyle(kFullSquare);
 	le2->SetMarkerColor(kPink-6);
 	le2->SetMarkerSize(2.1);
-  TLegendEntry *ent2_thr=legBL2->AddEntry("ent2_thr","EPS09 NLO + CEM (Vogt)","f");
+  TLegendEntry *ent2_thr=legBL2->AddEntry("ent2_thr","EPS09 NLO + CEM (Lansberg)","f");
 	ent2_thr->SetFillColor(kYellow);
   ent2_thr->SetFillStyle(3001);
 //  ent2_thr->SetFillStyle(3004);
@@ -293,11 +299,11 @@ void comp_RpPb_pt_Vogt(double ptmax=32, bool isLine=true, bool isSmoothened=fals
 	c2->Update();
   
   if (isSmoothened) {
-    c2->SaveAs("plot_theory/comp_RpPb_pt_Vogt_smoothened_rap2.pdf");
-    c2->SaveAs("plot_theory/comp_RpPb_pt_Vogt_smoothened_rap2.png");
+    c2->SaveAs("plot_theory/comp_RpPb_pt_Lansberg_smoothened_rap2.pdf");
+    c2->SaveAs("plot_theory/comp_RpPb_pt_Lansberg_smoothened_rap2.png");
   } else {
-    c2->SaveAs("plot_theory/comp_RpPb_pt_Vogt_rap2.pdf");
-    c2->SaveAs("plot_theory/comp_RpPb_pt_Vogt_rap2.png");
+    c2->SaveAs("plot_theory/comp_RpPb_pt_Lansberg_rap2.pdf");
+    c2->SaveAs("plot_theory/comp_RpPb_pt_Lansberg_rap2.png");
   }
 	
   ///////////////// CANVAS 3	
@@ -318,7 +324,7 @@ void comp_RpPb_pt_Vogt(double ptmax=32, bool isLine=true, bool isSmoothened=fals
 	le1->SetMarkerStyle(kFullCircle);
 	le1->SetMarkerColor(kBlue-3);
 	le1->SetMarkerSize(2.1);
-  TLegendEntry *ent1_thr=legBL3->AddEntry("ent1_thr","EPS09 NLO + CEM (Vogt)","f");
+  TLegendEntry *ent1_thr=legBL3->AddEntry("ent1_thr","EPS09 NLO + CEM (Lansberg)","f");
 	ent1_thr->SetFillColor(kYellow);
   ent1_thr->SetFillStyle(3001);
 //  ent1_thr->SetFillStyle(3004);
@@ -341,11 +347,11 @@ void comp_RpPb_pt_Vogt(double ptmax=32, bool isLine=true, bool isSmoothened=fals
 	c3->Update();
 
   if (isSmoothened) {
-    c3->SaveAs("plot_theory/comp_RpPb_pt_Vogt_smoothened_rap3.pdf");
-    c3->SaveAs("plot_theory/comp_RpPb_pt_Vogt_smoothened_rap3.png");
+    c3->SaveAs("plot_theory/comp_RpPb_pt_Lansberg_smoothened_rap3.pdf");
+    c3->SaveAs("plot_theory/comp_RpPb_pt_Lansberg_smoothened_rap3.png");
   } else {
-    c3->SaveAs("plot_theory/comp_RpPb_pt_Vogt_rap3.pdf");
-    c3->SaveAs("plot_theory/comp_RpPb_pt_Vogt_rap3.png");
+    c3->SaveAs("plot_theory/comp_RpPb_pt_Lansberg_rap3.pdf");
+    c3->SaveAs("plot_theory/comp_RpPb_pt_Lansberg_rap3.png");
   }
 #endif
   return;
