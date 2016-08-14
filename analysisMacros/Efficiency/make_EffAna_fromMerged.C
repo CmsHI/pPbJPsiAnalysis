@@ -1,6 +1,6 @@
 #include "../SONGKYO.h"
 
-void make_EffAnaHist_fromMerged(int MrapNpt=89, int isPA = 0, int accCutType =2, bool isPrompt = true, bool useZvtxWeight=false, bool useSF=true)
+void make_EffAnaHist_fromMerged(int MrapNpt=89, int isPA = 0, int accCutType =2, bool isPrompt = true, bool useZvtxWeight=false, bool useSF=false)
 {
   TString szBinning;
   if (MrapNpt==89)  {szBinning = "8rap9pt"; }
@@ -23,13 +23,8 @@ void make_EffAnaHist_fromMerged(int MrapNpt=89, int isPA = 0, int accCutType =2,
   const TString szFinal = Form("%s_%s_%s_%s",szBinning.Data(),szPA.Data(),szPrompt.Data(),szAccCut.Data());
   std::cout << "szFinal: " << szFinal << std::endl;
 
-  TFile * f2D;
-  if (isPA==0 && isPrompt) { 
-    f2D= new TFile(Form("EffAna_%s_Zvtx%d_SF%d_merged_initev0_nevt45005396.root",szFinal.Data(),(int)useZvtxWeight,(int)useSF));
-  }
-  else if (isPA==0 && (!isPrompt) ) {  }
- 
-    cout << "f2D = " << f2D << endl;
+  TFile * f2D = new TFile(Form("./toBeMerged_divideEvt/merged_EffAna_%s_Zvtx%d_SF%d.root",szFinal.Data(),(int)useZvtxWeight,(int)useSF));
+  //cout << "f2D = " << f2D->GetName() << endl;
   
   return;
 #if 0

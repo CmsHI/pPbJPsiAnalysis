@@ -95,11 +95,11 @@ int rootAna_efficiency(int MrapNpt = 89, int isPA =0, int accCutType = 2, bool i
   if (isPA==0){
     if (isPrompt) {
       //f1 = new TFile("/home/storage/OniaTree/Onia5TeV/ppOfficialMC/OniaTree_JpsiMM_5p02TeV_TuneCUETP8M1_Trk_HINppWinter16DR-75X_mcRun2_asymptotic_ppAt5TeV_v3-v1.root","READ"); //official
-      f1 = new TFile("/home/storage/OniaTree/Onia5TeV/ppOfficialMC/OniaTree_JpsiMM_5p02TeV_TuneCUETP8M1_Trk_HINppWinter16DR-75X_mcRun2_asymptotic_ppAt5TeV_v3-v1_ExtendedKYO.root","READ"); //official extended
+      f1 = new TFile("/home/storage/OniaTree/Onia5TeV/ppOfficialMC/OniaTree_JpsiMM_5p02TeV_TuneCUETP8M1_Trk_HINppWinter16DR-75X_mcRun2_asymptotic_ppAt5TeV_v3-v1_Extended.root","READ"); //official extended 60M
     }
     else {
       //f1 = new TFile("/home/storage/OniaTree/Onia5TeV/ppOfficialMC/OniaTree_BJpsiMM_5p02TeV_TuneCUETP8M1_Trk_HINppWinter16DR-75X_mcRun2_asymptotic_ppAt5TeV_v3-v1.root","READ"); //official
-      f1 = new TFile("/home/storage/OniaTree/Onia5TeV/ppOfficialMC/OniaTree_BJpsiMM_5p02TeV_TuneCUETP8M1_Trk_HINppWinter16DR-75X_mcRun2_asymptotic_ppAt5TeV_v3-v1_ExtendedKYO.root","READ"); //official extended
+      f1 = new TFile("/home/storage/OniaTree/Onia5TeV/ppOfficialMC/OniaTree_BJpsiMM_5p02TeV_TuneCUETP8M1_Trk_HINppWinter16DR-75X_mcRun2_asymptotic_ppAt5TeV_v3-v1_Extended.root","READ"); //official extended 60M
     }
   }
   else if (isPA==1){
@@ -415,8 +415,8 @@ int rootAna_efficiency(int MrapNpt = 89, int isPA =0, int accCutType = 2, bool i
     ////else if (isPA==0 && isPrompt==false && (iev == 226946 || iev==36800 || iev == 780741 || iev == 884521)) continue;
     ////gDebug=2;
     //// **** buffer : pp official (no extended)
-    if (isPA==0 && isPrompt==true && (iev==257671 || iev==728369 || iev==1962013)) continue;
-    else if (isPA==0 && isPrompt==false && (iev == 12770 || iev==94836 || iev==228145 || iev==499832 || iev==536493 || iev==536492 || iev==582358 || iev==617861 || iev==687792 || iev==981657 || iev==1085955 || iev==1361016 || iev == 1433478 || iev==1520599 || iev==1753490 || iev==1839208 || iev==1973187 || iev==1997056 || iev==2149281|| iev==2205201)) continue;
+    //if (isPA==0 && isPrompt==true && (iev==257671 || iev==728369 || iev==1962013)) continue;
+    //else if (isPA==0 && isPrompt==false && (iev == 12770 || iev==94836 || iev==228145 || iev==499832 || iev==536493 || iev==536492 || iev==582358 || iev==617861 || iev==687792 || iev==981657 || iev==1085955 || iev==1361016 || iev == 1433478 || iev==1520599 || iev==1753490 || iev==1839208 || iev==1973187 || iev==1997056 || iev==2149281|| iev==2205201)) continue;
     myTree->GetEntry(iev);
 //    cout << "iev = " << iev <<", buffer : " << myTree->GetEntry(iev) << endl;
 
