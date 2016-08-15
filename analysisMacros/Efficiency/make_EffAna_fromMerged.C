@@ -1,6 +1,6 @@
 #include "../SONGKYO.h"
 
-void make_EffAnaHist_fromMerged(int MrapNpt=89, int isPA = 0, int accCutType =2, bool isPrompt = true, bool useZvtxWeight=false, bool useSF=false)
+void make_EffAna_fromMerged(int MrapNpt=89, int isPA = 0, int accCutType =2, bool isPrompt = true, bool useZvtxWeight=false, bool useSF=false)
 {
   TString szBinning;
   if (MrapNpt==89)  {szBinning = "8rap9pt"; }
@@ -26,77 +26,55 @@ void make_EffAnaHist_fromMerged(int MrapNpt=89, int isPA = 0, int accCutType =2,
   TFile * f2D = new TFile(Form("./toBeMerged_divideEvt/merged_EffAna_%s_Zvtx%d_SF%d.root",szFinal.Data(),(int)useZvtxWeight,(int)useSF));
   //cout << "f2D = " << f2D->GetName() << endl;
   
-  return;
-#if 0
-  // --- read-in 2D hist
-  TH2D* h2D_Den = (TH2D*)f2D->Get("h2D_Den_pt_y");
-  TH2D* h2D_Num = (TH2D*)f2D->Get("h2D_Num_pt_y");
-  TH2D* h2D_Eff = (TH2D*)f2D->Get("h2D_Eff_pt_y");
-
-  //latex box for beam, rapidity, pT info
-  TLatex* latex = new TLatex();
-  latex->SetNDC();
-  latex->SetTextAlign(12);
-  latex->SetTextSize(0.04);
-
-  //////////////////////////////////////////////////////////////////
-  // --- Draw histograms
-  TCanvas* c1 = new TCanvas("c1","c1",700,600);
-  TPaletteAxis* pal; 
-  c1->cd();
-  pal->SetX2NDC(0.92);
-  c1->Modified();
-  c1->Update();
-
-  if (isPA==0) {
-    if (MrapNpt==89) {
-      dashedLine(-2.4,2.0,-1.93,2.0,1,4);
-      dashedLine(-1.93,2.0,-1.93,4.0,1,4);
-      dashedLine(-1.93,4.0,-1.5,4.0,1,4);
-      dashedLine(-1.5,4.0,-1.5,6.5,1,4);
-      dashedLine(-1.5,6.5,1.5,6.5,1,4);
-      dashedLine(1.5,4.0,1.5,6.5,1,4);
-      dashedLine(1.5,4.0,1.93,4.0,1,4);
-      dashedLine(1.93,2.0,1.93,4.0,1,4);
-      dashedLine(1.93,2.0,2.4,2.0,1,4);
-      dashedLine(2.4,2.0,2.4,30.0,1,4);
-      dashedLine(-2.4,30.0,2.4,30.0,1,4);
-      dashedLine(-2.4,2.0,-2.4,30.0,1,4);
-    }
-    else {
-    }
+  ///////////////////////////////////////////////////////////////
+  TH1D* h1D_zVtx;
+  h1D_zVtx = (TH1D*)f2D->Get("h1D_zVtx");
+  
+  TH2D* h2D_Den_pt_y;
+  TH2D* h2D_Num_pt_y;
+  TH2D* h2D_Eff_pt_y;
+  h2D_Den_pt_y = (TH2D*)f2D->Get("h2D_Den_pt_y");
+  h2D_Num_pt_y = (TH2D*)f2D->Get("h2D_Num_pt_y");
+  h2D_Eff_pt_y = (TH2D*)h2D_Num_pt_y->Clone("h2D_Eff_pt_y");
+  // (Num/Den) to get efficiency (B : binomial error)
+  h2D_Eff_pt_y->Divide(h2D_Num_pt_y,h2D_Den_pt_y,1,1,"B"); 
+  
+  TH2D* h2D_Den_pt_y_fine;
+  TH2D* h2D_Num_pt_y_fine;
+  TH2D* h2D_Eff_pt_y_fine;
+  if (MrapNpt==89) {
+    h2D_Den_pt_y_fine = (TH2D*)f2D->Get("h2D_Den_pt_y_fine");
+    h2D_Num_pt_y_fine = (TH2D*)f2D->Get("h2D_Num_pt_y_fine");
+    h2D_Eff_pt_y_fine = (TH2D*)h2D_Num_pt_y_fine->Clone("h2D_Eff_pt_y_fine");
+    // (Num/Den) to get efficiency (B : binomial error)
+    h2D_Eff_pt_y_fine->Divide(h2D_Num_pt_y_fine,h2D_Den_pt_y_fine,1,1,"B"); 
+  }  
+  
+  ////////////////////////////////////////////////////////////////////////////
+  // Save the data!
+  
+  TFile *outFile = new TFile(Form("EffAna_%s_Zvtx%d_SF%d.root",szFinal.Data(), (int)useZvtxWeight,(int)useSF),"RECREATE");
+  std::cout << "szFinal: " << szFinal << std::endl;
+  outFile->cd();
+  h2D_Den_pt_y->Write();
+  h2D_Num_pt_y->Write();
+  h2D_Eff_pt_y->Write();
+  h1D_zVtx->Write();
+  if (MrapNpt==89) {
+    h2D_Den_pt_y_fine->Write();
+    h2D_Num_pt_y_fine->Write();
+    h2D_Eff_pt_y_fine->Write();
   }
-  else {
-    if (MrapNpt==89) {
-      dashedLine(-2.4,2.0,-1.97,2.0,1,4);
-      dashedLine(-1.97,2.0,-1.97,4.0,1,4);
-      dashedLine(-1.97,4.0,-1.37,4.0,1,4);
-      dashedLine(-1.37,4.0,-1.37,6.5,1,4);
-      dashedLine(-1.37,6.5,1.03,6.5,1,4);
-      dashedLine(1.03,5.0,1.03,6.5,1,4);
-      dashedLine(1.03,5.0,1.46,5.0,1,4);
-      dashedLine(1.46,4.0,1.46,5.0,1,4);
-      dashedLine(1.46,4.0,1.93,4.0,1,4);
-      dashedLine(1.93,2.0,1.93,4.0,1,4);
-      dashedLine(1.93,2.0,2.4,2.0,1,4);
-      dashedLine(2.4,2.0,2.4,30.0,1,4);
-      dashedLine(-2.4,30.0,2.4,30.0,1,4);
-      dashedLine(-2.4,2.0,-2.4,30.0,1,4);
-    }
-    else {
-      dashedLine(-2.4,5.0,-1.97,5.0,1,4);
-      dashedLine(-1.97,5.0,-1.97,6.5,1,4);
-      dashedLine(-1.97,6.5,1.03,6.5,1,4);
-      dashedLine(1.03,5.0,1.03,6.5,1,4);
-      dashedLine(1.03,5.0,1.46,5.0,1,4);
-      dashedLine(1.46,5.0,1.46,30.0,1,4);
-      dashedLine(-2.4,30.0,1.46,30.0,1,4);
-      dashedLine(-2.4,5.0,-2.4,30.0,1,4);
-    }
-  }
+  outFile->Close();
 
-  c1->SaveAs(Form("%s/h2D_Eff_%s.pdf",szDir.Data(),szFinal.Data()));
-#endif
+  delete h2D_Den_pt_y; 
+  delete h2D_Num_pt_y; 
+  delete h2D_Eff_pt_y; 
+  delete h2D_Den_pt_y_fine; 
+  delete h2D_Num_pt_y_fine; 
+  delete h2D_Eff_pt_y_fine; 
+  delete h1D_zVtx;
+  
   return;
 
 }
