@@ -2,6 +2,13 @@
 ###########int rootAna_efficiency_divideEvt(int MrapNpt = 89, int isPA =0, int accCutType = 2, bool isPrompt = true, bool useZvtxWeight =false, bool useSF=true, int=initev=0. int nevt=10000000)
 ####################################################################
 ########## divide events to be merged later
+####### pp prompt : total 60830490
+####### pp non-prompt : total 69283445 
+####### Pbp prompt : total 8222669
+####### Pbp non-prompt : total 14892039
+####### pPb prompt : total 8012891
+####### pp non-prompt : total 15565599
+
 
 ### make directory
 if [ ! -d "toBeMerged_divideEvt" ]; then
