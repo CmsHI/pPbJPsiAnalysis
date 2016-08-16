@@ -3,8 +3,8 @@
 
 # pp (STEP1, STEP2, STEP3) 
   - ./shell_rootAna_divideEt_STEP1.sh : run [rootAna_efficiency_divideEvt.C] and save outputs (initevXXX_nevtXXX.root) in [toBeMerged_divideEvt]
-  - ./shell_hadd_STEP2.sh : add root files and create [merged***.root] in [toBeMerged_divideEvt]
-  - ./shell_makeEffAna_STEP3.sh : run [make_EffAna_fromMerged.C] to calculate correct efficiency using the [merged***.root] and make actual [***.root]
+  - ./shell_hadd_STEP2.sh : add root files and create [merged_XXX.root] in [toBeMerged_divideEvt]
+  - ./shell_makeEffAna_STEP3.sh : run [make_EffAna_fromMerged.C] to calculate correct efficiency using the [merged_XXX.root] and make actual [XXX.root]
 
 # Final Output Files
 - EffAna_8rap9pt_pp_PR_newcut_Zvtx0_SF1.root

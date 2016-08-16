@@ -30,18 +30,18 @@ EOF
 for evt in '0,5000000' '5000000,10000000' '10000001,15000000' '15000001,20000000' '20000001,25000000' '25000001,30000000' '30000001,35000000' '35000001,40000000' '40000001,45000000' '45000001,50000000' '50000001,55000000' '55000001,60830490'
 ###for evt in '0,5000000' '5000000,10000000' '10000001,15000000'
 do
-#  echo " *** pp PR Zvtx0_SF0 (evt = " $evt ") ***"
+#  echo " *** pp PR 8rap9pt Zvtx0_SF0 (evt = " $evt ") ***"
 #  root -l -b -q 'rootAna_efficiency_divideEvt.C(89,0,2,true,false,false,'$evt')'
-  echo " *** pp PR Zvtx0_SF1 (evt = " $evt ") ***"  ## actual
+  echo " *** pp PR 8rap9pt Zvtx0_SF1 (evt = " $evt ") ***"  ## actual
   root -l -b -q 'rootAna_efficiency_divideEvt.C(89,0,2,true,false,true,'$evt')'
 done
 
 ####### pp non-prompt : total 69283445 
 for evt in '0,5000000' '5000000,10000000' '10000001,15000000' '15000001,20000000' '20000001,25000000' '25000001,30000000' '30000001,35000000' '35000001,40000000' '40000001,45000000' '45000001,50000000' '50000001,55000000' '55000001,60000000' '60000001,65000000' '65000001,69283445'
 do
-#  echo " *** pp NP Zvtx0_SF0 (evt = " $evt ") ***"
+#  echo " *** pp NP 8rap9pt Zvtx0_SF0 (evt = " $evt ") ***"
 #  root -l -b -q 'rootAna_efficiency_divideEvt.C(89,0,2,false,false,false,'$evt')'
-  echo " *** pp NP Zvtx0_SF1 (evt = " $evt ") ***"  ## actual
+  echo " *** pp NP 8rap9pt Zvtx0_SF1 (evt = " $evt ") ***"  ## actual
   root -l -b -q 'rootAna_efficiency_divideEvt.C(89,0,2,false,false,true,'$evt')'
 done
 
