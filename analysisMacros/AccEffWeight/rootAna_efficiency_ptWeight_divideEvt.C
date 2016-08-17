@@ -51,19 +51,19 @@ TF1* hTnp_pp_new_eta5 = (TF1*)fTnp_pp_new->Get("func_5");
 ////// useSF : true=useTNPSF, false=no
 //////////////////////////////////////////////////////////////////////////////////  
 
-int rootAna_efficiency_ptWeight(int MrapNpt = 89, int isPA =1, int accCutType = 2, bool isPrompt = true, bool useZvtxWeight =true, bool useSF=true)
+int rootAna_efficiency_ptWeight_divideEvt(int MrapNpt = 89, int isPA =1, int accCutType = 2, bool isPrompt = true, bool useZvtxWeight =true, bool useSF=true, int initev=0, int nevt=100)
 {
   using namespace std;
-  int initev =0;
+  //int initev =0;
   //int initev =2205202;
-  int nevt;
-  if (isPA==0 && isPrompt) nevt = 10000000;
-  else if (isPA==0 && (!isPrompt)) nevt = 10000000;
-  else if (isPA==1 && (!isPrompt)) nevt = 8900000; 
-  else nevt = -1; //all
+  //int nevt;
+  //if (isPA==0 && isPrompt) nevt = 10000000;
+  //else if (isPA==0 && (!isPrompt)) nevt = 10000000;
+  //else if (isPA==1 && (!isPrompt)) nevt = 8900000; 
+  //if(isPA==0 && isPrompt==false) nevt = myTree->GetEntries()-2;
+  //else nevt = -1; //all
   //int nevt = 100000;
   //int nevt = 1000;
-  cout << "nevt : " << nevt;
 
   TString szBinning;
   if (MrapNpt==89)  {szBinning = "8rap9pt"; }
@@ -439,8 +439,6 @@ int rootAna_efficiency_ptWeight(int MrapNpt = 89, int isPA =1, int accCutType = 
   
   cout << "Entries of tree : " << myTree->GetEntries() << endl;
   if(nevt == -1) nevt = myTree->GetEntries();
-
-  //if(isPA==0 && isPrompt==false) nevt = myTree->GetEntries()-2;
   //// event loop start!
   for(int iev=initev; iev<nevt; ++iev){
     if(iev%100000==0) cout << ">>>>> EVENT " << iev << " / " << myTree->GetEntries() << " ("<<(int)(100.*iev/myTree->GetEntries()) << "%)" << endl;
@@ -449,8 +447,8 @@ int rootAna_efficiency_ptWeight(int MrapNpt = 89, int isPA =1, int accCutType = 
     ////else if (isPA==0 && isPrompt==false && (iev == 226946 || iev==36800 || iev == 780741 || iev == 884521)) continue;
     ////gDebug=2;
     //// **** buffer : pp official
-    if (isPA==0 && isPrompt==true && (iev==257671 || iev==728369 || iev==1962013)) continue;
-    else if (isPA==0 && isPrompt==false && (iev == 12770 || iev==94836 || iev==228145 || iev==499832 || iev==536493 || iev==536492 || iev==582358 || iev==617861 || iev==687792 || iev==981657 || iev==1085955 || iev==1361016 || iev == 1433478 || iev==1520599 || iev==1753490 || iev==1839208 || iev==1973187 || iev==1997056 || iev==2149281|| iev==2205201)) continue;
+    //if (isPA==0 && isPrompt==true && (iev==257671 || iev==728369 || iev==1962013)) continue;
+    //else if (isPA==0 && isPrompt==false && (iev == 12770 || iev==94836 || iev==228145 || iev==499832 || iev==536493 || iev==536492 || iev==582358 || iev==617861 || iev==687792 || iev==981657 || iev==1085955 || iev==1361016 || iev == 1433478 || iev==1520599 || iev==1753490 || iev==1839208 || iev==1973187 || iev==1997056 || iev==2149281|| iev==2205201)) continue;
     myTree->GetEntry(iev);
 //    cout << "iev = " << iev <<", buffer : " << myTree->GetEntry(iev) << endl;
 
@@ -566,7 +564,8 @@ int rootAna_efficiency_ptWeight(int MrapNpt = 89, int isPA =1, int accCutType = 
   ////////////////////////////////////////////////////////////////////////////
   // Save the data!
 
-  TFile *outFile = new TFile(Form("EffAna_%s_Zvtx%d_SF%d_ptWeight.root",szFinal.Data(), (int)useZvtxWeight,(int)useSF),"RECREATE");
+  //TFile *outFile = new TFile(Form("EffAna_%s_Zvtx%d_SF%d_ptWeight.root",szFinal.Data(), (int)useZvtxWeight,(int)useSF),"RECREATE");
+  TFile *outFile = new TFile(Form("toBeMerged_divideEvt/EffAna_%s_Zvtx%d_SF%d_ptWeight_initev%d_nevt%d.root",szFinal.Data(), (int)useZvtxWeight,(int)useSF,initev,nevt),"RECREATE");
   std::cout << "szFinal: " << szFinal << std::endl;
   outFile->cd();
   //h2D_ctErrmin->Write();
