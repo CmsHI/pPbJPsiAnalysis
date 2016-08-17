@@ -29,13 +29,13 @@ void draw_1D_parameters(TString szBinning="8rap9pt", int isPA=1, bool isPrompt=t
   else if (strcmp(szParam,"enne")==0) {binmin=1.5; binmax=3.0;}
   else if (strcmp(szParam,"sigmaNPTrue")==0) {binmin=-0.000005; binmax=0.00006;} // need to be tuned
   else if (strcmp(szParam,"coefExpNPTrue")==0) {binmin=0.0; binmax=1.;}
-  //else if (strcmp(szParam,"fracRes")==0) {binmin=0.0; binmax=1.;}
-  else if (strcmp(szParam,"fracRes")==0) {binmin=0.0; binmax=1.5;}
+  else if (strcmp(szParam,"fracRes")==0) {binmin=0.0; binmax=1.;}
+  //else if (strcmp(szParam,"fracRes")==0) {binmin=0.0; binmax=1.5;}
   else if (strcmp(szParam,"meanPRResW")==0) {binmin=-0.02; binmax=0.04;} //need to be tuned..
 //  else if (strcmp(szParam,"meanPRResW")==0) {binmin=-0.5; binmax=0.5;} //need to be tuned..
   else if (strcmp(szParam,"meanPRResN")==0) {binmin=-0.01; binmax=0.020;} 
-  //else if (strcmp(szParam,"sigmaPRResW")==0) {binmin=0.; binmax=5;} //need to be tuned..
-  else if (strcmp(szParam,"sigmaPRResW")==0) {binmin=1.; binmax=15;} //need to be tuned..
+  else if (strcmp(szParam,"sigmaPRResW")==0) {binmin=0.; binmax=6.5;} //need to be tuned..
+  //else if (strcmp(szParam,"sigmaPRResW")==0) {binmin=1.; binmax=15;} //need to be tuned..
   else if (strcmp(szParam,"sigmaPRResN")==0) {binmin=0.5; binmax=1.5;} 
   else if (strcmp(szParam,"fracCtBkg1")==0) {binmin=0.00; binmax=2.00;} 
   else if (strcmp(szParam,"fracCtBkg2")==0) {binmin=0.00; binmax=2.00;} 
