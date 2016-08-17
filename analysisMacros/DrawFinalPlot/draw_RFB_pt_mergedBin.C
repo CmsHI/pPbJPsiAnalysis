@@ -36,20 +36,12 @@ void draw_RFB_pt(bool sysByHand=false, bool noPtWeight=false, bool isPrompt=true
   Double_t pxtmp[nRapRFB][nPtRFB]; //x point to fill remporarily
   Double_t pytmp[nRapRFB][nPtRFB]; //y point to fill remporarily
   Double_t eytmp[nRapRFB][nPtRFB]; //y point error to fill remporarily
-/*  
   /// 2015 PAS
   Double_t px[nRapRFB][nPtRFB] = { // x point (mean pT)
     {5.740347, 7.90416, 13.21239}, // 1.5-1.93
     {-531, 7.95946, 13.31027}, //0.9-1.5
     {-531, 8.25131, 13.61970} //0.0-0.9
   };
-*/
-  Double_t px[nRapRFB][nPtRFB] = { // x point (mean pT)
-    {5.50494, 7.59243, 13.2826}, // 1.5-1.93
-    {-531, 7.69327, 13.2588}, //0.9-1.5
-    {-531, 8.13648, 13.5598} //0.0-0.9
-  };
-
   Double_t ex[nPtRFB] = {0.,0.,0.}; // x stat error (0)
   Double_t exlow[nRapRFB][nPtRFB];
   Double_t exhigh[nRapRFB][nPtRFB];

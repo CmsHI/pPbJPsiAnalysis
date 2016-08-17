@@ -8,15 +8,15 @@ root -l -b <<EOF
 .L draw_RpPb_pt.C++
 .q
 EOF
-root -l -b -q 'draw_RpPb_pt.C+(1,0,true)' >&logfiles/RpPb_PR_pt&
-root -l -b -q 'draw_RpPb_pt.C+(1,0,false)' >&logfiles/RpPb_NP_pt&
+root -l -b -q 'draw_RpPb_pt.C+(1,0,true)' 
+root -l -b -q 'draw_RpPb_pt.C+(1,0,false)' 
 
 root -l -b <<EOF
 .L draw_RpPb_rap.C++
 .q
 EOF
-root -l -b -q 'draw_RpPb_rap.C+(1,0,true)' >&logfiles/RpPb_PR_rap&
-root -l -b -q 'draw_RpPb_rap.C+(1,0,false)' >&logfiles/RpPb_NP_rap&
+root -l -b -q 'draw_RpPb_rap.C+(1,0,true)' 
+root -l -b -q 'draw_RpPb_rap.C+(1,0,false)' 
 
 echo ""
 echo "RpPb All Done!!!!!" 

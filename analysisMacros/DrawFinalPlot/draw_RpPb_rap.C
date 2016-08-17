@@ -18,7 +18,7 @@ void draw_RpPb_rap(bool sysByHand=false, bool noPtWeight=false, bool isPrompt=fa
 //	int iPos=0.;//outOfFrame
   
 	//double pxshift = 0.15;
-	double pxshift = 0.01;
+	double pxshift = 0.00;
   
   //// BR and lumi info.
   const Double_t br = 0.0593 ;

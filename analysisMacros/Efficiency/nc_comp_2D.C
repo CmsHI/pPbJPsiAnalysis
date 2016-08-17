@@ -4,8 +4,22 @@
   gStyle->SetPaintTextFormat(".3f");
   //gStyle->SetPaintTextFormat(".5f");
   
-  TFile* f01 = TFile::Open("EffAna_8rap9pt_pp_PR_newcut_Zvtx0_SF1.root");
-  TFile* f02 = TFile::Open("EffAna_8rap9pt_pp_PR_newcut_Zvtx0_SF1_t1.root");
+  TFile* f01 = TFile::Open("EffAna_8rap9pt_pp_PR_newcut_Zvtx1_SF1_loosemass.root");
+  TFile* f02 = TFile::Open("EffAna_8rap9pt_pp_PR_newcut_Zvtx0_SF1_loosemass.root");
+  
+  //TFile* f01 = TFile::Open("EffAna_8rap9pt_pp_PR_newcut_Zvtx0_SF1_loosemass.root");
+  //TFile* f02 = TFile::Open("EffAna_8rap9pt_pp_PR_newcut_Zvtx0_SF1.root");
+  //TFile* f01 = TFile::Open("EffAna_8rap9pt_pp_NP_newcut_Zvtx0_SF1_loosemass.root");
+  //TFile* f02 = TFile::Open("EffAna_8rap9pt_pp_NP_newcut_Zvtx0_SF1.root");
+  //TFile* f01 = TFile::Open("EffAna_8rap9pt_Pbp_PR_newcut_Zvtx1_SF1_loosemass.root");
+  //TFile* f02 = TFile::Open("EffAna_8rap9pt_Pbp_PR_newcut_Zvtx1_SF1.root");
+  //TFile* f01 = TFile::Open("EffAna_8rap9pt_Pbp_NP_newcut_Zvtx1_SF1_loosemass.root");
+  //TFile* f02 = TFile::Open("EffAna_8rap9pt_Pbp_NP_newcut_Zvtx1_SF1.root");
+  //TFile* f01 = TFile::Open("EffAna_8rap9pt_pPb_PR_newcut_Zvtx1_SF1_loosemass.root");
+  //TFile* f02 = TFile::Open("EffAna_8rap9pt_pPb_PR_newcut_Zvtx1_SF1.root");
+  //TFile* f01 = TFile::Open("EffAna_8rap9pt_pPb_NP_newcut_Zvtx1_SF1_loosemass.root");
+  //TFile* f02 = TFile::Open("EffAna_8rap9pt_pPb_NP_newcut_Zvtx1_SF1.root");
+  
   //TFile* f01 = TFile::Open("EffAna_8rap9pt_pp_PR_newcut_Zvtx1_SF0_test02.root");
   //TFile* f02 = TFile::Open("EffAna_8rap9pt_pp_PR_newcut_Zvtx0_SF0.root");
   //TFile* f01 = TFile::Open("EffAna_8rap9pt_Pbp_PR_newcut_Zvtx1_SF1.root");
@@ -24,6 +38,7 @@
   h2D_01->Divide(h2D_02);
   //h2D_01->SetMaximum(1.3);  
   //h2D_01->SetMaximum(1.7);  
-  h2D_01->Draw("text e colz");
+  //h2D_01->Draw("text e colz");
+  h2D_01->Draw("text colz");
 
 }

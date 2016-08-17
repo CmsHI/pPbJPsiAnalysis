@@ -49,32 +49,63 @@ void comp_RFB_rap_Vogt(bool isLine=true, bool isSmoothened=false)
 	
   TGraphAsymmErrors* gRFB_theory_lowpt = new TGraphAsymmErrors(nRapRFB, theory_px, theory_py_lowpt, theory_exlow, theory_exhigh, theory_eylow_lowpt, theory_eyhigh_lowpt);	
 	gRFB_theory_lowpt->SetFillColor(kRed-7);
+	gRFB_theory_lowpt->SetLineColor(kRed-7);
   if (isSmoothened) gRFB_theory_lowpt->SetFillStyle(3254);
   else gRFB_theory_lowpt->SetFillStyle(3004);
   if(!isLine) gRFB_theory_lowpt->SetLineWidth(0);
 //  cout << "GetHatchesSpacing = " << gRFB_theory_lowpt->GetHatchesSpacing() << endl;
-	gRFB_theory_lowpt->SetLineColor(kRed-7);
-	gRFB_theory_lowpt->GetXaxis()->SetLimits(0., 2.0);
-	gRFB_theory_lowpt->SetMinimum(0.5);
-	gRFB_theory_lowpt->SetMaximum(1.15);
+/*
+	gRFB_theory_lowpt->GetXaxis()->SetLimits(0., 2.1);
+	gRFB_theory_lowpt->SetMinimum(0.0);
+	gRFB_theory_lowpt->SetMaximum(1.8);
   gRFB_theory_lowpt->GetXaxis()->SetTitle("|y_{CM}|");
   gRFB_theory_lowpt->GetXaxis()->CenterTitle();
   gRFB_theory_lowpt->GetYaxis()->SetTitle("R_{FB}");
   gRFB_theory_lowpt->GetYaxis()->CenterTitle();
-	if (isSmoothened) gRFB_theory_lowpt->Draw("A3");
-	else gRFB_theory_lowpt->Draw("A5");
-	
+*/	
   TGraphAsymmErrors* gRFB_theory_highpt = new TGraphAsymmErrors(nRapRFB, theory_px, theory_py_highpt, theory_exlow, theory_exhigh, theory_eylow_highpt, theory_eyhigh_highpt);	
 	gRFB_theory_highpt->SetFillColor(kGreen-4);
+	gRFB_theory_highpt->SetLineColor(kGreen-4);
   if (isSmoothened) gRFB_theory_highpt->SetFillStyle(3245);
   else gRFB_theory_highpt->SetFillStyle(3005);
   if(!isLine) gRFB_theory_highpt->SetLineWidth(0);
-	gRFB_theory_highpt->SetLineColor(kGreen-4);
+
+	///////////////////////////////////////////////////
+	//// overlay experimental points	
+	///////////////////////////////////////////////////
+  //// NEW
+	TFile *inFile = new TFile("../DrawFinalPlot/plot_RFB/RFB_rap_isPrompt1.root");
+	TGraphAsymmErrors* gRFB_sys_lowpt = (TGraphAsymmErrors*)inFile->Get("gRFB_sys_lowpt"); 	
+	TGraphAsymmErrors* gRFB_sys_lowpt_line = (TGraphAsymmErrors*)inFile->Get("gRFB_sys_lowpt"); 	
+	TGraphAsymmErrors* gRFB_lowpt = (TGraphAsymmErrors*)inFile->Get("gRFB_lowpt"); 	
+	TGraphAsymmErrors* gRFB_sys_highpt = (TGraphAsymmErrors*)inFile->Get("gRFB_sys_highpt"); 	
+	TGraphAsymmErrors* gRFB_sys_highpt_line = (TGraphAsymmErrors*)inFile->Get("gRFB_sys_highpt"); 	
+	TGraphAsymmErrors* gRFB_highpt = (TGraphAsymmErrors*)inFile->Get("gRFB_highpt"); 	
+	
+	gRFB_sys_lowpt->SetFillColorAlpha(kRed-10,0.5);
+	gRFB_sys_lowpt_line->SetFillColorAlpha(kRed-10,0.0);
+	gRFB_sys_highpt->SetFillColorAlpha(kGreen-10,0.5);
+	gRFB_sys_highpt_line->SetFillColorAlpha(kGreen-10,0.0);
+	SetGraphStyleFinal(gRFB_lowpt,1,3);
+	gRFB_lowpt->SetMarkerSize(1.4);
+	SetGraphStyleFinal(gRFB_highpt,0,5);
+	gRFB_highpt->SetMarkerSize(2.1);
+	
+  //////////////// Draw
+
+  gRFB_sys_lowpt->Draw("A5");
+	gRFB_sys_highpt->Draw("5");
+  gRFB_sys_lowpt_line->Draw("5");
+	gRFB_sys_highpt_line->Draw("5");
+	if (isSmoothened) gRFB_theory_lowpt->Draw("3");
+	else gRFB_theory_lowpt->Draw("5");
 	if (isSmoothened) gRFB_theory_highpt->Draw("3");
   else gRFB_theory_highpt->Draw("5");
-
+	gRFB_lowpt->Draw("P");
+	gRFB_highpt->Draw("P");
+  
   dashedLine(0.,1.,2.,1.,1,1);
- 
+
   ////Legend for experiment 
   TLegend *leg_exp = new TLegend(0.21,0.24,0.50,0.37,NULL,"brNDC");
   SetLegendStyle(leg_exp);
@@ -85,18 +116,19 @@ void comp_RFB_rap_Vogt(bool isLine=true, bool isSmoothened=false)
   ent1_exp->SetLineColor(kPink-6);
   ent1_exp->SetMarkerStyle(kFullSquare);
   ent1_exp->SetMarkerColor(kPink-6);
-  ent1_exp->SetMarkerSize(2.1);
+  ent1_exp->SetMarkerSize(1.9);
 	TLegendEntry *ent2_exp=leg_exp->AddEntry("ent2_exp","10 < p_{T} < 30 GeV/c","lpf");
-  ent2_exp->SetFillColor(kTeal-9);
+  ent2_exp->SetFillColor(kGreen-10);
   ent2_exp->SetFillStyle(1001);
   ent2_exp->SetLineColor(kGreen+3);
   ent2_exp->SetMarkerStyle(kFullDiamond);
   ent2_exp->SetMarkerColor(kGreen+3);
-  ent2_exp->SetMarkerSize(3.3);
+  ent2_exp->SetMarkerSize(3.1);
   leg_exp->Draw();
   
   ////Legend-like boxes for theory 
-  TBox * box1_thr = new TBox(0.145, 0.54, 0.245, 0.58);
+  //TBox * box1_thr = new TBox(0.145, 0.54, 0.245, 0.58);
+  TBox * box1_thr = new TBox(0.145, 0.1, 0.245, 0.2);
 	box1_thr->SetFillColor(kRed-7);
   if (isSmoothened) box1_thr->SetFillStyle(3254);
   else box1_thr->SetFillStyle(3004);
@@ -105,7 +137,8 @@ void comp_RFB_rap_Vogt(bool isLine=true, bool isSmoothened=false)
   box1_thr->SetLineColor(kRed-7);
   box1_thr->Draw("l");
   
-  TBox * box2_thr = new TBox(0.275, 0.54, 0.375, 0.58);
+  //TBox * box2_thr = new TBox(0.275, 0.54, 0.375, 0.58);
+  TBox * box2_thr = new TBox(0.275, 0.1, 0.375, 0.2);
 	box2_thr->SetFillColor(kGreen-4);
   if (isSmoothened) box2_thr->SetFillStyle(3245);
   else box2_thr->SetFillStyle(3005);
@@ -120,43 +153,6 @@ void comp_RFB_rap_Vogt(bool isLine=true, bool isSmoothened=false)
   tex_thr->SetTextFont(42);
   tex_thr->DrawLatex(0.33, 0.20, "EPS09 NLO + CEM (Vogt)");
 	
-/*
-  //// Legend	
-  TLegend *leg_lowpt = new TLegend(0.20,0.28,0.45,0.40,NULL,"brNDC");
-  SetLegendStyle(leg_lowpt);
-  TLegendEntry *ent1_exp=leg_lowpt->AddEntry("ent1_exp","CMS, 6.5 < p_{T} < 10 GeV/c","lpf");
-  ent1_exp->SetFillColor(kRed-10);
-  ent1_exp->SetFillStyle(1001);
-  ent1_exp->SetLineColor(kPink-6);
-  ent1_exp->SetMarkerStyle(kFullSquare);
-  ent1_exp->SetMarkerColor(kPink-6);
-  ent1_exp->SetMarkerSize(2.1);
-  TLegendEntry *ent1_thr=leg_lowpt->AddEntry("ent1_thr","EPS09 NLO + CEM (Vogt)","f");
-	ent1_thr->SetFillColor(kRed-7);
-  if (isSmoothened) ent1_thr->SetFillStyle(3254);
-  else ent1_thr->SetFillStyle(3004);
-  if(!isLine) ent1_thr->SetLineWidth(0);
-  ent1_thr->SetLineColor(kRed-7);
-	leg_lowpt->Draw();
-  
-  TLegend *leg_highpt = new TLegend(0.20,0.16,0.45,0.28,NULL,"brNDC");
-  SetLegendStyle(leg_highpt);
-	TLegendEntry *ent2_exp=leg_highpt->AddEntry("ent2_exp","CMS, 10 < p_{T} < 30 GeV/c","lpf");
-  ent2_exp->SetFillColor(kTeal-9);
-  ent2_exp->SetFillStyle(1001);
-  ent2_exp->SetLineColor(kGreen+3);
-  ent2_exp->SetMarkerStyle(kFullDiamond);
-  ent2_exp->SetMarkerColor(kGreen+3);
-  ent2_exp->SetMarkerSize(3.3);
-  TLegendEntry *ent2_thr=leg_highpt->AddEntry("ent2_thr","EPS09 NLO + CEM (Vogt)","f");
-	ent2_thr->SetFillColor(kGreen-4);
-  if (isSmoothened) ent2_thr->SetFillStyle(3245);
-  else ent2_thr->SetFillStyle(3005);
-  if(!isLine) ent2_thr->SetLineWidth(0);
-  ent2_thr->SetLineColor(kGreen-4);
-	leg_highpt->Draw();
-*/
-
   TLatex* globtex = new TLatex();
   globtex->SetNDC();
   globtex->SetTextAlign(12); 
@@ -164,29 +160,10 @@ void comp_RFB_rap_Vogt(bool isLine=true, bool isSmoothened=false)
   globtex->SetTextFont(42);
   globtex->DrawLatex(0.21, 0.84, "Prompt J/#psi");
 	
-	///////////////////////////////////////////////////
-	//// overlay experimental points	
-	///////////////////////////////////////////////////
-  //// PAS
-	//TFile *inFile = new TFile("../../2015PAS/drawFinalPlot/RFB_8rap9pt2gev/RFB_rap_isPrompt1.root");
-  //// NEW
-	TFile *inFile = new TFile("../DrawFinalPlot/plot_RFB/RFB_rap_isPrompt1.root");
-	TGraphAsymmErrors* gRFB_sys_lowpt = (TGraphAsymmErrors*)inFile->Get("gRFB_sys_lowpt"); 	
-	TGraphAsymmErrors* gRFB_lowpt = (TGraphAsymmErrors*)inFile->Get("gRFB_lowpt"); 	
-	TGraphAsymmErrors* gRFB_sys_highpt = (TGraphAsymmErrors*)inFile->Get("gRFB_sys_highpt"); 	
-	TGraphAsymmErrors* gRFB_highpt = (TGraphAsymmErrors*)inFile->Get("gRFB_highpt"); 	
 	
-	gRFB_sys_lowpt->SetFillColor(kRed-10); //tmp
-	gRFB_sys_lowpt->Draw("2");
-	gRFB_sys_highpt->SetFillColor(kTeal-9); //tmp
-	gRFB_sys_highpt->Draw("2");
-	SetGraphStyleFinal(gRFB_lowpt,1,3);
-	gRFB_lowpt->Draw("P");
-	SetGraphStyleFinal(gRFB_highpt,0,5);
-	gRFB_highpt->SetMarkerSize(3.3);
-	gRFB_highpt->Draw("P");
-
-	CMS_lumi( c1, isPA, iPos );
+  
+  
+  CMS_lumi( c1, isPA, iPos );
   c1->Update();
   if (isSmoothened) {
     c1->SaveAs("plot_theory/comp_RFB_rap_Vogt_smoothened.pdf");

@@ -56,7 +56,9 @@ int rootAna_efficiency_ptWeight(int MrapNpt = 89, int isPA =1, int accCutType = 
   int initev =0;
   //int initev =2205202;
   int nevt;
-  if (!isPrompt) nevt = 8900000; 
+  if (isPA==0 && isPrompt) nevt = 10000000;
+  else if (isPA==0 && (!isPrompt)) nevt = 10000000;
+  else if (isPA==1 && (!isPrompt)) nevt = 8900000; 
   else nevt = -1; //all
   //int nevt = 100000;
   //int nevt = 1000;
@@ -96,12 +98,12 @@ int rootAna_efficiency_ptWeight(int MrapNpt = 89, int isPA =1, int accCutType = 
   ////// read-in HiOniaTrees
   if (isPA==0){
     if (isPrompt) {
-      f1 = new TFile("/home/storage/OniaTree/Onia5TeV/ppOfficialMC/OniaTree_JpsiMM_5p02TeV_TuneCUETP8M1_Trk_HINppWinter16DR-75X_mcRun2_asymptotic_ppAt5TeV_v3-v1.root","READ"); //official
-      //f1 = new TFile("/home/songkyo/kyo/ppDataSample/EfficiencySamplePrivate/OniaTree_JpsiMM_pp5p02TeV_TuneCUETP8M1_Trk_noCUT.root","READ"); //private
+      //f1 = new TFile("/home/storage/OniaTree/Onia5TeV/ppOfficialMC/OniaTree_JpsiMM_5p02TeV_TuneCUETP8M1_Trk_HINppWinter16DR-75X_mcRun2_asymptotic_ppAt5TeV_v3-v1.root","READ"); //official
+      f1 = new TFile("/home/storage/OniaTree/Onia5TeV/ppOfficialMC/OniaTree_JpsiMM_5p02TeV_TuneCUETP8M1_Trk_HINppWinter16DR-75X_mcRun2_asymptotic_ppAt5TeV_v3-v1_ExtendedKYO.root","READ"); //official extended
     }
     else {
-      f1 = new TFile("/home/storage/OniaTree/Onia5TeV/ppOfficialMC/OniaTree_BJpsiMM_5p02TeV_TuneCUETP8M1_Trk_HINppWinter16DR-75X_mcRun2_asymptotic_ppAt5TeV_v3-v1.root","READ"); //official
-      //f1 = new TFile("/home/songkyo/kyo/ppDataSample/EfficiencySamplePrivate/OniaTree_BJpsiMM_pp5p02TeV_TuneCUETP8M1_Trk_noCUT.root","READ"); //private
+      //f1 = new TFile("/home/storage/OniaTree/Onia5TeV/ppOfficialMC/OniaTree_BJpsiMM_5p02TeV_TuneCUETP8M1_Trk_HINppWinter16DR-75X_mcRun2_asymptotic_ppAt5TeV_v3-v1.root","READ"); //official
+      f1 = new TFile("/home/storage/OniaTree/Onia5TeV/ppOfficialMC/OniaTree_BJpsiMM_5p02TeV_TuneCUETP8M1_Trk_HINppWinter16DR-75X_mcRun2_asymptotic_ppAt5TeV_v3-v1_ExtendedKYO.root","READ"); //official extended
     }
   }
   else if (isPA==1){
@@ -436,7 +438,7 @@ int rootAna_efficiency_ptWeight(int MrapNpt = 89, int isPA =1, int accCutType = 
   cout << "Entries of tree : " << myTree->GetEntries() << endl;
   if(nevt == -1) nevt = myTree->GetEntries();
 
-  if(isPA==0 && isPrompt==false) nevt = myTree->GetEntries()-2;
+  //if(isPA==0 && isPrompt==false) nevt = myTree->GetEntries()-2;
   //// event loop start!
   for(int iev=initev; iev<nevt; ++iev){
     if(iev%100000==0) cout << ">>>>> EVENT " << iev << " / " << myTree->GetEntries() << " ("<<(int)(100.*iev/myTree->GetEntries()) << "%)" << endl;

@@ -3,27 +3,26 @@
 
 void CMS_lumi( TPad* pad, int iPeriod, int iPosX );
 
-void comp_RFB_pt_Vogt(double ptmax=20, bool isLine=true, bool isSmoothened=false)
+void comp_RFB_pt_Vogt(double ptmax=32, bool isLine=true, bool isSmoothened=false)
 {
 	gROOT->Macro("./tdrstyle_kyo.C");
-  
-  TCanvas* c1 = new TCanvas("c1","c1",200,10,600,600);
-	c1->cd();
 	int isPA = 1;  // 0:pp, 1:pPb
 	int iPos=0;
 
-	///////////////////////////////////////////////////
+  bool isPrompt=true;
+	
+  ///////////////////////////////////////////////////
 	///////// from Ramona
 	const int nRapRFB = 3;
 	//const int nPtRFB = 3;
 	const int nPtRFB = 5;
 	//// *** NOTE ***
-  //// *** low_pT(5 or 6.5) and high_pT(20) points for bin edge are added artificially for isSmoothend
+  //// *** low_pT(5 or 6.5) and high_pT(20) points for bin edge are added artificially for isSmoothened
   //// *** Also theory values are copied from 0.45 to 0.0, and from 1.71 to 1.93.
 	Double_t theory_px[nRapRFB][nPtRFB] = {
-    {5., 5.740347, 7.90416, 13.21239, ptmax}, //1.5-1.93
-    {6.5, 6.5, 7.95946, 13.31027, ptmax}, //0.9-1.5 
-    {6.5, 6.5, 8.25131, 13.61970, ptmax} //0.0-0.9
+    {5., 5.740347, 7.90416, 13.21239, 30.}, //1.5-1.93
+    {6.5, 6.5, 7.95946, 13.31027, 30.}, //0.9-1.5 
+    {6.5, 6.5, 8.25131, 13.61970, 30.} //0.0-0.9
   };
 	Double_t theory_py[nRapRFB][nPtRFB] = {
     {9.4911E-01, 9.4911E-01, 9.2275E-01, 9.0718E-01, 9.0718E-01},
@@ -31,14 +30,14 @@ void comp_RFB_pt_Vogt(double ptmax=20, bool isLine=true, bool isSmoothened=false
     {9.8764E-01, 9.8764E-01, 9.8764E-01, 9.8128E-01, 9.8128E-01}
   };
 	Double_t theory_exlow_tmp[nRapRFB][nPtRFB] = {
-    {5., 5., 6.5, 10., ptmax},
-    {6.5, 6.5, 6.5, 10, ptmax},
-    {6.5, 6.5, 6.5, 10., ptmax}
+    {5., 5., 6.5, 10., 30.},
+    {6.5, 6.5, 6.5, 10, 30.},
+    {6.5, 6.5, 6.5, 10., 30.}
 	};
   Double_t theory_exhigh_tmp[nRapRFB][nPtRFB] = {
-    {5., 6.5, 10., ptmax, ptmax},
-    {6.5, 6.5, 10, ptmax, ptmax},
-    {6.5, 6.5, 10., ptmax, ptmax}
+    {5., 6.5, 10., 30., 30.},
+    {6.5, 6.5, 10, 30., 30.},
+    {6.5, 6.5, 10., 30., 30.}
   };
 	Double_t theory_exlow[nRapRFB][nPtRFB];
 	Double_t theory_exhigh[nRapRFB][nPtRFB];
@@ -68,161 +67,29 @@ void comp_RFB_pt_Vogt(double ptmax=20, bool isLine=true, bool isSmoothened=false
   for (int ir = 0 ; ir < nRapRFB; ir ++ ) {
     gRFB_theory[ir]= new TGraphAsymmErrors(nPtRFB, theory_px[ir], theory_py[ir], theory_exlow[ir], theory_exhigh[ir], theory_eylow[ir], theory_eyhigh[ir]);	
   }
-	gRFB_theory[0]->SetFillColor(kGreen-4);
-  if (isSmoothened) gRFB_theory[0]->SetFillStyle(3245);
-  else gRFB_theory[0]->SetFillStyle(3005);
-	if(!isLine) gRFB_theory[0]->SetLineWidth(0);
-	gRFB_theory[0]->SetLineColor(kGreen-4);
-	gRFB_theory[0]->GetXaxis()->SetLimits(0.,ptmax);
-	gRFB_theory[0]->SetMinimum(0.5);
-	gRFB_theory[0]->SetMaximum(1.15);
-  gRFB_theory[0]->GetXaxis()->SetTitle("p_{T} [GeV/c]");
-  gRFB_theory[0]->GetXaxis()->CenterTitle();
-  gRFB_theory[0]->GetYaxis()->SetTitle("R_{FB}");
-  gRFB_theory[0]->GetYaxis()->CenterTitle();
-	if (isSmoothened) gRFB_theory[0]->Draw("A3");
-  else gRFB_theory[0]->Draw("A5");
-  gRFB_theory[1]->SetFillColor(kRed-7);
-  if (isSmoothened) gRFB_theory[1]->SetFillStyle(3254);
-  else gRFB_theory[1]->SetFillStyle(3004);
-  if(!isLine) gRFB_theory[1]->SetLineWidth(0);
-  gRFB_theory[1]->SetLineColor(kRed-7);
-	if (isSmoothened) gRFB_theory[1]->Draw("3");
-	else gRFB_theory[1]->Draw("5");
-	gRFB_theory[2]->SetFillColor(kAzure+1);
-  gRFB_theory[2]->SetFillStyle(3002);
-  //gRFB_theory[2]->SetFillStyle(3295);
-	if(!isLine) gRFB_theory[2]->SetLineWidth(0);
-	gRFB_theory[2]->SetLineColor(kAzure+1);
-	if (isSmoothened) gRFB_theory[2]->Draw("3");
-	else gRFB_theory[2]->Draw("5");
-
-	dashedLine(0.,1.,ptmax,1.,1,1);
-  
-  //// Legend for experiments	
-  TLegend *leg_exp = new TLegend(0.58,0.25,0.85,0.45,NULL,"brNDC");
-  SetLegendStyle(leg_exp);
-  //leg_exp->SetTextSize(0.033);
-  TLegendEntry *ent1_exp=leg_exp->AddEntry("ent1_exp","0 < |y_{CM}| < 0.9","lpf");
-  ent1_exp->SetFillColor(kBlue-10);
-  ent1_exp->SetFillStyle(1001);
-  ent1_exp->SetLineColor(kBlue-3);
-  ent1_exp->SetMarkerStyle(kFullCircle);
-  ent1_exp->SetMarkerColor(kBlue-3);
-  ent1_exp->SetMarkerSize(2.1);
-  TLegendEntry *ent2_exp=leg_exp->AddEntry("ent2_exp","0.9 < |y_{CM}| < 1.5","lpf");
-  ent2_exp->SetFillColor(kRed-10);
-  ent2_exp->SetFillStyle(1001);
-  ent2_exp->SetLineColor(kPink-6);
-  ent2_exp->SetMarkerStyle(kFullSquare);
-  ent2_exp->SetMarkerColor(kPink-6);
-  ent2_exp->SetMarkerSize(2.1);
-	TLegendEntry *ent3_exp=leg_exp->AddEntry("ent3_exp","1.5 < |y_{CM}| < 1.93","lpf");
-  ent3_exp->SetFillColor(kTeal-9);
-  ent3_exp->SetFillStyle(1001);
-  ent3_exp->SetLineColor(kGreen+3);
-  ent3_exp->SetMarkerStyle(kFullDiamond);
-  ent3_exp->SetMarkerColor(kGreen+3);
-  ent3_exp->SetMarkerSize(3.3);
-	leg_exp->Draw();
-  
-  ////Legend-like boxes for theory 
-  TBox * box1_thr = new TBox(5.0, 0.54, 6.0, 0.58);
-	box1_thr->SetFillColor(kAzure+1);
-  if (isSmoothened) box1_thr->SetFillStyle(3002);
-  else box1_thr->SetFillStyle(3002);
-  if(!isLine) box1_thr->SetLineWidth(0);
-  box1_thr->SetLineColor(kAzure+1);
-  box1_thr->Draw("l");
-  
-  TBox * box2_thr = new TBox(6.25, 0.54, 7.25, 0.58);
-	box2_thr->SetFillColor(kRed-7);
-  if (isSmoothened) box2_thr->SetFillStyle(3254);
-  else box2_thr->SetFillStyle(3004);
-  if(isLine) box2_thr->SetLineWidth(1);
-  else box2_thr->SetLineWidth(0);
-  box2_thr->SetLineColor(kRed-7);
-  box2_thr->Draw("l");
 	
-  TBox * box3_thr = new TBox(7.5, 0.54, 8.5, 0.58);
-  box3_thr->SetFillColor(kGreen-4);
-  if (isSmoothened) box3_thr->SetFillStyle(3245);
-  else box3_thr->SetFillStyle(3005);
-  if(!isLine) box3_thr->SetLineWidth(0);
-  box3_thr->SetLineColor(kGreen-4);
-  box3_thr->Draw("l");
+  for (int iy=0; iy<nRapRFB; iy++) {
+	  gRFB_theory[iy]->GetXaxis()->SetLimits(0.,ptmax);
+	  gRFB_theory[iy]->SetMinimum(0.0);
+	  gRFB_theory[iy]->SetMaximum(1.8);
+    gRFB_theory[iy]->GetXaxis()->SetTitle("p_{T} [GeV/c]");
+    gRFB_theory[iy]->GetXaxis()->CenterTitle();
+    gRFB_theory[iy]->GetYaxis()->SetTitle("R_{FB}");
+    gRFB_theory[iy]->GetYaxis()->CenterTitle();
+    gRFB_theory[iy]->SetFillColorAlpha(kYellow,0.5);
+	  gRFB_theory[iy]->SetLineColor(kOrange+7);
+	  //gRFB_theory[iy]->SetFillStyle(3004);
+    if(!isLine) gRFB_theory[iy]->SetLineWidth(0);
+  }
   
-  TLatex* tex_thr = new TLatex();
-  tex_thr->SetNDC();
-  tex_thr->SetTextAlign(32); 
-  tex_thr->SetTextSize(0.040);
-  tex_thr->SetTextFont(42);
-  tex_thr->DrawLatex(0.93, 0.20, "EPS09 NLO + CEM (Vogt)");
-
-/*
-  //// Legend	
-  TLegend *legBR = new TLegend(0.45,0.15,0.70,0.42,NULL,"brNDC");
-  SetLegendStyle(legBR);
-  legBR->SetTextSize(0.033);
-  TLegendEntry *ent1_exp=legBR->AddEntry("ent1_exp","CMS, 0 < |y_{CM}| < 0.9","lpf");
-  ent1_exp->SetFillColor(kBlue-10);
-  ent1_exp->SetFillStyle(1001);
-  ent1_exp->SetLineColor(kBlue-3);
-  ent1_exp->SetMarkerStyle(kFullCircle);
-  ent1_exp->SetMarkerColor(kBlue-3);
-  ent1_exp->SetMarkerSize(2.1);
-  TLegendEntry *ent1_thr=legBR->AddEntry("ent1_thr","EPS09 NLO + CEM (Vogt)","f");
-	ent1_thr->SetFillColor(kAzure+1);
-  if (isSmoothened) ent1_thr->SetFillStyle(3002);
-  else ent1_thr->SetFillStyle(3002);
-  if(!isLine) ent1_thr->SetLineWidth(0);
-  ent1_thr->SetLineColor(kAzure+1);
- 
-  TLegendEntry *ent2_exp=legBR->AddEntry("ent2_exp","CMS, 0.9 < |y_{CM}| < 1.5","lpf");
-  ent2_exp->SetFillColor(kRed-10);
-  ent2_exp->SetFillStyle(1001);
-  ent2_exp->SetLineColor(kPink-6);
-  ent2_exp->SetMarkerStyle(kFullSquare);
-  ent2_exp->SetMarkerColor(kPink-6);
-  ent2_exp->SetMarkerSize(2.1);
-  TLegendEntry *ent2_thr=legBR->AddEntry("ent2_thrr","EPS09 NLO + CEM (Vogt)","f");
-	ent2_thr->SetFillColor(kRed-7);
-  if (isSmoothened) ent2_thr->SetFillStyle(3254);
-  else ent2_thr->SetFillStyle(3004);
-  if(!isLine) ent2_thr->SetLineWidth(0);
-  ent2_thr->SetLineColor(kRed-7);
-  
-	TLegendEntry *ent3_exp=legBR->AddEntry("ent3_exp","CMS, 1.5 < |y_{CM}| < 1.93","lpf");
-  ent3_exp->SetFillColor(kTeal-9);
-  ent3_exp->SetFillStyle(1001);
-  ent3_exp->SetLineColor(kGreen+3);
-  ent3_exp->SetMarkerStyle(kFullDiamond);
-  ent3_exp->SetMarkerColor(kGreen+3);
-  ent3_exp->SetMarkerSize(3.3);
-  TLegendEntry *ent3_thr=legBR->AddEntry("ent3_thr","EPS09 NLO + CEM (Vogt)","f");
-	ent3_thr->SetFillColor(kGreen-4);
-  if (isSmoothened) ent3_thr->SetFillStyle(3245);
-  else ent3_thr->SetFillStyle(3005);
-  if(!isLine) ent3_thr->SetLineWidth(0);
-  ent3_thr->SetLineColor(kGreen-4);
-	legBR->Draw();
-*/
-
-  TLatex* globtex = new TLatex();
-  globtex->SetNDC();
-  globtex->SetTextAlign(12); 
-  globtex->SetTextSize(0.055);
-  globtex->SetTextFont(42);
-  globtex->DrawLatex(0.21, 0.84, "Prompt J/#psi");
+  //if (isSmoothened) gRFB_theory[0]->SetFillStyle(3245);
+  //else gRFB_theory[0]->SetFillStyle(3004);
+  //if (isSmoothened) gRFB_theory[1]->SetFillStyle(3254);
+  //else gRFB_theory[1]->SetFillStyle(3004);
+  //gRFB_theory[2]->SetFillStyle(3002);
 	
-	
-  ///////////////////////////////////////////////////
-	//////// overlay experimental points	
 	///////////////////////////////////////////////////
-
-  //// PAS
-  //TFile *inFile = new TFile("../../2015PAS/drawFinalPlot/RFB_8rap9pt2gev/RFB_pt_isPrompt1.root");
-  //// NEW
+  //////// experimental points	
   TFile *inFile = new TFile("../DrawFinalPlot/plot_RFB/RFB_pt_isPrompt1.root");
   
   TGraphAsymmErrors* gRFB_sys[nRapRFB];
@@ -230,37 +97,182 @@ void comp_RFB_pt_Vogt(double ptmax=20, bool isLine=true, bool isSmoothened=false
   for (int ir = 0 ; ir < nRapRFB; ir ++ ) {
     gRFB_sys[ir] = (TGraphAsymmErrors*)inFile->Get(Form("gRFB_sys_%d",ir));
     gRFB[ir] = (TGraphAsymmErrors*)inFile->Get(Form("gRFB_%d",ir));
-    // tmp for PAS (sys erro box width)
-    for (int ipt=0; ipt < nPtRFB; ipt++) {
-      gRFB_sys[ir]->SetPointEXlow(ipt, 0.3);
-      gRFB_sys[ir]->SetPointEXhigh(ipt, 0.3);
-    } 
   } 
   
-  gRFB_sys[0]->SetFillColor(kTeal-9);
-	gRFB_sys[0]->Draw("2");
+  gRFB_sys[0]->SetFillColor(kGreen-10);
   gRFB_sys[1]->SetFillColor(kRed-10);
-	gRFB_sys[1]->Draw("2");
   gRFB_sys[2]->SetFillColor(kBlue-10);
-	gRFB_sys[2]->Draw("2");
+  gRFB_sys[0]->SetLineColor(kGreen+3);
+  gRFB_sys[1]->SetLineColor(kPink-6);
+  gRFB_sys[2]->SetLineColor(kBlue-3);
 
   SetGraphStyleFinal(gRFB[0], 0, 5);
   SetGraphStyleFinal(gRFB[1], 1, 3);
   SetGraphStyleFinal(gRFB[2], 2, 0);
-  gRFB[0]->SetMarkerSize(3.3);
-	gRFB[0]->Draw("P");
-	gRFB[1]->Draw("P");
-	gRFB[2]->Draw("P");
+  gRFB[0]->SetMarkerSize(2.6);
+  gRFB[1]->SetMarkerSize(1.4);
+  gRFB[2]->SetMarkerSize(1.4);
+  
+  ///////////////////////////////////////////////////////////////////////
 	
+  //TLegend *legBL = new TLegend(0.50, 0.18, 0.70, 0.39);
+  TLegend *legBL1 = new TLegend(0.20, 0.18, 0.40, 0.34);
+  TLegend *legBL2 = new TLegend(0.20, 0.18, 0.40, 0.34);
+  TLegend *legBL3 = new TLegend(0.20, 0.18, 0.40, 0.34);
+	SetLegendStyle(legBL1);
+	SetLegendStyle(legBL2);
+	SetLegendStyle(legBL3);
+	legBL1->SetTextSize(0.05);
+	legBL2->SetTextSize(0.05);
+	legBL3->SetTextSize(0.05);
+	
+  TLatex* globtex = new TLatex();
+	globtex->SetNDC();
+	globtex->SetTextAlign(12); //1:left, 2:vertical center
+  //globtex->SetTextAlign(32); //3:right 2:vertical center
+  globtex->SetTextFont(42);
+	globtex->SetTextSize(0.04);
+  
+  ///////////////// CANVAS 1  
+  TCanvas* c1 = new TCanvas("c1","c1",600,600);
+  c1->cd(); 
+  gRFB_sys[0]->Draw("A5");
+	if (isSmoothened) gRFB_theory[0]->Draw("3");
+  else gRFB_theory[0]->Draw("5");
+  gRFB[0]->Draw("P");
+	dashedLine(0.,1.,32.,1.,1,1);
+	
+  //// Legend for experiments	
+  TLegendEntry *le3=legBL1->AddEntry("le3","1.5 < |y_{CM}| < 1.93","lpf");
+	le3->SetFillColor(kGreen-10);
+	le3->SetFillStyle(1001);
+	le3->SetLineColor(kGreen+3);
+	le3->SetMarkerStyle(kFullDiamond);
+	le3->SetMarkerColor(kGreen+3);
+	le3->SetMarkerSize(3.3);
+  TLegendEntry *ent3_thr=legBL1->AddEntry("ent3_thr","EPS09 NLO + CEM (Vogt)","f");
+	ent3_thr->SetFillColor(kYellow);
+  ent3_thr->SetFillStyle(3001);
+//  ent3_thr->SetFillStyle(3004);
+  if(!isLine) ent3_thr->SetLineWidth(0);
+  ent3_thr->SetLineColor(kOrange+7);
+	legBL1->Draw();
+  
+  //globtex->SetTextAlign(32); //3:right 2:vertical center
+	//globtex->SetTextFont(42);
+  //globtex->SetTextSize(0.05);
+  //globtex->DrawLatex(0.9, 0.23, "1.5 < |y_{CM}| < 1.93");
+	
+	globtex->SetTextAlign(12); //1:left, 2:vertical center
+	globtex->SetTextSize(0.055);
+	globtex->SetTextFont(42);
+	if (isPrompt) globtex->DrawLatex(0.21, 0.84, "Prompt J/#psi");
+	else globtex->DrawLatex(0.21, 0.84, "Non-prompt J/#psi");
 
 	CMS_lumi( c1, isPA, iPos );
 	c1->Update();
   if (isSmoothened) {
-    c1->SaveAs("plot_theory/comp_RFB_pt_Vogt_smoothened.pdf");
-    c1->SaveAs("plot_theory/comp_RFB_pt_Vogt_smoothened.png");
+    c1->SaveAs("plot_theory/comp_RFB_pt_Vogt_smoothened_rap1.pdf");
+    c1->SaveAs("plot_theory/comp_RFB_pt_Vogt_smoothened_rap1.png");
   } else {
-    c1->SaveAs("plot_theory/comp_RFB_pt_Vogt.pdf");
-    c1->SaveAs("plot_theory/comp_RFB_pt_Vogt.png");
+    c1->SaveAs("plot_theory/comp_RFB_pt_Vogt_rap1.pdf");
+    c1->SaveAs("plot_theory/comp_RFB_pt_Vogt_rap1.png");
+  }
+  
+  ///////////////// CANVAS 2	
+  
+  TCanvas* c2 = new TCanvas("c2","c2",600,600);
+	c2->cd();
+	gRFB_sys[1]->Draw("A5");
+	if (isSmoothened) gRFB_theory[1]->Draw("3");
+	else gRFB_theory[1]->Draw("5");
+	gRFB[1]->Draw("P");
+	dashedLine(0.,1.,32.,1.,1,1);
+  
+  //// Legend for experiments	
+  TLegendEntry *le2=legBL2->AddEntry("le2","0.9 < |y_{CM}| < 1.5","lpf");
+	le2->SetFillColor(kRed-10);
+	le2->SetFillStyle(1001);
+	le2->SetLineColor(kPink-6);
+	le2->SetMarkerStyle(kFullSquare);
+	le2->SetMarkerColor(kPink-6);
+	le2->SetMarkerSize(2.1);
+  TLegendEntry *ent2_thr=legBL2->AddEntry("ent2_thr","EPS09 NLO + CEM (Vogt)","f");
+	ent2_thr->SetFillColor(kYellow);
+  ent2_thr->SetFillStyle(3001);
+//  ent2_thr->SetFillStyle(3004);
+  if(!isLine) ent2_thr->SetLineWidth(0);
+  ent2_thr->SetLineColor(kOrange+7);
+	legBL2->Draw();
+  
+  //globtex->SetTextAlign(32); //3:right 2:vertical center
+	//globtex->SetTextFont(42);
+  //globtex->SetTextSize(0.05);
+  //globtex->DrawLatex(0.9, 0.23, "0.9 < |y_{CM}| < 1.5");
+  
+	globtex->SetTextAlign(12); //1:left, 2:vertical center
+  globtex->SetTextSize(0.055);
+	globtex->SetTextFont(42);
+	if (isPrompt) globtex->DrawLatex(0.21, 0.84, "Prompt J/#psi");
+	else globtex->DrawLatex(0.21, 0.84, "Non-prompt J/#psi");
+	
+  CMS_lumi( c2, isPA, iPos );
+	c2->Update();
+  
+  if (isSmoothened) {
+    c2->SaveAs("plot_theory/comp_RFB_pt_Vogt_smoothened_rap2.pdf");
+    c2->SaveAs("plot_theory/comp_RFB_pt_Vogt_smoothened_rap2.png");
+  } else {
+    c2->SaveAs("plot_theory/comp_RFB_pt_Vogt_rap2.pdf");
+    c2->SaveAs("plot_theory/comp_RFB_pt_Vogt_rap2.png");
+  }
+	
+  ///////////////// CANVAS 3	
+  
+  TCanvas* c3 = new TCanvas("c3","c3",600,600);
+	c3->cd();
+	gRFB_sys[2]->Draw("A5");
+	if (isSmoothened) gRFB_theory[2]->Draw("3");
+	else gRFB_theory[2]->Draw("5");
+	gRFB[2]->Draw("P");
+	dashedLine(0.,1.,32.,1.,1,1);
+  
+  //// Legend for experiments	
+  TLegendEntry *le1=legBL3->AddEntry("le1","0 < |y_{CM}| < 0.9","lpf");
+	le1->SetFillColor(kBlue-10);
+	le1->SetFillStyle(1001);
+	le1->SetLineColor(kBlue-3);
+	le1->SetMarkerStyle(kFullCircle);
+	le1->SetMarkerColor(kBlue-3);
+	le1->SetMarkerSize(2.1);
+  TLegendEntry *ent1_thr=legBL3->AddEntry("ent1_thr","EPS09 NLO + CEM (Vogt)","f");
+	ent1_thr->SetFillColor(kYellow);
+  ent1_thr->SetFillStyle(3001);
+//  ent1_thr->SetFillStyle(3004);
+  if(!isLine) ent1_thr->SetLineWidth(0);
+  ent1_thr->SetLineColor(kOrange+7);
+	legBL3->Draw();
+  
+  //globtex->SetTextAlign(32); //3:right 2:vertical center
+	//globtex->SetTextFont(42);
+  //globtex->SetTextSize(0.05);
+  //globtex->DrawLatex(0.9, 0.23, "0.0 < |y_{CM}| < 0.9");
+
+	globtex->SetTextAlign(12); //1:left, 2:vertical center
+  globtex->SetTextSize(0.055);
+	globtex->SetTextFont(42);
+	if (isPrompt) globtex->DrawLatex(0.21, 0.84, "Prompt J/#psi");
+	else globtex->DrawLatex(0.21, 0.84, "Non-prompt J/#psi");
+
+  CMS_lumi( c3, isPA, iPos );
+	c3->Update();
+
+  if (isSmoothened) {
+    c3->SaveAs("plot_theory/comp_RFB_pt_Vogt_smoothened_rap3.pdf");
+    c3->SaveAs("plot_theory/comp_RFB_pt_Vogt_smoothened_rap3.png");
+  } else {
+    c3->SaveAs("plot_theory/comp_RFB_pt_Vogt_rap3.pdf");
+    c3->SaveAs("plot_theory/comp_RFB_pt_Vogt_rap3.png");
   }
   return;
 }
