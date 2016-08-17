@@ -7,7 +7,7 @@ void formPtArr(Double_t binmin, Double_t binmax, TString* arr);
 
 void CMS_lumi( TPad* pad, int iPeriod, int iPosX );
 
-void draw_RpPb_pt(bool sysByHand=false, bool noPtWeight=false, bool isPrompt=true)
+void draw_RpPb_pt(bool sysByHand=false, bool noPtWeight=false, bool isPrompt=false)
 {
   gROOT->Macro("./tdrstyle_kyo.C");
   //cmsTextFont   = 42;  // for b.hong
@@ -391,10 +391,10 @@ void draw_RpPb_pt(bool sysByHand=false, bool noPtWeight=false, bool isPrompt=tru
   pad_all[5]->cd();
   yaxis02->Draw();  
 
-  c_all->cd();
-  globtex->SetTextColor(kRed);
-	globtex->SetTextSize(0.1);
-  globtex->DrawLatex(0.5, 0.5, "XIA");
+//  c_all->cd();
+//  globtex->SetTextColor(kRed);
+//	globtex->SetTextSize(0.1);
+//  globtex->DrawLatex(0.5, 0.5, "XIA");
 
   
 

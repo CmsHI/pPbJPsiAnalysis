@@ -7,7 +7,7 @@ void CMS_lumi( TPad* pad, int iPeriod, int iPosX );
 void comp_RpPb_pt_Lansberg(double ptmax=32, bool isLine=true, bool isSmoothened=false, TString szPDF= "nCTEQ15")
 {
 	gROOT->Macro("./tdrstyle_kyo.C");
-	int isPA = 1;  // 0:pp, 1:pPb
+	int isPA = 10;  // 0:pp, 1:pPb, 10 : pp & pPb together for RpPb plot
 	int iPos=0;
 
   bool isPrompt=true;
@@ -42,7 +42,7 @@ void comp_RpPb_pt_Lansberg(double ptmax=32, bool isLine=true, bool isSmoothened=
   }
   
   string headers;
-  TString ptmindum, ptmaxdum, ppbdum, eylow_tmpdum, eyhigh_tmpdum, ppdum;
+  TString pxmindum, pxmaxdum, ppbdum, eylow_tmpdum, eyhigh_tmpdum, ppdum;
   int counts=0;
   
   for (int iy=0; iy<nRapRpPb; iy++) {
@@ -52,12 +52,12 @@ void comp_RpPb_pt_Lansberg(double ptmax=32, bool isLine=true, bool isSmoothened=
     getline(f0, headers); // remove prefix
     counts=0;
     while(!f0.eof()) {
-      f0 >> ptmindum >> ptmaxdum >> ppbdum >> eylow_tmpdum >> eyhigh_tmpdum >> ppdum;
-      //cout << ptmindum <<"\t"<< ptmaxdum <<"\t"<< ppbdum <<"\t"<< eylow_tmpdum <<"\t"<< eyhigh_tmpdum<<"\t"<< ppdum << endl;
-      theory_px[iy][counts+ipt_init[iy]] =(atof(ptmindum) + atof(ptmaxdum))/2.;
+      f0 >> pxmindum >> pxmaxdum >> ppbdum >> eylow_tmpdum >> eyhigh_tmpdum >> ppdum;
+      //cout << pxmindum <<"\t"<< pxmaxdum <<"\t"<< ppbdum <<"\t"<< eylow_tmpdum <<"\t"<< eyhigh_tmpdum<<"\t"<< ppdum << endl;
+      theory_px[iy][counts+ipt_init[iy]] =(atof(pxmindum) + atof(pxmaxdum))/2.;
       theory_py[iy][counts+ipt_init[iy]] = (atof(ppbdum) / atof(ppdum) );
-      theory_exlow_tmp[iy][counts+ipt_init[iy]] = atof(ptmindum);
-      theory_exhigh_tmp[iy][counts+ipt_init[iy]] = atof(ptmaxdum);
+      theory_exlow_tmp[iy][counts+ipt_init[iy]] = atof(pxmindum);
+      theory_exhigh_tmp[iy][counts+ipt_init[iy]] = atof(pxmaxdum);
       theory_eylow_tmp[iy][counts+ipt_init[iy]] = ( atof(eylow_tmpdum) / atof(ppdum) );
       theory_eyhigh_tmp[iy][counts+ipt_init[iy]] = ( atof(eyhigh_tmpdum) / atof(ppdum) );
       counts++;
@@ -103,6 +103,7 @@ void comp_RpPb_pt_Lansberg(double ptmax=32, bool isLine=true, bool isSmoothened=
   TGraphAsymmErrors* g_RpPb_theory[nRapRpPb];
   for (int iy = 0 ; iy < nRapRpPb; iy ++ ) {
     g_RpPb_theory[iy]= new TGraphAsymmErrors(nPtRpPb, theory_px[iy], theory_py[iy], theory_exlow[iy], theory_exhigh[iy], theory_eylow[iy], theory_eyhigh[iy]);	
+    g_RpPb_theory[iy]->SetName(Form("g_RpPb_theory_%d",iy));
   }
  /* 
   for (int iy=0; iy<nRapRpPb; iy++) {
@@ -189,171 +190,17 @@ void comp_RpPb_pt_Lansberg(double ptmax=32, bool isLine=true, bool isSmoothened=
     dashedLine(0.,1.,32.,1.,1,1);
   }
     
-  c_all->SaveAs(Form("plot_theory/comp_RpPb_pt_Lansberg_%s.pdf",szPDF.Data()));
-  c_all->SaveAs(Form("plot_theory/comp_RpPb_pt_Lansberg_%s.png",szPDF.Data()));
-  #if 0 
-  ///////////////////////////////////////////////////////////////////////
-	
-  //TLegend *legBL = new TLegend(0.50, 0.18, 0.70, 0.39);
-  TLegend *legBL1 = new TLegend(0.20, 0.18, 0.40, 0.34);
-  TLegend *legBL2 = new TLegend(0.20, 0.18, 0.40, 0.34);
-  TLegend *legBL3 = new TLegend(0.20, 0.18, 0.40, 0.34);
-	SetLegendStyle(legBL1);
-	SetLegendStyle(legBL2);
-	SetLegendStyle(legBL3);
-	legBL1->SetTextSize(0.05);
-	legBL2->SetTextSize(0.05);
-	legBL3->SetTextSize(0.05);
-	
-  TLatex* globtex = new TLatex();
-	globtex->SetNDC();
-	globtex->SetTextAlign(12); //1:left, 2:vertical center
-  //globtex->SetTextAlign(32); //3:right 2:vertical center
-  globtex->SetTextFont(42);
-	globtex->SetTextSize(0.04);
+  c_all->SaveAs(Form("plot_theory/comp_RpPb_pt_isSmoothened%d_Lansberg_%s.pdf",(int)isSmoothened,szPDF.Data()));
+  c_all->SaveAs(Form("plot_theory/comp_RpPb_pt_isSmoothened%d_Lansberg_%s.png",(int)isSmoothened,szPDF.Data()));
+ 
+  ///////////////////////////////////////////////////////////////////
+  // save as a root file
+  TFile* outFile = new TFile(Form("plot_theory/comp_RpPb_pt_isSmoothened%d_Lansberg_%s.root",(int)isSmoothened,szPDF.Data()),"RECREATE");
+  outFile->cd();
+  for (int iy = 0 ; iy < nRapRpPb; iy ++ ) {
+    g_RpPb_theory[iy]->Write();
+  } 
   
-  ///////////////// CANVAS 1  
-  TCanvas* c1 = new TCanvas("c1","c1",600,600);
-  c1->cd(); 
-  g_RpPb_sys[0]->Draw("A5");
-	if (isSmoothened) g_RpPb_theory[0]->Draw("3");
-  else g_RpPb_theory[0]->Draw("5");
-  g_RpPb[0]->Draw("P");
-	dashedLine(0.,1.,32.,1.,1,1);
-	
-  //// Legend for experiments	
-  TLegendEntry *le3=legBL1->AddEntry("le3","1.5 < |y_{CM}| < 1.93","lpf");
-	le3->SetFillColor(kGreen-10);
-	le3->SetFillStyle(1001);
-	le3->SetLineColor(kGreen+3);
-	le3->SetMarkerStyle(kFullDiamond);
-	le3->SetMarkerColor(kGreen+3);
-	le3->SetMarkerSize(3.3);
-  TLegendEntry *ent3_thr=legBL1->AddEntry("ent3_thr","EPS09 NLO + CEM (Lansberg)","f");
-	ent3_thr->SetFillColor(kYellow);
-  ent3_thr->SetFillStyle(3001);
-//  ent3_thr->SetFillStyle(3004);
-  if(!isLine) ent3_thr->SetLineWidth(0);
-  ent3_thr->SetLineColor(kOrange+7);
-	legBL1->Draw();
-  
-  //globtex->SetTextAlign(32); //3:right 2:vertical center
-	//globtex->SetTextFont(42);
-  //globtex->SetTextSize(0.05);
-  //globtex->DrawLatex(0.9, 0.23, "1.5 < |y_{CM}| < 1.93");
-	
-	globtex->SetTextAlign(12); //1:left, 2:vertical center
-	globtex->SetTextSize(0.055);
-	globtex->SetTextFont(42);
-	if (isPrompt) globtex->DrawLatex(0.21, 0.84, "Prompt J/#psi");
-	else globtex->DrawLatex(0.21, 0.84, "Non-prompt J/#psi");
-
-	CMS_lumi( c1, isPA, iPos );
-	c1->Update();
-  if (isSmoothened) {
-    c1->SaveAs("plot_theory/comp_RpPb_pt_Lansberg_smoothened_rap1.pdf");
-    c1->SaveAs("plot_theory/comp_RpPb_pt_Lansberg_smoothened_rap1.png");
-  } else {
-    c1->SaveAs("plot_theory/comp_RpPb_pt_Lansberg_rap1.pdf");
-    c1->SaveAs("plot_theory/comp_RpPb_pt_Lansberg_rap1.png");
-  }
-  
-  ///////////////// CANVAS 2	
-  
-  TCanvas* c2 = new TCanvas("c2","c2",600,600);
-	c2->cd();
-	g_RpPb_sys[1]->Draw("A5");
-	if (isSmoothened) g_RpPb_theory[1]->Draw("3");
-	else g_RpPb_theory[1]->Draw("5");
-	g_RpPb[1]->Draw("P");
-	dashedLine(0.,1.,32.,1.,1,1);
-  
-  //// Legend for experiments	
-  TLegendEntry *le2=legBL2->AddEntry("le2","0.9 < |y_{CM}| < 1.5","lpf");
-	le2->SetFillColor(kRed-10);
-	le2->SetFillStyle(1001);
-	le2->SetLineColor(kPink-6);
-	le2->SetMarkerStyle(kFullSquare);
-	le2->SetMarkerColor(kPink-6);
-	le2->SetMarkerSize(2.1);
-  TLegendEntry *ent2_thr=legBL2->AddEntry("ent2_thr","EPS09 NLO + CEM (Lansberg)","f");
-	ent2_thr->SetFillColor(kYellow);
-  ent2_thr->SetFillStyle(3001);
-//  ent2_thr->SetFillStyle(3004);
-  if(!isLine) ent2_thr->SetLineWidth(0);
-  ent2_thr->SetLineColor(kOrange+7);
-	legBL2->Draw();
-  
-  //globtex->SetTextAlign(32); //3:right 2:vertical center
-	//globtex->SetTextFont(42);
-  //globtex->SetTextSize(0.05);
-  //globtex->DrawLatex(0.9, 0.23, "0.9 < |y_{CM}| < 1.5");
-  
-	globtex->SetTextAlign(12); //1:left, 2:vertical center
-  globtex->SetTextSize(0.055);
-	globtex->SetTextFont(42);
-	if (isPrompt) globtex->DrawLatex(0.21, 0.84, "Prompt J/#psi");
-	else globtex->DrawLatex(0.21, 0.84, "Non-prompt J/#psi");
-	
-  CMS_lumi( c2, isPA, iPos );
-	c2->Update();
-  
-  if (isSmoothened) {
-    c2->SaveAs("plot_theory/comp_RpPb_pt_Lansberg_smoothened_rap2.pdf");
-    c2->SaveAs("plot_theory/comp_RpPb_pt_Lansberg_smoothened_rap2.png");
-  } else {
-    c2->SaveAs("plot_theory/comp_RpPb_pt_Lansberg_rap2.pdf");
-    c2->SaveAs("plot_theory/comp_RpPb_pt_Lansberg_rap2.png");
-  }
-	
-  ///////////////// CANVAS 3	
-  
-  TCanvas* c3 = new TCanvas("c3","c3",600,600);
-	c3->cd();
-	g_RpPb_sys[2]->Draw("A5");
-	if (isSmoothened) g_RpPb_theory[2]->Draw("3");
-	else g_RpPb_theory[2]->Draw("5");
-	g_RpPb[2]->Draw("P");
-	dashedLine(0.,1.,32.,1.,1,1);
-  
-  //// Legend for experiments	
-  TLegendEntry *le1=legBL3->AddEntry("le1","0 < |y_{CM}| < 0.9","lpf");
-	le1->SetFillColor(kBlue-10);
-	le1->SetFillStyle(1001);
-	le1->SetLineColor(kBlue-3);
-	le1->SetMarkerStyle(kFullCircle);
-	le1->SetMarkerColor(kBlue-3);
-	le1->SetMarkerSize(2.1);
-  TLegendEntry *ent1_thr=legBL3->AddEntry("ent1_thr","EPS09 NLO + CEM (Lansberg)","f");
-	ent1_thr->SetFillColor(kYellow);
-  ent1_thr->SetFillStyle(3001);
-//  ent1_thr->SetFillStyle(3004);
-  if(!isLine) ent1_thr->SetLineWidth(0);
-  ent1_thr->SetLineColor(kOrange+7);
-	legBL3->Draw();
-  
-  //globtex->SetTextAlign(32); //3:right 2:vertical center
-	//globtex->SetTextFont(42);
-  //globtex->SetTextSize(0.05);
-  //globtex->DrawLatex(0.9, 0.23, "0.0 < |y_{CM}| < 0.9");
-
-	globtex->SetTextAlign(12); //1:left, 2:vertical center
-  globtex->SetTextSize(0.055);
-	globtex->SetTextFont(42);
-	if (isPrompt) globtex->DrawLatex(0.21, 0.84, "Prompt J/#psi");
-	else globtex->DrawLatex(0.21, 0.84, "Non-prompt J/#psi");
-
-  CMS_lumi( c3, isPA, iPos );
-	c3->Update();
-
-  if (isSmoothened) {
-    c3->SaveAs("plot_theory/comp_RpPb_pt_Lansberg_smoothened_rap3.pdf");
-    c3->SaveAs("plot_theory/comp_RpPb_pt_Lansberg_smoothened_rap3.png");
-  } else {
-    c3->SaveAs("plot_theory/comp_RpPb_pt_Lansberg_rap3.pdf");
-    c3->SaveAs("plot_theory/comp_RpPb_pt_Lansberg_rap3.png");
-  }
-#endif
   return;
 }
 

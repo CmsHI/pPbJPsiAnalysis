@@ -7,7 +7,7 @@ void formPtArr(Double_t binmin, Double_t binmax, TString* arr);
 
 void CMS_lumi( TPad* pad, int iPeriod, int iPosX );
 
-void draw_RpPb_rap(bool sysByHand=false, bool noPtWeight=false, bool isPrompt=false)
+void draw_RpPb_rap(bool sysByHand=false, bool noPtWeight=false, bool isPrompt=true)
 {
   gROOT->Macro("./tdrstyle_kyo.C");
   //cmsTextFont   = 42;  // for b.hong
@@ -212,19 +212,25 @@ void draw_RpPb_rap(bool sysByHand=false, bool noPtWeight=false, bool isPrompt=fa
   g_RpPb_highpt = new TGraphAsymmErrors(nRapRpPb, pxtmp_highpt_pp, pytmp_highpt, ex, ex, eytmp_highpt, eytmp_highpt);
   //g_RpPb_highpt = new TGraphAsymmErrors(nRapRpPb, pxtmp_highpt_pp, pytmp_highpt, exlow_highpt, exhigh_highpt, eytmp_highpt, eytmp_highpt);
 	g_RpPb_sys_lowpt -> SetName("g_RpPb_sys_lowpt");
+	g_RpPb_sys_lowpt_line -> SetName("g_RpPb_sys_lowpt_line");
 	g_RpPb_lowpt -> SetName("g_RpPb_lowpt");
 	g_RpPb_sys_highpt -> SetName("g_RpPb_sys_highpt");
+	g_RpPb_sys_highpt_line -> SetName("g_RpPb_sys_highpt_line");
 	g_RpPb_highpt -> SetName("g_RpPb_highpt");
   g_RpPb_sys_lowpt->GetXaxis()->SetTitle("y_{CM}");
   g_RpPb_sys_lowpt->GetXaxis()->CenterTitle();
   g_RpPb_sys_lowpt->GetYaxis()->SetTitle("R_{pPb}");
   g_RpPb_sys_lowpt->GetYaxis()->CenterTitle();
-  //g_RpPb_sys_lowpt->GetXaxis()->SetLimits(-2.4,1.93);
   g_RpPb_sys_lowpt->GetXaxis()->SetLimits(-2.5,2.1);
-  //g_RpPb_sys_lowpt->SetMinimum(0.5);
-  //g_RpPb_sys_lowpt->SetMaximum(1.5);
   g_RpPb_sys_lowpt->SetMinimum(0.0);
   g_RpPb_sys_lowpt->SetMaximum(1.8);
+  g_RpPb_sys_highpt->GetXaxis()->SetTitle("y_{CM}");
+  g_RpPb_sys_highpt->GetXaxis()->CenterTitle();
+  g_RpPb_sys_highpt->GetYaxis()->SetTitle("R_{pPb}");
+  g_RpPb_sys_highpt->GetYaxis()->CenterTitle();
+  g_RpPb_sys_highpt->GetXaxis()->SetLimits(-2.5,2.1);
+  g_RpPb_sys_highpt->SetMinimum(0.0);
+  g_RpPb_sys_highpt->SetMaximum(1.8);
 
   //g_RpPb_sys_lowpt->SetFillColor(kRed-10);
   g_RpPb_sys_lowpt->SetFillColorAlpha(kRed-10,0.5);
@@ -310,8 +316,10 @@ void draw_RpPb_rap(bool sysByHand=false, bool noPtWeight=false, bool isPrompt=fa
   else outFile = new TFile(Form("plot_RpPb/RpPb_rap_isPrompt%d.root",(int)isPrompt),"RECREATE");
   outFile->cd();
   g_RpPb_sys_lowpt->Write();  
+  g_RpPb_sys_lowpt_line->Write();  
   g_RpPb_lowpt->Write();  
   g_RpPb_sys_highpt->Write();  
+  g_RpPb_sys_highpt_line->Write();  
   g_RpPb_highpt->Write();  
   outFile->Close();
 

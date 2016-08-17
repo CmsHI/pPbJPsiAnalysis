@@ -7,3 +7,4 @@ root -l 'comp_RFB_pt_Vogt.C+(20,true, false)'
 #root -l -b -q 'comp_RFB_rap_Vogt.C+(true, false)'
 #root -l -b -q 'comp_RFB_pt_Vogt.C+(20,true, false)'
 
+void comp_RpPb_pt_Lansberg(double ptmax=32, bool isLine=true, bool isSmoothened=false, TString szPDF= "nCTEQ15")

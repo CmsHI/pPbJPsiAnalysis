@@ -8,7 +8,7 @@ void formEtArr(Double_t min, Double_t max, TString* arr);
 
 void CMS_lumi( TPad* pad, int iPeriod, int iPosX );
 
-void draw_RFB_ethf(bool sysByHand=true, bool noPtWeight = false, bool isPrompt=true)
+void draw_RFB_ethf(bool sysByHand=true, bool noPtWeight = false, bool isPrompt=false)
 {
 	gROOT->Macro("./tdrstyle_kyo.C");
   //gStyle->SetTitleXOffset(1.13);
