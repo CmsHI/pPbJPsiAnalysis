@@ -70,9 +70,11 @@ void make_EffAna_fromMerged(int MrapNpt=89, int isPA = 0, int accCutType =2, boo
   delete h2D_Den_pt_y; 
   delete h2D_Num_pt_y; 
   delete h2D_Eff_pt_y; 
-  delete h2D_Den_pt_y_fine; 
-  delete h2D_Num_pt_y_fine; 
-  delete h2D_Eff_pt_y_fine; 
+  if (MrapNpt==89) {
+    delete h2D_Den_pt_y_fine; 
+    delete h2D_Num_pt_y_fine; 
+    delete h2D_Eff_pt_y_fine; 
+  }
   delete h1D_zVtx;
   
   return;

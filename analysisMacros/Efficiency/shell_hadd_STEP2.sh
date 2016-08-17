@@ -1,8 +1,8 @@
 #!/bin/bash
 
 dirName="toBeMerged_divideEvt"
-#szFinalArr=("8rap9pt_pp_PR_newcut_Zvtx0_SF1" "8rap9pt_pp_NP_newcut_Zvtx0_SF1")
-szFinalArr=("8rap9pt_pp_PR_newcut_Zvtx0_SF0" "8rap9pt_pp_NP_newcut_Zvtx0_SF0")
+szFinalArr=("8rap9pt_pp_PR_newcut_Zvtx0_SF1" "8rap9pt_pp_NP_newcut_Zvtx0_SF1")
+#szFinalArr=("8rap9pt_pp_PR_newcut_Zvtx0_SF0" "8rap9pt_pp_NP_newcut_Zvtx0_SF0")
 
 ##### loop
 for szFinal in ${szFinalArr[@]}; do
