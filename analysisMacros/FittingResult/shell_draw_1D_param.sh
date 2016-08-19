@@ -45,7 +45,7 @@ done
 for par in ${parName[@]}
 do
   echo " *** loop for parameters "
-$  root -l 'draw_1D_parameters.C+("8rap9pt",0,1,false,"'$par'")'
+#  root -l 'draw_1D_parameters.C+("8rap9pt",0,1,false,"'$par'")'
 #  root -l 'draw_1D_parameters.C+("8rap9pt",1,1,false,"'$par'")'
 #  root -l -b -q 'draw_1D_parameters.C+("8rap9pt",0,1,false,"'$par'")'
 #  root -l -b -q 'draw_1D_parameters.C+("8rap9pt",1,1,false,"'$par'")'
