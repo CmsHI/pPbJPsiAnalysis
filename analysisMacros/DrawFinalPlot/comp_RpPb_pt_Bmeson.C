@@ -128,8 +128,8 @@ void comp_RpPb_pt_Bmeson(bool isPrompt = false)
   g_RpPb_sys->SetLineColor(kGreen+3);
 
   SetGraphStyleFinal(g_RpPb, 0, 5);
-  //g_RpPb->SetMarkerSize(2.5);
-  g_RpPb->SetMarkerSize(2.1);
+  //g_RpPb->SetMarkerSize(2.1);
+  g_RpPb->SetMarkerSize(1.6);
   
   ////// actual draw
   g_RpPb_Bmeson_sysFONLL->Draw("A5");

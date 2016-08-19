@@ -103,8 +103,9 @@ int comp_RFB_pt_LHCb_ALICE_ATLAS()
 	////// Draw Plots
 	////////////////////
 
-	TLegend *legBR = new TLegend(0.52, 0.195, 0.84, 0.315);
-	TLegend *legBR2 = new TLegend(0.52, 0.195, 0.84, 0.315);
+	//TLegend *legBR = new TLegend(0.52, 0.195, 0.84, 0.315);
+	TLegend *legBR = new TLegend(0.48, 0.2, 0.84, 0.35);
+	TLegend *legBR2 = new TLegend(0.48, 0.2, 0.84, 0.35);
 	TLegend *legUL = new TLegend(0.20, 0.78, 0.40, 0.90);
 	//TLegend *legUL = new TLegend(0.61, 0.74, 0.89, 0.81);
 	SetLegendStyle(legBR);
@@ -202,10 +203,11 @@ int comp_RFB_pt_LHCb_ALICE_ATLAS()
 
 
   /////////////////////////////////	
+  gRFB_pr_sys_0->Draw("5");
 	gRFB_lhcb_pr_sys->Draw("2");
 	gRFB_alice_sys->Draw("2");
 	gRFB_atlas_sys_pr->Draw("2");
-  gRFB_pr_sys_0->Draw("5");
+  //gRFB_pr_sys_0->Draw("5");
 	gRFB_lhcb_pr->Draw("P");
 	gRFB_alice->Draw("P");
 	gRFB_atlas_pr->Draw("P");
@@ -214,14 +216,14 @@ int comp_RFB_pt_LHCb_ALICE_ATLAS()
 	dashedLine(0.0,1.0,32.0,1.0,1,1);
 	legUL->AddEntry(gRFB_pr_0,"1.5 < |y_{CM}| < 1.93","lp");
 	legUL->Draw("SAME");
-	legBR->AddEntry(gRFB_atlas_pr,"ATLAS: |y_{CM}|<1.94","lp");
-	legBR->AddEntry(gRFB_lhcb_pr,"LHCb: 2.5<|y_{CM}|<4 ","lp");
-	legBR->AddEntry(gRFB_alice,"ALICE : 2.96<|y_{CM}|<3.53 ","lp");
+	legBR->AddEntry(gRFB_atlas_pr,"ATLAS: |y_{CM}| < 1.94","lp");
+	legBR->AddEntry(gRFB_lhcb_pr,"LHCb: 2.5 < |y_{CM}| < 4 ","lp");
+	legBR->AddEntry(gRFB_alice,"ALICE : 2.96 < |y_{CM}| < 3.53 ","lp");
 	legBR->Draw("SAME");
 	globtex->SetTextSize(0.035);
 	globtex->SetTextFont(42);
 	globtex->SetTextAlign(12); //1:left, 2:vertical center
-	globtex->DrawLatex(0.69, 0.17, "inclusive J/#psi");
+	globtex->DrawLatex(0.67, 0.17, "inclusive J/#psi");
 	
 	globtex->SetTextSize(0.055);
 	globtex->SetTextFont(42);
@@ -284,9 +286,10 @@ int comp_RFB_pt_LHCb_ALICE_ATLAS()
 	//gRFB_np_0->SetLineColor(kGreen+3);
 
   /////////////////////////////////	
+  gRFB_np_sys_0->Draw("5");
 	gRFB_lhcb_np_sys->Draw("2");
 	gRFB_atlas_sys_np->Draw("2");
-  gRFB_np_sys_0->Draw("5");
+  //gRFB_np_sys_0->Draw("5");
 	gRFB_lhcb_np->Draw("P");
 	gRFB_atlas_np->Draw("P");
 	gRFB_np_0->Draw("P");
@@ -294,8 +297,8 @@ int comp_RFB_pt_LHCb_ALICE_ATLAS()
   dashedLine(0.0,1.0,32.0,1.0,1,1);
 	
 	legUL->Draw("SAME");
-	legBR2 -> AddEntry(gRFB_atlas_np,"ATLAS: |y_{CM}|<1.94","lp");
-	legBR2 -> AddEntry(gRFB_lhcb_np,"LHCb: 2.5<|y_{CM}|<4 ","lp");
+	legBR2 -> AddEntry(gRFB_atlas_np,"ATLAS: |y_{CM}| < 1.94","lp");
+	legBR2 -> AddEntry(gRFB_lhcb_np,"LHCb: 2.5 < |y_{CM}| < 4 ","lp");
 	legBR2 -> Draw();
 
 	globtex->SetTextSize(0.055);

@@ -27,20 +27,28 @@ int comp_RFB_rap_LHCb_ALICE_ATLAS()
 	TFile *inFile_np = new TFile("./plot_RFB/RFB_rap_isPrompt0.root");
        
 	TGraphAsymmErrors* gRFB_pr_sys_lowpt = (TGraphAsymmErrors*)inFile_pr->Get("gRFB_sys_lowpt"); 	
+	TGraphAsymmErrors* gRFB_pr_sys_lowpt_line = (TGraphAsymmErrors*)inFile_pr->Get("gRFB_sys_lowpt"); 	
 	TGraphAsymmErrors* gRFB_pr_lowpt = (TGraphAsymmErrors*)inFile_pr->Get("gRFB_lowpt"); 	
 	TGraphAsymmErrors* gRFB_pr_sys_highpt = (TGraphAsymmErrors*)inFile_pr->Get("gRFB_sys_highpt"); 	
+	TGraphAsymmErrors* gRFB_pr_sys_highpt_line = (TGraphAsymmErrors*)inFile_pr->Get("gRFB_sys_highpt"); 	
 	TGraphAsymmErrors* gRFB_pr_highpt = (TGraphAsymmErrors*)inFile_pr->Get("gRFB_highpt"); 	
 	TGraphAsymmErrors* gRFB_np_sys_lowpt = (TGraphAsymmErrors*)inFile_np->Get("gRFB_sys_lowpt"); 	
+	TGraphAsymmErrors* gRFB_np_sys_lowpt_line = (TGraphAsymmErrors*)inFile_np->Get("gRFB_sys_lowpt"); 	
 	TGraphAsymmErrors* gRFB_np_lowpt = (TGraphAsymmErrors*)inFile_np->Get("gRFB_lowpt"); 	
 	TGraphAsymmErrors* gRFB_np_sys_highpt = (TGraphAsymmErrors*)inFile_np->Get("gRFB_sys_highpt"); 	
+	TGraphAsymmErrors* gRFB_np_sys_highpt_line = (TGraphAsymmErrors*)inFile_np->Get("gRFB_sys_highpt"); 	
 	TGraphAsymmErrors* gRFB_np_highpt = (TGraphAsymmErrors*)inFile_np->Get("gRFB_highpt"); 	
 	gRFB_pr_sys_lowpt->SetName("gRFB_pr_sys_lowpt");
+	gRFB_pr_sys_lowpt_line->SetName("gRFB_pr_sys_lowpt_line");
 	gRFB_pr_lowpt->SetName("gRFB_pr_lowpt");
 	gRFB_pr_sys_highpt->SetName("gRFB_pr_sys_highpt");
+	gRFB_pr_sys_highpt_line->SetName("gRFB_pr_sys_highpt_line");
 	gRFB_pr_highpt->SetName("gRFB_pr_highpt");
 	gRFB_np_sys_lowpt->SetName("gRFB_np_sys_lowpt");
+	gRFB_np_sys_lowpt_line->SetName("gRFB_np_sys_lowpt_line");
 	gRFB_np_lowpt->SetName("gRFB_np_lowpt");
 	gRFB_np_sys_highpt->SetName("gRFB_np_sys_highpt");
+	gRFB_np_sys_highpt_line->SetName("gRFB_np_sys_highpt_line");
 	gRFB_np_highpt->SetName("gRFB_np_highpt");
 	cout << "hello"<<"gRFB_pr_sys_lowpt = " << gRFB_pr_sys_lowpt << endl;
 	cout << "gRFB_pr_lowpt = " << gRFB_pr_lowpt << endl;
@@ -160,16 +168,26 @@ int comp_RFB_rap_LHCb_ALICE_ATLAS()
 	gRFB_pr_sys_lowpt->GetXaxis()->CenterTitle();
 	gRFB_pr_sys_lowpt->GetXaxis()->SetLimits(0.0 ,4.5);
 	gRFB_pr_sys_lowpt->GetYaxis()->SetTitle("R_{FB}");
-	gRFB_pr_sys_lowpt->SetMinimum(0.5);
-	gRFB_pr_sys_lowpt->SetMaximum(1.4);
-	gRFB_pr_sys_lowpt->SetFillColor(kRed-10);
+	//gRFB_pr_sys_lowpt->SetMinimum(0.5);
+	//gRFB_pr_sys_lowpt->SetMaximum(1.4);
+	gRFB_pr_sys_lowpt->SetMinimum(0.0);
+	gRFB_pr_sys_lowpt->SetMaximum(2.0);
+	gRFB_pr_sys_lowpt->SetFillColorAlpha(kRed-10,0.5);	
+	gRFB_pr_sys_lowpt_line->SetFillColorAlpha(kRed-10,0.);	
+	gRFB_pr_sys_lowpt->SetLineColor(kPink-6);	
+	gRFB_pr_sys_lowpt_line->SetLineColor(kPink-6);	
 	//gRFB_pr_sys_lowpt->SetFillStyle(3001);
-	gRFB_pr_sys_lowpt->Draw("A2");
+	gRFB_pr_sys_lowpt->Draw("A5");
+	gRFB_pr_sys_lowpt_line->Draw("5");
 	
 	// 2) highpt
-	gRFB_pr_sys_highpt->SetFillColor(kTeal-9);
+	gRFB_pr_sys_highpt->SetFillColorAlpha(kGreen-10,0.5);
+	gRFB_pr_sys_highpt_line->SetFillColorAlpha(kGreen-10,0.);
+	gRFB_pr_sys_highpt->SetLineColor(kGreen+3);
+	gRFB_pr_sys_highpt_line->SetLineColor(kGreen+3);
 	//gRFB_pr_sys_highpt->SetFillStyle(3001);
-	gRFB_pr_sys_highpt->Draw("2");
+	gRFB_pr_sys_highpt->Draw("5");
+	gRFB_pr_sys_highpt_line->Draw("5");
 
 	// 3) lhcb
 	gRFB_lhcb_pr_sys = new TGraphAsymmErrors(nBin_lhcb, lhcb_px, lhcb_py_pr, lhcb_exsys, lhcb_exsys, lhcb_eysys_pr, lhcb_eysys_pr);	
@@ -195,8 +213,8 @@ int comp_RFB_rap_LHCb_ALICE_ATLAS()
 	gRFB_atlas_sys_pr->SetLineWidth(1);
 	gRFB_atlas_sys_pr->Draw("2");
 	
-  gRFB_pr_sys_lowpt->Draw("2");
-  gRFB_pr_sys_highpt->Draw("2");
+  //gRFB_pr_sys_lowpt->Draw("2");
+  //gRFB_pr_sys_highpt->Draw("2");
  
   //////////////////////////////////////////////////////////////////////// 
 
@@ -223,11 +241,11 @@ int comp_RFB_rap_LHCb_ALICE_ATLAS()
 	gRFB_atlas_pr->Draw("P");
 	
   SetGraphStyleFinal(gRFB_pr_lowpt,1,3);
-	gRFB_pr_lowpt->SetMarkerSize(1.8);
+	gRFB_pr_lowpt->SetMarkerSize(1.4);
   gRFB_pr_lowpt->Draw("P");
   
   SetGraphStyleFinal(gRFB_pr_highpt,0,5);
-	gRFB_pr_highpt->SetMarkerSize(2.7);
+	gRFB_pr_highpt->SetMarkerSize(2.1);
 	gRFB_pr_highpt->Draw("P");
 
 
@@ -277,14 +295,22 @@ int comp_RFB_rap_LHCb_ALICE_ATLAS()
 	gRFB_np_sys_lowpt->GetXaxis()->CenterTitle();
 	gRFB_np_sys_lowpt->GetXaxis()->SetLimits(0.0,4.5);
 	gRFB_np_sys_lowpt->GetYaxis()->SetTitle("R_{FB}");
-	gRFB_np_sys_lowpt->SetMinimum(0.5);
-	gRFB_np_sys_lowpt->SetMaximum(1.4);
-	gRFB_np_sys_lowpt->SetFillColor(kRed-10);
-	gRFB_np_sys_lowpt->Draw("A2");
+	gRFB_np_sys_lowpt->SetMinimum(0.0);
+	gRFB_np_sys_lowpt->SetMaximum(2.0);
+	gRFB_np_sys_lowpt->SetFillColorAlpha(kRed-10,0.5);	
+	gRFB_np_sys_lowpt_line->SetFillColorAlpha(kRed-10,0.);	
+	gRFB_np_sys_lowpt->SetLineColor(kPink-6);	
+	gRFB_np_sys_lowpt_line->SetLineColor(kPink-6);	
+	gRFB_np_sys_lowpt->Draw("A5");
+	gRFB_np_sys_lowpt_line->Draw("5");
 	
 	// 2) highpt
-	gRFB_np_sys_highpt->SetFillColor(kTeal-9);
-	gRFB_np_sys_highpt->Draw("2");
+	gRFB_np_sys_highpt->SetFillColorAlpha(kGreen-10,0.5);
+	gRFB_np_sys_highpt_line->SetFillColorAlpha(kGreen-10,0.);
+	gRFB_np_sys_highpt->SetLineColor(kGreen+3);
+	gRFB_np_sys_highpt_line->SetLineColor(kGreen+3);
+	gRFB_np_sys_highpt->Draw("5");
+	gRFB_np_sys_highpt_line->Draw("5");
 
 	// 3) lhcb
 	gRFB_lhcb_np_sys = new TGraphAsymmErrors(nBin_lhcb, lhcb_px, lhcb_py_np, lhcb_exsys, lhcb_exsys, lhcb_eysys_np, lhcb_eysys_np);	
@@ -301,8 +327,8 @@ int comp_RFB_rap_LHCb_ALICE_ATLAS()
 	gRFB_atlas_sys_np->SetLineWidth(1);
 	gRFB_atlas_sys_np->Draw("2");
 	
-	gRFB_np_sys_highpt->Draw("2");
-	gRFB_np_sys_highpt->Draw("2");
+	//gRFB_np_sys_highpt->Draw("2");
+	//gRFB_np_sys_highpt->Draw("2");
 	
   //////////////////////////////////////////////////////////////////////////
   
@@ -320,11 +346,11 @@ int comp_RFB_rap_LHCb_ALICE_ATLAS()
 	gRFB_atlas_np->Draw("P");	
 	
   SetGraphStyleFinal(gRFB_np_lowpt,1,3);
-	gRFB_np_lowpt->SetMarkerSize(1.8);
+	gRFB_np_lowpt->SetMarkerSize(1.4);
 	gRFB_np_lowpt->Draw("P");
   
   SetGraphStyleFinal(gRFB_np_highpt,0,5);
-	gRFB_np_highpt->SetMarkerSize(2.7);
+	gRFB_np_highpt->SetMarkerSize(2.1);
 	gRFB_np_highpt->Draw("P");
 
 

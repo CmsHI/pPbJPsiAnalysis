@@ -140,7 +140,8 @@ void comp_RpPb_pt_ATLAS(bool isPrompt = true)
   g_RpPb_sys->SetFillColor(kGreen-10);
 
   SetGraphStyleFinal(g_RpPb, 0, 5);
-  g_RpPb->SetMarkerSize(2.1);
+  //g_RpPb->SetMarkerSize(2.1);
+  g_RpPb->SetMarkerSize(1.8);
   
   ////// actual draw
   g_RpPb_ATLAS_sys->Draw("A5");
