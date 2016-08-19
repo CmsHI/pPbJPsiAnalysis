@@ -1,1 +1,1 @@
-Here yields and b-fraction distributions from fit is stored
+Here yields and b-fraction distributions from fit are stored

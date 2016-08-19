@@ -1,1 +1,1 @@
-Here chi2 distributions from fit is stored
+Here chi2 plots are stored
