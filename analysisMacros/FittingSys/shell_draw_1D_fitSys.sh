@@ -3,7 +3,7 @@
 
 ######### pp
 root -l -b -q 'draw_1D_fitSys_total.C+(89,0,true,6,false,0)'
-root -l -b -q 'draw_1D_fitSys_total.C+(89,0,false,30,false,0)'
+root -l -b -q 'draw_1D_fitSys_total.C+(89,0,false,40,false,0)'
 root -l -b -q 'draw_1D_fitSys_each.C+(89,0,true,5,"sys01",false,0)' 
 root -l -b -q 'draw_1D_fitSys_each.C+(89,0,false,10,"sys01",false,0)' 
 root -l -b -q 'draw_1D_fitSys_each.C+(89,0,true,5,"sys02",false,0)' 
@@ -11,10 +11,10 @@ root -l -b -q 'draw_1D_fitSys_each.C+(89,0,false,10,"sys02",false,0)'
 root -l -b -q 'draw_1D_fitSys_each.C+(89,0,true,5,"sys03",false,0)' 
 root -l -b -q 'draw_1D_fitSys_each.C+(89,0,false,22,"sys03",false,0)' 
 root -l -b -q 'draw_1D_fitSys_each.C+(89,0,true,5,"sys04",false,0)' 
-root -l -b -q 'draw_1D_fitSys_each.C+(89,0,false,30,"sys04",false,0)' 
+root -l -b -q 'draw_1D_fitSys_each.C+(89,0,false,40,"sys04",false,0)' 
 ######### pA
 root -l -b -q 'draw_1D_fitSys_total.C+(89,1,true,6,false,0)'
-root -l -b -q 'draw_1D_fitSys_total.C+(89,1,false,30,false,0)'
+root -l -b -q 'draw_1D_fitSys_total.C+(89,1,false,40,false,0)'
 root -l -b -q 'draw_1D_fitSys_each.C+(89,1,true,5,"sys01",false,0)'
 root -l -b -q 'draw_1D_fitSys_each.C+(89,1,false,10,"sys01",false,0)'
 root -l -b -q 'draw_1D_fitSys_each.C+(89,1,true,5,"sys02",false,0)'
@@ -23,7 +23,7 @@ root -l -b -q 'draw_1D_fitSys_each.C+(89,1,true,5,"sys03",false,0)'
 root -l -b -q 'draw_1D_fitSys_each.C+(89,1,true,5,"sys03",false,0)'
 root -l -b -q 'draw_1D_fitSys_each.C+(89,1,false,22,"sys03",false,0)'
 root -l -b -q 'draw_1D_fitSys_each.C+(89,1,true,5,"sys04",false,0)'
-root -l -b -q 'draw_1D_fitSys_each.C+(89,1,false,30,"sys04",false,0)'
+root -l -b -q 'draw_1D_fitSys_each.C+(89,1,false,40,"sys04",false,0)'
 
 ######### E_T dependence
 for iopt in 1 2 3
