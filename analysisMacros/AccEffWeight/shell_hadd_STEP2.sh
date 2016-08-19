@@ -2,7 +2,6 @@
 
 dirName="toBeMerged_divideEvt"
 szFinalArr=("8rap9pt_pp_PR_newcut_Zvtx0_SF1_ptWeight" "8rap9pt_pp_NP_newcut_Zvtx0_SF1_ptWeight" "8rap9pt_Pbp_NP_newcut_Zvtx1_SF1_ptWeight" "8rap9pt_pPb_NP_newcut_Zvtx1_SF1_ptWeight" "6rap2pt_Pbp_NP_newcut_Zvtx1_SF1_ptWeight" "6rap2pt_pPb_NP_newcut_Zvtx1_SF1_ptWeight")
-#szFinalArr=("8rap9pt_pp_PR_newcut_Zvtx0_SF1_ptWeight")
 
 ##### loop
 for szFinal in ${szFinalArr[@]}; do
