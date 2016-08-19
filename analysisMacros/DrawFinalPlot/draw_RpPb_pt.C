@@ -7,7 +7,7 @@ void formPtArr(Double_t binmin, Double_t binmax, TString* arr);
 
 void CMS_lumi( TPad* pad, int iPeriod, int iPosX );
 
-void draw_RpPb_pt(bool sysByHand=false, bool noPtWeight=false, bool isPrompt=false)
+void draw_RpPb_pt(bool sysByHand=false, bool noPtWeight=false, bool isPrompt=true)
 {
   gROOT->Macro("./tdrstyle_kyo.C");
   //cmsTextFont   = 42;  // for b.hong
@@ -374,7 +374,8 @@ void draw_RpPb_pt(bool sysByHand=false, bool noPtWeight=false, bool isPrompt=fal
   yaxis01->SetTitleFont(42);
   yaxis01->SetLabelFont(42);
   yaxis01->SetTitle("R_{pPb}");
-  yaxis01->SetTitleOffset(1.1);
+  yaxis01->SetTitleOffset(1.15);
+  yaxis01->SetLabelOffset(0.05);
   yaxis01->CenterTitle(1);
   yaxis01->SetTitleSize(0.075*(0.29/0.07));
   yaxis01->SetLabelSize(0.055*(0.29/0.07));
@@ -384,19 +385,81 @@ void draw_RpPb_pt(bool sysByHand=false, bool noPtWeight=false, bool isPrompt=fal
   yaxis02->SetTitleFont(42);
   yaxis02->SetLabelFont(42);
   yaxis02->SetTitle("R_{pPb}");
-  yaxis02->SetTitleOffset(1.1);
+  yaxis02->SetTitleOffset(1.15);
+  yaxis02->SetLabelOffset(0.05);
   yaxis02->CenterTitle(1);
   yaxis02->SetTitleSize(0.075*(0.29/0.07));
   yaxis02->SetLabelSize(0.055*(0.29/0.07));
   pad_all[5]->cd();
   yaxis02->Draw();  
 
-//  c_all->cd();
+  c_all->cd();
+//  double tmpx = -0.004;
+//  double tmpy = -0.016;
 //  globtex->SetTextColor(kRed);
-//	globtex->SetTextSize(0.1);
-//  globtex->DrawLatex(0.5, 0.5, "XIA");
+//	globtex->SetTextSize(0.02825);
+//  globtex->DrawLatex(xpad0+xpadw+tmpx, 0.0+(bottommargin/2.)+tmpy, "0");
+//  globtex->DrawLatex(xpad0+2*xpadw+tmpx, 0.0+(bottommargin/2.)+tmpy, "0");
+//  globtex->DrawLatex(xpad0+3*xpadw+tmpx, 0.0+(bottommargin/2.)+tmpy, "0");
+////	globtex->SetTextSize(0.1);
+////  globtex->DrawLatex(0.5, 0.5, "XIA");
 
-  
+  //// re-draw 0 for x axis 
+  double tmpx = 0.005;
+  double tmpy = 0.0415;
+  TPaveText *pave00 = new TPaveText(xpad0+0*xpadw-tmpx,0.0+(bottommargin/2.)-tmpy,xpad0+0*xpadw+tmpx,0.0+(bottommargin/2.)-0.0115);
+  //pave00->SetTextColor(kRed);
+  pave00->SetTextFont(42);
+  pave00->SetTextAlign(31); //3:right 1:top
+  pave00->SetFillColor(kWhite);
+  pave00->SetLineColor(kWhite);
+  pave00->SetShadowColor(kWhite);
+  pave00->AddText("0");
+  pave00->Draw();
+  TPaveText *pave01 = new TPaveText(xpad0+1*xpadw-tmpx,0.0+(bottommargin/2.)-tmpy,xpad0+1*xpadw+tmpx,0.0+(bottommargin/2.)-0.0115);
+  //pave01->SetTextColor(kRed);
+  pave01->SetTextFont(42);
+  pave01->SetTextAlign(31); //3:right 1:top
+  pave01->SetFillColor(kWhite);
+  pave01->SetLineColor(kWhite);
+  pave01->SetShadowColor(kWhite);
+  pave01->AddText("0");
+  pave01->Draw();
+  TPaveText *pave02 = new TPaveText(xpad0+2*xpadw-tmpx,0.0+(bottommargin/2.)-tmpy,xpad0+2*xpadw+tmpx,0.0+(bottommargin/2.)-0.0115);
+  //pave02->SetTextColor(kRed);
+  pave02->SetTextFont(42);
+  pave02->SetTextAlign(31); //3:right 1:top
+  pave02->SetFillColor(kWhite);
+  pave02->SetLineColor(kWhite);
+  pave02->SetShadowColor(kWhite);
+  pave02->AddText("0");
+  pave02->Draw();
+  TPaveText *pave03 = new TPaveText(xpad0+3*xpadw-tmpx,0.0+(bottommargin/2.)-tmpy,xpad0+3*xpadw+tmpx,0.0+(bottommargin/2.)-0.0115);
+  //pave03->SetTextColor(kRed);
+  pave03->SetTextFont(42);
+  pave03->SetTextAlign(31); //3:right 1:top
+  pave03->SetFillColor(kWhite);
+  pave03->SetLineColor(kWhite);
+  pave03->SetShadowColor(kWhite);
+  pave03->AddText("0");
+  pave03->Draw();
+ 
+  //// re-draw 0 for y axis 
+  TPaveText *pave_Y_01 = new TPaveText(xpad0-0.02, 0.506-0.015, xpad0-0.002, 0.506+0.015,"BL");
+  pave_Y_01->SetFillColor(kWhite);
+  pave_Y_01->SetLineColor(kWhite);
+  pave_Y_01->SetShadowColor(kWhite);
+  pave_Y_01->Draw();
+  TPaveText *pave_Y_02 = new TPaveText(xpad0-0.01, 0.506-0.015, xpad0-0.002, 0.506+0.015,"BL");
+  //pave_Y_02->SetTextColor(kRed);
+  pave_Y_02->SetTextFont(42);
+  pave_Y_02->SetTextAlign(32); //3:right 2:vertical center
+  pave_Y_02->SetFillColor(kWhite);
+  pave_Y_02->SetLineColor(kWhite);
+  pave_Y_02->SetShadowColor(kWhite);
+  pave_Y_02->AddText("0");
+  pave_Y_02->Draw();
+
 
   CMS_lumi( c_all, isPA, iPos );
 	c_all->Update();
@@ -539,7 +602,8 @@ void CMS_lumi( TPad* pad, int iPeriod, int iPosX )
   latex.SetTextAlign(31); 
   latex.SetTextSize(lumiTextSize*t);    
   //latex.DrawLatex(1-r,1-t+lumiTextOffset*t,lumiText);
-  latex.DrawLatex(1-r+0.01,1-t+lumiTextOffset*t+0.01,lumiText);//KYO
+  //latex.DrawLatex(1-r+0.01,1-t+lumiTextOffset*t+0.01,lumiText);//KYO
+  latex.DrawLatex(1-r+0.02,1-t+lumiTextOffset*t+0.01,lumiText);//KYO
   if( outOfFrame ) {
     latex.SetTextFont(cmsTextFont);
     latex.SetTextAlign(11); 

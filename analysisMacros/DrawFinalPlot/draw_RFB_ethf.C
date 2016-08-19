@@ -13,7 +13,8 @@ void draw_RFB_ethf(bool sysByHand=true, bool noPtWeight = false, bool isPrompt=f
 	gROOT->Macro("./tdrstyle_kyo.C");
   //gStyle->SetTitleXOffset(1.13);
   int isPA = 1;	
-	int iPos=0;
+	//int iPos=0; //outside topleft
+	int iPos=33; //right corner
 
 	//double pxshift = 1.3;
 	double pxshift = 0.1;
@@ -386,10 +387,11 @@ void draw_RFB_ethf(bool sysByHand=true, bool noPtWeight = false, bool isPrompt=f
 	//solidLine(3.,0.,3.,1.8,1,1);
 	CMS_lumi( c1, isPA, iPos );
 	c1->Update();
+	globtex->SetTextAlign(12); //1:left, 2:vertical center
 	globtex->SetTextSize(0.055);
 	globtex->SetTextFont(42);
-	if (isPrompt) globtex->DrawLatex(0.88, 0.84, "Prompt J/#psi");
-	else globtex->DrawLatex(0.88, 0.84, "Non-prompt J/#psi");
+	if (isPrompt) globtex->DrawLatex(0.21, 0.84, "Prompt J/#psi");
+	else globtex->DrawLatex(0.21, 0.84, "Non-prompt J/#psi");
 	legBL->Draw();
 	legUL->Draw();
 
@@ -584,6 +586,7 @@ void CMS_lumi( TPad* pad, int iPeriod, int iPosX )
 	    latex.SetTextFont(cmsTextFont);
 	    latex.SetTextSize(cmsTextSize*t);
 	    latex.SetTextAlign(align_);
+      if (iPosX==33) {posX_ -= 0.03; posY_-=0.03; } // KYO
 	    latex.DrawLatex(posX_, posY_, cmsText);
 	    if( writeExtraText ) {
 	      latex.SetTextFont(extraTextFont);

@@ -7,13 +7,14 @@ void formPtArr(Double_t binmin, Double_t binmax, TString* arr);
 
 void CMS_lumi( TPad* pad, int iPeriod, int iPosX );
 
-void draw_RFB_pt(bool sysByHand=false, bool noPtWeight=false, bool isPrompt=true)
+void draw_RFB_pt_mergedBin(bool sysByHand=false, bool noPtWeight=false, bool isPrompt=false)
 {
   gROOT->Macro("./tdrstyle_kyo.C");
   //cmsTextFont   = 42;  // for b.hong
   //extraTextFont = 42;  // for b.hong
   int isPA = 1;  // 0:pp, 1:pPb
-  int iPos=0;
+	//int iPos=0; //outside topleft
+	int iPos=33; //right corner
 
   //// BR and lumi info.
   const Double_t br = 0.0593 ;
@@ -38,9 +39,9 @@ void draw_RFB_pt(bool sysByHand=false, bool noPtWeight=false, bool isPrompt=true
   Double_t eytmp[nRapRFB][nPtRFB]; //y point error to fill remporarily
   /// 2015 PAS
   Double_t px[nRapRFB][nPtRFB] = { // x point (mean pT)
-    {5.740347, 7.90416, 13.21239}, // 1.5-1.93
-    {-531, 7.95946, 13.31027}, //0.9-1.5
-    {-531, 8.25131, 13.61970} //0.0-0.9
+    {5.75945, 7.90077, 13.2826}, //1.5-1.93
+    {-531, 7.98106, 13.2588}, //0.9-1.5
+    {-531, 8.2616, 13.5598} //0.0-0.9
   };
   Double_t ex[nPtRFB] = {0.,0.,0.}; // x stat error (0)
   Double_t exlow[nRapRFB][nPtRFB];
@@ -370,6 +371,14 @@ void draw_RFB_pt(bool sysByHand=false, bool noPtWeight=false, bool isPrompt=true
 
   CMS_lumi( c1, isPA, iPos );
   c1->Update();
+  
+  if (noPtWeight) { 
+    c1->SaveAs(Form("plot_RFB/RFB_pt_mergedBin_isPrompt%d_noPtWeight_rap1.pdf",(int)isPrompt));
+    c1->SaveAs(Form("plot_RFB/RFB_pt_mergedBin_isPrompt%d_noPtWeight_rap1.png",(int)isPrompt));
+  } else {
+    c1->SaveAs(Form("plot_RFB/RFB_pt_mergedBin_isPrompt%d_rap1.pdf",(int)isPrompt));
+    c1->SaveAs(Form("plot_RFB/RFB_pt_mergedBin_isPrompt%d_rap1.png",(int)isPrompt));
+  }
 
   ///////////////// CANVAS 2  
   
@@ -393,6 +402,15 @@ void draw_RFB_pt(bool sysByHand=false, bool noPtWeight=false, bool isPrompt=true
   
   CMS_lumi( c2, isPA, iPos );
   c2->Update();
+ 
+  if (noPtWeight) { 
+    c2->SaveAs(Form("plot_RFB/RFB_pt_mergedBin_isPrompt%d_noPtWeight_rap2.pdf",(int)isPrompt));
+    c2->SaveAs(Form("plot_RFB/RFB_pt_mergedBin_isPrompt%d_noPtWeight_rap2.png",(int)isPrompt));
+  } else {
+    c2->SaveAs(Form("plot_RFB/RFB_pt_mergedBin_isPrompt%d_rap2.pdf",(int)isPrompt));
+    c2->SaveAs(Form("plot_RFB/RFB_pt_mergedBin_isPrompt%d_rap2.png",(int)isPrompt));
+  }
+
   
   ///////////////// CANVAS 3  
   
@@ -418,19 +436,11 @@ void draw_RFB_pt(bool sysByHand=false, bool noPtWeight=false, bool isPrompt=true
   c3->Update();
 
   if (noPtWeight) { 
-    c1->SaveAs(Form("plot_RFB/RFB_pt_isPrompt%d_noPtWeight_rap1.pdf",(int)isPrompt));
-    c1->SaveAs(Form("plot_RFB/RFB_pt_isPrompt%d_noPtWeight_rap1.png",(int)isPrompt));
-    c2->SaveAs(Form("plot_RFB/RFB_pt_isPrompt%d_noPtWeight_rap2.pdf",(int)isPrompt));
-    c2->SaveAs(Form("plot_RFB/RFB_pt_isPrompt%d_noPtWeight_rap2.png",(int)isPrompt));
-    c3->SaveAs(Form("plot_RFB/RFB_pt_isPrompt%d_noPtWeight_rap3.pdf",(int)isPrompt));
-    c3->SaveAs(Form("plot_RFB/RFB_pt_isPrompt%d_noPtWeight_rap3.png",(int)isPrompt));
+    c3->SaveAs(Form("plot_RFB/RFB_pt_mergedBin_isPrompt%d_noPtWeight_rap3.pdf",(int)isPrompt));
+    c3->SaveAs(Form("plot_RFB/RFB_pt_mergedBin_isPrompt%d_noPtWeight_rap3.png",(int)isPrompt));
   } else {
-    c1->SaveAs(Form("plot_RFB/RFB_pt_isPrompt%d_rap1.pdf",(int)isPrompt));
-    c1->SaveAs(Form("plot_RFB/RFB_pt_isPrompt%d_rap1.png",(int)isPrompt));
-    c2->SaveAs(Form("plot_RFB/RFB_pt_isPrompt%d_rap2.pdf",(int)isPrompt));
-    c2->SaveAs(Form("plot_RFB/RFB_pt_isPrompt%d_rap2.png",(int)isPrompt));
-    c3->SaveAs(Form("plot_RFB/RFB_pt_isPrompt%d_rap3.pdf",(int)isPrompt));
-    c3->SaveAs(Form("plot_RFB/RFB_pt_isPrompt%d_rap3.png",(int)isPrompt));
+    c3->SaveAs(Form("plot_RFB/RFB_pt_mergedBin_isPrompt%d_rap3.pdf",(int)isPrompt));
+    c3->SaveAs(Form("plot_RFB/RFB_pt_mergedBin_isPrompt%d_rap3.png",(int)isPrompt));
   }
   
   ///////////////////////////////////////////////////////////////////
@@ -590,6 +600,7 @@ void CMS_lumi( TPad* pad, int iPeriod, int iPosX )
       latex.SetTextFont(cmsTextFont);
       latex.SetTextSize(cmsTextSize*t);
       latex.SetTextAlign(align_);
+      if (iPosX==33) {posX_ -= 0.03; posY_-=0.03; } // KYO
       latex.DrawLatex(posX_, posY_, cmsText);
       if( writeExtraText ) {
         latex.SetTextFont(extraTextFont);

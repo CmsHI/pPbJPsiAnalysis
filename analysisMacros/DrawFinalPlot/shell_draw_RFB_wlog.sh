@@ -10,8 +10,13 @@ root -l -b <<EOF
 EOF
 root -l -b -q 'draw_RFB_pt.C+(1,0,true)' >&logfiles/RFB_PR_pt&
 root -l -b -q 'draw_RFB_pt.C+(1,0,false)' >&logfiles/RFB_NP_pt&
-#root -l -b -q 'draw_RFB_pt_mergedBin.C+(1,0,true)'
-#root -l -b -q 'draw_RFB_pt_mergedBin.C+(1,0,false)'
+
+root -l -b <<EOF
+.L draw_RFB_pt.C++
+.q
+EOF
+root -l -b -q 'draw_RFB_pt_mergedBin.C+(1,0,true)' >&logfiles/RFB_PR_pt_mergedBin&
+root -l -b -q 'draw_RFB_pt_mergedBin.C+(1,0,false)' >&logfiles/RFB_PR_pt_mergedBin&
 
 root -l -b <<EOF
 .L draw_RFB_rap.C++

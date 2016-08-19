@@ -7,13 +7,14 @@ void formPtArr(Double_t binmin, Double_t binmax, TString* arr);
 
 void CMS_lumi( TPad* pad, int iPeriod, int iPosX );
 
-void draw_RFB_pt(bool sysByHand=false, bool noPtWeight=false, bool isPrompt=true)
+void draw_RFB_pt(bool sysByHand=false, bool noPtWeight=false, bool isPrompt=false)
 {
 	gROOT->Macro("./tdrstyle_kyo.C");
   //cmsTextFont   = 42;  // for b.hong
 	//extraTextFont = 42;  // for b.hong
 	int isPA = 1;  // 0:pp, 1:pPb
-	int iPos=0;
+	//int iPos=0; //outside topleft
+	int iPos=33; //right corner
 
 	//// BR and lumi info.
 	const Double_t br = 0.0593 ;
@@ -218,6 +219,9 @@ void draw_RFB_pt(bool sysByHand=false, bool noPtWeight=false, bool isPrompt=true
 		for (int ipt=0; ipt<nPtRFB; ipt++){
       //eysysrel[iy][ipt] = TMath::Sqrt(h1D_RFBSys_tmp[iy]->GetBinContent(ipt+1)*h1D_RFBSys_tmp[iy]->GetBinContent(ipt+1)+ h1D_RFBSys_tmp[2*nRapRFB-iy-1]->GetBinContent(ipt+1)*h1D_RFBSys_tmp[2*nRapRFB-iy-1]->GetBinContent(ipt+1)); 
       DivideValue(h1D_RFB_tmp[iy]->GetBinContent(ipt+1),h1D_RFBSys_tmp[iy]->GetBinContent(ipt+1),h1D_RFB_tmp[2*nRapRFB-iy-1]->GetBinContent(ipt+1),h1D_RFBSys_tmp[2*nRapRFB-iy-1]->GetBinContent(ipt+1),&dummy,&eysys[iy][ipt]);
+      //cout << iy <<"th y, "<<ipt<<"th pt ********** " << endl;
+      //cout << "FW bin  = " << h1D_RFB_tmp[iy]->GetBinContent(ipt+1) << endl;
+      //cout << "BW bin  = " << h1D_RFB_tmp[2*nRapRFB-iy-1]->GetBinContent(ipt+1) << endl;
       //cout << "FW bin sys = " << h1D_RFBSys_tmp[iy]->GetBinContent(ipt+1) << endl;
       //cout << "BW bin sys = " << h1D_RFBSys_tmp[2*nRapRFB-iy-1]->GetBinContent(ipt+1) << endl;
       //cout << "dummy (R_FB) = " << dummy << endl;
@@ -568,6 +572,7 @@ void CMS_lumi( TPad* pad, int iPeriod, int iPosX )
 	    latex.SetTextFont(cmsTextFont);
 	    latex.SetTextSize(cmsTextSize*t);
 	    latex.SetTextAlign(align_);
+      if (iPosX==33) {posX_ -= 0.03; posY_-=0.03; } // KYO
 	    latex.DrawLatex(posX_, posY_, cmsText);
 	    if( writeExtraText ) {
 	      latex.SetTextFont(extraTextFont);
