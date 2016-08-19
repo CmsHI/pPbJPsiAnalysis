@@ -9,16 +9,16 @@
   //TFile* f01 = TFile::Open("EffAna_8rap9pt_pp_NP_newcut_Zvtx0_SF0_ptSpectraTest_gen.root");
   
   TCanvas* c1 = new TCanvas("c1","",600,600);
-  //TH2D* h2D_01 = (TH2D*)f01->Get("h2D_Eff_pt_y");
+  TH2D* h2D_01 = (TH2D*)f01->Get("h2D_Eff_pt_y");
   //TH2D* h2D_01 = (TH2D*)f01->Get("h2D_Den_pt_y_fine");
   //TH2D* h2D_01 = (TH2D*)f01->Get("h2D_Num_pt_y_fine");
-  TH2D* h2D_01 = (TH2D*)f01->Get("h2D_Eff_pt_y_fine");
+  //TH2D* h2D_01 = (TH2D*)f01->Get("h2D_Eff_pt_y_fine");
   h2D_01->SetName("h2D_01");
 
-  //TH2D* h2D_02 = (TH2D*)f02->Get("h2D_Eff_pt_y");
+  TH2D* h2D_02 = (TH2D*)f02->Get("h2D_Eff_pt_y");
   //TH2D* h2D_02 = (TH2D*)f02->Get("h2D_Den_pt_y_fine");
   //TH2D* h2D_02 = (TH2D*)f02->Get("h2D_Num_pt_y_fine");
-  TH2D* h2D_02 = (TH2D*)f02->Get("h2D_Eff_pt_y_fine");
+  //TH2D* h2D_02 = (TH2D*)f02->Get("h2D_Eff_pt_y_fine");
   h2D_02->SetName("h2D_02");
   
   //TH2D* h2D_03 = (TH2D*)f03->Get("h2D_Eff_pt_y");
