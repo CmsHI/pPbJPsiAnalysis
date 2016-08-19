@@ -106,14 +106,14 @@ void comp_RpPb_rap_Overlay(bool isPoint=true, bool isSmoothened=false)
     g_RpPb_theory[1][ipt]->SetLineColor(kRed+1);
     //g_RpPb_theory[1][ipt]->SetFillStyle(3004);
     //g_RpPb_theory[1][ipt]->SetFillStyle(3254);
-    g_RpPb_theory[1][ipt]->SetFillStyle(3454);
-    g_RpPb_theory[2][ipt]->SetFillColor(kGreen+1);
-    g_RpPb_theory[2][ipt]->SetLineColor(kGreen+1);
+    g_RpPb_theory[1][ipt]->SetFillStyle(3354);
+    g_RpPb_theory[2][ipt]->SetFillColor(kBlue+1);
+    g_RpPb_theory[2][ipt]->SetLineColor(kBlue+1);
     //g_RpPb_theory[2][ipt]->SetFillStyle(3005);
     //g_RpPb_theory[2][ipt]->SetFillStyle(3245);
-    g_RpPb_theory[2][ipt]->SetFillStyle(3445);
-    g_RpPb_theory[3][ipt]->SetFillColor(kBlue+1);
-    g_RpPb_theory[3][ipt]->SetLineColor(kBlue+1);
+    g_RpPb_theory[2][ipt]->SetFillStyle(3345);
+    g_RpPb_theory[3][ipt]->SetFillColor(kGreen+1);
+    g_RpPb_theory[3][ipt]->SetLineColor(kGreen+1);
     g_RpPb_theory[3][ipt]->SetFillStyle(3003);
     //g_RpPb_theory[3][ipt]->SetFillStyle(3400);
   } 
@@ -121,12 +121,13 @@ void comp_RpPb_rap_Overlay(bool isPoint=true, bool isSmoothened=false)
 	//// Draw
   ///////////////////////////////////////////////////
 	
-	TLegend *legBR = new TLegend(0.45, 0.18, 0.70, 0.32);
-	SetLegendStyle(legBR);
-	legBR->SetTextSize(0.05);
-	TLegend *legBR2 = new TLegend(0.45, 0.18, 0.70, 0.32);
-	SetLegendStyle(legBR2);
-	legBR2->SetTextSize(0.05);
+	TLegend *legBL1 = new TLegend(0.195, 0.168, 0.38, 0.333);
+	SetLegendStyle(legBL1);
+	//legBL1->SetTextSize(0.05);
+	legBL1->SetTextSize(0.037);
+	TLegend *legBL2 = new TLegend(0.195, 0.168, 0.38, 0.333);
+	SetLegendStyle(legBL2);
+	legBL2->SetTextSize(0.037);
   
   TLatex* globtex = new TLatex();
 	globtex->SetNDC();
@@ -141,15 +142,15 @@ void comp_RpPb_rap_Overlay(bool isPoint=true, bool isSmoothened=false)
   //g_RpPb_sys[0]->Draw("A2"); 
   g_RpPb_sys[0]->Draw("A5"); 
   for (int ith = 0 ; ith < nTheory; ith ++ ) {
-    if (ith==0){
-      g_RpPb_theory[ith][0]->Draw("3");
-    } else {
+    //if (ith==0){
+    //  g_RpPb_theory[ith][0]->Draw("3");
+    //} else {
       if (isSmoothened) {
         g_RpPb_theory[ith][0]->Draw("3");
       } else {
         g_RpPb_theory[ith][0]->Draw("5");
       }
-    }
+    //}
   }
   if (isPoint) {
     g_RpPb_sys[0]->Draw("5"); 
@@ -157,15 +158,37 @@ void comp_RpPb_rap_Overlay(bool isPoint=true, bool isSmoothened=false)
   } 
   dashedLine(-2.5,1.,2.1,1.,1,1);
 
-	TLegendEntry *le1=legBR->AddEntry("le1","6.5 < p_{T} < 10 GeV/c","lpf");
-  le1->SetFillColor(kRed-10);
-  le1->SetFillStyle(1001);
-  le1->SetLineColor(kPink-6);
-  le1->SetLineWidth(1);
-  le1->SetMarkerStyle(kFullSquare);
-  le1->SetMarkerColor(kPink-6);
-  le1->SetMarkerSize(1.9);
-	legBR->Draw();
+	globtex->SetTextSize(0.045);
+	globtex->SetTextFont(42);
+  globtex->DrawLatex(0.21, 0.37, "6.5 < p_{T} < 10 GeV/c");
+	//legBL1->SetTextSize(0.05);
+	//legBL1->SetHeader("6.5 < p_{T} < 10 GeV/c");
+	//legBL1->SetTextSize(0.037);
+	//TLegendEntry *le1=legBL1->AddEntry("le1","6.5 < p_{T} < 10 GeV/c","f");
+  //le1->SetFillColor(kWhite);
+  //le1->SetLineColor(kWhite);
+  //le1->SetFillStyle(1001);
+  TLegendEntry *ent1_thr=legBL1->AddEntry("ent1_thr"," EPS09NLO + CEM (Vogt)","f");
+	ent1_thr->SetFillColor(kYellow);
+	ent1_thr->SetLineColor(kYellow);
+  ent1_thr->SetFillStyle(1001);
+  TLegendEntry *ent2_thr=legBL1->AddEntry("ent2_thr"," EPS09LO + generic 2#rightarrow2 (Lansberg-Shao)","f");
+	ent2_thr->SetFillColor(kRed+1);
+	ent2_thr->SetLineColor(kRed+1);
+  ent2_thr->SetFillStyle(3354);
+  TLegendEntry *ent3_thr=legBL1->AddEntry("ent3_thr"," EPS09NLO + generic 2#rightarrow2 (Lansberg-Shao)","f");
+	ent3_thr->SetFillColor(kBlue+1);
+	ent3_thr->SetLineColor(kBlue+1);
+  ent3_thr->SetFillStyle(3345);
+  TLegendEntry *ent4_thr=legBL1->AddEntry("ent4_thr"," nCTEQ15LO + generic 2#rightarrow2 (Lansberg-Shao)","f");
+	ent4_thr->SetFillColor(kGreen+1);
+	ent4_thr->SetLineColor(kGreen+1);
+  ent4_thr->SetFillStyle(3003);
+//  TLegendEntry *ent5_thr=legBL1->AddEntry("ent5_thr","(Lansberg-Shao)","f");
+//	ent5_thr->SetFillColor(kWhite);
+//	ent5_thr->SetLineColor(kWhite);
+//  ent5_thr->SetFillStyle(1001);
+	legBL1->Draw();
 	
   globtex->SetTextSize(0.055);
 	globtex->SetTextFont(42);
@@ -187,15 +210,15 @@ void comp_RpPb_rap_Overlay(bool isPoint=true, bool isSmoothened=false)
   g_RpPb_sys[1]->Draw("A5"); 
   //g_RpPb_sys_line[1]->Draw("5"); 
   for (int ith = 0 ; ith < nTheory; ith ++ ) {
-    if (ith==0){
-      g_RpPb_theory[ith][1]->Draw("3");
-    } else {
+    //if (ith==0){
+    //  g_RpPb_theory[ith][1]->Draw("3");
+    //} else {
       if (isSmoothened) {
         g_RpPb_theory[ith][1]->Draw("3");
       } else {
         g_RpPb_theory[ith][1]->Draw("5");
       }
-    }
+    //}
   }
   if (isPoint) {
     g_RpPb_sys[1]->Draw("5"); 
@@ -203,14 +226,28 @@ void comp_RpPb_rap_Overlay(bool isPoint=true, bool isSmoothened=false)
   }  
   dashedLine(-2.5,1.,2.1,1.,1,1);
 
-	TLegendEntry *le2=legBR2->AddEntry("le2","10 < p_{T} < 30 GeV/c","lpf");
-  le2->SetFillColor(kGreen-10);
-  le2->SetFillStyle(1001);
-  le2->SetLineColor(kGreen+3);
-  le2->SetMarkerStyle(kFullDiamond);
-  le2->SetMarkerColor(kGreen+3);
-  le2->SetMarkerSize(3.1);
-	legBR2->Draw();
+	globtex->SetTextSize(0.045);
+	globtex->SetTextFont(42);
+  globtex->DrawLatex(0.21, 0.37, "10 < p_{T} < 30 GeV/c");
+  /*
+  TLegendEntry *ent1_thr=legBL1->AddEntry("ent1_thr"," EPS09NLO + CEM (Vogt)","f");
+	ent1_thr->SetFillColor(kYellow);
+	ent1_thr->SetLineColor(kYellow);
+  ent1_thr->SetFillStyle(1001);
+  TLegendEntry *ent2_thr=legBL1->AddEntry("ent2_thr"," EPS09LO + generic 2#rightarrow2 (Lansberg-Shao)","f");
+	ent2_thr->SetFillColor(kRed+1);
+	ent2_thr->SetLineColor(kRed+1);
+  ent2_thr->SetFillStyle(3354);
+  TLegendEntry *ent3_thr=legBL1->AddEntry("ent3_thr"," EPS09NLO + generic 2#rightarrow2 (Lansberg-Shao)","f");
+	ent3_thr->SetFillColor(kBlue+1);
+	ent3_thr->SetLineColor(kBlue+1);
+  ent3_thr->SetFillStyle(3345);
+  TLegendEntry *ent4_thr=legBL1->AddEntry("ent4_thr"," nCTEQ15LO + generic 2#rightarrow2 (Lansberg-Shao)","f");
+	ent4_thr->SetFillColor(kGreen+1);
+	ent4_thr->SetLineColor(kGreen+1);
+  ent4_thr->SetFillStyle(3003);
+	*/
+  legBL1->Draw();
 	
   globtex->SetTextSize(0.055);
 	globtex->SetTextFont(42);

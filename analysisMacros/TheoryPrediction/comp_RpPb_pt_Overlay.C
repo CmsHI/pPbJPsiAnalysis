@@ -75,44 +75,53 @@ void comp_RpPb_pt_Overlay(double ptmax=32, bool isPoint=true, bool isSmoothened=
       g_RpPb_theory[ith][iy]->SetName(Form("g_RpPb_theory_%d_%d",ith,iy));
     } 
   } 
-
+  
   //// color
   for (int iy = 0 ; iy < nRapRpPb; iy ++ ) {
     //g_RpPb_theory[0][iy]->SetFillColorAlpha(kYellow,0.5);
     g_RpPb_theory[0][iy]->SetFillColorAlpha(kYellow,1);
     g_RpPb_theory[0][iy]->SetLineColor(kYellow);
+    g_RpPb_theory[0][ipt]->SetFillStyle(1001);
     g_RpPb_theory[1][iy]->SetFillColor(kRed+1);
     g_RpPb_theory[1][iy]->SetLineColor(kRed+1);
     //g_RpPb_theory[1][iy]->SetFillStyle(3004);
     //g_RpPb_theory[1][iy]->SetFillStyle(3254);
-    g_RpPb_theory[1][iy]->SetFillStyle(3454);
-    g_RpPb_theory[2][iy]->SetFillColor(kGreen+1);
-    g_RpPb_theory[2][iy]->SetLineColor(kGreen+1);
+    //g_RpPb_theory[1][iy]->SetFillStyle(3454);
+    g_RpPb_theory[1][iy]->SetFillStyle(3554);
+    g_RpPb_theory[2][iy]->SetFillColor(kBlue+1);
+    g_RpPb_theory[2][iy]->SetLineColor(kBlue+1);
     //g_RpPb_theory[2][iy]->SetFillStyle(3005);
     //g_RpPb_theory[2][iy]->SetFillStyle(3245);
-    g_RpPb_theory[2][iy]->SetFillStyle(3445);
-    g_RpPb_theory[3][iy]->SetFillColor(kBlue+1);
-    g_RpPb_theory[3][iy]->SetLineColor(kBlue+1);
+    //g_RpPb_theory[2][iy]->SetFillStyle(3445);
+    g_RpPb_theory[2][iy]->SetFillStyle(3545);
+    g_RpPb_theory[3][iy]->SetFillColor(kGreen+1);
+    g_RpPb_theory[3][iy]->SetLineColor(kGreen+1);
     g_RpPb_theory[3][iy]->SetFillStyle(3003);
     //g_RpPb_theory[3][iy]->SetFillStyle(3400);
   } 
 /*
   for (int iy = 0 ; iy < nRapRpPb; iy ++ ) {
-    g_RpPb_theory[0][iy]->SetFillColorAlpha(kMagenta-10,1);
+    //g_RpPb_theory[0][iy]->SetFillColorAlpha(kMagenta-10,0.5);
+    g_RpPb_theory[0][iy]->SetFillColorAlpha(kYellow,1);
     g_RpPb_theory[0][iy]->SetLineColor(kViolet-6);
-    g_RpPb_theory[0][iy]->SetFillStyle(3458);
-    g_RpPb_theory[1][iy]->SetFillColorAlpha(kRed-10,1);
-    g_RpPb_theory[1][iy]->SetLineColor(kPink-6);
-    g_RpPb_theory[1][iy]->SetFillStyle(3454);
-    g_RpPb_theory[2][iy]->SetFillColorAlpha(kGreen+10,1);
-    g_RpPb_theory[2][iy]->SetLineColor(kGreen+3);
-    g_RpPb_theory[2][iy]->SetFillStyle(3445);
-    g_RpPb_theory[3][iy]->SetFillColorAlpha(kBlue-10,1);
-    g_RpPb_theory[3][iy]->SetLineColor(kBlue-3);
-    g_RpPb_theory[3][iy]->SetFillStyle(3485);
+    //g_RpPb_theory[0][iy]->SetFillStyle(3458);
+    //g_RpPb_theory[1][iy]->SetFillColorAlpha(kRed-10,0.5);
+    g_RpPb_theory[1][iy]->SetFillColorAlpha(kRed+1,1);
+    //g_RpPb_theory[1][iy]->SetLineColor(kPink-6);
+    //g_RpPb_theory[1][iy]->SetFillStyle(3004);
+    g_RpPb_theory[1][iy]->SetFillStyle(3554);
+    //g_RpPb_theory[2][iy]->SetFillColorAlpha(kGreen+10,0.5);
+    g_RpPb_theory[2][iy]->SetFillColorAlpha(kBlue,1);
+    //g_RpPb_theory[2][iy]->SetLineColor(kBlue+3);
+    //g_RpPb_theory[2][iy]->SetFillStyle(3005);
+    g_RpPb_theory[2][iy]->SetFillStyle(3545);
+    g_RpPb_theory[3][iy]->SetFillColorAlpha(kGreen,1);
+    //g_RpPb_theory[3][iy]->SetLineColor(kBlue-3);
+    g_RpPb_theory[3][iy]->SetFillStyle(3002);
+    //g_RpPb_theory[3][iy]->SetFillStyle(3585);
   } 
-*/  
-	///////////////////////////////////////////////////
+*/	
+  ///////////////////////////////////////////////////
 	//// Draw
   ///////////////////////////////////////////////////
 	
@@ -131,6 +140,10 @@ void comp_RpPb_pt_Overlay(double ptmax=32, bool isPoint=true, bool isSmoothened=
 	emptybox->SetLineColor(kBlack);
 	emptybox->SetLineWidth(1);
   
+  TLegend *legBL1 = new TLegend(0.04, 0.08, 0.40, 0.5);
+	SetLegendStyle(legBL1);
+	legBL1->SetTextSize(0.07);
+	
   TCanvas* c_all = new TCanvas("c_all","c_all",1200,680);
   //CMS_lumi( c_all, isPA, iPos );
   c_all->Divide(5,2);
@@ -187,7 +200,7 @@ void comp_RpPb_pt_Overlay(double ptmax=32, bool isPoint=true, bool isSmoothened=
       //if (ith == nTheory-1) continue;
       if (ith==0){
         g_RpPb_theory[ith][iy]->Draw("3");
-        //g_RpPb_theory[ith][iy]->Draw("C");
+        //g_RpPb_theory[ith][iy]->Draw("5");
       } else {
         if (isSmoothened) g_RpPb_theory[ith][iy]->Draw("3");
         else g_RpPb_theory[ith][iy]->Draw("5");
@@ -207,7 +220,31 @@ void comp_RpPb_pt_Overlay(double ptmax=32, bool isPoint=true, bool isSmoothened=
   }
   pad_all[4]->cd();
   emptybox->Draw("l");
-	
+  
+  TLegendEntry *ent1_thr=legBL1->AddEntry("ent1_thr"," EPS09NLO + CEM (Vogt)","f");
+	ent1_thr->SetFillColor(kYellow);
+	ent1_thr->SetLineColor(kYellow);
+  ent1_thr->SetFillStyle(1001);
+  TLegendEntry *ent2_thr=legBL1->AddEntry("ent2_thr"," EPS09LO + generic 2#rightarrow2","f");
+	ent2_thr->SetFillColor(kRed+1);
+	ent2_thr->SetLineColor(kRed+1);
+  ent2_thr->SetFillStyle(3554);
+  TLegendEntry *ent3_thr=legBL1->AddEntry("ent3_thr"," EPS09NLO + generic 2#rightarrow2","f");
+	ent3_thr->SetFillColor(kBlue+1);
+	ent3_thr->SetLineColor(kBlue+1);
+  ent3_thr->SetFillStyle(3545);
+  TLegendEntry *ent4_thr=legBL1->AddEntry("ent4_thr"," nCTEQ15LO + generic 2#rightarrow2","f");
+	ent4_thr->SetFillColor(kGreen+1);
+	ent4_thr->SetLineColor(kGreen+1);
+  ent4_thr->SetFillStyle(3003);
+  TLegendEntry *ent5_thr=legBL1->AddEntry("ent5_thr","(Lansberg-Shao)","f");
+	ent5_thr->SetFillColor(kWhite);
+	ent5_thr->SetLineColor(kWhite);
+  ent5_thr->SetFillStyle(1001);
+	legBL1->Draw();
+
+
+/*	
   globtex->SetTextAlign(12); //1:left, 2:vertical center
   globtex->SetTextSize(0.09);
 	globtex->SetTextFont(42);
@@ -217,7 +254,7 @@ void comp_RpPb_pt_Overlay(double ptmax=32, bool isPoint=true, bool isSmoothened=
 	globtex->SetTextSize(0.07);
 	globtex->SetTextFont(42);
   globtex->DrawLatex(0.08, 0.18, "Global uncertainty : 5.3 \%");
-
+*/
   //////////////////// y axis
       //g_RpPb_sys[iy]->GetYaxis()->SetTitle("R_{pPb}");
       //g_RpPb_sys[iy]->GetYaxis()->SetTitleOffset(1.1);
@@ -232,7 +269,8 @@ void comp_RpPb_pt_Overlay(double ptmax=32, bool isPoint=true, bool isSmoothened=
   yaxis01->SetTitleFont(42);
   yaxis01->SetLabelFont(42);
   yaxis01->SetTitle("R_{pPb}");
-  yaxis01->SetTitleOffset(1.1);
+  yaxis01->SetTitleOffset(1.15);
+  yaxis01->SetLabelOffset(0.05);
   yaxis01->CenterTitle(1);
   yaxis01->SetTitleSize(0.075*(0.29/0.07));
   yaxis01->SetLabelSize(0.055*(0.29/0.07));
@@ -242,18 +280,91 @@ void comp_RpPb_pt_Overlay(double ptmax=32, bool isPoint=true, bool isSmoothened=
   yaxis02->SetTitleFont(42);
   yaxis02->SetLabelFont(42);
   yaxis02->SetTitle("R_{pPb}");
-  yaxis02->SetTitleOffset(1.1);
+  yaxis02->SetTitleOffset(1.15);
+  yaxis02->SetLabelOffset(0.05);
   yaxis02->CenterTitle(1);
   yaxis02->SetTitleSize(0.075*(0.29/0.07));
   yaxis02->SetLabelSize(0.055*(0.29/0.07));
   pad_all[5]->cd();
   yaxis02->Draw();  
 
-  //c_all->cd();
-  //globtex->SetTextColor(kRed);
-	//globtex->SetTextSize(0.1);
-  //globtex->DrawLatex(0.5, 0.5, "XIA");
+  c_all->cd();
+//  double tmpx = -0.004;
+//  double tmpy = -0.016;
+//  globtex->SetTextColor(kRed);
+//	globtex->SetTextSize(0.02825);
+//  globtex->DrawLatex(xpad0+xpadw+tmpx, 0.0+(bottommargin/2.)+tmpy, "0");
+//  globtex->DrawLatex(xpad0+2*xpadw+tmpx, 0.0+(bottommargin/2.)+tmpy, "0");
+//  globtex->DrawLatex(xpad0+3*xpadw+tmpx, 0.0+(bottommargin/2.)+tmpy, "0");
+////	globtex->SetTextSize(0.1);
+////  globtex->DrawLatex(0.5, 0.5, "XIA");
+
+  //// re-draw 0 for x axis 
+  double tmpx = 0.005;
+  double tmpy = 0.0415;
+  TPaveText *pave00 = new TPaveText(xpad0+0*xpadw-tmpx,0.0+(bottommargin/2.)-tmpy,xpad0+0*xpadw+tmpx,0.0+(bottommargin/2.)-0.0115);
+  //pave00->SetTextColor(kRed);
+  pave00->SetTextFont(42);
+  pave00->SetTextAlign(31); //3:right 1:top
+  pave00->SetFillColor(kWhite);
+  pave00->SetLineColor(kWhite);
+  pave00->SetShadowColor(kWhite);
+  pave00->AddText("0");
+  pave00->Draw();
+  TPaveText *pave01 = new TPaveText(xpad0+1*xpadw-tmpx,0.0+(bottommargin/2.)-tmpy,xpad0+1*xpadw+tmpx,0.0+(bottommargin/2.)-0.0115);
+  //pave01->SetTextColor(kRed);
+  pave01->SetTextFont(42);
+  pave01->SetTextAlign(31); //3:right 1:top
+  pave01->SetFillColor(kWhite);
+  pave01->SetLineColor(kWhite);
+  pave01->SetShadowColor(kWhite);
+  pave01->AddText("0");
+  pave01->Draw();
+  TPaveText *pave02 = new TPaveText(xpad0+2*xpadw-tmpx,0.0+(bottommargin/2.)-tmpy,xpad0+2*xpadw+tmpx,0.0+(bottommargin/2.)-0.0115);
+  //pave02->SetTextColor(kRed);
+  pave02->SetTextFont(42);
+  pave02->SetTextAlign(31); //3:right 1:top
+  pave02->SetFillColor(kWhite);
+  pave02->SetLineColor(kWhite);
+  pave02->SetShadowColor(kWhite);
+  pave02->AddText("0");
+  pave02->Draw();
+  TPaveText *pave03 = new TPaveText(xpad0+3*xpadw-tmpx,0.0+(bottommargin/2.)-tmpy,xpad0+3*xpadw+tmpx,0.0+(bottommargin/2.)-0.0115);
+  //pave03->SetTextColor(kRed);
+  pave03->SetTextFont(42);
+  pave03->SetTextAlign(31); //3:right 1:top
+  pave03->SetFillColor(kWhite);
+  pave03->SetLineColor(kWhite);
+  pave03->SetShadowColor(kWhite);
+  pave03->AddText("0");
+  pave03->Draw();
+ 
+  //// re-draw 0 for y axis 
+  TPaveText *pave_Y_01 = new TPaveText(xpad0-0.02, 0.506-0.015, xpad0-0.002, 0.506+0.015,"BL");
+  pave_Y_01->SetFillColor(kWhite);
+  pave_Y_01->SetLineColor(kWhite);
+  pave_Y_01->SetShadowColor(kWhite);
+  pave_Y_01->Draw();
+  TPaveText *pave_Y_02 = new TPaveText(xpad0-0.01, 0.506-0.015, xpad0-0.002, 0.506+0.015,"BL");
+  //pave_Y_02->SetTextColor(kRed);
+  pave_Y_02->SetTextFont(42);
+  pave_Y_02->SetTextAlign(32); //3:right 2:vertical center
+  pave_Y_02->SetFillColor(kWhite);
+  pave_Y_02->SetLineColor(kWhite);
+  pave_Y_02->SetShadowColor(kWhite);
+  pave_Y_02->AddText("0");
+  pave_Y_02->Draw();
   
+  globtex->SetTextAlign(12); //1:left, 2:vertical center
+  globtex->SetTextSize(0.09/2.5);
+	globtex->SetTextFont(42);
+	if (isPrompt) globtex->DrawLatex(0.08, 0.885, "Prompt J/#psi");
+	else globtex->DrawLatex(0.08, 0.885, "Non-prompt J/#psi");
+  globtex->SetTextAlign(12); //1:left 2:vertical center
+	globtex->SetTextSize(0.07/2.5);
+	globtex->SetTextFont(42);
+  globtex->DrawLatex(0.08, 0.84, "Global uncertainty : 5.3 \%");
+
   CMS_lumi( c_all, isPA, iPos );
     
   c_all->SaveAs(Form("plot_theory/comp_RpPb_pt_isSmoothened%d_Overlay.pdf",(int)isSmoothened));
@@ -384,7 +495,8 @@ void CMS_lumi( TPad* pad, int iPeriod, int iPosX )
   latex.SetTextAlign(31); 
   latex.SetTextSize(lumiTextSize*t);    
   //latex.DrawLatex(1-r,1-t+lumiTextOffset*t,lumiText);
-  latex.DrawLatex(1-r+0.01,1-t+lumiTextOffset*t+0.01,lumiText);//KYO
+  //latex.DrawLatex(1-r+0.01,1-t+lumiTextOffset*t+0.01,lumiText);//KYO
+  latex.DrawLatex(1-r+0.02,1-t+lumiTextOffset*t+0.01,lumiText);//KYO
   if( outOfFrame ) {
     latex.SetTextFont(cmsTextFont);
     latex.SetTextAlign(11); 
