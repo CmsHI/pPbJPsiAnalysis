@@ -1,1 +1,1 @@
-Here plots for fit systemtaic uncertainties is stored
+Here plots for fit systemtaic uncertainties are stored

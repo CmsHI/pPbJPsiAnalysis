@@ -1,1 +1,1 @@
-Here plots for total systemtaic uncertainties is stored
+Here plots for total systemtaic uncertainties are stored

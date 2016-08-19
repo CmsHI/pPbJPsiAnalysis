@@ -1,1 +1,1 @@
-Here acceptance plots is stored
+Here acceptance plots are stored
