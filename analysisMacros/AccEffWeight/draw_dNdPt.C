@@ -121,11 +121,10 @@ void draw_dNdPt(int isPA=1, bool isPrompt=false, bool noPtWeight=true, bool isLo
 	TFile * f2D;
   if (isPA==0) {
     if (noPtWeight) f2D = new TFile("../FittingResult/totalHist_pp_8rap9pt_newcut_nominal_Zvtx0_SF1_noPtWeight.root");
-//    if (noPtWeight) f2D = new TFile("../FittingResult/totalHist_pp_8rap9pt_newcut_nominal_Zvtx0_SF0_noPtWeight.root");
-    else f2D = new TFile("../FittingResult/totalHist_pp_8rap9pt_newcut_nominal_Zvtx0_SF1.root");
+    else f2D = new TFile("../FittingResult/totalHist_pp_8rap9pt_newcut_nominal_Zvtx0_SF1_etOpt0.root");
   } else {
     if (noPtWeight) f2D = new TFile("../FittingResult/totalHist_pA_8rap9pt_newcut_nominal_Zvtx1_SF1_noPtWeight.root");
-    else f2D = new TFile("../FittingResult/totalHist_pA_8rap9pt_newcut_nominal_Zvtx1_SF1.root");
+    else f2D = new TFile("../FittingResult/totalHist_pA_8rap9pt_newcut_nominal_Zvtx1_SF1_etOpt0.root");
 
   }
 	//// read-in 2D hist for corrected yield
@@ -288,8 +287,13 @@ void draw_dNdPt(int isPA=1, bool isPrompt=false, bool noPtWeight=true, bool isLo
 		}
     latex->DrawLatex(0.57,0.88,Form("%s",rapArr[iy].Data()));
 	}
-	if (isPA==0) c1->SaveAs(Form("dir_dNdPt/pp_dNdPt_isPrompt%d.pdf",(int)isPrompt));
-	else c1->SaveAs(Form("dir_dNdPt/pA_dNdPt_isPrompt%d.pdf",(int)isPrompt));
+  if (noPtWeight) {
+  	if (isPA==0) c1->SaveAs(Form("dir_dNdPt/pp_dNdPt_isPrompt%d.pdf",(int)isPrompt));
+  	else c1->SaveAs(Form("dir_dNdPt/pA_dNdPt_isPrompt%d.pdf",(int)isPrompt));
+  } else {
+  	if (isPA==0) c1->SaveAs(Form("dir_dNdPt_afterWeight/pp_dNdPt_isPrompt%d.pdf",(int)isPrompt));
+  	else c1->SaveAs(Form("dir_dNdPt_afterWeight/pA_dNdPt_isPrompt%d.pdf",(int)isPrompt));
+  }
 	//legUR->Clear();
 	
 	
@@ -334,14 +338,24 @@ void draw_dNdPt(int isPA=1, bool isPrompt=false, bool noPtWeight=true, bool isLo
 		else latex->DrawLatex(0.57,0.22,Form("%s",rapArr[iy].Data()));
 		dashedLine(0.,1.,25.,1.,1,1);
 	}	
-	if (isPA==0) c2->SaveAs(Form("dir_dNdPt/pp_dNdPtRatio_isPrompt%d.pdf",(int)isPrompt));
-	else c2->SaveAs(Form("dir_dNdPt/pA_dNdPtRatio_isPrompt%d.pdf",(int)isPrompt));
+  if (noPtWeight) {
+  	if (isPA==0) c2->SaveAs(Form("dir_dNdPt/pp_dNdPtRatio_isPrompt%d.pdf",(int)isPrompt));
+  	else c2->SaveAs(Form("dir_dNdPt/pA_dNdPtRatio_isPrompt%d.pdf",(int)isPrompt));
+  } else {
+  	if (isPA==0) c2->SaveAs(Form("dir_dNdPt_afterWeight/pp_dNdPtRatio_isPrompt%d.pdf",(int)isPrompt));
+  	else c2->SaveAs(Form("dir_dNdPt_afterWeight/pA_dNdPtRatio_isPrompt%d.pdf",(int)isPrompt));
+  }
 
 	//////////////////////////////////////////////////////////////////
 	// root file
 	TFile *fOut;
-  if (isPA==0) fOut= new TFile(Form("dir_dNdPt/pp_dNdPt_isPrompt%d.root",(int)isPrompt),"RECREATE");
-  else fOut= new TFile(Form("dir_dNdPt/pA_dNdPt_isPrompt%d.root",(int)isPrompt),"RECREATE");
+  if (noPtWeight) {
+    if (isPA==0) fOut= new TFile(Form("dir_dNdPt/pp_dNdPt_isPrompt%d.root",(int)isPrompt),"RECREATE");
+    else fOut= new TFile(Form("dir_dNdPt/pA_dNdPt_isPrompt%d.root",(int)isPrompt),"RECREATE");
+  } else {
+    if (isPA==0) fOut= new TFile(Form("dir_dNdPt_afterWeight/pp_dNdPt_isPrompt%d.root",(int)isPrompt),"RECREATE");
+    else fOut= new TFile(Form("dir_dNdPt_afterWeight/pA_dNdPt_isPrompt%d.root",(int)isPrompt),"RECREATE");
+  }
 	fOut->cd();
 	for (Int_t iy = 0; iy < nRap; iy++) {
 		h1D_Data[iy]->Write();
