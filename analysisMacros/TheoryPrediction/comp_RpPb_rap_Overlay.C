@@ -154,9 +154,9 @@ void comp_RpPb_rap_Overlay(bool isPoint=true, bool isSmoothened=false)
   }
   if (isPoint) {
     g_RpPb_sys[0]->Draw("5"); 
+    dashedLine(-2.5,1.,2.1,1.,1,1);
     g_RpPb[0]->Draw("P"); 
   } 
-  dashedLine(-2.5,1.,2.1,1.,1,1);
 
 	globtex->SetTextSize(0.045);
 	globtex->SetTextFont(42);
@@ -388,7 +388,11 @@ void CMS_lumi( TPad* pad, int iPeriod, int iPosX )
       latex.SetTextSize(cmsTextSize*t);
       latex.SetTextAlign(align_);
       //cout << "posX_ = " << posX_ << ", posY_ = " << posY_ << endl;
-      if (iPosX==33) {posX_ -= 0.03; posY_-=0.03; } // KYO
+      //if (iPosX==33) {posX_ -= 0.03; posY_-=0.03; } // KYO
+      if (iPosX==33) {
+        posX_ -= 0.03; posY_-=0.03; 
+        latex.SetTextSize(cmsTextSize*t*1.5);
+      } // KYO
       latex.DrawLatex(posX_, posY_, cmsText);
       if( writeExtraText ) {
         latex.SetTextFont(extraTextFont);

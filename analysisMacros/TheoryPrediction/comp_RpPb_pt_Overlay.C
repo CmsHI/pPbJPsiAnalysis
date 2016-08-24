@@ -81,7 +81,7 @@ void comp_RpPb_pt_Overlay(double ptmax=32, bool isPoint=true, bool isSmoothened=
     //g_RpPb_theory[0][iy]->SetFillColorAlpha(kYellow,0.5);
     g_RpPb_theory[0][iy]->SetFillColorAlpha(kYellow,1);
     g_RpPb_theory[0][iy]->SetLineColor(kYellow);
-    g_RpPb_theory[0][ipt]->SetFillStyle(1001);
+    g_RpPb_theory[0][iy]->SetFillStyle(1001);
     g_RpPb_theory[1][iy]->SetFillColor(kRed+1);
     g_RpPb_theory[1][iy]->SetLineColor(kRed+1);
     //g_RpPb_theory[1][iy]->SetFillStyle(3004);
@@ -209,9 +209,9 @@ void comp_RpPb_pt_Overlay(double ptmax=32, bool isPoint=true, bool isSmoothened=
     }
     if (isPoint) {
       g_RpPb_sys[iy]->Draw("5");
+      dashedLine(0.,1.,32.,1.,1,1);
       g_RpPb[iy]->Draw("p");
     }
-    dashedLine(0.,1.,32.,1.,1,1);
     globtex->SetTextAlign(32); //3:right 2:vertical center
 	  globtex->SetTextFont(42);
 	  globtex->SetTextSize(0.078);
@@ -532,7 +532,11 @@ void CMS_lumi( TPad* pad, int iPeriod, int iPosX )
       latex.SetTextAlign(align_);
       //cout << "posX_ = " << posX_ << ", posY_ = " << posY_ << endl;
       //if (iPosX==33) {posX_ -= 0.03; posY_-=0.03; } // KYO
-      if (iPosX==33) {posX_ += 0.03; posY_-=0.01; } // KYO
+      //if (iPosX==33) {posX_ += 0.03; posY_-=0.01; } // KYO
+      if (iPosX==33) {
+        posX_ -= 0.03; posY_-=0.01; 
+        latex.SetTextSize(cmsTextSize*t*1.5);
+      } // KYO
       latex.DrawLatex(posX_, posY_, cmsText);
       if( writeExtraText ) {
         latex.SetTextFont(extraTextFont);
