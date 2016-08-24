@@ -534,7 +534,7 @@ void CMS_lumi( TPad* pad, int iPeriod, int iPosX )
       //if (iPosX==33) {posX_ -= 0.03; posY_-=0.03; } // KYO
       //if (iPosX==33) {posX_ += 0.03; posY_-=0.01; } // KYO
       if (iPosX==33) {
-        posX_ -= 0.03; posY_-=0.01; 
+        posX_ += 0.03; posY_-=0.01; 
         latex.SetTextSize(cmsTextSize*t*1.5);
       } // KYO
       latex.DrawLatex(posX_, posY_, cmsText);
