@@ -270,9 +270,9 @@ void draw_RFB_pt(bool sysByHand=false, bool noPtWeight=false, bool isPrompt=fals
 	  gRFB_sys[iy]->SetMaximum(1.8);
 	}
 	
-  gRFB_sys[0]->SetFillColor(kGreen-10);
-	gRFB_sys[1]->SetFillColor(kRed-10);
-	gRFB_sys[2]->SetFillColor(kBlue-10);
+  gRFB_sys[0]->SetFillColorAlpha(kGreen-10,0.5);
+	gRFB_sys[1]->SetFillColorAlpha(kRed-10,0.5);
+	gRFB_sys[2]->SetFillColorAlpha(kBlue-10,0.5);
 	gRFB_sys[0]->SetLineColor(kGreen+3);
 	gRFB_sys[1]->SetLineColor(kPink-6);
 	gRFB_sys[2]->SetLineColor(kBlue-3);
@@ -304,25 +304,25 @@ void draw_RFB_pt(bool sysByHand=false, bool noPtWeight=false, bool isPrompt=fals
   TCanvas* c1 = new TCanvas("c1","c1",600,600);
   c1->cd(); 
   gRFB_sys[0]->Draw("A5");
-  gRFB[0]->Draw("P");
 	dashedLine(0.,1.,32.,1.,1,1);
+  gRFB[0]->Draw("P");
 	
   TLegendEntry *le1=legBR->AddEntry("le1",Form("  %s", rapAbsArr[2].Data()),"lpf");
-	le1->SetFillColor(kBlue-10);
+	le1->SetFillColorAlpha(kBlue-10,0.5);
 	le1->SetFillStyle(1001);
 	le1->SetLineColor(kBlue-3);
 	le1->SetMarkerStyle(kFullCircle);
 	le1->SetMarkerColor(kBlue-3);
 	le1->SetMarkerSize(2.1);
 	TLegendEntry *le2=legBR->AddEntry("le2",Form("  %s", rapAbsArr[1].Data()),"lpf");
-	le2->SetFillColor(kRed-10);
+	le2->SetFillColorAlpha(kRed-10,0.5);
 	le2->SetFillStyle(1001);
 	le2->SetLineColor(kPink-6);
 	le2->SetMarkerStyle(kFullSquare);
 	le2->SetMarkerColor(kPink-6);
 	le2->SetMarkerSize(2.1);
 	TLegendEntry *le3=legBR->AddEntry("le3",Form("  %s", rapAbsArr[0].Data()),"lpf");
-	le3->SetFillColor(kGreen-10);
+	le3->SetFillColorAlpha(kGreen-10,0.5);
 	le3->SetFillStyle(1001);
 	le3->SetLineColor(kGreen+3);
 	le3->SetMarkerStyle(kFullDiamond);
@@ -358,8 +358,8 @@ void draw_RFB_pt(bool sysByHand=false, bool noPtWeight=false, bool isPrompt=fals
   TCanvas* c2 = new TCanvas("c2","c2",600,600);
 	c2->cd();
 	gRFB_sys[1]->Draw("A5");
-	gRFB[1]->Draw("P");
 	dashedLine(0.,1.,32.,1.,1,1);
+	gRFB[1]->Draw("P");
 	//legBR->Draw();
   
   globtex->SetTextAlign(32); //3:right 2:vertical center
@@ -389,8 +389,8 @@ void draw_RFB_pt(bool sysByHand=false, bool noPtWeight=false, bool isPrompt=fals
   TCanvas* c3 = new TCanvas("c3","c3",600,600);
 	c3->cd();
 	gRFB_sys[2]->Draw("A5");
-	gRFB[2]->Draw("P");
 	dashedLine(0.,1.,32.,1.,1,1);
+	gRFB[2]->Draw("P");
 	///legBR->Draw();
   
   globtex->SetTextAlign(32); //3:right 2:vertical center
@@ -572,7 +572,10 @@ void CMS_lumi( TPad* pad, int iPeriod, int iPosX )
 	    latex.SetTextFont(cmsTextFont);
 	    latex.SetTextSize(cmsTextSize*t);
 	    latex.SetTextAlign(align_);
-      if (iPosX==33) {posX_ -= 0.03; posY_-=0.03; } // KYO
+      if (iPosX==33) {
+        posX_ -= 0.03; posY_-=0.03; 
+        latex.SetTextSize(cmsTextSize*t*1.5);
+      } // KYO
 	    latex.DrawLatex(posX_, posY_, cmsText);
 	    if( writeExtraText ) {
 	      latex.SetTextFont(extraTextFont);

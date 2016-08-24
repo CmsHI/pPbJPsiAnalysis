@@ -356,14 +356,14 @@ void draw_cross_pt_middle(bool sysByHand=false, bool noPtWeight=false, bool isSc
 
   //// different color scheme for pp and pA
   if (isPA==0) {
-	  g_cross_sys[0]->SetFillColor(kViolet-9);
-	  g_cross_sys[1]->SetFillColor(kTeal-9);
-	  g_cross_sys[2]->SetFillColor(kRed-10);
-	  g_cross_sys[3]->SetFillColor(kBlue-10);
-	  g_cross_sys[4]->SetFillColor(kBlue-10);
-	  g_cross_sys[5]->SetFillColor(kRed-10);
-	  g_cross_sys[6]->SetFillColor(kTeal-9);
-	  g_cross_sys[7]->SetFillColor(kViolet-9);
+	  g_cross_sys[0]->SetFillColorAlpha(kViolet-9,0.5);
+	  g_cross_sys[1]->SetFillColorAlpha(kTeal-9,0.5);
+	  g_cross_sys[2]->SetFillColorAlpha(kRed-10,0.5);
+	  g_cross_sys[3]->SetFillColorAlpha(kBlue-10,0.5);
+	  g_cross_sys[4]->SetFillColorAlpha(kBlue-10,0.5);
+	  g_cross_sys[5]->SetFillColorAlpha(kRed-10,0.5);
+	  g_cross_sys[6]->SetFillColorAlpha(kTeal-9,0.5);
+	  g_cross_sys[7]->SetFillColorAlpha(kViolet-9,0.5);
 	  SetGraphStyleFinal(g_cross[0],	8,2);
 	  g_cross[0]->SetMarkerSize(2.1);
 	  SetGraphStyleFinal(g_cross[1],	0,5);
@@ -382,14 +382,14 @@ void draw_cross_pt_middle(bool sysByHand=false, bool noPtWeight=false, bool isSc
 	  g_cross[7]->SetMarkerSize(2.1);
 
   } else {
-	  g_cross_sys[0]->SetFillColor(kTeal-9);
-	  g_cross_sys[1]->SetFillColor(kRed-10);
-	  g_cross_sys[2]->SetFillColor(kBlue-10);
-	  g_cross_sys[3]->SetFillColor(kBlue-10);
-	  g_cross_sys[4]->SetFillColor(kRed-10);
-	  g_cross_sys[5]->SetFillColor(kTeal-9);
-	  g_cross_sys[6]->SetFillColor(kViolet-9);
-	  g_cross_sys[7]->SetFillColor(kGray);
+	  g_cross_sys[0]->SetFillColorAlpha(kTeal-9,0.5);
+	  g_cross_sys[1]->SetFillColorAlpha(kRed-10,0.5);
+	  g_cross_sys[2]->SetFillColorAlpha(kBlue-10,0.5);
+	  g_cross_sys[3]->SetFillColorAlpha(kBlue-10,0.5);
+	  g_cross_sys[4]->SetFillColorAlpha(kRed-10,0.5);
+	  g_cross_sys[5]->SetFillColorAlpha(kTeal-9,0.5);
+	  g_cross_sys[6]->SetFillColorAlpha(kViolet-9,0.5);
+	  g_cross_sys[7]->SetFillColorAlpha(kGray,0.5);
 	  SetGraphStyleFinal(g_cross[0],	0,5);
 	  g_cross[0]->SetMarkerSize(2.5);
 	  SetGraphStyleFinal(g_cross[1],	1,3);

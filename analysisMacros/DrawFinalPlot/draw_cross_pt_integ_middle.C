@@ -303,21 +303,22 @@ void draw_cross_pt_integ_middle(bool sysByHand=false, bool noPtWeight=false, boo
     eysys[fwrap_init][ipt] = 0;
 		for (Int_t iy = fwrap_init; iy < bwrap_init; iy++) {
       //// from relative error to absolute error
-			//tmpsys[iy][ipt] = h1D_SysErr[iy]->GetBinContent(ipt+1);
 			tmpsys[iy][ipt] = h1D_SysErr[iy]->GetBinContent(ipt+1)*h1D_CorrY[iy]->GetBinContent(ipt+1);
 		  //cout << "fw : " << iy << "th iy, "<<ipt<<"th ipt tmpssys = " << tmpsys[iy][ipt] << endl;
-      eysys[fwrap_init][ipt] += tmpsys[iy][ipt]*tmpsys[iy][ipt];
+      //eysys[fwrap_init][ipt] += tmpsys[iy][ipt]*tmpsys[iy][ipt]; //same as stat.
+      eysys[fwrap_init][ipt] += TMath::Abs(tmpsys[iy][ipt]); //linear sum (Emilien)
     }
-    eysys[fwrap_init][ipt] = TMath::Sqrt(eysys[fwrap_init][ipt]);
+    //eysys[fwrap_init][ipt] = TMath::Sqrt(eysys[fwrap_init][ipt]);
     //cout << "fw : eysys[fwrap_init]["<<ipt<<"] = " << eysys[fwrap_init][ipt] << endl;
     
     eysys[bwrap_init][ipt] = 0;
 		for (Int_t iy = bwrap_init; iy < bwrap_final; iy++) {
 			tmpsys[iy][ipt] = h1D_SysErr[iy]->GetBinContent(ipt+1)*h1D_CorrY[iy]->GetBinContent(ipt+1);
 		  //cout << "bw : " << iy << "th iy, "<<ipt<<"th ipt tmpssys = " << tmpsys[iy][ipt] << endl;
-      eysys[bwrap_init][ipt] += tmpsys[iy][ipt]*tmpsys[iy][ipt];
+      //eysys[bwrap_init][ipt] += tmpsys[iy][ipt]*tmpsys[iy][ipt]; //same as stat.
+      eysys[bwrap_init][ipt] += TMath::Abs(tmpsys[iy][ipt]); //linear sum (Emilien)
 		}
-    eysys[bwrap_init][ipt] = TMath::Sqrt(eysys[bwrap_init][ipt]);
+    //eysys[bwrap_init][ipt] = TMath::Sqrt(eysys[bwrap_init][ipt]);
     //cout << "bw : eysys[bwrap_init]["<<ipt<<"] = " << eysys[bwrap_init][ipt] << endl;
   } 
   //// rap bin merging
@@ -469,7 +470,7 @@ void draw_cross_pt_integ_middle(bool sysByHand=false, bool noPtWeight=false, boo
 	  }
 	}
   g_cross_sys[fwrap_init]->GetXaxis()->SetLimits(0.0, 30.);
-	g_cross_sys[fwrap_init]->SetFillColor(kViolet-9);
+	g_cross_sys[fwrap_init]->SetFillColorAlpha(kMagenta-10,0.5);
 	SetGraphStyleFinal(g_cross[fwrap_init],	8,2);
 	g_cross[fwrap_init]->SetMarkerSize(2.1);
 	
@@ -496,7 +497,7 @@ void draw_cross_pt_integ_middle(bool sysByHand=false, bool noPtWeight=false, boo
 	  }
 	}
 	g_cross_sys[bwrap_init]->GetXaxis()->SetLimits(0.0, 30.);
-	g_cross_sys[bwrap_init]->SetFillColor(kViolet-9);
+	g_cross_sys[bwrap_init]->SetFillColorAlpha(kMagenta-10,0.5);
 	SetGraphStyleFinal(g_cross[bwrap_init],	8,2);
 	g_cross[bwrap_init]->SetMarkerSize(2.1);
 

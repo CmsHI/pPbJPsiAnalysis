@@ -146,10 +146,10 @@ void comp_RpPb_pt_ATLAS(bool isPrompt = true)
   ////// actual draw
   g_RpPb_ATLAS_sys->Draw("A5");
   g_RpPb_sys->Draw("5");
+  dashedLine(0.,1.,32.,1.,1,1);
   g_RpPb_ATLAS->Draw("p");
   g_RpPb->Draw("p");
   
-  dashedLine(0.,1.,32.,1.,1,1);
 	
   //TLegend *legBL = new TLegend(0.19,0.18,0.54,0.25);
   TLegend *legBL = new TLegend(0.18,0.18,0.77,0.32);
@@ -337,8 +337,12 @@ void CMS_lumi( TPad* pad, int iPeriod, int iPosX )
       latex.SetTextSize(cmsTextSize*t);
       latex.SetTextAlign(align_);
       //cout << "posX_ = " << posX_ << ", posY_ = " << posY_ << endl;
-      if (iPosX==33) {posX_ -= 0.03; posY_-=0.03; } // KYO
+      //if (iPosX==33) {posX_ -= 0.03; posY_-=0.03; } // KYO
       //if (iPosX==33) {posX_ += 0.03; posY_-=0.01; } // KYO RpPb_pt
+      if (iPosX==33) {
+        posX_ -= 0.03; posY_-=0.03; 
+        latex.SetTextSize(cmsTextSize*t*1.5);
+      } // KYO
       latex.DrawLatex(posX_, posY_, cmsText);
       if( writeExtraText ) {
         latex.SetTextFont(extraTextFont);

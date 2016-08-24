@@ -11,7 +11,7 @@ void draw_RFB_rap(bool sysByHand=true,  bool noPtWeight=false, bool isPrompt = t
 {
 	gROOT->Macro("./tdrstyle_kyo.C");
 	int isPA = 1;  // 0:pp, 1:pPb
-	int iPos=0;
+	int iPos=33;
 
 	//double pxshift = 0.06;
 	double pxshift = 0.00;
@@ -172,11 +172,8 @@ void draw_RFB_rap(bool sysByHand=true,  bool noPtWeight=false, bool isPrompt = t
     for (Int_t ipt = lowpt_init; ipt < highpt_init; ipt++) {
 			//// from relative error to absolute error
       tmpsys[iy][ipt] = h1D_SysErr[ipt]->GetBinContent(iy+1)*h1D_CorrY[ipt]->GetBinContent(iy+1);
-      //cout << iy << "th iy, "<<ipt<<"th ipt tmpssys = " << tmpsys[iy][ipt] << endl;
-      tmpsys_lowpt[iy] += tmpsys[iy][ipt]*tmpsys[iy][ipt]; 
+      tmpsys_lowpt[iy] += TMath::Abs(tmpsys[iy][ipt]); 
 	  }
-    tmpsys_lowpt[iy] = TMath::Sqrt(tmpsys_lowpt[iy]);
-    //cout << "tmpsys_lowpt[iy]" << tmpsys_lowpt[iy] << endl;
 	}
 
 	for (int iy=0; iy <nRap; iy ++ ){
@@ -184,11 +181,8 @@ void draw_RFB_rap(bool sysByHand=true,  bool noPtWeight=false, bool isPrompt = t
 	  for (Int_t ipt = highpt_init; ipt < nPt; ipt++) {
       //// from relative error to absolute error
 			tmpsys[iy][ipt] = h1D_SysErr[ipt]->GetBinContent(iy+1)*h1D_CorrY[ipt]->GetBinContent(iy+1);
-      //cout << iy << "th iy, "<<ipt<<"th ipt tmpssys = " << tmpsys[iy][ipt] << endl;
-      tmpsys_highpt[iy] += tmpsys[iy][ipt]*tmpsys[iy][ipt]; 
+      tmpsys_highpt[iy] += TMath::Abs(tmpsys[iy][ipt]); 
 	  }
-    tmpsys_highpt[iy] = TMath::Sqrt(tmpsys_highpt[iy]);
-    //cout << "tmpsys_highpt[iy]" << tmpsys_highpt[iy] << endl;
 	}
   
   //// pt bin merging
@@ -362,13 +356,13 @@ void draw_RFB_rap(bool sysByHand=true,  bool noPtWeight=false, bool isPrompt = t
 	gRFB_sys_highpt->Draw("5");
 	gRFB_sys_lowpt_line->Draw("5");
 	gRFB_sys_highpt_line->Draw("5");
+	dashedLine(0.,1.,2.1,1.,1,1);
 	gRFB_lowpt->Draw("P");	
 	gRFB_highpt->Draw("P");	
 	
-	dashedLine(0.,1.,2.1,1.,1,1);
 
 	TLegendEntry *le1=legBR->AddEntry("le1",Form("  %s", ptArr_lowpt.Data()),"lpf");
-  le1->SetFillColor(kRed-10);
+  le1->SetFillColorAlpha(kRed-10,0.5);
   le1->SetFillStyle(1001);
   le1->SetLineColor(kPink-6);
   le1->SetMarkerStyle(kFullSquare);
@@ -376,7 +370,7 @@ void draw_RFB_rap(bool sysByHand=true,  bool noPtWeight=false, bool isPrompt = t
   le1->SetMarkerSize(1.9);
 	//legBR->Draw();
 	TLegendEntry *le2=legBR->AddEntry("le2",Form("  %s", ptArr_highpt.Data()),"lpf");
-  le2->SetFillColor(kGreen-10);
+  le2->SetFillColorAlpha(kGreen-10,0.5);
   le2->SetFillStyle(1001);
   le2->SetLineColor(kGreen+3);
   le2->SetMarkerStyle(kFullDiamond);
@@ -544,6 +538,10 @@ void CMS_lumi( TPad* pad, int iPeriod, int iPosX )
 	    latex.SetTextFont(cmsTextFont);
 	    latex.SetTextSize(cmsTextSize*t);
 	    latex.SetTextAlign(align_);
+      if (iPosX==33) {
+        posX_ -= 0.03; posY_-=0.03; 
+        latex.SetTextSize(cmsTextSize*t*1.5);
+      } // KYO
 	    latex.DrawLatex(posX_, posY_, cmsText);
 	    if( writeExtraText ) {
 	      latex.SetTextFont(extraTextFont);

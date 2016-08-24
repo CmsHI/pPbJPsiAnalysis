@@ -219,25 +219,30 @@ void draw_cross_rap(bool sysByHand=false, bool noPtWeight=false, bool isScale=fa
 		eysys_lowpt[iy]= 0;
 		for (Int_t ipt = lowpt_init; ipt < highpt_init; ipt++) {
       //// from relative error to absolute error
-			//tmpsys[iy][ipt] = h1D_SysErr[ipt]->GetBinContent(iy+1);
 			tmpsys[iy][ipt] = h1D_SysErr[ipt]->GetBinContent(iy+1)*h1D_CorrY[ipt]->GetBinContent(iy+1);
-      //cout << iy << "th iy, "<<ipt<<"th ipt tmpssys = " << tmpsys[iy][ipt] << endl;
-      eysys_lowpt[iy] += tmpsys[iy][ipt]*tmpsys[iy][ipt]; 
+      //cout << iy << "th iy, "<<ipt<<"th ipt h1D_CorrY = " << h1D_CorrY[ipt]->GetBinContent(iy+1) << endl;
+      //cout << iy << "th iy, "<<ipt<<"th ipt h1D_SysErr = " << h1D_SysErr[ipt]->GetBinContent(iy+1) << endl;
+      //cout << iy << "th iy, "<<ipt<<"th ipt tmpsys = " << tmpsys[iy][ipt] << endl;
+      ////eysys_lowpt[iy] += tmpsys[iy][ipt]*tmpsys[iy][ipt];  // same as stat.
+      eysys_lowpt[iy] += TMath::Abs(tmpsys[iy][ipt]);  // linear sum (Emilien)
+      
 		}
-    eysys_lowpt[iy] = TMath::Sqrt(eysys_lowpt[iy]);
-    //cout << "eysys_lowpt[iy] = " << eysys_lowpt[iy] << endl;
+    ////eysys_lowpt[iy] = TMath::Sqrt(eysys_lowpt[iy]);
+    cout << "eysys_lowpt[iy] = " << eysys_lowpt[iy] << endl;
   }	
   
   for (Int_t iy=0; iy<nRap; iy++){
 		eysys_highpt[iy]= 0;
 		for (Int_t ipt = highpt_init; ipt < nPt; ipt++) {
       //// from relative error to absolute error
-			//tmpsys[iy][ipt] = h1D_SysErr[ipt]->GetBinContent(iy+1);
 			tmpsys[iy][ipt] = h1D_SysErr[ipt]->GetBinContent(iy+1)*h1D_CorrY[ipt]->GetBinContent(iy+1);
-      //cout << iy << "th iy, "<<ipt<<"th ipt tmpssys = " << tmpsys[iy][ipt] << endl;
-      eysys_highpt[iy] += tmpsys[iy][ipt]*tmpsys[iy][ipt]; 
+      //cout << iy << "th iy, "<<ipt<<"th ipt h1D_CorrY = " << h1D_CorrY[ipt]->GetBinContent(iy+1) << endl;
+      //cout << iy << "th iy, "<<ipt<<"th ipt h1D_SysErr = " << h1D_SysErr[ipt]->GetBinContent(iy+1) << endl;
+      //cout << iy << "th iy, "<<ipt<<"th ipt tmpsys = " << tmpsys[iy][ipt] << endl;
+      ////eysys_highpt[iy] += tmpsys[iy][ipt]*tmpsys[iy][ipt]; // same as stat. 
+      eysys_highpt[iy] += TMath::Abs(tmpsys[iy][ipt]);  // linear sum (Emilien)
 		}
-    eysys_highpt[iy] = TMath::Sqrt(eysys_highpt[iy]);
+    //eysys_highpt[iy] = TMath::Sqrt(eysys_highpt[iy]);
     //cout << "eysys_highpt[iy] = " << eysys_highpt[iy] << endl;
   }	
 
@@ -376,19 +381,21 @@ void draw_cross_rap(bool sysByHand=false, bool noPtWeight=false, bool isScale=fa
     if (isPrompt) g_cross_sys_lowpt->SetMaximum(4.);	
 		else g_cross_sys_lowpt->SetMaximum(1.2);	
 	}
-	g_cross_sys_lowpt->SetFillColor(kRed-10);	
+	g_cross_sys_lowpt->SetFillColorAlpha(kRed-10,0.5);	
 	g_cross_sys_lowpt->SetLineColor(kPink-6);	
 	//g_cross_sys_lowpt->Draw("A2");
 	g_cross_sys_lowpt->Draw("A5");
-	g_cross_sys_highpt->SetFillColor(kGreen-10);	
+	g_cross_sys_highpt->SetFillColorAlpha(kGreen-10,0.5);	
 	g_cross_sys_highpt->SetLineColor(kGreen+3);	
 	//g_cross_sys_highpt->Draw("2");
 	g_cross_sys_highpt->Draw("5");
 	SetGraphStyleFinal(g_cross_lowpt,1,3);
 	g_cross_lowpt->SetMarkerSize(1.4);
+//	g_cross_lowpt->SetMarkerSize(1.0);
 	g_cross_lowpt->Draw("P");
 	SetGraphStyleFinal(g_cross_highpt,0,5);
 	g_cross_highpt->SetMarkerSize(2.1);
+//	g_cross_highpt->SetMarkerSize(1.7);
 	g_cross_highpt->Draw("P");
 
 	if (isScale && scaleF_low != 1.0) legUL -> AddEntry(g_cross_lowpt,Form("6.5 < p_{T} < 10 GeV/c [x%1.f]",scaleF_low), "lp");

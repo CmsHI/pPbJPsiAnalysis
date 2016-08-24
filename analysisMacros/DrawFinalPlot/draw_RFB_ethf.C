@@ -318,13 +318,13 @@ void draw_RFB_ethf(bool sysByHand=true, bool noPtWeight = false, bool isPrompt=f
   	gRFB_sys[inh]->SetMaximum(1.8);
   }
 */
-	gRFB_sys[0]->SetFillColor(kMagenta-10);
+	gRFB_sys[0]->SetFillColorAlpha(kMagenta-10,0.5);
 	gRFB_sys[0]->SetLineColor(kViolet-6);
-	gRFB_sys[1]->SetFillColor(kGreen-10);
+	gRFB_sys[1]->SetFillColorAlpha(kGreen-10,0.5);
 	gRFB_sys[1]->SetLineColor(kGreen+3);
-	gRFB_sys[2]->SetFillColor(kRed-10);
+	gRFB_sys[2]->SetFillColorAlpha(kRed-10,0.5);
 	gRFB_sys[2]->SetLineColor(kPink-6);
-	gRFB_sys[3]->SetFillColor(kBlue-10);
+	gRFB_sys[3]->SetFillColorAlpha(kBlue-10,0.5);
 	gRFB_sys[3]->SetLineColor(kBlue-3);
 
 	SetGraphStyleFinal(gRFB[0], 8, 6); //1.5-1.93 low
@@ -339,21 +339,21 @@ void draw_RFB_ethf(bool sysByHand=true, bool noPtWeight = false, bool isPrompt=f
   legBL->SetHeader("6.5 < p_{T} < 30 GeV/c");	
   //TLegendEntry *le1=legBL->AddEntry("le1","0 < |y_{CM}| < 0.9, 6.5 < p_{T} < 30 GeV/c","lpf");
   TLegendEntry *le1=legBL->AddEntry("le1","0 < |y_{CM}| < 0.9","lpf");
-	le1->SetFillColor(kBlue-10);
+	le1->SetFillColorAlpha(kBlue-10,0.5);
 	le1->SetFillStyle(1001);
 	le1->SetLineColor(kBlue-3);
 	le1->SetMarkerStyle(kFullCircle);
 	le1->SetMarkerColor(kBlue-3);
 	le1->SetMarkerSize(1.7);
 	TLegendEntry *le2=legBL->AddEntry("le2","0.9 < |y_{CM}| < 1.5","lpf");
-	le2->SetFillColor(kRed-10);
+	le2->SetFillColorAlpha(kRed-10,0.5);
 	le2->SetFillStyle(1001);
 	le2->SetLineColor(kPink-6);
 	le2->SetMarkerStyle(kFullSquare);
 	le2->SetMarkerColor(kPink-6);
 	le2->SetMarkerSize(1.7);
 	TLegendEntry *le3=legBL->AddEntry("le3","1.5 < |y_{CM}| < 1.93","lpf");
-	le3->SetFillColor(kGreen-10);
+	le3->SetFillColorAlpha(kGreen-10,0.5);
 	le3->SetFillStyle(1001);
 	le3->SetLineColor(kGreen+3);
 	le3->SetMarkerStyle(kFullDiamond);
@@ -363,7 +363,7 @@ void draw_RFB_ethf(bool sysByHand=true, bool noPtWeight = false, bool isPrompt=f
   
   legUL->SetHeader("5 < p_{T} < 6.5 GeV/c");	
   TLegendEntry *le4=legUL->AddEntry("le4","1.5 < |y_{CM}| < 1.93","lpf");
-	le4->SetFillColor(kMagenta-10);
+	le4->SetFillColorAlpha(kMagenta-10,0.5);
 	le4->SetFillStyle(1001);
 	le4->SetLineColor(kViolet-6);
 	le4->SetMarkerStyle(kFullCross);
@@ -379,12 +379,9 @@ void draw_RFB_ethf(bool sysByHand=true, bool noPtWeight = false, bool isPrompt=f
   //// STEP1
   //gRFB_sys[3]->Draw("A5");
   gRFB_sys[3]->Draw("5");
+	dashedLine(0.,1.,3.,1.,1,1);
 	gRFB[3]->Draw("P");
 	//dashedLine(0.,1.,50.,1.,1,1);
-	dashedLine(0.,1.,3.,1.,1,1);
-	//solidLine(1.,0.,1.,1.8,1,1);
-	//solidLine(2.,0.,2.,1.8,1,1);
-	//solidLine(3.,0.,3.,1.8,1,1);
 	CMS_lumi( c1, isPA, iPos );
 	c1->Update();
 	globtex->SetTextAlign(12); //1:left, 2:vertical center
@@ -586,7 +583,10 @@ void CMS_lumi( TPad* pad, int iPeriod, int iPosX )
 	    latex.SetTextFont(cmsTextFont);
 	    latex.SetTextSize(cmsTextSize*t);
 	    latex.SetTextAlign(align_);
-      if (iPosX==33) {posX_ -= 0.03; posY_-=0.03; } // KYO
+      if (iPosX==33) {
+        posX_ -= 0.03; posY_-=0.03; 
+        latex.SetTextSize(cmsTextSize*t*1.5);
+      } // KYO
 	    latex.DrawLatex(posX_, posY_, cmsText);
 	    if( writeExtraText ) {
 	      latex.SetTextFont(extraTextFont);

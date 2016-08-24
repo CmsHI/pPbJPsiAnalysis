@@ -232,11 +232,9 @@ void draw_RpPb_rap(bool sysByHand=false, bool noPtWeight=false, bool isPrompt=tr
   g_RpPb_sys_highpt->SetMinimum(0.0);
   g_RpPb_sys_highpt->SetMaximum(1.8);
 
-  //g_RpPb_sys_lowpt->SetFillColor(kRed-10);
   g_RpPb_sys_lowpt->SetFillColorAlpha(kRed-10,0.5);
   g_RpPb_sys_lowpt_line->SetFillColorAlpha(kRed-10,0.);
   g_RpPb_sys_lowpt_line->SetLineColor(kPink-6);
-  //g_RpPb_sys_highpt->SetFillColor(kGreen-10);
   g_RpPb_sys_highpt->SetFillColorAlpha(kGreen-10,0.5);
   g_RpPb_sys_highpt_line->SetFillColorAlpha(kGreen-10,0.);
   g_RpPb_sys_highpt_line->SetLineColor(kGreen+3);
@@ -269,12 +267,12 @@ void draw_RpPb_rap(bool sysByHand=false, bool noPtWeight=false, bool isPrompt=tr
   g_RpPb_sys_highpt->Draw("2");
   g_RpPb_sys_lowpt_line->Draw("5");
   g_RpPb_sys_highpt_line->Draw("5");
+  dashedLine(-2.5,1.,2.1,1.,1,1);
   g_RpPb_lowpt->Draw("P");
   g_RpPb_highpt->Draw("P");
-  dashedLine(-2.5,1.,2.1,1.,1,1);
 
 	TLegendEntry *le1=legBR->AddEntry("le1","6.5 < p_{T} < 10 GeV/c","lpf");
-  le1->SetFillColor(kRed-10);
+  le1->SetFillColorAlpha(kRed-10,0.5);
   le1->SetFillStyle(1001);
   le1->SetLineColor(kPink-6);
   le1->SetLineWidth(1);
@@ -283,7 +281,7 @@ void draw_RpPb_rap(bool sysByHand=false, bool noPtWeight=false, bool isPrompt=tr
   le1->SetMarkerSize(1.9);
 	//legBR->Draw();
 	TLegendEntry *le2=legBR->AddEntry("le2","10 < p_{T} < 30 GeV/c","lpf");
-  le2->SetFillColor(kGreen-10);
+  le2->SetFillColorAlpha(kGreen-10,0.5);
   le2->SetFillStyle(1001);
   le2->SetLineColor(kGreen+3);
   le2->SetMarkerStyle(kFullDiamond);
@@ -474,7 +472,10 @@ void CMS_lumi( TPad* pad, int iPeriod, int iPosX )
       latex.SetTextSize(cmsTextSize*t);
       latex.SetTextAlign(align_);
       //cout << "posX_ = " << posX_ << ", posY_ = " << posY_ << endl;
-      if (iPosX==33) {posX_ -= 0.03; posY_-=0.03; } // KYO
+      if (iPosX==33) {
+        posX_ -= 0.03; posY_-=0.03; 
+        latex.SetTextSize(cmsTextSize*t*1.5);
+      } // KYO
       latex.DrawLatex(posX_, posY_, cmsText);
       if( writeExtraText ) {
         latex.SetTextFont(extraTextFont);

@@ -194,8 +194,8 @@ int comp_RFB_pt_LHCb_ALICE_ATLAS()
 	//gRFB_atlas_sys_pr->SetLineWidth(1);
 
 	// 1) CMS
-	//gRFB_pr_sys_0->SetLineColor(kGreen+3);
-	//gRFB_pr_sys_0->SetFillColor(kGreen-10);
+	gRFB_pr_sys_0->SetLineColor(kGreen+3);
+	gRFB_pr_sys_0->SetFillColorAlpha(kGreen-10,0.5);
 	//gRFB_pr_0->SetMarkerSize(1.5);
 	//gRFB_pr_0->SetMarkerColor(kGreen+3);
 	//gRFB_pr_0->SetMarkerStyle(kFullSquare);
@@ -208,12 +208,12 @@ int comp_RFB_pt_LHCb_ALICE_ATLAS()
 	gRFB_alice_sys->Draw("2");
 	gRFB_atlas_sys_pr->Draw("2");
   //gRFB_pr_sys_0->Draw("5");
+	dashedLine(0.0,1.0,32.0,1.0,1,1);
 	gRFB_lhcb_pr->Draw("P");
 	gRFB_alice->Draw("P");
 	gRFB_atlas_pr->Draw("P");
 	gRFB_pr_0->Draw("P");
 
-	dashedLine(0.0,1.0,32.0,1.0,1,1);
 	legUL->AddEntry(gRFB_pr_0,"1.5 < |y_{CM}| < 1.93","lp");
 	legUL->Draw("SAME");
 	legBR->AddEntry(gRFB_atlas_pr,"ATLAS: |y_{CM}| < 1.94","lp");
@@ -278,8 +278,8 @@ int comp_RFB_pt_LHCb_ALICE_ATLAS()
 	gRFB_atlas_sys_np->SetLineWidth(1);
 	
   // 1) CMS
-	//gRFB_np_sys_0->SetLineColor(kGreen+3);
-	//gRFB_np_sys_0->SetFillColor(kGreen-10);
+	gRFB_np_sys_0->SetLineColor(kGreen+3);
+	gRFB_np_sys_0->SetFillColorAlpha(kGreen-10,0.5);
 	//gRFB_np_0->SetMarkerSize(1.5);
 	//gRFB_np_0->SetMarkerColor(kGreen+3);
 	//gRFB_np_0->SetMarkerStyle(kFullSquare);

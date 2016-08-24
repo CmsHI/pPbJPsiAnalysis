@@ -217,6 +217,8 @@ int comp_RFB_rap_LHCb_ALICE_ATLAS()
   //gRFB_pr_sys_highpt->Draw("2");
  
   //////////////////////////////////////////////////////////////////////// 
+	
+  dashedLine(0.0,1.0,4.5,1.0,1,1);
 
 	gRFB_lhcb_pr = new TGraphAsymmErrors(nBin_lhcb, lhcb_px, lhcb_py_pr, lhcb_ex, lhcb_ex, lhcb_ey_pr, lhcb_ey_pr);	
 	SetGraphStyleFinal(gRFB_lhcb_pr,1,10);
@@ -249,7 +251,6 @@ int comp_RFB_rap_LHCb_ALICE_ATLAS()
 	gRFB_pr_highpt->Draw("P");
 
 
-	dashedLine(0.0,1.0,4.5,1.0,1,1);
 
 
 	legUL -> AddEntry(gRFB_pr_lowpt,"6.5 < p_{T} < 10 GeV/c","lp");
@@ -331,9 +332,12 @@ int comp_RFB_rap_LHCb_ALICE_ATLAS()
 	//gRFB_np_sys_highpt->Draw("2");
 	
   //////////////////////////////////////////////////////////////////////////
+	
+  dashedLine(0.0,1.0,4.5,1.0,1,1);
   
 	gRFB_lhcb_np = new TGraphAsymmErrors(nBin_lhcb, lhcb_px, lhcb_py_np, lhcb_ex, lhcb_ex, lhcb_ey_np, lhcb_ey_np);	
 	SetGraphStyleFinal(gRFB_lhcb_np,1,10);
+	gRFB_lhcb_np->SetMarkerSize(1.5);
 	gRFB_lhcb_np->SetMarkerColor(1);
 	gRFB_lhcb_np->SetLineColor(1);
 	gRFB_lhcb_np->Draw("P");
@@ -354,7 +358,6 @@ int comp_RFB_rap_LHCb_ALICE_ATLAS()
 	gRFB_np_highpt->Draw("P");
 
 
-	dashedLine(0.0,1.0,4.5,1.0,1,1);
 	
   legUL -> AddEntry(gRFB_pr_lowpt,"6.5 < p_{T} < 10 GeV/c","lp");
 	legUL -> AddEntry(gRFB_pr_highpt,"10 < p_{T} < 30 GeV/c","lp");
@@ -370,8 +373,8 @@ int comp_RFB_rap_LHCb_ALICE_ATLAS()
 	
   CMS_lumi( c_np, isPA, iPos );
 	c_np->Update();
-	c_np->SaveAs("plot_otherExp/comp_RFB_rap_LHCb_ATLAS_isPrompt0.pdf");
-	c_np->SaveAs("plot_otherExp/comp_RFB_rap_LHCb_ATLAS_isPrompt0.png");
+	c_np->SaveAs("plot_otherExp/comp_RFB_rap_LHCb_ALICE_ATLAS_isPrompt0.pdf");
+	c_np->SaveAs("plot_otherExp/comp_RFB_rap_LHCb_ALICE_ATLAS_isPrompt0.png");
 	//legUL->Clear();
 	//c_np->Clear();
 

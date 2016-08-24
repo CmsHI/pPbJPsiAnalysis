@@ -222,13 +222,13 @@ void draw_RpPb_pt(bool sysByHand=false, bool noPtWeight=false, bool isPrompt=tru
     g_RpPb_sys[iy]->SetMaximum(1.8);
   } 
 
-  g_RpPb_sys[0]->SetFillColor(kGreen-10);
-  g_RpPb_sys[1]->SetFillColor(kRed-10);
-  g_RpPb_sys[2]->SetFillColor(kBlue-10);
-  g_RpPb_sys[3]->SetFillColor(kBlue-10);
-  g_RpPb_sys[4]->SetFillColor(kRed-10);
-  g_RpPb_sys[5]->SetFillColor(kGreen-10);
-  g_RpPb_sys[6]->SetFillColor(kMagenta-10);
+  g_RpPb_sys[0]->SetFillColorAlpha(kGreen-10,0.5);
+  g_RpPb_sys[1]->SetFillColorAlpha(kRed-10,0.5);
+  g_RpPb_sys[2]->SetFillColorAlpha(kBlue-10,0.5);
+  g_RpPb_sys[3]->SetFillColorAlpha(kBlue-10,0.5);
+  g_RpPb_sys[4]->SetFillColorAlpha(kRed-10,0.5);
+  g_RpPb_sys[5]->SetFillColorAlpha(kGreen-10,0.5);
+  g_RpPb_sys[6]->SetFillColorAlpha(kMagenta-10,0.5);
  
   g_RpPb_sys[0]->SetLineColor(kGreen+3);
   g_RpPb_sys[1]->SetLineColor(kPink-6);
@@ -336,8 +336,8 @@ void draw_RpPb_pt(bool sysByHand=false, bool noPtWeight=false, bool isPrompt=tru
     else if (iy==2) pad_all[1]->cd();
     else pad_all[iy+3]->cd();
     g_RpPb_sys[iy]->Draw("A5");
-    g_RpPb[iy]->Draw("P");
     dashedLine(0.,1.,32.,1.,1,1);
+    g_RpPb[iy]->Draw("P");
     globtex->SetTextAlign(32); //3:right 2:vertical center
 	  globtex->SetTextFont(42);
 	  //if (iy==2 || iy==3) globtex->SetTextSize(0.063);
@@ -639,7 +639,10 @@ void CMS_lumi( TPad* pad, int iPeriod, int iPosX )
       latex.SetTextAlign(align_);
       //cout << "posX_ = " << posX_ << ", posY_ = " << posY_ << endl;
       //if (iPosX==33) {posX_ -= 0.03; posY_-=0.03; } // KYO
-      if (iPosX==33) {posX_ += 0.03; posY_-=0.01; } // KYO
+      if (iPosX==33) {
+        posX_ += 0.03; posY_-=0.01; 
+        latex.SetTextSize(cmsTextSize*t*1.5);
+      } // KYO
       latex.DrawLatex(posX_, posY_, cmsText);
       if( writeExtraText ) {
         latex.SetTextFont(extraTextFont);

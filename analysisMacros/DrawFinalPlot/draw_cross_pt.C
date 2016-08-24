@@ -371,14 +371,14 @@ void draw_cross_pt(bool sysByHand=false, bool noPtWeight=true, bool isScale=fals
 
   //// different color scheme for pp and pA
   if (isPA==0) {
-	  g_cross_sys[0]->SetFillColor(kMagenta-10);
-	  g_cross_sys[1]->SetFillColor(kGreen-10);
-	  g_cross_sys[2]->SetFillColor(kRed-10);
-	  g_cross_sys[3]->SetFillColor(kBlue-10);
-	  g_cross_sys[4]->SetFillColor(kBlue-10);
-	  g_cross_sys[5]->SetFillColor(kRed-10);
-	  g_cross_sys[6]->SetFillColor(kGreen-10);
-	  g_cross_sys[7]->SetFillColor(kMagenta-10);
+	  g_cross_sys[0]->SetFillColorAlpha(kMagenta-10,0.5);
+	  g_cross_sys[1]->SetFillColorAlpha(kGreen-10,0.5);
+	  g_cross_sys[2]->SetFillColorAlpha(kRed-10,0.5);
+	  g_cross_sys[3]->SetFillColorAlpha(kBlue-10,0.5);
+	  g_cross_sys[4]->SetFillColorAlpha(kBlue-10,0.5);
+	  g_cross_sys[5]->SetFillColorAlpha(kRed-10,0.5);
+	  g_cross_sys[6]->SetFillColorAlpha(kGreen-10,0.5);
+	  g_cross_sys[7]->SetFillColorAlpha(kMagenta-10,0.5);
 	  
     g_cross_sys[0]->SetLineColor(kViolet-6);
 	  g_cross_sys[1]->SetLineColor(kGreen+3);
@@ -407,14 +407,14 @@ void draw_cross_pt(bool sysByHand=false, bool noPtWeight=true, bool isScale=fals
 	  g_cross[7]->SetMarkerSize(1.4);
 
   } else {
-	  g_cross_sys[0]->SetFillColor(kGreen-10);
-	  g_cross_sys[1]->SetFillColor(kRed-10);
-	  g_cross_sys[2]->SetFillColor(kBlue-10);
-	  g_cross_sys[3]->SetFillColor(kBlue-10);
-	  g_cross_sys[4]->SetFillColor(kRed-10);
-	  g_cross_sys[5]->SetFillColor(kGreen-10);
-	  g_cross_sys[6]->SetFillColor(kMagenta-10);
-	  g_cross_sys[7]->SetFillColor(kGray);
+	  g_cross_sys[0]->SetFillColorAlpha(kGreen-10,0.5);
+	  g_cross_sys[1]->SetFillColorAlpha(kRed-10,0.5);
+	  g_cross_sys[2]->SetFillColorAlpha(kBlue-10,0.5);
+	  g_cross_sys[3]->SetFillColorAlpha(kBlue-10,0.5);
+	  g_cross_sys[4]->SetFillColorAlpha(kRed-10,0.5);
+	  g_cross_sys[5]->SetFillColorAlpha(kGreen-10,0.5);
+	  g_cross_sys[6]->SetFillColorAlpha(kMagenta-10,0.5);
+	  g_cross_sys[7]->SetFillColorAlpha(kGray,0.5);
 	  
     g_cross_sys[0]->SetLineColor(kGreen+3);
 	  g_cross_sys[1]->SetLineColor(kPink-6);
