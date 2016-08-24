@@ -68,7 +68,8 @@ int make_TotSys(int MrapNpt = 89, int isPA =0, int etOpt=0){
 	hTNPNP->SetName("hTNPNP");
 
   ////////////////////////////////////////////////////////////////////////////////////////
-  /// *** check total efficiency syst. = Sqrt( (hEffMC)^2 + (hTNP)^2 )
+  /// *** check total efficiency syst. = Sqrt( (hEffMC)^2 + (hTNP)^2 +(TrackingEff)^2 )  
+  //  *** where tracking efficiency = 2 %
   ////////////////////////////////////////////////////////////////////////////////////////
   
   TH2D* hEffPR=(TH2D*)hFitPR->Clone("hEffPR");	//y binning in y_lab^1st
@@ -90,8 +91,8 @@ int make_TotSys(int MrapNpt = 89, int isPA =0, int etOpt=0){
 			tmp_NP1 = hEffMCNP->GetBinContent(iy+1,ipt+1);	
 			tmp_NP2 = hTNPNP->GetBinContent(iy+1,ipt+1);	
 			//// calculate the total relative error
-			tmpPRtot[iy][ipt]=TMath::Sqrt(tmp_PR1*tmp_PR1+tmp_PR2*tmp_PR2);
-			tmpNPtot[iy][ipt]=TMath::Sqrt(tmp_NP1*tmp_NP1+tmp_NP2*tmp_NP2);
+			tmpPRtot[iy][ipt]=TMath::Sqrt( tmp_PR1*tmp_PR1 + tmp_PR2*tmp_PR2 + 0.02*0.02 );
+			tmpNPtot[iy][ipt]=TMath::Sqrt( tmp_NP1*tmp_NP1 + tmp_NP2*tmp_NP2 + 0.02*0.02 );
 			//// fill into hist
 			hEffPR->SetBinContent(iy+1,ipt+1,tmpPRtot[iy][ipt]);
 			hEffNP->SetBinContent(iy+1,ipt+1,tmpNPtot[iy][ipt]);
