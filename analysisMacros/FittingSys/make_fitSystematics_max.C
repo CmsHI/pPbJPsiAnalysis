@@ -128,8 +128,8 @@ int make_fitSystematics_max(int MrapNpt=89, int isPA =1, int accCutType=2,int et
 			}
 		}
 	}
-  return 0;
-	////////////////////////////////////////////////
+	
+  ////////////////////////////////////////////////
 	/// check relative err for each szSysOpt ( (norminal)-(sys)/(nominal) )
 	TH2D* h2D_PR_maxerr[nOpt]; //y binning in y_lab^1st
 	TH2D* h2D_NP_maxerr[nOpt];
@@ -173,8 +173,8 @@ int make_fitSystematics_max(int MrapNpt=89, int isPA =1, int accCutType=2,int et
 	//// set unsed values as zero		
 	for (int iy=0; iy<nRap;iy++ ){
 		for (int ipt=0; ipt<nPt;ipt++ ){
-			if ( isPA==0 && !( (iy>=1&&iy<=6&&(ipt==0||ipt==1)) || (iy>=2&&iy<=5&&(ipt==2||ipt==3)) ) ) { continue;}
-			if ( isPA==1 && !( (iy>=1&&iy<=6&&(ipt==0||ipt==1)) || (iy>=2&&iy<=5&&(ipt==2)) || (iy>=2&&iy<=4&&ipt==3) ) ) { continue;}
+			if ( MrapNpt==89 && isPA==0 && !( (iy>=1&&iy<=6&&(ipt==0||ipt==1)) || (iy>=2&&iy<=5&&(ipt==2||ipt==3)) ) ) { continue;}
+			if ( MrapNpt==89 && isPA==1 && !( (iy>=1&&iy<=6&&(ipt==0||ipt==1)) || (iy>=2&&iy<=5&&(ipt==2)) || (iy>=2&&iy<=4&&ipt==3) ) ) { continue;}
       if (MrapNpt==62 && isPA==1 && !( (iy>=1 && iy<=4&&(ipt==0)) ) ) {continue; } 
 			for (int iopt=0; iopt<nOpt; iopt++){
 				h2D_PR_maxerr[iopt]->SetBinContent(iy+1,ipt+1,0);

@@ -6,8 +6,9 @@
   
   //TFile* f01 = TFile::Open("fitResHist_8rap9pt_pA_newcut_sys01_01.root");
   //TFile* f02 = TFile::Open("fitResHist_8rap9pt_pA_newcut_sys04_01.root");
-  TFile* f01 = TFile::Open("fitSysErr_8rap9pt_pA_newcut_etOpt0_rms.root");
-  TFile* f02 = TFile::Open("../FittingSys_0817/fitSysErr_8rap9pt_pA_newcut_etOpt0_rms.root");
+  TFile* f01 = TFile::Open("fitSysErr_8rap9pt_pA_newcut_etOpt0_max.root");
+  TFile* f02 = TFile::Open("fitSysErr_8rap9pt_pA_newcut_etOpt0_rms.root");
+  //TFile* f02 = TFile::Open("../FittingSys_0817/fitSysErr_8rap9pt_pA_newcut_etOpt0_rms.root");
   
   TCanvas* c1 = new TCanvas("c1","",600,600);
   TH2D* h2D_01 = (TH2D*)f01->Get("h2D_PR_tot");
