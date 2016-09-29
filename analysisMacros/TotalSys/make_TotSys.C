@@ -32,7 +32,8 @@ int make_TotSys(int MrapNpt = 89, int isPA =0, int etOpt=0){
 	//////////////////////////////////////////????????????????????????//////
 	////// read in from each sys. file
 	TFile* fFit;
-  fFit = new TFile(Form("../FittingSys/fitSysErr_%s_%s_newcut_etOpt%d_rms.root",szBinning.Data(),szPA.Data(),etOpt));
+  //fFit = new TFile(Form("../FittingSys/fitSysErr_%s_%s_newcut_etOpt%d_rms.root",szBinning.Data(),szPA.Data(),etOpt));
+  fFit = new TFile(Form("../FittingSys/fitSysErr_%s_%s_newcut_etOpt%d_max.root",szBinning.Data(),szPA.Data(),etOpt));
 	
   TFile* fAccEff;
   if (isPA==0) { fAccEff = new TFile(Form("../AccEffSys/AccEffSys_%s_%s_newcut_nominal_Zvtx0_SF1_etOpt%d.root",szPA.Data(),szBinning.Data(),etOpt)); }
