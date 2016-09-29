@@ -105,6 +105,11 @@ void comp_RpPb_pt_ATLAS(bool isPrompt = true)
   //globtex->SetTextAlign(32); //3:right 2:vertical center
   globtex->SetTextFont(42);
 	globtex->SetTextSize(0.04);
+  
+  //// global uncertainty from lumi
+	TBox * globbox_all = new TBox(0.0, 0.9468493, 1.5, 1.053151);
+	globbox_all->SetFillColorAlpha(kGray+2,0.5);
+	globbox_all->SetLineColor(kBlack);
 
   TCanvas *c1 = new TCanvas("c1","c1",600,600);
   
@@ -137,16 +142,18 @@ void comp_RpPb_pt_ATLAS(bool isPrompt = true)
   g_RpPb_sys->GetXaxis()->SetLimits(0.,30.0);
   g_RpPb_sys->SetMinimum(0.0);
   g_RpPb_sys->SetMaximum(2.0);
-  g_RpPb_sys->SetFillColor(kGreen-10);
+  g_RpPb_sys->SetFillColorAlpha(kRed-10,0.5);
+  g_RpPb_sys->SetLineColor(kPink-6);
 
-  SetGraphStyleFinal(g_RpPb, 0, 5);
+  SetGraphStyleFinal(g_RpPb, 1, 0);
   //g_RpPb->SetMarkerSize(2.1);
-  g_RpPb->SetMarkerSize(1.8);
+  g_RpPb->SetMarkerSize(1.7);
   
   ////// actual draw
   g_RpPb_ATLAS_sys->Draw("A5");
   g_RpPb_sys->Draw("5");
-  dashedLine(0.,1.,32.,1.,1,1);
+  globbox_all->Draw("lf");
+  solidLine(0.,1.,32.,1.,1,1);
   g_RpPb_ATLAS->Draw("p");
   g_RpPb->Draw("p");
   
@@ -163,7 +170,7 @@ void comp_RpPb_pt_ATLAS(bool isPrompt = true)
   globtex->SetTextSize(0.055); 
   globtex->SetTextFont(42);
   if (isPrompt) globtex->DrawLatex(0.21, 0.84, "Prompt J/#psi");
-  else globtex->DrawLatex(0.21, 0.84, "Non-prompt J/#psi");
+  else globtex->DrawLatex(0.21, 0.84, "Nonprompt J/#psi");
   
   CMS_lumi( c1, isPA, iPos );
   c1->Update();
@@ -340,8 +347,8 @@ void CMS_lumi( TPad* pad, int iPeriod, int iPosX )
       //if (iPosX==33) {posX_ -= 0.03; posY_-=0.03; } // KYO
       //if (iPosX==33) {posX_ += 0.03; posY_-=0.01; } // KYO RpPb_pt
       if (iPosX==33) {
-        posX_ -= 0.03; posY_-=0.03; 
-        latex.SetTextSize(cmsTextSize*t*1.5);
+        posX_ -= 0.01; posY_-=0.02; 
+        latex.SetTextSize(cmsTextSize*t*1.3);
       } // KYO
       latex.DrawLatex(posX_, posY_, cmsText);
       if( writeExtraText ) {

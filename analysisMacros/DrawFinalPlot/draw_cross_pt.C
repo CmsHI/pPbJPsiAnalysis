@@ -7,12 +7,14 @@ void formPtArr(Double_t binmin, Double_t binmax, TString* arr);
 
 void CMS_lumi( TPad* pad, int iPeriod, int iPosX );
 
-void draw_cross_pt(bool sysByHand=false, bool noPtWeight=true, bool isScale=false, bool isLog=false, int isPA = 0, bool isPrompt=true)
+void draw_cross_pt(bool sysByHand=false, bool noPtWeight=false, bool isScale=true, bool isLog=true, int isPA = 1, bool isPrompt=true)
 {
 	gROOT->Macro("./tdrstyle_kyo.C");
   gStyle->SetTitleYOffset(1.38); //KYO
 
-	int iPos=0.;//outOfFrame
+	//int iPos=0.;//outOfFrame
+	int iPos=33;//right corner
+  //int iPos=11;//left corner
 
 	//// pileup rejection!!
 	Double_t pileReg;
@@ -373,19 +375,19 @@ void draw_cross_pt(bool sysByHand=false, bool noPtWeight=true, bool isScale=fals
   if (isPA==0) {
 	  g_cross_sys[0]->SetFillColorAlpha(kMagenta-10,0.5);
 	  g_cross_sys[1]->SetFillColorAlpha(kGreen-10,0.5);
-	  g_cross_sys[2]->SetFillColorAlpha(kRed-10,0.5);
-	  g_cross_sys[3]->SetFillColorAlpha(kBlue-10,0.5);
-	  g_cross_sys[4]->SetFillColorAlpha(kBlue-10,0.5);
-	  g_cross_sys[5]->SetFillColorAlpha(kRed-10,0.5);
+	  g_cross_sys[2]->SetFillColorAlpha(kBlue-10,0.5);
+	  g_cross_sys[3]->SetFillColorAlpha(kRed-10,0.5);
+	  g_cross_sys[4]->SetFillColorAlpha(kRed-10,0.5);
+	  g_cross_sys[5]->SetFillColorAlpha(kBlue-10,0.5);
 	  g_cross_sys[6]->SetFillColorAlpha(kGreen-10,0.5);
 	  g_cross_sys[7]->SetFillColorAlpha(kMagenta-10,0.5);
 	  
     g_cross_sys[0]->SetLineColor(kViolet-6);
 	  g_cross_sys[1]->SetLineColor(kGreen+3);
-	  g_cross_sys[2]->SetLineColor(kPink-6);
-	  g_cross_sys[3]->SetLineColor(kBlue-3);
-	  g_cross_sys[4]->SetLineColor(kBlue-3);
-	  g_cross_sys[5]->SetLineColor(kPink-6);
+	  g_cross_sys[2]->SetLineColor(kBlue-2);
+	  g_cross_sys[3]->SetLineColor(kPink-6);
+	  g_cross_sys[4]->SetLineColor(kPink-6);
+	  g_cross_sys[5]->SetLineColor(kBlue-2);
 	  g_cross_sys[6]->SetLineColor(kGreen+3);
 	  g_cross_sys[7]->SetLineColor(kViolet-6);
 
@@ -393,13 +395,13 @@ void draw_cross_pt(bool sysByHand=false, bool noPtWeight=true, bool isScale=fals
 	  g_cross[0]->SetMarkerSize(1.4);
 	  SetGraphStyleFinal(g_cross[1],	0,5);
 	  g_cross[1]->SetMarkerSize(2.1);
-	  SetGraphStyleFinal(g_cross[2],	1,3);
+	  SetGraphStyleFinal(g_cross[2],	2,3);
 	  g_cross[2]->SetMarkerSize(1.4);
-	  SetGraphStyleFinal(g_cross[3],	2,0);
+	  SetGraphStyleFinal(g_cross[3],	1,0);
 	  g_cross[3]->SetMarkerSize(1.4);
-	  SetGraphStyleFinal(g_cross[4],	2,0);
+	  SetGraphStyleFinal(g_cross[4],	1,0);
 	  g_cross[4]->SetMarkerSize(1.4);
-	  SetGraphStyleFinal(g_cross[5],	1,3);
+	  SetGraphStyleFinal(g_cross[5],	2,3);
 	  g_cross[5]->SetMarkerSize(1.4);
 	  SetGraphStyleFinal(g_cross[6],	0,5);
 	  g_cross[6]->SetMarkerSize(2.1);
@@ -408,32 +410,32 @@ void draw_cross_pt(bool sysByHand=false, bool noPtWeight=true, bool isScale=fals
 
   } else {
 	  g_cross_sys[0]->SetFillColorAlpha(kGreen-10,0.5);
-	  g_cross_sys[1]->SetFillColorAlpha(kRed-10,0.5);
-	  g_cross_sys[2]->SetFillColorAlpha(kBlue-10,0.5);
-	  g_cross_sys[3]->SetFillColorAlpha(kBlue-10,0.5);
-	  g_cross_sys[4]->SetFillColorAlpha(kRed-10,0.5);
+	  g_cross_sys[1]->SetFillColorAlpha(kBlue-10,0.5);
+	  g_cross_sys[2]->SetFillColorAlpha(kRed-10,0.5);
+	  g_cross_sys[3]->SetFillColorAlpha(kRed-10,0.5);
+	  g_cross_sys[4]->SetFillColorAlpha(kBlue-10,0.5);
 	  g_cross_sys[5]->SetFillColorAlpha(kGreen-10,0.5);
 	  g_cross_sys[6]->SetFillColorAlpha(kMagenta-10,0.5);
 	  g_cross_sys[7]->SetFillColorAlpha(kGray,0.5);
 	  
     g_cross_sys[0]->SetLineColor(kGreen+3);
-	  g_cross_sys[1]->SetLineColor(kPink-6);
-	  g_cross_sys[2]->SetLineColor(kBlue-3);
-	  g_cross_sys[3]->SetLineColor(kBlue-3);
-	  g_cross_sys[4]->SetLineColor(kPink-6);
+	  g_cross_sys[1]->SetLineColor(kBlue-2);
+	  g_cross_sys[2]->SetLineColor(kPink-6);
+	  g_cross_sys[3]->SetLineColor(kPink-6);
+	  g_cross_sys[4]->SetLineColor(kBlue-2);
 	  g_cross_sys[5]->SetLineColor(kGreen+3);
 	  g_cross_sys[6]->SetLineColor(kViolet-6);
 	  g_cross_sys[7]->SetLineColor(kBlack);
 
 	  SetGraphStyleFinal(g_cross[0],	0,5);
 	  g_cross[0]->SetMarkerSize(2.1);
-	  SetGraphStyleFinal(g_cross[1],	1,3);
+	  SetGraphStyleFinal(g_cross[1],	2,3);
 	  g_cross[1]->SetMarkerSize(1.4);
-	  SetGraphStyleFinal(g_cross[2],	2,0);
+	  SetGraphStyleFinal(g_cross[2],	1,0);
 	  g_cross[2]->SetMarkerSize(1.4);
-	  SetGraphStyleFinal(g_cross[3],	2,0);
+	  SetGraphStyleFinal(g_cross[3],	1,0);
 	  g_cross[3]->SetMarkerSize(1.4);
-	  SetGraphStyleFinal(g_cross[4],	1,3);
+	  SetGraphStyleFinal(g_cross[4],	2,3);
 	  g_cross[4]->SetMarkerSize(1.4);
 	  SetGraphStyleFinal(g_cross[5],	0,5);
 	  g_cross[5]->SetMarkerSize(2.1);
@@ -465,15 +467,16 @@ void draw_cross_pt(bool sysByHand=false, bool noPtWeight=true, bool isScale=fals
 		//else legBLFW -> AddEntry(g_cross[iy],Form("%s",rapArr[iy].Data()),"lp");
 	}
 	if (isLog) legBLFW->Draw();
+  
+  globtex->SetTextSize(0.050);
+	globtex->SetTextFont(42);
+	if (isPrompt) globtex->DrawLatex(0.92, 0.76, "Prompt J/#psi");
+	else globtex->DrawLatex(0.92, 0.76, "Nonprompt J/#psi");
+//	globtex->SetTextSize(0.035);
+//	globtex->SetTextFont(42);
+//	if (isPA==0) globtex->DrawLatex(0.91, 0.80, "Global uncertainty : 4 \%");
+//	else globtex->DrawLatex(0.91, 0.80, "Global uncertainty : 3.5 \%");
 
-	globtex->SetTextSize(0.055);
-	globtex->SetTextFont(42);
-	if (isPrompt) globtex->DrawLatex(0.91, 0.86, "Prompt J/#psi");
-	else globtex->DrawLatex(0.91, 0.86, "Non-Prompt J/#psi");
-	globtex->SetTextSize(0.035);
-	globtex->SetTextFont(42);
-	if (isPA==0) globtex->DrawLatex(0.91, 0.80, "Global uncertainty : 4 \%");
-	else globtex->DrawLatex(0.91, 0.80, "Global uncertainty : 3.5 \%");
 	CMS_lumi( c_fw, isPA, iPos );
 	c_fw->Update();
   if (isPA==0){
@@ -516,14 +519,14 @@ void draw_cross_pt(bool sysByHand=false, bool noPtWeight=true, bool isScale=fals
 	}
 	if (isLog) legBLBW->Draw();
 	
-  globtex->SetTextSize(0.055);
+  globtex->SetTextSize(0.050);
 	globtex->SetTextFont(42);
-	if (isPrompt) globtex->DrawLatex(0.91, 0.86, "Prompt J/#psi");
-	else globtex->DrawLatex(0.91, 0.86, "Non-Prompt J/#psi");
-	globtex->SetTextSize(0.035);
-	globtex->SetTextFont(42);
-	if (isPA==0) globtex->DrawLatex(0.91, 0.80, "Global uncertainty : 4 \%");
-	else globtex->DrawLatex(0.91, 0.80, "Global uncertainty : 3.5 \%");
+	if (isPrompt) globtex->DrawLatex(0.92, 0.76, "Prompt J/#psi");
+	else globtex->DrawLatex(0.92, 0.76, "Nonprompt J/#psi");
+//	globtex->SetTextSize(0.035);
+//	globtex->SetTextFont(42);
+//	if (isPA==0) globtex->DrawLatex(0.91, 0.80, "Global uncertainty : 4 \%");
+//	else globtex->DrawLatex(0.91, 0.80, "Global uncertainty : 3.5 \%");
 	CMS_lumi( c_bw, isPA, iPos );
 	c_bw->Update();
   if (isPA==0){
@@ -657,6 +660,12 @@ void CMS_lumi( TPad* pad, int iPeriod, int iPosX )
   } else if( iPeriod==1 || iPeriod==2 || iPeriod==3){
     lumiText += lumi_pPb502TeV;
     lumiText += " (pPb 5.02 TeV)";
+  } else if( iPeriod==10){
+    lumiText += "pPb ";
+    lumiText += lumi_pPb502TeV;
+    lumiText += ", pp ";
+    lumiText += lumi_pp502TeV;
+    lumiText += " (5.02 TeV)";
   } else {
     lumiText += "LumiText Not Selected";
   }
@@ -670,7 +679,7 @@ void CMS_lumi( TPad* pad, int iPeriod, int iPosX )
 
   //float extraTextSize = extraOverCmsTextSize*cmsTextSize;
   float extraTextSize = extraOverCmsTextSize*cmsTextSize*1.1;
-  
+
   latex.SetTextFont(42);
   latex.SetTextAlign(31); 
   latex.SetTextSize(lumiTextSize*t);    
@@ -691,36 +700,41 @@ void CMS_lumi( TPad* pad, int iPeriod, int iPosX )
   float posY_ = 1-t - relPosY*(1-t-b);
   if( !outOfFrame ) {
     if( drawLogo ) {
-	    posX_ =   l + 0.045*(1-l-r)*W/H;
-	    posY_ = 1-t - 0.045*(1-t-b);
-	    float xl_0 = posX_;
-	    float yl_0 = posY_ - 0.15;
-	    float xl_1 = posX_ + 0.15*H/W;
-	    float yl_1 = posY_;
-	    //TASImage* CMS_logo = new TASImage("CMS-BW-label.png");
-	    TPad* pad_logo = new TPad("logo","logo", xl_0, yl_0, xl_1, yl_1 );
-	    pad_logo->Draw();
-	    pad_logo->cd();
-	    //CMS_logo->Draw("X");
-	    pad_logo->Modified();
-	    pad->cd();
-	  } else {
-	    latex.SetTextFont(cmsTextFont);
-	    latex.SetTextSize(cmsTextSize*t);
-	    latex.SetTextAlign(align_);
-	    latex.DrawLatex(posX_, posY_, cmsText);
-	    if( writeExtraText ) {
-	      latex.SetTextFont(extraTextFont);
-	      latex.SetTextAlign(align_);
-	      latex.SetTextSize(extraTextSize*t);
-	      latex.DrawLatex(posX_, posY_- relExtraDY*cmsTextSize*t, extraText);
-	    }
-	  }
+      posX_ =   l + 0.045*(1-l-r)*W/H;
+      posY_ = 1-t - 0.045*(1-t-b);
+      float xl_0 = posX_;
+      float yl_0 = posY_ - 0.15;
+      float xl_1 = posX_ + 0.15*H/W;
+      float yl_1 = posY_;
+      //TASImage* CMS_logo = new TASImage("CMS-BW-label.png");
+      TPad* pad_logo = new TPad("logo","logo", xl_0, yl_0, xl_1, yl_1 );
+      pad_logo->Draw();
+      pad_logo->cd();
+      //CMS_logo->Draw("X");
+      pad_logo->Modified();
+      pad->cd();
+    } else {
+      latex.SetTextFont(cmsTextFont);
+      latex.SetTextSize(cmsTextSize*t);
+      latex.SetTextAlign(align_);
+      //cout << "posX_ = " << posX_ << ", posY_ = " << posY_ << endl;
+      if (iPosX==33) {
+        posX_ -= 0.01; posY_-=0.02; 
+        latex.SetTextSize(cmsTextSize*t*1.3);
+      } // KYO
+      latex.DrawLatex(posX_, posY_, cmsText);
+      if( writeExtraText ) {
+        latex.SetTextFont(extraTextFont);
+        latex.SetTextAlign(align_);
+        latex.SetTextSize(extraTextSize*t);
+        latex.DrawLatex(posX_, posY_- relExtraDY*cmsTextSize*t, extraText);
+      }
+    }
   } else if( writeExtraText ) {
     if( iPosX==0) {
-  	  posX_ =   l +  relPosX*(1-l-r);
-  	  posY_ =   1-t+lumiTextOffset*t;
-  	}
+      posX_ =   l +  relPosX*(1-l-r);
+      posY_ =   1-t+lumiTextOffset*t;
+    }
     latex.SetTextFont(extraTextFont);
     latex.SetTextSize(extraTextSize*t);
     latex.SetTextAlign(align_);
@@ -728,3 +742,4 @@ void CMS_lumi( TPad* pad, int iPeriod, int iPosX )
   }
   return;
 }
+

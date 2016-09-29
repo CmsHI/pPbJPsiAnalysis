@@ -30,8 +30,9 @@ void comp_RpPb_rap_ATLAS(bool isPrompt = false)
   else inFile= new TFile("plot_RpPb/RpPb_rap_isPrompt0.root");
 	TGraphAsymmErrors* g_RpPb_sys_highpt = (TGraphAsymmErrors*)inFile->Get("g_RpPb_sys_highpt"); 
 	TGraphAsymmErrors* g_RpPb_highpt = (TGraphAsymmErrors*)inFile->Get("g_RpPb_highpt"); 
-  g_RpPb_sys_highpt->SetFillColor(kGreen-10);
-  g_RpPb_highpt->SetMarkerSize(2.1);
+  g_RpPb_sys_highpt->SetFillColorAlpha(kRed-10,0.5);
+  g_RpPb_sys_highpt->SetLineColor(kPink-6);
+  g_RpPb_highpt->SetMarkerSize(1.7);
   
 	//double pxshift = 0.15;
 	double pxshift = 0.0;
@@ -96,7 +97,7 @@ void comp_RpPb_rap_ATLAS(bool isPrompt = false)
   g_RpPb_ATLAS_sys->GetYaxis()->SetTitle("R_{pPb}");
   g_RpPb_ATLAS_sys->GetYaxis()->CenterTitle();
   g_RpPb_ATLAS_sys->GetXaxis()->SetTitleOffset(1.15);
-  g_RpPb_ATLAS_sys->GetXaxis()->SetLimits(-2.5,2.1);
+  g_RpPb_ATLAS_sys->GetXaxis()->SetLimits(-2.7,2.1);
   g_RpPb_ATLAS_sys->SetMinimum(0.0);
   g_RpPb_ATLAS_sys->SetMaximum(2.0);
   g_RpPb_ATLAS_sys->SetLineColor(kGray);
@@ -118,11 +119,16 @@ void comp_RpPb_rap_ATLAS(bool isPrompt = false)
   //globtex->SetTextAlign(32); //3:right 2:vertical center
   globtex->SetTextFont(42);
 	globtex->SetTextSize(0.04);
+	
+  TBox * globbox_all = new TBox(-2.7, 0.9468493, -2.5, 1.053151);
+	globbox_all->SetFillColorAlpha(kGray+2,0.5);
+	globbox_all->SetLineColor(kBlack);
 
   ////// actual draw
   g_RpPb_ATLAS_sys->Draw("A5");
   g_RpPb_sys_highpt->Draw("5");
-  dashedLine(-2.5,1.,2.1,1.,1,1);
+  globbox_all->Draw("lf");
+  solidLine(-2.7,1.,2.1,1.,1,1);
   g_RpPb_ATLAS->Draw("p");
   g_RpPb_highpt->Draw("p");
   
@@ -140,7 +146,7 @@ void comp_RpPb_rap_ATLAS(bool isPrompt = false)
   globtex->SetTextSize(0.055); 
   globtex->SetTextFont(42);
   if (isPrompt) globtex->DrawLatex(0.21, 0.84, "Prompt J/#psi");
-  else globtex->DrawLatex(0.21, 0.84, "Non-prompt J/#psi");
+  else globtex->DrawLatex(0.21, 0.84, "Nonprompt J/#psi");
   
   CMS_lumi( c1, isPA, iPos );
   c1->Update();
@@ -292,8 +298,8 @@ void CMS_lumi( TPad* pad, int iPeriod, int iPosX )
       //if (iPosX==33) {posX_ -= 0.03; posY_-=0.03; } // KYO
       //if (iPosX==33) {posX_ += 0.03; posY_-=0.01; } // KYO RpPb_pt
       if (iPosX==33) {
-        posX_ -= 0.03; posY_-=0.03; 
-        latex.SetTextSize(cmsTextSize*t*1.5);
+        posX_ -= 0.01; posY_-=0.02; 
+        latex.SetTextSize(cmsTextSize*t*1.3);
       } // KYO
       latex.DrawLatex(posX_, posY_, cmsText);
       if( writeExtraText ) {

@@ -220,8 +220,12 @@ void draw_RpPb_pt(bool sysByHand=false, bool noPtWeight=false, bool isPrompt=tru
     g_RpPb_sys[iy]->GetXaxis()->SetLimits(0.,32.0);
     g_RpPb_sys[iy]->SetMinimum(0.0);
     g_RpPb_sys[iy]->SetMaximum(1.8);
+    g_RpPb_sys[iy]->SetFillColorAlpha(kRed-10,0.5);
+    g_RpPb_sys[iy]->SetLineColor(kPink-6);
+    SetGraphStyleFinal(g_RpPb[iy], 1,0);
+    g_RpPb[iy]->SetMarkerSize(1.1);
   } 
-
+/*
   g_RpPb_sys[0]->SetFillColorAlpha(kGreen-10,0.5);
   g_RpPb_sys[1]->SetFillColorAlpha(kRed-10,0.5);
   g_RpPb_sys[2]->SetFillColorAlpha(kBlue-10,0.5);
@@ -252,6 +256,7 @@ void draw_RpPb_pt(bool sysByHand=false, bool noPtWeight=false, bool isPrompt=tru
   g_RpPb[5]->SetMarkerSize(1.8);
   SetGraphStyleFinal(g_RpPb[6],  8,6);
   g_RpPb[6]->SetMarkerSize(1.3);
+*/ 
   
   //////////////////////////////////////////////////////////////////
   //// draw
@@ -269,6 +274,17 @@ void draw_RpPb_pt(bool sysByHand=false, bool noPtWeight=false, bool isPrompt=tru
   //globtex->SetTextAlign(32); //3:right 2:vertical center
   globtex->SetTextFont(42);
 	globtex->SetTextSize(0.075);
+	
+  //// global uncertainty from lumi
+	TBox * globbox_pp = new TBox(0.0, 0.96, 1.5, 1.04);
+	globbox_pp->SetFillColorAlpha(kGray+2,0.5);
+	globbox_pp->SetLineColor(kBlack);
+	TBox * globbox_pa = new TBox(1.5, 0.965, 3.0, 1.035);
+	globbox_pa->SetFillColorAlpha(kWhite,0.5);
+	globbox_pa->SetLineColor(kBlack);
+	TBox * globbox_all = new TBox(0.0, 0.9468493, 1.5, 1.053151);
+	globbox_all->SetFillColorAlpha(kGray+2,0.5);
+	globbox_all->SetLineColor(kBlack);
 
   //// Draw 
 	//TBox* emptybox = new TBox(0.0, 0.0, 0.97, 0.86);
@@ -336,28 +352,27 @@ void draw_RpPb_pt(bool sysByHand=false, bool noPtWeight=false, bool isPrompt=tru
     else if (iy==2) pad_all[1]->cd();
     else pad_all[iy+3]->cd();
     g_RpPb_sys[iy]->Draw("A5");
-    dashedLine(0.,1.,32.,1.,1,1);
+    globbox_all->Draw("lf");
+    //solidLine(0.,1.,32.,1.,1,1);
+    solidLine(0.,1.,32.,1.,1,1);
     g_RpPb[iy]->Draw("P");
-    globtex->SetTextAlign(32); //3:right 2:vertical center
+    //globtex->SetTextAlign(32); //3:right 2:vertical center
+    globtex->SetTextAlign(22);
 	  globtex->SetTextFont(42);
-	  //if (iy==2 || iy==3) globtex->SetTextSize(0.063);
-	  //else globtex->SetTextSize(0.078);
 	  globtex->SetTextSize(0.078);
-    if (iy<3) globtex->DrawLatex(0.9, 0.09, rapArr[iy].Data());
-    else globtex->DrawLatex(0.9, 0.25, rapArr[iy].Data());
+    //if (iy<3) globtex->DrawLatex(0.9, 0.09, rapArr[iy].Data());
+    //else globtex->DrawLatex(0.9, 0.25, rapArr[iy].Data());
+    if (iy<3) globtex->DrawLatex(0.53, 0.2, rapArr[iy].Data());
+    else globtex->DrawLatex(0.53, 0.35, rapArr[iy].Data());
   }
   pad_all[4]->cd();
   emptybox->Draw("l");
 
-	globtex->SetTextAlign(12); //1:left, 2:vertical center
-  globtex->SetTextSize(0.09);
+  globtex->SetTextSize(0.1);
 	globtex->SetTextFont(42);
-	if (isPrompt) globtex->DrawLatex(0.08, 0.28, "Prompt J/#psi");
-	else globtex->DrawLatex(0.08, 0.28, "Non-prompt J/#psi");
-  globtex->SetTextAlign(12); //1:left 2:vertical center
-	globtex->SetTextSize(0.07);
-	globtex->SetTextFont(42);
-  globtex->DrawLatex(0.08, 0.18, "Global uncertainty : 5.3 \%");
+	globtex->SetTextAlign(32); //1:left, 2:vertical center
+	if (isPrompt) globtex->DrawLatex(0.90, 0.54, "Prompt J/#psi");
+	else globtex->DrawLatex(0.90, 0.51, "Nonprompt J/#psi");
 
 
   //////////////////// y axis
@@ -641,7 +656,7 @@ void CMS_lumi( TPad* pad, int iPeriod, int iPosX )
       //if (iPosX==33) {posX_ -= 0.03; posY_-=0.03; } // KYO
       if (iPosX==33) {
         posX_ += 0.03; posY_-=0.01; 
-        latex.SetTextSize(cmsTextSize*t*1.5);
+        latex.SetTextSize(cmsTextSize*t*1.3);
       } // KYO
       latex.DrawLatex(posX_, posY_, cmsText);
       if( writeExtraText ) {

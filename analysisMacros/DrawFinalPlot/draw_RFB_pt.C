@@ -268,15 +268,17 @@ void draw_RFB_pt(bool sysByHand=false, bool noPtWeight=false, bool isPrompt=fals
 	  gRFB_sys[iy]->GetXaxis()->SetLimits(0.,32.0);
 	  gRFB_sys[iy]->SetMinimum(0.0);
 	  gRFB_sys[iy]->SetMaximum(1.8);
+	  gRFB_sys[iy]->SetFillColorAlpha(kRed-10,0.5);
+	  gRFB_sys[iy]->SetLineColor(kPink-6);
 	}
-	
+/*	
   gRFB_sys[0]->SetFillColorAlpha(kGreen-10,0.5);
 	gRFB_sys[1]->SetFillColorAlpha(kRed-10,0.5);
 	gRFB_sys[2]->SetFillColorAlpha(kBlue-10,0.5);
 	gRFB_sys[0]->SetLineColor(kGreen+3);
 	gRFB_sys[1]->SetLineColor(kPink-6);
 	gRFB_sys[2]->SetLineColor(kBlue-3);
-
+*/
 	//// 2) RFB graph
 	TGraphAsymmErrors*gRFB[nRapRFB]; 
 	for (int iy=0; iy<nRapRFB; iy++){
@@ -292,21 +294,24 @@ void draw_RFB_pt(bool sysByHand=false, bool noPtWeight=false, bool isPrompt=fals
       //if (!((iy==1 || iy==2)&&ipt==0))
       cout << pytmp[iy][ipt] <<"\t"<<eytmp[iy][ipt] << "\t "<<eysys[iy][ipt]<<endl;
 		}
+	  SetGraphStyleFinal(gRFB[iy], 1, 0);
+	  gRFB[iy]->SetMarkerSize(1.4);
 	}
-	SetGraphStyleFinal(gRFB[0], 0, 5); //1.5-1.93
+	/*
+  SetGraphStyleFinal(gRFB[0], 0, 5); //1.5-1.93
 	SetGraphStyleFinal(gRFB[1], 1, 3); //0.9-1.5
 	SetGraphStyleFinal(gRFB[2], 2, 0); //0-0.9
 	gRFB[0]->SetMarkerSize(2.6);
 	gRFB[1]->SetMarkerSize(1.4);
 	gRFB[2]->SetMarkerSize(1.4);
-
+*/
   ///////////////// CANVAS 1  
   TCanvas* c1 = new TCanvas("c1","c1",600,600);
   c1->cd(); 
   gRFB_sys[0]->Draw("A5");
-	dashedLine(0.,1.,32.,1.,1,1);
+	solidLine(0.,1.,32.,1.,1,1);
   gRFB[0]->Draw("P");
-	
+/*	
   TLegendEntry *le1=legBR->AddEntry("le1",Form("  %s", rapAbsArr[2].Data()),"lpf");
 	le1->SetFillColorAlpha(kBlue-10,0.5);
 	le1->SetFillStyle(1001);
@@ -330,17 +335,19 @@ void draw_RFB_pt(bool sysByHand=false, bool noPtWeight=false, bool isPrompt=fals
 	le3->SetMarkerSize(3.3);
 
 	//legBR->Draw();
-
-  globtex->SetTextAlign(32); //3:right 2:vertical center
+*/
+  globtex->SetTextAlign(22);
 	globtex->SetTextFont(42);
   globtex->SetTextSize(0.05);
-  globtex->DrawLatex(0.9, 0.23, rapAbsArr[0].Data());
+  globtex->DrawLatex(0.57, 0.30, rapAbsArr[0].Data());
+  //globtex->DrawLatex(0.9, 0.23, rapAbsArr[0].Data());
+  //globtex->DrawLatex(0.21, 0.84, rapAbsArr[0].Data());
 	
-	globtex->SetTextAlign(12); //1:left, 2:vertical center
-	globtex->SetTextSize(0.055);
+	globtex->SetTextAlign(32); 
+	globtex->SetTextSize(0.050);
 	globtex->SetTextFont(42);
-	if (isPrompt) globtex->DrawLatex(0.21, 0.84, "Prompt J/#psi");
-	else globtex->DrawLatex(0.21, 0.84, "Non-prompt J/#psi");
+	if (isPrompt) globtex->DrawLatex(0.92, 0.76, "Prompt J/#psi");
+	else globtex->DrawLatex(0.92, 0.76, "Nonprompt J/#psi");
 
 	CMS_lumi( c1, isPA, iPos );
 	c1->Update();
@@ -358,20 +365,20 @@ void draw_RFB_pt(bool sysByHand=false, bool noPtWeight=false, bool isPrompt=fals
   TCanvas* c2 = new TCanvas("c2","c2",600,600);
 	c2->cd();
 	gRFB_sys[1]->Draw("A5");
-	dashedLine(0.,1.,32.,1.,1,1);
+	solidLine(0.,1.,32.,1.,1,1);
 	gRFB[1]->Draw("P");
 	//legBR->Draw();
   
-  globtex->SetTextAlign(32); //3:right 2:vertical center
+  globtex->SetTextAlign(22);
 	globtex->SetTextFont(42);
   globtex->SetTextSize(0.05);
-  globtex->DrawLatex(0.9, 0.23, rapAbsArr[1].Data());
+  globtex->DrawLatex(0.57, 0.30, rapAbsArr[1].Data());
   
-	globtex->SetTextAlign(12); //1:left, 2:vertical center
-  globtex->SetTextSize(0.055);
+  globtex->SetTextAlign(32); //3:right 2:vertical center
+  globtex->SetTextSize(0.050);
 	globtex->SetTextFont(42);
-	if (isPrompt) globtex->DrawLatex(0.21, 0.84, "Prompt J/#psi");
-	else globtex->DrawLatex(0.21, 0.84, "Non-prompt J/#psi");
+	if (isPrompt) globtex->DrawLatex(0.92, 0.76, "Prompt J/#psi");
+	else globtex->DrawLatex(0.92, 0.76, "Nonprompt J/#psi");
 	
   CMS_lumi( c2, isPA, iPos );
 	c2->Update();
@@ -389,20 +396,20 @@ void draw_RFB_pt(bool sysByHand=false, bool noPtWeight=false, bool isPrompt=fals
   TCanvas* c3 = new TCanvas("c3","c3",600,600);
 	c3->cd();
 	gRFB_sys[2]->Draw("A5");
-	dashedLine(0.,1.,32.,1.,1,1);
+	solidLine(0.,1.,32.,1.,1,1);
 	gRFB[2]->Draw("P");
 	///legBR->Draw();
   
-  globtex->SetTextAlign(32); //3:right 2:vertical center
+  globtex->SetTextAlign(22);
 	globtex->SetTextFont(42);
   globtex->SetTextSize(0.05);
-  globtex->DrawLatex(0.9, 0.23, rapAbsArr[2].Data());
+  globtex->DrawLatex(0.57, 0.30, rapAbsArr[2].Data());
 
-	globtex->SetTextAlign(12); //1:left, 2:vertical center
-  globtex->SetTextSize(0.055);
+  globtex->SetTextAlign(32); //3:right 2:vertical center
+  globtex->SetTextSize(0.050);
 	globtex->SetTextFont(42);
-	if (isPrompt) globtex->DrawLatex(0.21, 0.84, "Prompt J/#psi");
-	else globtex->DrawLatex(0.21, 0.84, "Non-prompt J/#psi");
+	if (isPrompt) globtex->DrawLatex(0.92, 0.76, "Prompt J/#psi");
+	else globtex->DrawLatex(0.92, 0.76, "Nonprompt J/#psi");
 
   CMS_lumi( c3, isPA, iPos );
 	c3->Update();
@@ -573,8 +580,8 @@ void CMS_lumi( TPad* pad, int iPeriod, int iPosX )
 	    latex.SetTextSize(cmsTextSize*t);
 	    latex.SetTextAlign(align_);
       if (iPosX==33) {
-        posX_ -= 0.03; posY_-=0.03; 
-        latex.SetTextSize(cmsTextSize*t*1.5);
+        posX_ -= 0.01; posY_-=0.02; 
+        latex.SetTextSize(cmsTextSize*t*1.3);
       } // KYO
 	    latex.DrawLatex(posX_, posY_, cmsText);
 	    if( writeExtraText ) {

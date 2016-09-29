@@ -169,7 +169,7 @@ int comp_RFB_pt_LHCb_ALICE_ATLAS()
 	gRFB_alice->SetMarkerSize(1.5);
 	gRFB_alice->SetLineColor(1);
 	gRFB_alice->SetMarkerColor(1);
-	gRFB_alice->SetMarkerStyle(kOpenTriangleUp);
+	gRFB_alice->SetMarkerStyle(kOpenSquare);
 
 	gRFB_alice_sys = new TGraphAsymmErrors(nBin_alice, alice_px, alice_RFB, alice_exsys, alice_exsys, alice_ey_sys, alice_ey_sys);	
 	gRFB_alice_sys->SetFillColor(kGray);
@@ -194,12 +194,8 @@ int comp_RFB_pt_LHCb_ALICE_ATLAS()
 	//gRFB_atlas_sys_pr->SetLineWidth(1);
 
 	// 1) CMS
-	gRFB_pr_sys_0->SetLineColor(kGreen+3);
-	gRFB_pr_sys_0->SetFillColorAlpha(kGreen-10,0.5);
-	//gRFB_pr_0->SetMarkerSize(1.5);
-	//gRFB_pr_0->SetMarkerColor(kGreen+3);
-	//gRFB_pr_0->SetMarkerStyle(kFullSquare);
-	//gRFB_pr_0->SetLineColor(kGreen+3);
+	gRFB_pr_sys_0->SetLineColor(kPink-6);
+	gRFB_pr_sys_0->SetFillColorAlpha(kRed-10,0.5);
 
 
   /////////////////////////////////	
@@ -208,7 +204,7 @@ int comp_RFB_pt_LHCb_ALICE_ATLAS()
 	gRFB_alice_sys->Draw("2");
 	gRFB_atlas_sys_pr->Draw("2");
   //gRFB_pr_sys_0->Draw("5");
-	dashedLine(0.0,1.0,32.0,1.0,1,1);
+	solidLine(0.0,1.0,32.0,1.0,1,1);
 	gRFB_lhcb_pr->Draw("P");
 	gRFB_alice->Draw("P");
 	gRFB_atlas_pr->Draw("P");
@@ -278,12 +274,8 @@ int comp_RFB_pt_LHCb_ALICE_ATLAS()
 	gRFB_atlas_sys_np->SetLineWidth(1);
 	
   // 1) CMS
-	gRFB_np_sys_0->SetLineColor(kGreen+3);
-	gRFB_np_sys_0->SetFillColorAlpha(kGreen-10,0.5);
-	//gRFB_np_0->SetMarkerSize(1.5);
-	//gRFB_np_0->SetMarkerColor(kGreen+3);
-	//gRFB_np_0->SetMarkerStyle(kFullSquare);
-	//gRFB_np_0->SetLineColor(kGreen+3);
+	gRFB_np_sys_0->SetLineColor(kPink-6);
+	gRFB_np_sys_0->SetFillColorAlpha(kRed-10,0.5);
 
   /////////////////////////////////	
   gRFB_np_sys_0->Draw("5");
@@ -294,7 +286,7 @@ int comp_RFB_pt_LHCb_ALICE_ATLAS()
 	gRFB_atlas_np->Draw("P");
 	gRFB_np_0->Draw("P");
 	
-  dashedLine(0.0,1.0,32.0,1.0,1,1);
+  solidLine(0.0,1.0,32.0,1.0,1,1);
 	
 	legUL->Draw("SAME");
 	legBR2 -> AddEntry(gRFB_atlas_np,"ATLAS: |y_{CM}| < 1.94","lp");
@@ -303,7 +295,7 @@ int comp_RFB_pt_LHCb_ALICE_ATLAS()
 
 	globtex->SetTextSize(0.055);
 	globtex->SetTextFont(42);
-	globtex->DrawLatex(0.89, 0.85, "Non-prompt J/#psi");
+	globtex->DrawLatex(0.89, 0.85, "Nonprompt J/#psi");
 	
   CMS_lumi( c_np, isPA, iPos );
 	c_np->Update();

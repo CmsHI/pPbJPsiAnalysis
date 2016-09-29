@@ -179,7 +179,7 @@ void comp_cross_pt_ATLAS(bool isShift=false, bool isPrompt = false, bool isLog=f
 	dummy1->SetLineColor(kWhite); //KYO
 	dummy1->Draw(); //KYO
 
-	if (!isLog) dashedLine(5.0,0.0,30.0,0.0,1,1);
+	if (!isLog) solidLine(5.0,0.0,30.0,0.0,1,1);
 
 	if (isPrompt) g_cross_atlas_sys_fwrap = new TGraphAsymmErrors(nPtATLAS, atlas_px, atlas_py_pr_fw, atlas_exsys, atlas_exsys, atlas_eysys01_pr_fw, atlas_eysys01_pr_fw);	
 	else g_cross_atlas_sys_fwrap = new TGraphAsymmErrors(nPtATLAS, atlas_px, atlas_py_np_fw, atlas_exsys, atlas_exsys, atlas_eysys01_np_fw, atlas_eysys01_np_fw);	
@@ -306,7 +306,7 @@ void comp_cross_pt_ATLAS(bool isShift=false, bool isPrompt = false, bool isLog=f
   globtex->SetTextSize(0.055); 
   globtex->SetTextFont(42);
 	if (isPrompt) globtex->DrawLatex(0.88, 0.84, "Prompt J/#psi");
-	else globtex->DrawLatex(0.88, 0.84, "Non-prompt J/#psi");
+	else globtex->DrawLatex(0.88, 0.84, "Nonprompt J/#psi");
 	
 	CMS_lumi( c1, isPA, iPos );
 	c1->Update();

@@ -7,7 +7,7 @@ void formPtArr(Double_t binmin, Double_t binmax, TString* arr);
 
 void CMS_lumi( TPad* pad, int iPeriod, int iPosX );
 
-void draw_RFB_rap(bool sysByHand=true,  bool noPtWeight=false, bool isPrompt = true)
+void draw_RFB_rap(bool sysByHand=true,  bool noPtWeight=false, bool isPrompt = false)
 {
 	gROOT->Macro("./tdrstyle_kyo.C");
 	int isPA = 1;  // 0:pp, 1:pPb
@@ -342,21 +342,21 @@ void draw_RFB_rap(bool sysByHand=true,  bool noPtWeight=false, bool isPrompt = t
 	gRFB_sys_lowpt_line->SetFillColorAlpha(kRed-10,0.);	
 	gRFB_sys_lowpt->SetLineColor(kPink-6);	
 	gRFB_sys_lowpt_line->SetLineColor(kPink-6);	
-	gRFB_sys_highpt->SetFillColorAlpha(kGreen-10,0.5);
-	gRFB_sys_highpt_line->SetFillColorAlpha(kGreen-10,0.);
-	gRFB_sys_highpt->SetLineColor(kGreen+3);
-	gRFB_sys_highpt_line->SetLineColor(kGreen+3);
+	gRFB_sys_highpt->SetFillColorAlpha(kBlue-10,0.5);
+	gRFB_sys_highpt_line->SetFillColorAlpha(kBlue-10,0.);
+	gRFB_sys_highpt->SetLineColor(kBlue-2);
+	gRFB_sys_highpt_line->SetLineColor(kBlue-2);
 	
-	SetGraphStyleFinal(gRFB_lowpt, 1, 3);
+	SetGraphStyleFinal(gRFB_lowpt, 1, 0);
 	gRFB_lowpt->SetMarkerSize(1.4);
-	SetGraphStyleFinal(gRFB_highpt, 0, 5);
-	gRFB_highpt->SetMarkerSize(2.1);
+	SetGraphStyleFinal(gRFB_highpt, 2, 3);
+	gRFB_highpt->SetMarkerSize(1.4);
 
 	gRFB_sys_lowpt->Draw("A5");
 	gRFB_sys_highpt->Draw("5");
 	gRFB_sys_lowpt_line->Draw("5");
 	gRFB_sys_highpt_line->Draw("5");
-	dashedLine(0.,1.,2.1,1.,1,1);
+	solidLine(0.,1.,2.1,1.,1,1);
 	gRFB_lowpt->Draw("P");	
 	gRFB_highpt->Draw("P");	
 	
@@ -365,23 +365,23 @@ void draw_RFB_rap(bool sysByHand=true,  bool noPtWeight=false, bool isPrompt = t
   le1->SetFillColorAlpha(kRed-10,0.5);
   le1->SetFillStyle(1001);
   le1->SetLineColor(kPink-6);
-  le1->SetMarkerStyle(kFullSquare);
+  le1->SetMarkerStyle(kFullCircle);
   le1->SetMarkerColor(kPink-6);
   le1->SetMarkerSize(1.9);
 	//legBR->Draw();
 	TLegendEntry *le2=legBR->AddEntry("le2",Form("  %s", ptArr_highpt.Data()),"lpf");
-  le2->SetFillColorAlpha(kGreen-10,0.5);
+  le2->SetFillColorAlpha(kBlue-10,0.5);
   le2->SetFillStyle(1001);
-  le2->SetLineColor(kGreen+3);
-  le2->SetMarkerStyle(kFullDiamond);
-  le2->SetMarkerColor(kGreen+3);
-  le2->SetMarkerSize(3.1);
+  le2->SetLineColor(kBlue-2);
+  le2->SetMarkerStyle(kFullSquare);
+  le2->SetMarkerColor(kBlue-2);
+  le2->SetMarkerSize(1.9);
 	legBR->Draw();
 	
   globtex->SetTextSize(0.055);
 	globtex->SetTextFont(42);
 	if (isPrompt) globtex->DrawLatex(0.21, 0.85, "Prompt J/#psi");
-	else globtex->DrawLatex(0.21, 0.85, "Non-prompt J/#psi");
+	else globtex->DrawLatex(0.21, 0.85, "Nonprompt J/#psi");
 	CMS_lumi( c1, isPA, iPos );
 	c1->Update();
 

@@ -512,7 +512,7 @@ void draw_cross_pt_integ_middle(bool sysByHand=false, bool noPtWeight=false, boo
   globtex->SetTextSize(0.055);
 	globtex->SetTextFont(42);
 	if (isPrompt) globtex->DrawLatex(0.91, 0.86, "Prompt J/#psi");
-	else globtex->DrawLatex(0.91, 0.86, "Non-Prompt J/#psi");
+	else globtex->DrawLatex(0.91, 0.86, "Nonprompt J/#psi");
 	globtex->SetTextSize(0.035);
 	globtex->SetTextFont(42);
 	if (isPA==0) globtex->DrawLatex(0.91, 0.80, "Global uncertainty : 4 \%");
@@ -551,7 +551,7 @@ void draw_cross_pt_integ_middle(bool sysByHand=false, bool noPtWeight=false, boo
   globtex->SetTextSize(0.055);
 	globtex->SetTextFont(42);
 	if (isPrompt) globtex->DrawLatex(0.91, 0.86, "Prompt J/#psi");
-	else globtex->DrawLatex(0.91, 0.86, "Non-Prompt J/#psi");
+	else globtex->DrawLatex(0.91, 0.86, "Nonprompt J/#psi");
 	globtex->SetTextSize(0.035);
 	globtex->SetTextFont(42);
 	if (isPA==0) globtex->DrawLatex(0.91, 0.80, "Global uncertainty : 4 \%");

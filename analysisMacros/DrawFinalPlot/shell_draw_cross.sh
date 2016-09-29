@@ -25,25 +25,27 @@ root -l -b -q 'draw_cross_pt.C+(0,0,1,1,1,false)'
 root -l -b -q 'draw_cross_pt.C+(0,0,0,0,1,true)' 
 root -l -b -q 'draw_cross_pt.C+(0,0,0,0,1,false)' 
 
-root -l -b <<EOF
-.L draw_cross_pt_middle.C++
-.q
-EOF
-
 ########################################
 ######### for comparision ###############
 ########################################
-#### for pPb cross
-root -l -b -q 'draw_cross_pt_middle.C+(0,0,0,0,1,true)' 
-root -l -b -q 'draw_cross_pt_middle.C+(0,0,0,0,1,false)' 
+
+#root -l -b <<EOF
+#.L draw_cross_pt_middle.C++
+#.q
+#EOF
+
+### for LHCb cross
+#root -l -b -q 'draw_cross_pt_middle.C+(0,0,0,0,1,true)' 
+#root -l -b -q 'draw_cross_pt_middle.C+(0,0,0,0,1,false)' 
 
 root -l -b <<EOF
 .L draw_cross_pt_integ_middle.C++
 .q
 EOF
 
-root -l -b -q 'draw_cross_pt_integ_middle.C+(0,0,0,0,1,true,193)' 
-root -l -b -q 'draw_cross_pt_integ_middle.C+(0,0,0,0,1,false,193)' 
+### for ATLAS cross
+#root -l -b -q 'draw_cross_pt_integ_middle.C+(0,0,0,0,1,true,193)' 
+#root -l -b -q 'draw_cross_pt_integ_middle.C+(0,0,0,0,1,false,193)' 
 
 ### for ATLAS RpPb
 root -l -b -q 'draw_cross_pt_integ_middle.C+(0,0,0,0,0,true,300)' 

@@ -181,10 +181,10 @@ int comp_RFB_rap_LHCb_ALICE_ATLAS()
 	gRFB_pr_sys_lowpt_line->Draw("5");
 	
 	// 2) highpt
-	gRFB_pr_sys_highpt->SetFillColorAlpha(kGreen-10,0.5);
-	gRFB_pr_sys_highpt_line->SetFillColorAlpha(kGreen-10,0.);
-	gRFB_pr_sys_highpt->SetLineColor(kGreen+3);
-	gRFB_pr_sys_highpt_line->SetLineColor(kGreen+3);
+	gRFB_pr_sys_highpt->SetFillColorAlpha(kBlue-10,0.5);
+	gRFB_pr_sys_highpt_line->SetFillColorAlpha(kBlue-10,0.);
+	gRFB_pr_sys_highpt->SetLineColor(kBlue-2);
+	gRFB_pr_sys_highpt_line->SetLineColor(kBlue-2);
 	//gRFB_pr_sys_highpt->SetFillStyle(3001);
 	gRFB_pr_sys_highpt->Draw("5");
 	gRFB_pr_sys_highpt_line->Draw("5");
@@ -218,7 +218,7 @@ int comp_RFB_rap_LHCb_ALICE_ATLAS()
  
   //////////////////////////////////////////////////////////////////////// 
 	
-  dashedLine(0.0,1.0,4.5,1.0,1,1);
+  solidLine(0.0,1.0,4.5,1.0,1,1);
 
 	gRFB_lhcb_pr = new TGraphAsymmErrors(nBin_lhcb, lhcb_px, lhcb_py_pr, lhcb_ex, lhcb_ex, lhcb_ey_pr, lhcb_ey_pr);	
 	SetGraphStyleFinal(gRFB_lhcb_pr,1,10);
@@ -232,7 +232,7 @@ int comp_RFB_rap_LHCb_ALICE_ATLAS()
 	gRFB_alice->SetMarkerSize(1.5);
 	gRFB_alice->SetLineColor(1);
 	gRFB_alice->SetMarkerColor(1);
-	gRFB_alice->SetMarkerStyle(kOpenTriangleUp);
+	gRFB_alice->SetMarkerStyle(kOpenSquare);
 	gRFB_alice->Draw("P");
 	
   gRFB_atlas_pr = new TGraphAsymmErrors(nBin_atlas, atlas_px, atlas_RFB_pr, atlas_ex, atlas_ex, atlas_eysys_stat_pr, atlas_eysys_stat_pr);	
@@ -242,12 +242,12 @@ int comp_RFB_rap_LHCb_ALICE_ATLAS()
 	gRFB_atlas_pr->SetLineColor(1);
 	gRFB_atlas_pr->Draw("P");
 	
-  SetGraphStyleFinal(gRFB_pr_lowpt,1,3);
+  SetGraphStyleFinal(gRFB_pr_lowpt,1,0);
 	gRFB_pr_lowpt->SetMarkerSize(1.4);
   gRFB_pr_lowpt->Draw("P");
   
-  SetGraphStyleFinal(gRFB_pr_highpt,0,5);
-	gRFB_pr_highpt->SetMarkerSize(2.1);
+  SetGraphStyleFinal(gRFB_pr_highpt,2,3);
+	gRFB_pr_highpt->SetMarkerSize(1.4);
 	gRFB_pr_highpt->Draw("P");
 
 
@@ -306,10 +306,10 @@ int comp_RFB_rap_LHCb_ALICE_ATLAS()
 	gRFB_np_sys_lowpt_line->Draw("5");
 	
 	// 2) highpt
-	gRFB_np_sys_highpt->SetFillColorAlpha(kGreen-10,0.5);
-	gRFB_np_sys_highpt_line->SetFillColorAlpha(kGreen-10,0.);
-	gRFB_np_sys_highpt->SetLineColor(kGreen+3);
-	gRFB_np_sys_highpt_line->SetLineColor(kGreen+3);
+	gRFB_np_sys_highpt->SetFillColorAlpha(kBlue-10,0.5);
+	gRFB_np_sys_highpt_line->SetFillColorAlpha(kBlue-10,0.);
+	gRFB_np_sys_highpt->SetLineColor(kBlue-2);
+	gRFB_np_sys_highpt_line->SetLineColor(kBlue-2);
 	gRFB_np_sys_highpt->Draw("5");
 	gRFB_np_sys_highpt_line->Draw("5");
 
@@ -333,7 +333,7 @@ int comp_RFB_rap_LHCb_ALICE_ATLAS()
 	
   //////////////////////////////////////////////////////////////////////////
 	
-  dashedLine(0.0,1.0,4.5,1.0,1,1);
+  solidLine(0.0,1.0,4.5,1.0,1,1);
   
 	gRFB_lhcb_np = new TGraphAsymmErrors(nBin_lhcb, lhcb_px, lhcb_py_np, lhcb_ex, lhcb_ex, lhcb_ey_np, lhcb_ey_np);	
 	SetGraphStyleFinal(gRFB_lhcb_np,1,10);
@@ -349,12 +349,12 @@ int comp_RFB_rap_LHCb_ALICE_ATLAS()
 	gRFB_atlas_np->SetLineColor(1);
 	gRFB_atlas_np->Draw("P");	
 	
-  SetGraphStyleFinal(gRFB_np_lowpt,1,3);
+  SetGraphStyleFinal(gRFB_np_lowpt,1,0);
 	gRFB_np_lowpt->SetMarkerSize(1.4);
 	gRFB_np_lowpt->Draw("P");
   
-  SetGraphStyleFinal(gRFB_np_highpt,0,5);
-	gRFB_np_highpt->SetMarkerSize(2.1);
+  SetGraphStyleFinal(gRFB_np_highpt,2,3);
+	gRFB_np_highpt->SetMarkerSize(1.4);
 	gRFB_np_highpt->Draw("P");
 
 
@@ -369,7 +369,7 @@ int comp_RFB_rap_LHCb_ALICE_ATLAS()
   globtex->SetTextAlign(32);
 	globtex->SetTextSize(0.055);
 	globtex->SetTextFont(42);
-	globtex->DrawLatex(0.92, 0.85, "Non-prompt J/#psi");
+	globtex->DrawLatex(0.92, 0.85, "Nonprompt J/#psi");
 	
   CMS_lumi( c_np, isPA, iPos );
 	c_np->Update();

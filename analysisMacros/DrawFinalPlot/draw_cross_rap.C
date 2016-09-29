@@ -7,12 +7,13 @@ void formPtArr(Double_t binmin, Double_t binmax, TString* arr);
 
 void CMS_lumi( TPad* pad, int iPeriod, int iPosX );
 
-void draw_cross_rap(bool sysByHand=false, bool noPtWeight=false, bool isScale=false, int isPA = 0, bool isPrompt=true)
+void draw_cross_rap(bool sysByHand=false, bool noPtWeight=false, bool isScale=false, int isPA = 0, bool isPrompt=false)
 {
 	gROOT->Macro("./tdrstyle_kyo.C");
   gStyle->SetTitleYOffset(1.38); //KYO
   if (isPA==0) gStyle->SetTitleYOffset(1.5); //KYO
-	int iPos=0;
+	//int iPos=0.;//outOfFrame
+	int iPos=33;//right corner
 
 	//// pileup rejection!!
 	Double_t pileReg;
@@ -296,7 +297,8 @@ void draw_cross_rap(bool sysByHand=false, bool noPtWeight=false, bool isScale=fa
 
 	TLegend *legUL = new TLegend(0.17, 0.77, 0.56, 0.88);
 	SetLegendStyle(legUL);
-	legUL->SetTextSize(0.037);
+	//legUL->SetTextSize(0.037);
+	legUL->SetTextSize(0.040);
 
 	TLatex* globtex = new TLatex();
 	globtex->SetNDC();
@@ -383,19 +385,16 @@ void draw_cross_rap(bool sysByHand=false, bool noPtWeight=false, bool isScale=fa
 	}
 	g_cross_sys_lowpt->SetFillColorAlpha(kRed-10,0.5);	
 	g_cross_sys_lowpt->SetLineColor(kPink-6);	
-	//g_cross_sys_lowpt->Draw("A2");
 	g_cross_sys_lowpt->Draw("A5");
-	g_cross_sys_highpt->SetFillColorAlpha(kGreen-10,0.5);	
-	g_cross_sys_highpt->SetLineColor(kGreen+3);	
-	//g_cross_sys_highpt->Draw("2");
+	g_cross_sys_highpt->SetFillColorAlpha(kBlue-10,0.5);	
+	g_cross_sys_highpt->SetLineColor(kBlue-2);	
 	g_cross_sys_highpt->Draw("5");
-	SetGraphStyleFinal(g_cross_lowpt,1,3);
+	SetGraphStyleFinal(g_cross_lowpt,1,0);
 	g_cross_lowpt->SetMarkerSize(1.4);
-//	g_cross_lowpt->SetMarkerSize(1.0);
 	g_cross_lowpt->Draw("P");
-	SetGraphStyleFinal(g_cross_highpt,0,5);
-	g_cross_highpt->SetMarkerSize(2.1);
-//	g_cross_highpt->SetMarkerSize(1.7);
+	SetGraphStyleFinal(g_cross_highpt,2,3);
+	//g_cross_highpt->SetMarkerSize(2.1);
+	g_cross_highpt->SetMarkerSize(1.4);
 	g_cross_highpt->Draw("P");
 
 	if (isScale && scaleF_low != 1.0) legUL -> AddEntry(g_cross_lowpt,Form("6.5 < p_{T} < 10 GeV/c [x%1.f]",scaleF_low), "lp");
@@ -403,15 +402,14 @@ void draw_cross_rap(bool sysByHand=false, bool noPtWeight=false, bool isScale=fa
 	if (isScale && scaleF_high != 1.0) legUL -> AddEntry(g_cross_highpt,Form("10 < p_{T} < 30 GeV/c [x%.1f]",scaleF_high),"lp");
 	else legUL -> AddEntry(g_cross_highpt,"10 < p_{T} < 30 GeV/c","lp");
 	legUL->Draw();
-	globtex->SetTextSize(0.055);
+	globtex->SetTextSize(0.050);
 	globtex->SetTextFont(42);
-	if (isPrompt) globtex->DrawLatex(0.93, 0.85, "Prompt J/#psi");
-  else globtex->DrawLatex(0.93, 0.85, "Non-prompt J/#psi");
-	globtex->SetTextSize(0.035);
-	globtex->SetTextFont(42);
-  if (isPA==0) globtex->DrawLatex(0.93, 0.79, "Global uncertainty : 4 \%");
-	else globtex->DrawLatex(0.93, 0.79, "Global uncertainty : 3.5 \%");
-	//globtex->DrawLatex(0.89, 0.80, "Global uncertainty : 3.5 \%");
+	if (isPrompt) globtex->DrawLatex(0.92, 0.76, "Prompt J/#psi");
+  else globtex->DrawLatex(0.92, 0.76, "Nonprompt J/#psi");
+	//globtex->SetTextSize(0.035);
+	//globtex->SetTextFont(42);
+  //if (isPA==0) globtex->DrawLatex(0.93, 0.79, "Global uncertainty : 4 \%");
+	//else globtex->DrawLatex(0.93, 0.79, "Global uncertainty : 3.5 \%");
 	CMS_lumi( c1, isPA, iPos );
 	c1->Update();
   if (isPA==0){
@@ -538,6 +536,12 @@ void CMS_lumi( TPad* pad, int iPeriod, int iPosX )
   } else if( iPeriod==1 || iPeriod==2 || iPeriod==3){
     lumiText += lumi_pPb502TeV;
     lumiText += " (pPb 5.02 TeV)";
+  } else if( iPeriod==10){
+    lumiText += "pPb ";
+    lumiText += lumi_pPb502TeV;
+    lumiText += ", pp ";
+    lumiText += lumi_pp502TeV;
+    lumiText += " (5.02 TeV)";
   } else {
     lumiText += "LumiText Not Selected";
   }
@@ -551,7 +555,7 @@ void CMS_lumi( TPad* pad, int iPeriod, int iPosX )
 
   //float extraTextSize = extraOverCmsTextSize*cmsTextSize;
   float extraTextSize = extraOverCmsTextSize*cmsTextSize*1.1;
-  
+
   latex.SetTextFont(42);
   latex.SetTextAlign(31); 
   latex.SetTextSize(lumiTextSize*t);    
@@ -572,36 +576,41 @@ void CMS_lumi( TPad* pad, int iPeriod, int iPosX )
   float posY_ = 1-t - relPosY*(1-t-b);
   if( !outOfFrame ) {
     if( drawLogo ) {
-	    posX_ =   l + 0.045*(1-l-r)*W/H;
-	    posY_ = 1-t - 0.045*(1-t-b);
-	    float xl_0 = posX_;
-	    float yl_0 = posY_ - 0.15;
-	    float xl_1 = posX_ + 0.15*H/W;
-	    float yl_1 = posY_;
-	    //TASImage* CMS_logo = new TASImage("CMS-BW-label.png");
-	    TPad* pad_logo = new TPad("logo","logo", xl_0, yl_0, xl_1, yl_1 );
-	    pad_logo->Draw();
-	    pad_logo->cd();
-	    //CMS_logo->Draw("X");
-	    pad_logo->Modified();
-	    pad->cd();
-	  } else {
-	    latex.SetTextFont(cmsTextFont);
-	    latex.SetTextSize(cmsTextSize*t);
-	    latex.SetTextAlign(align_);
-	    latex.DrawLatex(posX_, posY_, cmsText);
-	    if( writeExtraText ) {
-	      latex.SetTextFont(extraTextFont);
-	      latex.SetTextAlign(align_);
-	      latex.SetTextSize(extraTextSize*t);
-	      latex.DrawLatex(posX_, posY_- relExtraDY*cmsTextSize*t, extraText);
-	    }
-	  }
+      posX_ =   l + 0.045*(1-l-r)*W/H;
+      posY_ = 1-t - 0.045*(1-t-b);
+      float xl_0 = posX_;
+      float yl_0 = posY_ - 0.15;
+      float xl_1 = posX_ + 0.15*H/W;
+      float yl_1 = posY_;
+      //TASImage* CMS_logo = new TASImage("CMS-BW-label.png");
+      TPad* pad_logo = new TPad("logo","logo", xl_0, yl_0, xl_1, yl_1 );
+      pad_logo->Draw();
+      pad_logo->cd();
+      //CMS_logo->Draw("X");
+      pad_logo->Modified();
+      pad->cd();
+    } else {
+      latex.SetTextFont(cmsTextFont);
+      latex.SetTextSize(cmsTextSize*t);
+      latex.SetTextAlign(align_);
+      //cout << "posX_ = " << posX_ << ", posY_ = " << posY_ << endl;
+      if (iPosX==33) {
+        posX_ -= 0.01; posY_-=0.02; 
+        latex.SetTextSize(cmsTextSize*t*1.3);
+      } // KYO
+      latex.DrawLatex(posX_, posY_, cmsText);
+      if( writeExtraText ) {
+        latex.SetTextFont(extraTextFont);
+        latex.SetTextAlign(align_);
+        latex.SetTextSize(extraTextSize*t);
+        latex.DrawLatex(posX_, posY_- relExtraDY*cmsTextSize*t, extraText);
+      }
+    }
   } else if( writeExtraText ) {
     if( iPosX==0) {
-  	  posX_ =   l +  relPosX*(1-l-r);
-  	  posY_ =   1-t+lumiTextOffset*t;
-  	}
+      posX_ =   l +  relPosX*(1-l-r);
+      posY_ =   1-t+lumiTextOffset*t;
+    }
     latex.SetTextFont(extraTextFont);
     latex.SetTextSize(extraTextSize*t);
     latex.SetTextAlign(align_);

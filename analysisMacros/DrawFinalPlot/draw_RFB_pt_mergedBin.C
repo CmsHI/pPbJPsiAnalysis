@@ -333,7 +333,7 @@ void draw_RFB_pt_mergedBin(bool sysByHand=false, bool noPtWeight=false, bool isP
   TCanvas* c1 = new TCanvas("c1","c1",600,600);
   c1->cd(); 
   gRFB_sys[0]->Draw("A5");
-  dashedLine(0.,1.,32.,1.,1,1);
+  solidLine(0.,1.,32.,1.,1,1);
   gRFB[0]->Draw("P");
   
   TLegendEntry *le1=legBR->AddEntry("le1",Form("  %s", rapAbsArr[2].Data()),"lpf");
@@ -369,7 +369,7 @@ void draw_RFB_pt_mergedBin(bool sysByHand=false, bool noPtWeight=false, bool isP
   globtex->SetTextSize(0.055);
   globtex->SetTextFont(42);
   if (isPrompt) globtex->DrawLatex(0.21, 0.84, "Prompt J/#psi");
-  else globtex->DrawLatex(0.21, 0.84, "Non-prompt J/#psi");
+  else globtex->DrawLatex(0.21, 0.84, "Nonprompt J/#psi");
 
   CMS_lumi( c1, isPA, iPos );
   c1->Update();
@@ -387,7 +387,7 @@ void draw_RFB_pt_mergedBin(bool sysByHand=false, bool noPtWeight=false, bool isP
   TCanvas* c2 = new TCanvas("c2","c2",600,600);
   c2->cd();
   gRFB_sys[1]->Draw("A5");
-  dashedLine(0.,1.,32.,1.,1,1);
+  solidLine(0.,1.,32.,1.,1,1);
   gRFB[1]->Draw("P");
   //legBR->Draw();
   
@@ -400,7 +400,7 @@ void draw_RFB_pt_mergedBin(bool sysByHand=false, bool noPtWeight=false, bool isP
   globtex->SetTextSize(0.055);
   globtex->SetTextFont(42);
   if (isPrompt) globtex->DrawLatex(0.21, 0.84, "Prompt J/#psi");
-  else globtex->DrawLatex(0.21, 0.84, "Non-prompt J/#psi");
+  else globtex->DrawLatex(0.21, 0.84, "Nonprompt J/#psi");
   
   CMS_lumi( c2, isPA, iPos );
   c2->Update();
@@ -419,7 +419,7 @@ void draw_RFB_pt_mergedBin(bool sysByHand=false, bool noPtWeight=false, bool isP
   TCanvas* c3 = new TCanvas("c3","c3",600,600);
   c3->cd();
   gRFB_sys[2]->Draw("A5");
-  dashedLine(0.,1.,32.,1.,1,1);
+  solidLine(0.,1.,32.,1.,1,1);
   gRFB[2]->Draw("P");
   ///legBR->Draw();
   
@@ -432,7 +432,7 @@ void draw_RFB_pt_mergedBin(bool sysByHand=false, bool noPtWeight=false, bool isP
   globtex->SetTextSize(0.055);
   globtex->SetTextFont(42);
   if (isPrompt) globtex->DrawLatex(0.21, 0.84, "Prompt J/#psi");
-  else globtex->DrawLatex(0.21, 0.84, "Non-prompt J/#psi");
+  else globtex->DrawLatex(0.21, 0.84, "Nonprompt J/#psi");
 
   CMS_lumi( c3, isPA, iPos );
   c3->Update();

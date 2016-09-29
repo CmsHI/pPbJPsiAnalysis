@@ -221,30 +221,29 @@ void draw_RpPb_rap(bool sysByHand=false, bool noPtWeight=false, bool isPrompt=fa
   g_RpPb_sys_lowpt->GetXaxis()->CenterTitle();
   g_RpPb_sys_lowpt->GetYaxis()->SetTitle("R_{pPb}");
   g_RpPb_sys_lowpt->GetYaxis()->CenterTitle();
-  g_RpPb_sys_lowpt->GetXaxis()->SetLimits(-2.5,2.1);
+//  g_RpPb_sys_lowpt->GetXaxis()->SetLimits(-2.5,2.1);
+  g_RpPb_sys_lowpt->GetXaxis()->SetLimits(-2.7,2.1);
   g_RpPb_sys_lowpt->SetMinimum(0.0);
   g_RpPb_sys_lowpt->SetMaximum(1.8);
   g_RpPb_sys_highpt->GetXaxis()->SetTitle("y_{CM}");
   g_RpPb_sys_highpt->GetXaxis()->CenterTitle();
   g_RpPb_sys_highpt->GetYaxis()->SetTitle("R_{pPb}");
   g_RpPb_sys_highpt->GetYaxis()->CenterTitle();
-  g_RpPb_sys_highpt->GetXaxis()->SetLimits(-2.5,2.1);
+  g_RpPb_sys_highpt->GetXaxis()->SetLimits(-2.7,2.1);
   g_RpPb_sys_highpt->SetMinimum(0.0);
   g_RpPb_sys_highpt->SetMaximum(1.8);
 
   g_RpPb_sys_lowpt->SetFillColorAlpha(kRed-10,0.5);
   g_RpPb_sys_lowpt_line->SetFillColorAlpha(kRed-10,0.);
   g_RpPb_sys_lowpt_line->SetLineColor(kPink-6);
-  g_RpPb_sys_highpt->SetFillColorAlpha(kGreen-10,0.5);
-  g_RpPb_sys_highpt_line->SetFillColorAlpha(kGreen-10,0.);
-  g_RpPb_sys_highpt_line->SetLineColor(kGreen+3);
+  g_RpPb_sys_highpt->SetFillColorAlpha(kRed-10,0.5);
+  g_RpPb_sys_highpt_line->SetFillColorAlpha(kRed-10,0.);
+  g_RpPb_sys_highpt_line->SetLineColor(kPink-6);
 
-  SetGraphStyleFinal(g_RpPb_lowpt,1,3);
+  SetGraphStyleFinal(g_RpPb_lowpt,1,0);
   g_RpPb_lowpt->SetMarkerSize(1.4);
-  //g_RpPb_lowpt->SetMarkerSize(1.9);
-  SetGraphStyleFinal(g_RpPb_highpt,0,5);
-  g_RpPb_highpt->SetMarkerSize(2.1);
-  //g_RpPb_highpt->SetMarkerSize(3.1);
+  SetGraphStyleFinal(g_RpPb_highpt,1,0);
+  g_RpPb_highpt->SetMarkerSize(1.4);
 
   //////////////////////////////////////////////////////////////////
   //// draw
@@ -259,53 +258,86 @@ void draw_RpPb_rap(bool sysByHand=false, bool noPtWeight=false, bool isPrompt=fa
   //globtex->SetTextAlign(32); //3:right 2:vertical center
   globtex->SetTextFont(42);
 	globtex->SetTextSize(0.04);
+  
+  //// global uncertainty from lumi
+	TBox * globbox_pp = new TBox(-3.0, 0.96, -2.8, 1.04);
+	globbox_pp->SetFillColorAlpha(kGray+2,0.5);
+	globbox_pp->SetLineColor(kBlack);
+	TBox * globbox_pa = new TBox(-2.8, 0.965, -2.6, 1.035);
+	globbox_pa->SetFillColorAlpha(kWhite,0.5);
+	globbox_pa->SetLineColor(kBlack);
+	TBox * globbox_all = new TBox(-2.7, 0.9468493, -2.5, 1.053151);
+	globbox_all->SetFillColorAlpha(kGray+2,0.5);
+	globbox_all->SetLineColor(kBlack);
+
+  ////// lowpt
 
   TCanvas* c1 = new TCanvas("c1","c1",600,600);
   c1->cd();
   
   g_RpPb_sys_lowpt->Draw("A2");
-  g_RpPb_sys_highpt->Draw("2");
   g_RpPb_sys_lowpt_line->Draw("5");
-  g_RpPb_sys_highpt_line->Draw("5");
-  dashedLine(-2.5,1.,2.1,1.,1,1);
+  globbox_all->Draw("lf");
+  solidLine(-2.7,1.,2.1,1.,1,1);
   g_RpPb_lowpt->Draw("P");
-  g_RpPb_highpt->Draw("P");
+  
+  globtex->SetTextAlign(22);
+	globtex->SetTextFont(42);
+  globtex->SetTextSize(0.05);
+  globtex->DrawLatex(0.57, 0.30, "6.5 < p_{T} < 10 GeV/c");
 
-	TLegendEntry *le1=legBR->AddEntry("le1","6.5 < p_{T} < 10 GeV/c","lpf");
-  le1->SetFillColorAlpha(kRed-10,0.5);
-  le1->SetFillStyle(1001);
-  le1->SetLineColor(kPink-6);
-  le1->SetLineWidth(1);
-  le1->SetMarkerStyle(kFullSquare);
-  le1->SetMarkerColor(kPink-6);
-  le1->SetMarkerSize(1.9);
-	//legBR->Draw();
-	TLegendEntry *le2=legBR->AddEntry("le2","10 < p_{T} < 30 GeV/c","lpf");
-  le2->SetFillColorAlpha(kGreen-10,0.5);
-  le2->SetFillStyle(1001);
-  le2->SetLineColor(kGreen+3);
-  le2->SetMarkerStyle(kFullDiamond);
-  le2->SetMarkerColor(kGreen+3);
-  le2->SetMarkerSize(3.1);
-	legBR->Draw();
-	
-  globtex->SetTextSize(0.055);
+  globtex->SetTextAlign(32); //3:right 2:vertical center
+  globtex->SetTextSize(0.050);
 	globtex->SetTextFont(42);
-	if (isPrompt) globtex->DrawLatex(0.21, 0.84, "Prompt J/#psi");
-	else globtex->DrawLatex(0.21, 0.84, "Non-prompt J/#psi");
-	globtex->SetTextSize(0.035);
-	globtex->SetTextFont(42);
-  globtex->DrawLatex(0.21, 0.78, "Global uncertainty : 5.3 \%");
+	if (isPrompt) globtex->DrawLatex(0.92, 0.78, "Prompt J/#psi");
+	else globtex->DrawLatex(0.92, 0.78, "Nonprompt J/#psi");
 	
   CMS_lumi( c1, isPA, iPos );
 
   if (noPtWeight) { 
-    c1->SaveAs(Form("plot_RpPb/RpPb_rap_isPrompt%d_noPtWeight.pdf",(int)isPrompt));
-    c1->SaveAs(Form("plot_RpPb/RpPb_rap_isPrompt%d_noPtWeight.png",(int)isPrompt));
+    c1->SaveAs(Form("plot_RpPb/RpPb_rap_isPrompt%d_noPtWeight_pt1.pdf",(int)isPrompt));
+    c1->SaveAs(Form("plot_RpPb/RpPb_rap_isPrompt%d_noPtWeight_pt1.png",(int)isPrompt));
   } else {
-    c1->SaveAs(Form("plot_RpPb/RpPb_rap_isPrompt%d.pdf",(int)isPrompt));
-    c1->SaveAs(Form("plot_RpPb/RpPb_rap_isPrompt%d.png",(int)isPrompt));
+    c1->SaveAs(Form("plot_RpPb/RpPb_rap_isPrompt%d_pt1.pdf",(int)isPrompt));
+    c1->SaveAs(Form("plot_RpPb/RpPb_rap_isPrompt%d_pt1.png",(int)isPrompt));
   }
+ 
+  ////// highpt
+
+  TCanvas* c2 = new TCanvas("c2","c2",600,600);
+  c2->cd();
+  
+  g_RpPb_sys_highpt->Draw("A2");
+  g_RpPb_sys_highpt_line->Draw("5");
+  globbox_all->Draw("lf");
+  solidLine(-2.7,1.,2.1,1.,1,1);
+  g_RpPb_highpt->Draw("P");
+  
+  globtex->SetTextAlign(22);
+	globtex->SetTextFont(42);
+  globtex->SetTextSize(0.05);
+  globtex->DrawLatex(0.57, 0.30, "10 < p_{T} < 30 GeV/c");
+
+  globtex->SetTextAlign(32); //3:right 2:vertical center
+  globtex->SetTextSize(0.050);
+	globtex->SetTextFont(42);
+	if (isPrompt) globtex->DrawLatex(0.92, 0.78, "Prompt J/#psi");
+	else globtex->DrawLatex(0.92, 0.78, "Nonprompt J/#psi");
+	
+  CMS_lumi( c2, isPA, iPos );
+
+  if (noPtWeight) { 
+    c2->SaveAs(Form("plot_RpPb/RpPb_rap_isPrompt%d_noPtWeight_pt2.pdf",(int)isPrompt));
+    c2->SaveAs(Form("plot_RpPb/RpPb_rap_isPrompt%d_noPtWeight_pt2.png",(int)isPrompt));
+  } else {
+    c2->SaveAs(Form("plot_RpPb/RpPb_rap_isPrompt%d_pt2.pdf",(int)isPrompt));
+    c2->SaveAs(Form("plot_RpPb/RpPb_rap_isPrompt%d_pt2.png",(int)isPrompt));
+  }
+ 
+ 
+ 
+ 
+ 
   
   ///////////////////////////////////////////////////////////////////
   //// save as a root file
@@ -473,8 +505,8 @@ void CMS_lumi( TPad* pad, int iPeriod, int iPosX )
       latex.SetTextAlign(align_);
       //cout << "posX_ = " << posX_ << ", posY_ = " << posY_ << endl;
       if (iPosX==33) {
-        posX_ -= 0.03; posY_-=0.03; 
-        latex.SetTextSize(cmsTextSize*t*1.5);
+        posX_ -= 0.01; posY_-=0.02; 
+        latex.SetTextSize(cmsTextSize*t*1.3);
       } // KYO
       latex.DrawLatex(posX_, posY_, cmsText);
       if( writeExtraText ) {

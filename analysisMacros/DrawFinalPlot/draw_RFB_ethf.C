@@ -322,15 +322,15 @@ void draw_RFB_ethf(bool sysByHand=true, bool noPtWeight = false, bool isPrompt=f
 	gRFB_sys[0]->SetLineColor(kViolet-6);
 	gRFB_sys[1]->SetFillColorAlpha(kGreen-10,0.5);
 	gRFB_sys[1]->SetLineColor(kGreen+3);
-	gRFB_sys[2]->SetFillColorAlpha(kRed-10,0.5);
-	gRFB_sys[2]->SetLineColor(kPink-6);
-	gRFB_sys[3]->SetFillColorAlpha(kBlue-10,0.5);
-	gRFB_sys[3]->SetLineColor(kBlue-3);
+	gRFB_sys[2]->SetFillColorAlpha(kBlue-10,0.5);
+	gRFB_sys[2]->SetLineColor(kBlue-2);
+	gRFB_sys[3]->SetFillColorAlpha(kRed-10,0.5);
+	gRFB_sys[3]->SetLineColor(kPink-6);
 
 	SetGraphStyleFinal(gRFB[0], 8, 6); //1.5-1.93 low
 	SetGraphStyleFinal(gRFB[1], 0, 5); //1.5-1.93
-	SetGraphStyleFinal(gRFB[2], 1, 3); //0.9-1.5
-	SetGraphStyleFinal(gRFB[3], 2, 0); //0-0.9
+	SetGraphStyleFinal(gRFB[2], 2, 3); //0.9-1.5
+	SetGraphStyleFinal(gRFB[3], 1, 0); //0-0.9
 	gRFB[0]->SetMarkerSize(1.4);
 	gRFB[1]->SetMarkerSize(2.1);
 	gRFB[2]->SetMarkerSize(1.4);
@@ -339,18 +339,18 @@ void draw_RFB_ethf(bool sysByHand=true, bool noPtWeight = false, bool isPrompt=f
   legBL->SetHeader("6.5 < p_{T} < 30 GeV/c");	
   //TLegendEntry *le1=legBL->AddEntry("le1","0 < |y_{CM}| < 0.9, 6.5 < p_{T} < 30 GeV/c","lpf");
   TLegendEntry *le1=legBL->AddEntry("le1","0 < |y_{CM}| < 0.9","lpf");
-	le1->SetFillColorAlpha(kBlue-10,0.5);
+	le1->SetFillColorAlpha(kRed-10,0.5);
 	le1->SetFillStyle(1001);
-	le1->SetLineColor(kBlue-3);
+	le1->SetLineColor(kPink-6);
 	le1->SetMarkerStyle(kFullCircle);
-	le1->SetMarkerColor(kBlue-3);
+	le1->SetMarkerColor(kPink-6);
 	le1->SetMarkerSize(1.7);
 	TLegendEntry *le2=legBL->AddEntry("le2","0.9 < |y_{CM}| < 1.5","lpf");
-	le2->SetFillColorAlpha(kRed-10,0.5);
+	le2->SetFillColorAlpha(kBlue-10,0.5);
 	le2->SetFillStyle(1001);
-	le2->SetLineColor(kPink-6);
+	le2->SetLineColor(kBlue-2);
 	le2->SetMarkerStyle(kFullSquare);
-	le2->SetMarkerColor(kPink-6);
+	le2->SetMarkerColor(kBlue-2);
 	le2->SetMarkerSize(1.7);
 	TLegendEntry *le3=legBL->AddEntry("le3","1.5 < |y_{CM}| < 1.93","lpf");
 	le3->SetFillColorAlpha(kGreen-10,0.5);
@@ -379,16 +379,16 @@ void draw_RFB_ethf(bool sysByHand=true, bool noPtWeight = false, bool isPrompt=f
   //// STEP1
   //gRFB_sys[3]->Draw("A5");
   gRFB_sys[3]->Draw("5");
-	dashedLine(0.,1.,3.,1.,1,1);
+	solidLine(0.,1.,3.,1.,1,1);
 	gRFB[3]->Draw("P");
-	//dashedLine(0.,1.,50.,1.,1,1);
+	//solidLine(0.,1.,50.,1.,1,1);
 	CMS_lumi( c1, isPA, iPos );
 	c1->Update();
-	globtex->SetTextAlign(12); //1:left, 2:vertical center
+	globtex->SetTextAlign(32); //1:left, 2:vertical center
 	globtex->SetTextSize(0.055);
 	globtex->SetTextFont(42);
-	if (isPrompt) globtex->DrawLatex(0.21, 0.84, "Prompt J/#psi");
-	else globtex->DrawLatex(0.21, 0.84, "Non-prompt J/#psi");
+	if (isPrompt) globtex->DrawLatex(0.92, 0.76, "Prompt J/#psi");
+	else globtex->DrawLatex(0.92, 0.76, "Nonprompt J/#psi");
 	legBL->Draw();
 	legUL->Draw();
 
@@ -584,8 +584,8 @@ void CMS_lumi( TPad* pad, int iPeriod, int iPosX )
 	    latex.SetTextSize(cmsTextSize*t);
 	    latex.SetTextAlign(align_);
       if (iPosX==33) {
-        posX_ -= 0.03; posY_-=0.03; 
-        latex.SetTextSize(cmsTextSize*t*1.5);
+        posX_ -= 0.01; posY_-=0.02; 
+        latex.SetTextSize(cmsTextSize*t*1.3);
       } // KYO
 	    latex.DrawLatex(posX_, posY_, cmsText);
 	    if( writeExtraText ) {

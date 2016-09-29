@@ -1,3 +1,6 @@
+//// reference : http://hepdata.cedar.ac.uk/view/ins1390110
+//// https://arxiv.org/abs/1508.06678 
+
 #include "../SONGKYO.h"
 #include "CMS_lumi.h"
 
@@ -109,7 +112,7 @@ void comp_RpPb_pt_Bmeson(bool isPrompt = false)
   //g_RpPb_Bmeson_sys->SetFillStyle(3001);
   
   SetGraphStyleFinal(g_RpPb_Bmeson, 9, 10);
-  g_RpPb_Bmeson->SetMarkerSize(1.7);
+  g_RpPb_Bmeson->SetMarkerSize(1.2);
    
   //////////////////////////////////////////////////////////////
   
@@ -119,23 +122,34 @@ void comp_RpPb_pt_Bmeson(bool isPrompt = false)
   //globtex->SetTextAlign(32); //3:right 2:vertical center
   globtex->SetTextFont(42);
 	globtex->SetTextSize(0.04);
+  
+  // global box
+  TBox * globbox_all = new TBox(0, 0.9468493, 2, 1.053151);
+  globbox_all->SetFillColorAlpha(kGray+2,0.5);
+  globbox_all->SetLineColor(kBlack);
+  
+  TBox * globbox_br = new TBox(2, 0.969, 4, 1.031); //for B+ branching ratio
+  globbox_br->SetFillColorAlpha(kWhite,0.5);
+  globbox_br->SetLineColor(kBlack);
+
 
   //// our results
   TGraphAsymmErrors* g_RpPb_sys = new TGraphAsymmErrors(nPt, pxtmp, rppb, exlow, exhigh, eysys_rppb, eysys_rppb);	
   TGraphAsymmErrors* g_RpPb = new TGraphAsymmErrors(nPt, pxtmp, rppb, exsys, exsys, ey_rppb, ey_rppb);	
   
-  g_RpPb_sys->SetFillColor(kGreen-10);
-  g_RpPb_sys->SetLineColor(kGreen+3);
+  g_RpPb_sys->SetFillColorAlpha(kRed-10,0.5);
+  g_RpPb_sys->SetLineColor(kPink-6);
 
-  SetGraphStyleFinal(g_RpPb, 0, 5);
-  //g_RpPb->SetMarkerSize(2.1);
-  g_RpPb->SetMarkerSize(1.6);
+  SetGraphStyleFinal(g_RpPb, 1, 0);
+  g_RpPb->SetMarkerSize(1.2);
   
   ////// actual draw
   g_RpPb_Bmeson_sysFONLL->Draw("A5");
   g_RpPb_Bmeson_sys->Draw("2");
   g_RpPb_sys->Draw("5");
-  dashedLine(0.,1.,62.,1.,1,1);
+  globbox_all->Draw("lf");
+  globbox_br->Draw("lf");
+  solidLine(0.,1.,62.,1.,1,1);
   g_RpPb_Bmeson->Draw("p");
   g_RpPb->Draw("p");
   
@@ -146,14 +160,14 @@ void comp_RpPb_pt_Bmeson(bool isPrompt = false)
 	//legBL->SetTextSize(0.037);
 	legBL->SetTextSize(0.043);
   legBL->SetTextFont(42);
-	legBL -> AddEntry(g_RpPb,"Non-prompt J/#psi: -1.93 < y_{CM} < 1.93","lp");
-	legBL -> AddEntry(g_RpPb_Bmeson,"B^{+}: -2.87 < y_{CM} < 1.93","lp");
+	legBL -> AddEntry(g_RpPb,"Nonprompt J/#psi: -1.93 < y_{CM} < 1.93","lp");
+	legBL -> AddEntry(g_RpPb_Bmeson,"B^{+}: -2.86 < y_{CM} < 1.93","lp");
 	legBL -> Draw();
   
   //globtex->SetTextSize(0.055); 
   //globtex->SetTextFont(42);
   //if (isPrompt) globtex->DrawLatex(0.21, 0.84, "Prompt J/#psi");
-  //else globtex->DrawLatex(0.21, 0.84, "Non-prompt J/#psi");
+  //else globtex->DrawLatex(0.21, 0.84, "Nonprompt J/#psi");
   
   CMS_lumi( c1, isPA, iPos );
   c1->Update();
@@ -305,8 +319,8 @@ void CMS_lumi( TPad* pad, int iPeriod, int iPosX )
       //if (iPosX==33) {posX_ -= 0.03; posY_-=0.03; } // KYO
       //if (iPosX==33) {posX_ += 0.03; posY_-=0.01; } // KYO RpPb_pt
       if (iPosX==33) {
-        posX_ -= 0.03; posY_-=0.03; 
-        latex.SetTextSize(cmsTextSize*t*1.5);
+        posX_ -= 0.01; posY_-=0.02; 
+        latex.SetTextSize(cmsTextSize*t*1.3);
       } // KYO
       latex.DrawLatex(posX_, posY_, cmsText);
       if( writeExtraText ) {

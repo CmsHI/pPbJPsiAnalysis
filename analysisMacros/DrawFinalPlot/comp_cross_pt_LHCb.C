@@ -204,7 +204,7 @@ void comp_cross_pt_LHCb(bool isShift=false, bool isPrompt = true, bool isLog=tru
 	g_cross_0->Draw("P");
   
 
-	if (!isLog) { dashedLine(0.0,0.0,30.0,0.0,1,1); }
+	if (!isLog) { solidLine(0.0,0.0,30.0,0.0,1,1); }
 	
 	if (isLog){	
 		legUL -> AddEntry(g_cross_0,"1.5 < y_{CM} < 1.93","lp");
@@ -224,7 +224,7 @@ void comp_cross_pt_LHCb(bool isShift=false, bool isPrompt = true, bool isLog=tru
 	globtex->SetTextSize(0.055);
 	globtex->SetTextFont(42);
 	if (isPrompt) globtex->DrawLatex(0.91, 0.86, "Prompt J/#psi");
-	else globtex->DrawLatex(0.91, 0.86, "Non-Prompt J/#psi");
+	else globtex->DrawLatex(0.91, 0.86, "Nonprompt J/#psi");
 	
 	CMS_lumi( c1, isPA, iPos );
 	c1->Update();

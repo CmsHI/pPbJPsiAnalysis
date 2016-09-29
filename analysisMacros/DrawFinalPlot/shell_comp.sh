@@ -3,15 +3,15 @@
 
 ####### cross ##########
 ### for LHCb
-root -l -b -q 'comp_cross_pt_LHCb.C+(0,true,true)'
-root -l -b -q 'comp_cross_pt_LHCb.C+(0,false,true)'
-root -l -b -q 'comp_cross_pt_LHCb.C+(0,true,false)'
-root -l -b -q 'comp_cross_pt_LHCb.C+(0,false,false)'
+#root -l -b -q 'comp_cross_pt_LHCb.C+(0,true,true)'
+#root -l -b -q 'comp_cross_pt_LHCb.C+(0,false,true)'
+#root -l -b -q 'comp_cross_pt_LHCb.C+(0,true,false)'
+#root -l -b -q 'comp_cross_pt_LHCb.C+(0,false,false)'
 ### for ATLAS
-root -l -b -q 'comp_cross_pt_ATLAS.C+(0,true,true)'
-root -l -b -q 'comp_cross_pt_ATLAS.C+(0,false,true)'
-root -l -b -q 'comp_cross_pt_ATLAS.C+(0,true,false)'
-root -l -b -q 'comp_cross_pt_ATLAS.C+(0,false,false)'
+#root -l -b -q 'comp_cross_pt_ATLAS.C+(0,true,true)'
+#root -l -b -q 'comp_cross_pt_ATLAS.C+(0,false,true)'
+#root -l -b -q 'comp_cross_pt_ATLAS.C+(0,true,false)'
+#root -l -b -q 'comp_cross_pt_ATLAS.C+(0,false,false)'
 
 ####### RFB ##########
 root -l -b -q comp_RFB_pt_LHCb_ALICE_ATLAS.C+

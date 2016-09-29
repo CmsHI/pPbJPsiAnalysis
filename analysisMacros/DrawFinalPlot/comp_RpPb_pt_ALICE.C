@@ -32,9 +32,9 @@ void comp_RpPb_pt_ALICE(bool isPrompt = true)
 	TGraphAsymmErrors* g_RpPb_fw = (TGraphAsymmErrors*)inFile->Get("g_RpPb_0"); 
 	TGraphAsymmErrors* g_RpPb_sys_bw = (TGraphAsymmErrors*)inFile->Get("g_RpPb_sys_6"); 
 	TGraphAsymmErrors* g_RpPb_bw = (TGraphAsymmErrors*)inFile->Get("g_RpPb_6"); 
-  g_RpPb_sys_fw->SetFillColorAlpha(kGreen-10,0.5);
-  g_RpPb_sys_bw->SetFillColorAlpha(kMagenta-10,0.5);
-  g_RpPb_fw->SetMarkerSize(2.1);
+  g_RpPb_sys_fw->SetFillColorAlpha(kRed-10,0.5);
+  g_RpPb_sys_bw->SetFillColorAlpha(kRed-10,0.5);
+  g_RpPb_fw->SetMarkerSize(1.4);
   g_RpPb_bw->SetMarkerSize(1.4);
 	
 	///////////////////////////////////////////////////
@@ -77,7 +77,7 @@ void comp_RpPb_pt_ALICE(bool isPrompt = true)
   
   g_RpPb_ALICE_fw_sys02->SetFillColor(kGray);
   SetGraphStyleFinal(g_RpPb_ALICE_fw, 9, 10);
-  g_RpPb_ALICE_fw->SetMarkerSize(1.7);
+  g_RpPb_ALICE_fw->SetMarkerSize(1.4);
  
   g_RpPb_ALICE_bw_sys01->GetXaxis()->SetTitle("p_{T} [GeV/c]");
   g_RpPb_ALICE_bw_sys01->GetXaxis()->CenterTitle();
@@ -94,7 +94,7 @@ void comp_RpPb_pt_ALICE(bool isPrompt = true)
   
   g_RpPb_ALICE_bw_sys02->SetFillColor(kGray);
   SetGraphStyleFinal(g_RpPb_ALICE_bw, 9, 10);
-  g_RpPb_ALICE_bw->SetMarkerSize(1.7);
+  g_RpPb_ALICE_bw->SetMarkerSize(1.4);
  
   //////////////////////////////////////////////////////////////
   
@@ -111,7 +111,7 @@ void comp_RpPb_pt_ALICE(bool isPrompt = true)
   g_RpPb_ALICE_fw_sys01->Draw("A5");
   g_RpPb_ALICE_fw_sys02->Draw("2");
   g_RpPb_sys_fw->Draw("5");
-  dashedLine(0.,1.,32.,1.,1,1);
+  solidLine(0.,1.,32.,1.,1,1);
   g_RpPb_ALICE_fw->Draw("p");
   g_RpPb_fw->Draw("p");
   
@@ -130,7 +130,7 @@ void comp_RpPb_pt_ALICE(bool isPrompt = true)
   globtex->SetTextSize(0.055); 
   globtex->SetTextFont(42);
   if (isPrompt) globtex->DrawLatex(0.21, 0.84, "Prompt J/#psi");
-  else globtex->DrawLatex(0.21, 0.84, "Non-prompt J/#psi");
+  else globtex->DrawLatex(0.21, 0.84, "Nonprompt J/#psi");
   
   CMS_lumi( c_fw, isPA, iPos );
   c_fw->Update();
@@ -146,7 +146,7 @@ void comp_RpPb_pt_ALICE(bool isPrompt = true)
   g_RpPb_ALICE_bw_sys01->Draw("A5");
   g_RpPb_ALICE_bw_sys02->Draw("2");
   g_RpPb_sys_bw->Draw("5");
-  dashedLine(0.,1.,32.,1.,1,1);
+  solidLine(0.,1.,32.,1.,1,1);
   g_RpPb_ALICE_bw->Draw("p");
   g_RpPb_bw->Draw("p");
   
@@ -317,8 +317,8 @@ void CMS_lumi( TPad* pad, int iPeriod, int iPosX )
       //if (iPosX==33) {posX_ -= 0.03; posY_-=0.03; } // KYO
       //if (iPosX==33) {posX_ += 0.03; posY_-=0.01; } // KYO RpPb_pt
       if (iPosX==33) {
-        posX_ -= 0.03; posY_-=0.03; 
-        latex.SetTextSize(cmsTextSize*t*1.5);
+        posX_ -= 0.01; posY_-=0.02; 
+        latex.SetTextSize(cmsTextSize*t*1.3);
       } // KYO
       latex.DrawLatex(posX_, posY_, cmsText);
       if( writeExtraText ) {
