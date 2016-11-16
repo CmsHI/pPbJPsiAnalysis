@@ -240,8 +240,8 @@ void comp_RpPb_pt_Overlay(double ptmax=32, bool isPoint=true, bool isSmoothened=
   globtex->SetTextSize(0.09);
   globtex->SetTextFont(42); 
   globtex->SetTextAlign(32); //1:left, 2:vertical center
-  if (isPrompt) globtex->DrawLatex(0.89, 0.56, "Prompt J/#psi");
-  else globtex->DrawLatex(0.89, 0.56, "Nonprompt J/#psi");
+  if (isPrompt) globtex->DrawLatex(0.88, 0.56, "Prompt J/#psi");
+  else globtex->DrawLatex(0.88, 0.56, "Nonprompt J/#psi");
   globtex->SetTextAlign(12); //1:left 2:vertical center
   globtex->SetTextSize(0.07);
   globtex->SetTextFont(42);  
