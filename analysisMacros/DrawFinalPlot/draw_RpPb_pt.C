@@ -382,8 +382,8 @@ void draw_RpPb_pt(bool sysByHand=false, bool noPtWeight=false, bool isPrompt=tru
   globtex->SetTextSize(0.09);
 	globtex->SetTextFont(42);
 	globtex->SetTextAlign(32); //1:left, 2:vertical center
-	if (isPrompt) globtex->DrawLatex(0.90, 0.57, "Prompt J/#psi");
-	else globtex->DrawLatex(0.90, 0.57, "Nonprompt J/#psi");
+	if (isPrompt) globtex->DrawLatex(0.89, 0.56, "Prompt J/#psi");
+	else globtex->DrawLatex(0.89, 0.56, "Nonprompt J/#psi");
 
 
   //////////////////// y axis
