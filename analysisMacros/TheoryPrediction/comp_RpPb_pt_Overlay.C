@@ -42,7 +42,6 @@ void comp_RpPb_pt_Overlay(double ptmax=32, bool isPoint=true, bool isSmoothened=
     cout << iy <<"th rapArr = " << rapArr[iy] << endl;
   }
   
-	
 	///////////////////////////////////////////////////
   //////// experimental points	
   TFile *inFile = new TFile("../DrawFinalPlot/plot_RpPb/RpPb_pt_isPrompt1.root","READ");
@@ -63,31 +62,41 @@ void comp_RpPb_pt_Overlay(double ptmax=32, bool isPoint=true, bool isSmoothened=
 	
   ///////////////////////////////////////////////////
   //////// theory curves	
-  const int nTheory = 2;
+  const int nTheory = 3;
 //  const int nTheory = 1;
   TFile *inFileTh[nTheory];
   inFileTh[0]= new TFile("./plot_theory/comp_RpPb_pt_isSmoothened0_Vogt.root","READ");
-  inFileTh[1]= new TFile("./plot_theory/comp_RpPb_pt_isSmoothened0_Lansberg_nCTEQ15.root","READ");
+  inFileTh[1]= new TFile("./plot_theory/comp_RpPb_pt_isSmoothened0_Lansberg_EPS09NLO.root","READ");
+  inFileTh[2]= new TFile("./plot_theory/comp_RpPb_pt_isSmoothened0_Lansberg_nCTEQ15.root","READ");
   
   TGraphAsymmErrors* g_RpPb_theory[nTheory][nRapRpPb];
+  TGraphAsymmErrors* g_RpPb_theory_line[nTheory][nRapRpPb];
   for (int ith = 0 ; ith < nTheory; ith ++ ) {
     for (int iy = 0 ; iy < nRapRpPb; iy ++ ) {
       g_RpPb_theory[ith][iy] = (TGraphAsymmErrors*)inFileTh[ith]->Get(Form("g_RpPb_theory_%d",iy));
       g_RpPb_theory[ith][iy]->SetName(Form("g_RpPb_theory_%d_%d",ith,iy));
+      g_RpPb_theory_line[ith][iy] = (TGraphAsymmErrors*)inFileTh[ith]->Get(Form("g_RpPb_theory_%d",iy));
+      g_RpPb_theory_line[ith][iy]->SetName(Form("g_RpPb_theory_line_%d_%d",ith,iy));
     } 
   } 
   
   //// color
   for (int iy = 0 ; iy < nRapRpPb; iy ++ ) {
-//    g_RpPb_theory[0][iy]->SetFillColor(kBlue-9);
-//    g_RpPb_theory[0][iy]->SetLineColor(kBlue-9);
-    g_RpPb_theory[0][iy]->SetFillColor(kAzure-9);
-    g_RpPb_theory[0][iy]->SetLineColor(kAzure-9);
+    g_RpPb_theory[0][iy]->SetFillColorAlpha(kAzure+1,0.5);
+    g_RpPb_theory[0][iy]->SetLineColor(kAzure+1);
     g_RpPb_theory[0][iy]->SetFillStyle(1001);
-    g_RpPb_theory[1][iy]->SetFillColor(kGreen+3);
-    g_RpPb_theory[1][iy]->SetLineColor(kGreen+3);
-    g_RpPb_theory[1][iy]->SetFillStyle(3005);
-//    g_RpPb_theory[1][iy]->SetFillStyle(3554);
+    g_RpPb_theory[1][iy]->SetFillColor(kOrange+2);
+    g_RpPb_theory[1][iy]->SetLineColor(kOrange+2);
+    g_RpPb_theory[1][iy]->SetFillStyle(3545);
+    g_RpPb_theory_line[1][iy]->SetFillColorAlpha(kOrange+2,0.);
+    g_RpPb_theory_line[1][iy]->SetLineColor(kOrange+2);
+    g_RpPb_theory_line[1][iy]->SetFillStyle(1001);
+    g_RpPb_theory[2][iy]->SetFillColor(kGreen+2);
+    g_RpPb_theory[2][iy]->SetLineColor(kGreen+2);
+    g_RpPb_theory[2][iy]->SetFillStyle(3754);
+    g_RpPb_theory_line[2][iy]->SetFillColorAlpha(kGreen+2,0.);
+    g_RpPb_theory_line[2][iy]->SetLineColor(kGreen+2);
+    g_RpPb_theory_line[2][iy]->SetFillStyle(1001);
   } 
   
   ///////////////////////////////////////////////////
@@ -122,6 +131,7 @@ void comp_RpPb_pt_Overlay(double ptmax=32, bool isPoint=true, bool isSmoothened=
   
   //TLegend *legBL1 = new TLegend(0.04, 0.08, 0.40, 0.5);
   TLegend *legBL1 = new TLegend(0.04, 0.08, 0.40, 0.37);
+  //TLegend *legBL1 = new TLegend(0.04, 0.08, 0.40, 0.27);
 	SetLegendStyle(legBL1);
 	legBL1->SetTextSize(0.07);
 	
@@ -202,19 +212,17 @@ void comp_RpPb_pt_Overlay(double ptmax=32, bool isPoint=true, bool isSmoothened=
     g_RpPb_sys[iy]->Draw("A5");
     globbox_all->Draw("lf");
     for (int ith = 0 ; ith < nTheory; ith ++ ) {
-      if (ith==0){
-        g_RpPb_theory[ith][iy]->Draw("3");
-      } 
+      if (ith==0){ g_RpPb_theory[ith][iy]->Draw("3"); }  
     }
-    if (isPoint) {
-      g_RpPb_sys[iy]->Draw("5");
-      for (int ith = 0 ; ith < nTheory; ith ++ ) {
-        if (ith!=0){
-          if (isSmoothened) g_RpPb_theory[ith][iy]->Draw("3");
-          else g_RpPb_theory[ith][iy]->Draw("5");
-        }
+    if (isPoint) { g_RpPb_sys[iy]->Draw("5"); }
+    for (int ith = 0 ; ith < nTheory; ith ++ ) {
+      if (ith!=0){
+        g_RpPb_theory[ith][iy]->Draw("5");
+        g_RpPb_theory_line[ith][iy]->Draw("5");
       }
-      solidLine(0.,1.,32.,1.,1,1);
+    }
+    solidLine(0.,1.,32.,1.,1,1);
+    if (isPoint) {
       g_RpPb_sys_line[iy]->Draw("5");
       g_RpPb[iy]->Draw("p");
     }
@@ -230,27 +238,31 @@ void comp_RpPb_pt_Overlay(double ptmax=32, bool isPoint=true, bool isSmoothened=
   pad_all[4]->cd();
   emptybox->Draw("l");
   
-  globtex->SetTextSize(0.1);
+  globtex->SetTextSize(0.09);
   globtex->SetTextFont(42); 
   globtex->SetTextAlign(32); //1:left, 2:vertical center
-  if (isPrompt) globtex->DrawLatex(0.90, 0.54, "Prompt J/#psi");
-  else globtex->DrawLatex(0.90, 0.54, "Nonprompt J/#psi");
+  if (isPrompt) globtex->DrawLatex(0.90, 0.55, "Prompt J/#psi");
+  else globtex->DrawLatex(0.90, 0.55, "Nonprompt J/#psi");
   globtex->SetTextAlign(12); //1:left 2:vertical center
   globtex->SetTextSize(0.07);
   globtex->SetTextFont(42);  
 
-  TLegendEntry *ent1_thr=legBL1->AddEntry("ent1_thr"," EPS09NLO + CEM (Vogt)","f");
-	ent1_thr->SetFillColor(kAzure-9);
-	ent1_thr->SetLineColor(kAzure-9);
+  TLegendEntry *ent1_thr=legBL1->AddEntry("ent1_thr"," EPS09 NLO (Vogt)","f");
+	ent1_thr->SetFillColorAlpha(kAzure+1,0.5);
+	ent1_thr->SetLineColor(kAzure+5);
   ent1_thr->SetFillStyle(1001);
-  TLegendEntry *ent2_thr=legBL1->AddEntry("ent2_thr"," nCTEQ15NLO + 2#rightarrow2","f");
-	ent2_thr->SetFillColor(kGreen+3);
-	ent2_thr->SetLineColor(kGreen+3);
-  ent2_thr->SetFillStyle(3005);
-  TLegendEntry *ent3_thr=legBL1->AddEntry("ent3_thr"," (Lansberg-Shao)","f");
-	ent3_thr->SetFillColor(kWhite);
-	ent3_thr->SetLineColor(kWhite);
-  ent3_thr->SetFillStyle(1001);
+  TLegendEntry *ent2_thr=legBL1->AddEntry("ent2_thr"," EPS09 NLO (Lansberg-Shao)","f");
+	ent2_thr->SetFillColor(kOrange+1);
+	ent2_thr->SetLineColor(kOrange+1);
+  ent2_thr->SetFillStyle(3545);
+  TLegendEntry *ent3_thr=legBL1->AddEntry("ent3_thr"," nCTEQ15 NLO","f");
+	ent3_thr->SetFillColor(kGreen+2);
+	ent3_thr->SetLineColor(kGreen+2);
+  ent3_thr->SetFillStyle(3754);
+  TLegendEntry *ent4_thr=legBL1->AddEntry("ent4_thr"," (Lansberg-Shao)","f");
+	ent4_thr->SetFillColor(kWhite);
+	ent4_thr->SetLineColor(kWhite);
+  ent4_thr->SetFillStyle(1001);
 	legBL1->Draw();
 
   //////////////////// y axis
@@ -263,7 +275,7 @@ void comp_RpPb_pt_Overlay(double ptmax=32, bool isPoint=true, bool isSmoothened=
   cout << pad_all[1]->GetUxmax() << endl;
   pad_all[0]->cd();
   //cout << g_RpPb_sys[2]->GetYaxis()->GetXmin() << endl;
-  TGaxis *yaxis01 = new TGaxis(1.0,0.0,1.0,1.0-topmargin,0.0,1.8,510,"");
+  TGaxis *yaxis01 = new TGaxis(1.0,0.0,1.0,1.0-topmargin,0.0,1.6,510,"");
   yaxis01->SetTitleFont(42);
   yaxis01->SetLabelFont(42);
   yaxis01->SetTitle("R_{pPb}");
@@ -274,7 +286,7 @@ void comp_RpPb_pt_Overlay(double ptmax=32, bool isPoint=true, bool isSmoothened=
   yaxis01->SetLabelSize(0.055*(0.29/0.07));
   yaxis01->Draw();  
   
-  TGaxis *yaxis02 = new TGaxis(1.0,0.0+bottommargin,1.0,1.0,0.0,1.8,510,"");
+  TGaxis *yaxis02 = new TGaxis(1.0,0.0+bottommargin,1.0,1.0,0.0,1.6,510,"");
   yaxis02->SetTitleFont(42);
   yaxis02->SetLabelFont(42);
   yaxis02->SetTitle("R_{pPb}");
