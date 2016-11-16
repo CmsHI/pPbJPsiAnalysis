@@ -127,13 +127,11 @@ void comp_RpPb_rap_Overlay(bool isPoint=true, bool isSmoothened=false)
 	//// Draw
   ///////////////////////////////////////////////////
 	
-	TLegend *legBL1 = new TLegend(0.195, 0.168, 0.38, 0.333);
+	//TLegend *legBL1 = new TLegend(0.195, 0.168, 0.38, 0.333);
+	TLegend *legBL1 = new TLegend(0.195, 0.168, 0.38, 0.388);
 	SetLegendStyle(legBL1);
 	//legBL1->SetTextSize(0.05);
 	legBL1->SetTextSize(0.037);
-	TLegend *legBL2 = new TLegend(0.195, 0.168, 0.38, 0.333);
-	SetLegendStyle(legBL2);
-	legBL2->SetTextSize(0.037);
   
   TLatex* globtex = new TLatex();
 	globtex->SetNDC();
@@ -183,6 +181,14 @@ void comp_RpPb_rap_Overlay(bool isPoint=true, bool isSmoothened=false)
 	globtex->SetTextFont(42);
   globtex->DrawLatex(0.21, 0.84, "6.5 < p_{T} < 10 GeV/c");
   
+  TLegendEntry *ent_data=legBL1->AddEntry("ent_data"," Data","pf");
+	ent_data->SetFillColorAlpha(kRed-10,0.5);
+	ent_data->SetLineColor(kPink-6);
+	ent_data->SetMarkerColor(kPink-6);
+  ent_data->SetMarkerStyle(kFullSquare);
+  ent_data->SetLineWidth(1);
+//  ent_data->SetMarkerSize(1.9);
+  ent_data->SetFillStyle(1001);
   TLegendEntry *ent1_thr=legBL1->AddEntry("ent1_thr"," EPS09 NLO (Vogt)","f");
 	ent1_thr->SetFillColorAlpha(kAzure+1,0.5);
 	ent1_thr->SetLineColor(kAzure+5);
@@ -241,24 +247,7 @@ void comp_RpPb_rap_Overlay(bool isPoint=true, bool isSmoothened=false)
 	globtex->SetTextSize(0.045);
 	globtex->SetTextFont(42);
   globtex->DrawLatex(0.21, 0.84, "10 < p_{T} < 30 GeV/c");
-  /*
-  TLegendEntry *ent1_thr=legBL1->AddEntry("ent1_thr"," EPS09NLO + CEM (Vogt)","f");
-	ent1_thr->SetFillColor(kYellow);
-	ent1_thr->SetLineColor(kYellow);
-  ent1_thr->SetFillStyle(1001);
-  TLegendEntry *ent2_thr=legBL1->AddEntry("ent2_thr"," EPS09LO + generic 2#rightarrow2 (Lansberg-Shao)","f");
-	ent2_thr->SetFillColor(kRed+1);
-	ent2_thr->SetLineColor(kRed+1);
-  ent2_thr->SetFillStyle(3354);
-  TLegendEntry *ent3_thr=legBL1->AddEntry("ent3_thr"," EPS09NLO + generic 2#rightarrow2 (Lansberg-Shao)","f");
-	ent3_thr->SetFillColor(kBlue+1);
-	ent3_thr->SetLineColor(kBlue+1);
-  ent3_thr->SetFillStyle(3345);
-  TLegendEntry *ent4_thr=legBL1->AddEntry("ent4_thr"," nCTEQ15LO + generic 2#rightarrow2 (Lansberg-Shao)","f");
-	ent4_thr->SetFillColor(kGreen+1);
-	ent4_thr->SetLineColor(kGreen+1);
-  ent4_thr->SetFillStyle(3003);
-	*/
+  
   legBL1->Draw();
   
   globtex->SetTextAlign(32); //3:right 2:vertical center	

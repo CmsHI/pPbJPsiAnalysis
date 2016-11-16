@@ -129,9 +129,8 @@ void comp_RpPb_pt_Overlay(double ptmax=32, bool isPoint=true, bool isSmoothened=
 	emptybox->SetLineColor(kBlack);
 	emptybox->SetLineWidth(1);
   
-  //TLegend *legBL1 = new TLegend(0.04, 0.08, 0.40, 0.5);
-  TLegend *legBL1 = new TLegend(0.04, 0.08, 0.40, 0.37);
-  //TLegend *legBL1 = new TLegend(0.04, 0.08, 0.40, 0.27);
+  //TLegend *legBL1 = new TLegend(0.04, 0.08, 0.40, 0.37);
+  TLegend *legBL1 = new TLegend(0.03, 0.03, 0.39, 0.455);
 	SetLegendStyle(legBL1);
 	legBL1->SetTextSize(0.07);
 	
@@ -241,12 +240,20 @@ void comp_RpPb_pt_Overlay(double ptmax=32, bool isPoint=true, bool isSmoothened=
   globtex->SetTextSize(0.09);
   globtex->SetTextFont(42); 
   globtex->SetTextAlign(32); //1:left, 2:vertical center
-  if (isPrompt) globtex->DrawLatex(0.90, 0.55, "Prompt J/#psi");
-  else globtex->DrawLatex(0.90, 0.55, "Nonprompt J/#psi");
+  if (isPrompt) globtex->DrawLatex(0.90, 0.57, "Prompt J/#psi");
+  else globtex->DrawLatex(0.90, 0.57, "Nonprompt J/#psi");
   globtex->SetTextAlign(12); //1:left 2:vertical center
   globtex->SetTextSize(0.07);
   globtex->SetTextFont(42);  
 
+  TLegendEntry *ent_data=legBL1->AddEntry("ent_data"," Data","pf");
+	ent_data->SetFillColorAlpha(kRed-10,0.5);
+	ent_data->SetLineColor(kPink-6);
+	ent_data->SetMarkerColor(kPink-6);
+  ent_data->SetMarkerStyle(kFullSquare);
+  ent_data->SetLineWidth(1);
+//  ent_data->SetMarkerSize(1.9);
+  ent_data->SetFillStyle(1001);
   TLegendEntry *ent1_thr=legBL1->AddEntry("ent1_thr"," EPS09 NLO (Vogt)","f");
 	ent1_thr->SetFillColorAlpha(kAzure+1,0.5);
 	ent1_thr->SetLineColor(kAzure+5);
@@ -364,17 +371,7 @@ void comp_RpPb_pt_Overlay(double ptmax=32, bool isPoint=true, bool isSmoothened=
   pave_Y_02->SetShadowColor(kWhite);
   pave_Y_02->AddText("0");
   pave_Y_02->Draw();
-/*  
-  globtex->SetTextAlign(12); //1:left, 2:vertical center
-  globtex->SetTextSize(0.09/2.5);
-	globtex->SetTextFont(42);
-	if (isPrompt) globtex->DrawLatex(0.08, 0.885, "Prompt J/#psi");
-	else globtex->DrawLatex(0.08, 0.885, "Non-prompt J/#psi");
-  globtex->SetTextAlign(12); //1:left 2:vertical center
-	globtex->SetTextSize(0.07/2.5);
-	globtex->SetTextFont(42);
-  globtex->DrawLatex(0.08, 0.84, "Global uncertainty : 5.3 \%");
-*/
+  
   CMS_lumi( c_all, isPA, iPos );
     
   c_all->SaveAs(Form("plot_theory/comp_RpPb_pt_isSmoothened%d_Overlay.pdf",(int)isSmoothened));
