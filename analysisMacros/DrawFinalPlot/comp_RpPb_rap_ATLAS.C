@@ -15,10 +15,10 @@ void comp_RpPb_rap_ATLAS(bool isPrompt = false)
   //// BR and lumi info.
   const Double_t br = 0.0593 ;
   const Double_t brErr = 0.0006;
-	const Double_t pp_lumi_pb =28.538; // 28.5/pb
-	const Double_t pp_lumi_pb_err = 1.1; // 4 %
+	const Double_t pp_lumi_pb =27.972; // 28.0/pb
+	const Double_t pp_lumi_pb_err = 0.643; // 2.3 %
 	const Double_t pPb_lumi_nb = 34.622; // 34.6/nb
-	const Double_t pPb_lumi_nb_err = 1.2; // 3.5 %
+	const Double_t pPb_lumi_nb_err = 1.211; // 3.5 %
   const Double_t pp_lumi_mub = pp_lumi_pb *1000*1000;
   const Double_t pPb_lumi_mub_err = pp_lumi_pb_err *1000*1000;
  
@@ -97,7 +97,7 @@ void comp_RpPb_rap_ATLAS(bool isPrompt = false)
   g_RpPb_ATLAS_sys->GetYaxis()->SetTitle("R_{pPb}");
   g_RpPb_ATLAS_sys->GetYaxis()->CenterTitle();
   g_RpPb_ATLAS_sys->GetXaxis()->SetTitleOffset(1.15);
-  g_RpPb_ATLAS_sys->GetXaxis()->SetLimits(-2.7,2.1);
+  g_RpPb_ATLAS_sys->GetXaxis()->SetLimits(-2.5,2.1);
   g_RpPb_ATLAS_sys->SetMinimum(0.0);
   g_RpPb_ATLAS_sys->SetMaximum(2.0);
   g_RpPb_ATLAS_sys->SetLineColor(kGray);
@@ -127,8 +127,8 @@ void comp_RpPb_rap_ATLAS(bool isPrompt = false)
   ////// actual draw
   g_RpPb_ATLAS_sys->Draw("A5");
   g_RpPb_sys_highpt->Draw("5");
-  globbox_all->Draw("lf");
-  solidLine(-2.7,1.,2.1,1.,1,1);
+  //globbox_all->Draw("lf");
+  solidLine(-2.5,1.,2.1,1.,1,1);
   g_RpPb_ATLAS->Draw("p");
   g_RpPb_highpt->Draw("p");
   
@@ -193,13 +193,13 @@ void formPtArr(Double_t binmin, Double_t binmax, TString* arr) {
 	Double_t fracMin = modf(binmin, &intMin);
 	Double_t fracMax = modf(binmax, &intMax);
 	if ( fracMin == 0 && fracMax == 0 ) {
-		*arr = Form("%.0f < p_{T} < %.0f [GeV/c]", binmin, binmax);
+		*arr = Form("%.0f < p_{T} < %.0f (GeV/c)", binmin, binmax);
 	} else if ( fracMin != 0 && fracMax == 0 ) {
-		*arr = Form("%.1f < p_{T} < %.0f [GeV/c]", binmin, binmax);
+		*arr = Form("%.1f < p_{T} < %.0f (GeV/c)", binmin, binmax);
 	} else if ( fracMin == 0 && fracMax != 0 ) {
-		*arr = Form("%.0f < p_{T} < %.1f [GeV/c]", binmin, binmax);
+		*arr = Form("%.0f < p_{T} < %.1f (GeV/c)", binmin, binmax);
 	} else {
-		*arr = Form("%.1f < p_{T} < %.1f [GeV/c]", binmin, binmax);
+		*arr = Form("%.1f < p_{T} < %.1f (GeV/c)", binmin, binmax);
 	}
 }
 

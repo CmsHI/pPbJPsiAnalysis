@@ -12,13 +12,13 @@ int comp_RFB_rap_LHCb_ALICE_ATLAS()
 
   gROOT->LoadMacro("tdrstyle_kyo.C");
 	int isPA = 1;  // 0:pp, 1:pPb
-	int iPos=0;
+	int iPos=33;
 	
   //// BR and lumi info.
 	const Double_t br = 0.0593 ;
 	const Double_t brErr = 0.0006;
 	const Double_t pPb_lumi_nb = 34.622; // 34.6/nb
-	const Double_t pPb_lumi_nb_err = 1.2; // 3.5 %
+	const Double_t pPb_lumi_nb_err = 1.211; // 3.5 %
 	const Double_t pPb_lumi_mub = pPb_lumi_nb * 1000; // (nb)^{-1} -> {#mub}^{-1}
 	const Double_t pPb_lumi_mub_err = pPb_lumi_nb_err * 1000; // (nb)^{-1} -> {#mub}^{-1}
 	
@@ -269,7 +269,7 @@ int comp_RFB_rap_LHCb_ALICE_ATLAS()
   globtex->SetTextAlign(32);
 	globtex->SetTextSize(0.055);
 	globtex->SetTextFont(42);
-	globtex->DrawLatex(0.92, 0.85, "Prompt J/#psi");
+	globtex->DrawLatex(0.92, 0.77, "Prompt J/#psi");
 	
   CMS_lumi( c_pr, isPA, iPos );
 	c_pr->Update();
@@ -369,7 +369,7 @@ int comp_RFB_rap_LHCb_ALICE_ATLAS()
   globtex->SetTextAlign(32);
 	globtex->SetTextSize(0.055);
 	globtex->SetTextFont(42);
-	globtex->DrawLatex(0.92, 0.85, "Nonprompt J/#psi");
+	globtex->DrawLatex(0.92, 0.77, "Nonprompt J/#psi");
 	
   CMS_lumi( c_np, isPA, iPos );
 	c_np->Update();
@@ -416,13 +416,13 @@ void formPtArr(Double_t binmin, Double_t binmax, string* arr) {
 	Double_t fracMin = modf(binmin, &intMin);
 	Double_t fracMax = modf(binmax, &intMax);
 	if ( fracMin == 0 && fracMax == 0 ) {
-		*arr = Form("%.0f < p_{T} < %.0f [GeV/c]", binmin, binmax);
+		*arr = Form("%.0f < p_{T} < %.0f (GeV/c)", binmin, binmax);
 	} else if ( fracMin != 0 && fracMax == 0 ) {
-		*arr = Form("%.1f < p_{T} < %.0f [GeV/c]", binmin, binmax);
+		*arr = Form("%.1f < p_{T} < %.0f (GeV/c)", binmin, binmax);
 	} else if ( fracMin == 0 && fracMax != 0 ) {
-		*arr = Form("%.0f < p_{T} < %.1f [GeV/c]", binmin, binmax);
+		*arr = Form("%.0f < p_{T} < %.1f (GeV/c)", binmin, binmax);
 	} else {
-		*arr = Form("%.1f < p_{T} < %.1f [GeV/c]", binmin, binmax);
+		*arr = Form("%.1f < p_{T} < %.1f (GeV/c)", binmin, binmax);
 	}
 }
 
@@ -459,6 +459,12 @@ void CMS_lumi( TPad* pad, int iPeriod, int iPosX )
   } else if( iPeriod==1 || iPeriod==2 || iPeriod==3){
     lumiText += lumi_pPb502TeV;
     lumiText += " (pPb 5.02 TeV)";
+  } else if( iPeriod==10){
+    lumiText += "pPb ";
+    lumiText += lumi_pPb502TeV;
+    lumiText += ", pp ";
+    lumiText += lumi_pp502TeV;
+    lumiText += " (5.02 TeV)";
   } else {
     lumiText += "LumiText Not Selected";
   }
@@ -477,6 +483,7 @@ void CMS_lumi( TPad* pad, int iPeriod, int iPosX )
   latex.SetTextAlign(31); 
   latex.SetTextSize(lumiTextSize*t);    
   latex.DrawLatex(1-r,1-t+lumiTextOffset*t,lumiText);
+  //latex.DrawLatex(1-r+0.01,1-t+lumiTextOffset*t+0.01,lumiText);//KYO
   if( outOfFrame ) {
     latex.SetTextFont(cmsTextFont);
     latex.SetTextAlign(11); 
@@ -493,36 +500,43 @@ void CMS_lumi( TPad* pad, int iPeriod, int iPosX )
   float posY_ = 1-t - relPosY*(1-t-b);
   if( !outOfFrame ) {
     if( drawLogo ) {
-	    posX_ =   l + 0.045*(1-l-r)*W/H;
-	    posY_ = 1-t - 0.045*(1-t-b);
-	    float xl_0 = posX_;
-	    float yl_0 = posY_ - 0.15;
-	    float xl_1 = posX_ + 0.15*H/W;
-	    float yl_1 = posY_;
-	    //TASImage* CMS_logo = new TASImage("CMS-BW-label.png");
-	    TPad* pad_logo = new TPad("logo","logo", xl_0, yl_0, xl_1, yl_1 );
-	    pad_logo->Draw();
-	    pad_logo->cd();
-	    //CMS_logo->Draw("X");
-	    pad_logo->Modified();
-	    pad->cd();
-	  } else {
-	    latex.SetTextFont(cmsTextFont);
-	    latex.SetTextSize(cmsTextSize*t);
-	    latex.SetTextAlign(align_);
-	    latex.DrawLatex(posX_, posY_, cmsText);
-	    if( writeExtraText ) {
-	      latex.SetTextFont(extraTextFont);
-	      latex.SetTextAlign(align_);
-	      latex.SetTextSize(extraTextSize*t);
-	      latex.DrawLatex(posX_, posY_- relExtraDY*cmsTextSize*t, extraText);
-	    }
-	  }
+      posX_ =   l + 0.045*(1-l-r)*W/H;
+      posY_ = 1-t - 0.045*(1-t-b);
+      float xl_0 = posX_;
+      float yl_0 = posY_ - 0.15;
+      float xl_1 = posX_ + 0.15*H/W;
+      float yl_1 = posY_;
+      //TASImage* CMS_logo = new TASImage("CMS-BW-label.png");
+      TPad* pad_logo = new TPad("logo","logo", xl_0, yl_0, xl_1, yl_1 );
+      pad_logo->Draw();
+      pad_logo->cd();
+      //CMS_logo->Draw("X");
+      pad_logo->Modified();
+      pad->cd();
+    } else {
+      latex.SetTextFont(cmsTextFont);
+      latex.SetTextSize(cmsTextSize*t);
+      latex.SetTextAlign(align_);
+      //cout << "posX_ = " << posX_ << ", posY_ = " << posY_ << endl;
+      //if (iPosX==33) {posX_ -= 0.03; posY_-=0.03; } // KYO
+      //if (iPosX==33) {posX_ += 0.03; posY_-=0.01; } // KYO RpPb_pt
+      if (iPosX==33) {
+        posX_ -= 0.01; posY_-=0.02; 
+        latex.SetTextSize(cmsTextSize*t*1.3);
+      } // KYO
+      latex.DrawLatex(posX_, posY_, cmsText);
+      if( writeExtraText ) {
+        latex.SetTextFont(extraTextFont);
+        latex.SetTextAlign(align_);
+        latex.SetTextSize(extraTextSize*t);
+        latex.DrawLatex(posX_, posY_- relExtraDY*cmsTextSize*t, extraText);
+      }
+    }
   } else if( writeExtraText ) {
     if( iPosX==0) {
-  	  posX_ =   l +  relPosX*(1-l-r);
-  	  posY_ =   1-t+lumiTextOffset*t;
-  	}
+      posX_ =   l +  relPosX*(1-l-r);
+      posY_ =   1-t+lumiTextOffset*t;
+    }
     latex.SetTextFont(extraTextFont);
     latex.SetTextSize(extraTextSize*t);
     latex.SetTextAlign(align_);
@@ -530,3 +544,4 @@ void CMS_lumi( TPad* pad, int iPeriod, int iPosX )
   }
   return;
 }
+

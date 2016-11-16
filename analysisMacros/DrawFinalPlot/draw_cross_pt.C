@@ -28,10 +28,12 @@ void draw_cross_pt(bool sysByHand=false, bool noPtWeight=false, bool isScale=tru
 	//// BR and lumi info.
 	const Double_t br = 0.0593 ;
 	const Double_t brErr = 0.0006;
-	const Double_t pp_lumi_pb =28.538; // 28.5/pb
-	const Double_t pp_lumi_pb_err = 1.1; // 4 %
+//	const Double_t pp_lumi_pb =28.538; // 28.5/pb
+//	const Double_t pp_lumi_pb_err = 1.1; // 4 %
+	const Double_t pp_lumi_pb =27.972; // 28.0/pb
+	const Double_t pp_lumi_pb_err = 0.643; // 2.3 %
 	const Double_t pPb_lumi_nb = 34.622; // 34.6/nb
-	const Double_t pPb_lumi_nb_err = 1.2; // 3.5 %
+	const Double_t pPb_lumi_nb_err = 1.211; // 3.5 %
 	Double_t lumi_mub;
 	Double_t lumi_mub_err;
   if (isPA==0) {
@@ -61,6 +63,7 @@ void draw_cross_pt(bool sysByHand=false, bool noPtWeight=false, bool isScale=tru
 	Double_t eytmp[nRap][nPt]; //y point error to fill remporarily
 
 	Double_t px[nRap][nPt];
+  /*
   Double_t px_pp[nRap][nPt] = { //x point (mean pT) by JB -- from FW to BW
     {2.54567, 3.50886, 4.48508, 5.69331, 6.97532, 7.97107, 9.17601, 11.5322, 17.4867},
     {0, 0, 4.54938, 5.75633, 6.9727, 7.97359, 9.17558, 11.4729, 17.4391},
@@ -81,7 +84,8 @@ void draw_cross_pt(bool sysByHand=false, bool noPtWeight=false, bool isScale=tru
     {0, 0, 4.52204, 5.72881, 6.97074, 7.95284, 9.14157, 11.4976, 17.3058},
     {2.51699, 3.4959, 4.47636, 5.68624, 6.97338, 7.97824, 9.1805, 11.4841, 16.8762}
 	};
-	/* //// for middle
+	*/
+  //// for middle
   Double_t px_pp[nRap][nPt] = {	
 		{2.5, 3.5, 4.5, 5.75, 7, 8, 9.25, 12., 22}, 
 		{0., 0., 4.5, 5.75, 7, 8, 9.25, 12., 22},
@@ -102,7 +106,7 @@ void draw_cross_pt(bool sysByHand=false, bool noPtWeight=false, bool isScale=tru
 		{0., 0., 4.5, 5.75, 7, 8, 9.25, 12., 22}, 
 		{2.5, 3.5, 4.5, 5.75, 7, 8, 9.25, 12., 22}
 	};
-*/	
+  
   Double_t ex[nPt] = {0,0,0,0,0,0,0,0,0}; // x stat error
 	Double_t exlow[nRap][nPt]; // x binWidth 
 	Double_t exhigh[nRap][nPt]; // x binWidth
@@ -272,22 +276,18 @@ void draw_cross_pt(bool sysByHand=false, bool noPtWeight=false, bool isScale=tru
 	TLegend *legBLFW; 
 	TLegend *legBLBW;
   if (isPA==0) {
-    //legBLFW = new TLegend(0.19, 0.165, 0.46, 0.365);
-    //legBLBW = new TLegend(0.19, 0.165, 0.46, 0.365);
-    legBLFW = new TLegend(0.19, 0.160, 0.46, 0.320);
-    legBLBW = new TLegend(0.19, 0.160, 0.46, 0.320);
+    //legBLFW = new TLegend(0.19, 0.160, 0.46, 0.320);
+    //legBLBW = new TLegend(0.19, 0.160, 0.46, 0.320);
+    legBLFW = new TLegend(0.19, 0.160, 0.46, 0.160+0.035*4+0.035*1.2);
+    legBLBW = new TLegend(0.19, 0.160, 0.46, 0.160+0.035*4+0.035*1.2);
   } else {
-    //legBLFW = new TLegend(0.19, 0.165, 0.46, 0.315);
-    //legBLBW = new TLegend(0.19, 0.165, 0.46, 0.415);
-    legBLFW = new TLegend(0.19, 0.160, 0.46, 0.280);
-    legBLBW = new TLegend(0.19, 0.160, 0.46, 0.360);
+    legBLFW = new TLegend(0.19, 0.160, 0.46, 0.160+0.035*3+0.035*1.2);
+    legBLBW = new TLegend(0.19, 0.160, 0.46, 0.160+0.035*5+0.035*1.2);
   }
 	SetLegendStyle(legBLFW);
 	SetLegendStyle(legBLBW);
-	//legBLFW->SetTextSize(0.037); 
-	//legBLBW->SetTextSize(0.037); 
-	legBLFW->SetTextSize(0.034); 
-	legBLBW->SetTextSize(0.034); 
+	//legBLFW->SetTextSize(0.034); 
+	//legBLBW->SetTextSize(0.034); 
 	 	
 	TLatex* globtex = new TLatex();
 	globtex->SetNDC();
@@ -343,9 +343,9 @@ void draw_cross_pt(bool sysByHand=false, bool noPtWeight=false, bool isScale=tru
   else { fw_init=fw_init_pA; bw_init=bw_init_pA; }
 
   for (Int_t iy = 0; iy < nRap; iy++) {
-	  g_cross_sys[iy]->GetXaxis()->SetTitle("p_{T} [GeV/c]");
+	  g_cross_sys[iy]->GetXaxis()->SetTitle("p_{T} (GeV/c)");
 	  g_cross_sys[iy]->GetXaxis()->CenterTitle("");
-	  g_cross_sys[iy]->GetYaxis()->SetTitle("B x d^{2}#sigma/dp_{T}dy [#mub/(GeV/c)]");
+	  g_cross_sys[iy]->GetYaxis()->SetTitle("B d^{2}#sigma/dp_{T}dy (#mub/ GeV/c)");
 	  g_cross_sys[iy]->GetYaxis()->CenterTitle("");
 	  if (isLog) {
 		  if (isPA==0) {
@@ -460,6 +460,9 @@ void draw_cross_pt(bool sysByHand=false, bool noPtWeight=false, bool isScale=tru
 	  g_cross[iy]->Draw("P");
 	}
 	//// leg
+	legBLFW->SetTextSize(0.032*1.2); 
+  legBLFW -> SetHeader("Forward rapidity");
+	legBLFW->SetTextSize(0.032); 
   for (Int_t iy = fw_init; iy < bw_init; iy++) {
 		if (isScale && scaleF[bw_init-iy-1]!=1.) legBLFW -> AddEntry(g_cross[bw_init-iy-1],Form("%s (x%.0f)",rapArr[bw_init-iy-1].Data(),scaleF[bw_init-iy-1]),"lp");
 		else legBLFW -> AddEntry(g_cross[bw_init-iy-1],Form("%s",rapArr[bw_init-iy-1].Data()),"lp");
@@ -468,10 +471,10 @@ void draw_cross_pt(bool sysByHand=false, bool noPtWeight=false, bool isScale=tru
 	}
 	if (isLog) legBLFW->Draw();
   
-  globtex->SetTextSize(0.050);
+  globtex->SetTextSize(0.048);
 	globtex->SetTextFont(42);
-	if (isPrompt) globtex->DrawLatex(0.92, 0.76, "Prompt J/#psi");
-	else globtex->DrawLatex(0.92, 0.76, "Nonprompt J/#psi");
+	if (isPrompt) globtex->DrawLatex(0.92, 0.77, "Prompt J/#psi");
+	else globtex->DrawLatex(0.92, 0.77, "Nonprompt J/#psi");
 //	globtex->SetTextSize(0.035);
 //	globtex->SetTextFont(42);
 //	if (isPA==0) globtex->DrawLatex(0.91, 0.80, "Global uncertainty : 4 \%");
@@ -513,16 +516,19 @@ void draw_cross_pt(bool sysByHand=false, bool noPtWeight=false, bool isScale=tru
 	  g_cross[iy]->Draw("P");
 	}
 	//// leg
+	legBLBW->SetTextSize(0.032*1.2); 
+  legBLBW -> SetHeader("Backward rapidity");
+	legBLBW->SetTextSize(0.032); 
   for (Int_t iy = bw_init; iy < nRap; iy++) {
 		if (isScale && scaleF[iy]!=1.) legBLBW -> AddEntry(g_cross[iy],Form("%s (x%.0f)",rapArr[iy].Data(),scaleF[iy]),"lp");
 		else legBLBW -> AddEntry(g_cross[iy],Form("%s",rapArr[iy].Data()),"lp");
 	}
 	if (isLog) legBLBW->Draw();
 	
-  globtex->SetTextSize(0.050);
+  globtex->SetTextSize(0.048);
 	globtex->SetTextFont(42);
-	if (isPrompt) globtex->DrawLatex(0.92, 0.76, "Prompt J/#psi");
-	else globtex->DrawLatex(0.92, 0.76, "Nonprompt J/#psi");
+	if (isPrompt) globtex->DrawLatex(0.92, 0.77, "Prompt J/#psi");
+	else globtex->DrawLatex(0.92, 0.77, "Nonprompt J/#psi");
 //	globtex->SetTextSize(0.035);
 //	globtex->SetTextFont(42);
 //	if (isPA==0) globtex->DrawLatex(0.91, 0.80, "Global uncertainty : 4 \%");
@@ -617,13 +623,13 @@ void formPtArr(Double_t binmin, Double_t binmax, TString* arr) {
 	Double_t fracMin = modf(binmin, &intMin);
 	Double_t fracMax = modf(binmax, &intMax);
 	if ( fracMin == 0 && fracMax == 0 ) {
-		*arr = Form("%.0f < p_{T} < %.0f [GeV/c]", binmin, binmax);
+		*arr = Form("%.0f < p_{T} < %.0f (GeV/c)", binmin, binmax);
 	} else if ( fracMin != 0 && fracMax == 0 ) {
-		*arr = Form("%.1f < p_{T} < %.0f [GeV/c]", binmin, binmax);
+		*arr = Form("%.1f < p_{T} < %.0f (GeV/c)", binmin, binmax);
 	} else if ( fracMin == 0 && fracMax != 0 ) {
-		*arr = Form("%.0f < p_{T} < %.1f [GeV/c]", binmin, binmax);
+		*arr = Form("%.0f < p_{T} < %.1f (GeV/c)", binmin, binmax);
 	} else {
-		*arr = Form("%.1f < p_{T} < %.1f [GeV/c]", binmin, binmax);
+		*arr = Form("%.1f < p_{T} < %.1f (GeV/c)", binmin, binmax);
 	}
 }
 

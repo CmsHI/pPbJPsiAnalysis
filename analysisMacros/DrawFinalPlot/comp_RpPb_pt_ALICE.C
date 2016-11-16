@@ -15,10 +15,10 @@ void comp_RpPb_pt_ALICE(bool isPrompt = true)
   //// BR and lumi info.
   const Double_t br = 0.0593 ;
   const Double_t brErr = 0.0006;
-	const Double_t pp_lumi_pb =28.538; // 28.5/pb
-	const Double_t pp_lumi_pb_err = 1.1; // 4 %
+	const Double_t pp_lumi_pb =27.972; // 28.0/pb
+	const Double_t pp_lumi_pb_err = 0.643; // 2.3 %
 	const Double_t pPb_lumi_nb = 34.622; // 34.6/nb
-	const Double_t pPb_lumi_nb_err = 1.2; // 3.5 %
+	const Double_t pPb_lumi_nb_err = 1.211; // 3.5 %
   const Double_t pp_lumi_mub = pp_lumi_pb *1000*1000;
   const Double_t pPb_lumi_mub_err = pp_lumi_pb_err *1000*1000;
  
@@ -61,7 +61,7 @@ void comp_RpPb_pt_ALICE(bool isPrompt = true)
   TGraphAsymmErrors* g_RpPb_ALICE_fw = new TGraphAsymmErrors(nPtALICE, px_ALICE, rppb_ALICE_fw, ex_ALICE, ex_ALICE, ey_ALICE_fw, ey_ALICE_fw);	
   TGraphAsymmErrors* g_RpPb_ALICE_bw = new TGraphAsymmErrors(nPtALICE, px_ALICE, rppb_ALICE_bw, ex_ALICE, ex_ALICE, ey_ALICE_bw, ey_ALICE_bw);	
   
-  g_RpPb_ALICE_fw_sys01->GetXaxis()->SetTitle("p_{T} [GeV/c]");
+  g_RpPb_ALICE_fw_sys01->GetXaxis()->SetTitle("p_{T} (GeV/c)");
   g_RpPb_ALICE_fw_sys01->GetXaxis()->CenterTitle();
   g_RpPb_ALICE_fw_sys01->GetYaxis()->SetTitle("R_{pPb}");
   g_RpPb_ALICE_fw_sys01->GetYaxis()->CenterTitle();
@@ -79,7 +79,7 @@ void comp_RpPb_pt_ALICE(bool isPrompt = true)
   SetGraphStyleFinal(g_RpPb_ALICE_fw, 9, 10);
   g_RpPb_ALICE_fw->SetMarkerSize(1.4);
  
-  g_RpPb_ALICE_bw_sys01->GetXaxis()->SetTitle("p_{T} [GeV/c]");
+  g_RpPb_ALICE_bw_sys01->GetXaxis()->SetTitle("p_{T} (GeV/c)");
   g_RpPb_ALICE_bw_sys01->GetXaxis()->CenterTitle();
   g_RpPb_ALICE_bw_sys01->GetYaxis()->SetTitle("R_{pPb}");
   g_RpPb_ALICE_bw_sys01->GetYaxis()->CenterTitle();
@@ -212,13 +212,13 @@ void formPtArr(Double_t binmin, Double_t binmax, TString* arr) {
 	Double_t fracMin = modf(binmin, &intMin);
 	Double_t fracMax = modf(binmax, &intMax);
 	if ( fracMin == 0 && fracMax == 0 ) {
-		*arr = Form("%.0f < p_{T} < %.0f [GeV/c]", binmin, binmax);
+		*arr = Form("%.0f < p_{T} < %.0f (GeV/c)", binmin, binmax);
 	} else if ( fracMin != 0 && fracMax == 0 ) {
-		*arr = Form("%.1f < p_{T} < %.0f [GeV/c]", binmin, binmax);
+		*arr = Form("%.1f < p_{T} < %.0f (GeV/c)", binmin, binmax);
 	} else if ( fracMin == 0 && fracMax != 0 ) {
-		*arr = Form("%.0f < p_{T} < %.1f [GeV/c]", binmin, binmax);
+		*arr = Form("%.0f < p_{T} < %.1f (GeV/c)", binmin, binmax);
 	} else {
-		*arr = Form("%.1f < p_{T} < %.1f [GeV/c]", binmin, binmax);
+		*arr = Form("%.1f < p_{T} < %.1f (GeV/c)", binmin, binmax);
 	}
 }
 

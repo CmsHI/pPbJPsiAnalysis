@@ -18,10 +18,10 @@ void comp_cross_pt_LHCb(bool isShift=false, bool isPrompt = true, bool isLog=tru
   //// BR and lumi info.
 	const Double_t br = 0.0593 ;
 	const Double_t brErr = 0.0006;
-	const Double_t pp_lumi_pb =26.3; // 26.3/pb
-	const Double_t pp_lumi_pb_err = 2.63; // tmp
+	const Double_t pp_lumi_pb =27.972; // 28.0/pb
+	const Double_t pp_lumi_pb_err = 0.643; // 2.3 %
 	const Double_t pPb_lumi_nb = 34.622; // 34.6/nb
-	const Double_t pPb_lumi_nb_err = 1.2;
+	const Double_t pPb_lumi_nb_err = 1.211; // 3.5 %
 	Double_t lumi_mub;
 	Double_t lumi_mub_err;
   if (isPA==0) {
@@ -165,10 +165,10 @@ void comp_cross_pt_LHCb(bool isShift=false, bool isPrompt = true, bool isLog=tru
 	else gPad->SetLogy(0);
   
   //// CMS
-	g_cross_sys_0->GetXaxis()->SetTitle("p_{T} [GeV/c]");
+	g_cross_sys_0->GetXaxis()->SetTitle("p_{T} (GeV/c)");
 	g_cross_sys_0->GetXaxis()->CenterTitle();
   g_cross_sys_0->GetXaxis()->SetLimits(0.0,30.0);
-	g_cross_sys_0->GetYaxis()->SetTitle("B x d^{2}#sigma/dp_{T}dy [#mub/(GeV/c)]");
+	g_cross_sys_0->GetYaxis()->SetTitle("B d^{2}#sigma/dp_{T}dy (#mub/ GeV/c)");
 	if (isLog){
 		if (isPrompt) {
       g_cross_sys_0->SetMinimum(0.001);
@@ -274,13 +274,13 @@ void formPtArr(Double_t binmin, Double_t binmax, TString* arr) {
 	Double_t fracMin = modf(binmin, &intMin);
 	Double_t fracMax = modf(binmax, &intMax);
 	if ( fracMin == 0 && fracMax == 0 ) {
-		*arr = Form("%.0f < p_{T} < %.0f [GeV/c]", binmin, binmax);
+		*arr = Form("%.0f < p_{T} < %.0f (GeV/c)", binmin, binmax);
 	} else if ( fracMin != 0 && fracMax == 0 ) {
-		*arr = Form("%.1f < p_{T} < %.0f [GeV/c]", binmin, binmax);
+		*arr = Form("%.1f < p_{T} < %.0f (GeV/c)", binmin, binmax);
 	} else if ( fracMin == 0 && fracMax != 0 ) {
-		*arr = Form("%.0f < p_{T} < %.1f [GeV/c]", binmin, binmax);
+		*arr = Form("%.0f < p_{T} < %.1f (GeV/c)", binmin, binmax);
 	} else {
-		*arr = Form("%.1f < p_{T} < %.1f [GeV/c]", binmin, binmax);
+		*arr = Form("%.1f < p_{T} < %.1f (GeV/c)", binmin, binmax);
 	}
 }
 

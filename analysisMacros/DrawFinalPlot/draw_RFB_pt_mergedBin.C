@@ -20,7 +20,7 @@ void draw_RFB_pt_mergedBin(bool sysByHand=false, bool noPtWeight=false, bool isP
   const Double_t br = 0.0593 ;
   const Double_t brErr = 0.0006;
   const Double_t pPb_lumi_nb = 34.622; // 34.6/nb
-  const Double_t pPb_lumi_nb_err = 1.2; // 3.5 %
+  const Double_t pPb_lumi_nb_err = 1.211; // 3.5 %
   const Double_t pPb_lumi_mub = pPb_lumi_nb * 1000; // (nb)^{-1} -> {#mub}^{-1}
   const Double_t pPb_lumi_mub_err = pPb_lumi_nb_err * 1000; // (nb)^{-1} -> {#mub}^{-1}
   
@@ -291,7 +291,7 @@ void draw_RFB_pt_mergedBin(bool sysByHand=false, bool noPtWeight=false, bool isP
       //gRFB_sys[iy]->SetPointError(ipt, exsys[ipt], exsys[ipt], eysys[iy][ipt], eysys[iy][ipt]);
       gRFB_sys[iy]->SetPointError(ipt, exlow[iy][ipt], exhigh[iy][ipt], eysys[iy][ipt], eysys[iy][ipt]);
     }
-    gRFB_sys[iy]->GetXaxis()->SetTitle("p_{T} [GeV/c]");
+    gRFB_sys[iy]->GetXaxis()->SetTitle("p_{T} (GeV/c)");
     gRFB_sys[iy]->GetXaxis()->CenterTitle();
     gRFB_sys[iy]->GetYaxis()->SetTitle("R_{FB}");
     gRFB_sys[iy]->GetYaxis()->CenterTitle();
@@ -508,13 +508,13 @@ void formPtArr(Double_t binmin, Double_t binmax, TString* arr) {
   Double_t fracMin = modf(binmin, &intMin);
   Double_t fracMax = modf(binmax, &intMax);
   if ( fracMin == 0 && fracMax == 0 ) {
-    *arr = Form("%.0f < p_{T} < %.0f [GeV/c]", binmin, binmax);
+    *arr = Form("%.0f < p_{T} < %.0f (GeV/c)", binmin, binmax);
   } else if ( fracMin != 0 && fracMax == 0 ) {
-    *arr = Form("%.1f < p_{T} < %.0f [GeV/c]", binmin, binmax);
+    *arr = Form("%.1f < p_{T} < %.0f (GeV/c)", binmin, binmax);
   } else if ( fracMin == 0 && fracMax != 0 ) {
-    *arr = Form("%.0f < p_{T} < %.1f [GeV/c]", binmin, binmax);
+    *arr = Form("%.0f < p_{T} < %.1f (GeV/c)", binmin, binmax);
   } else {
-    *arr = Form("%.1f < p_{T} < %.1f [GeV/c]", binmin, binmax);
+    *arr = Form("%.1f < p_{T} < %.1f (GeV/c)", binmin, binmax);
   }
 }
 

@@ -27,10 +27,10 @@ void draw_cross_rap(bool sysByHand=false, bool noPtWeight=false, bool isScale=fa
 	//// BR and lumi info.
 	const Double_t br = 0.0593 ;
 	const Double_t brErr = 0.0006;
-	const Double_t pp_lumi_pb =28.538; // 28.5/pb
-	const Double_t pp_lumi_pb_err = 1.1; // 4 %
+	const Double_t pp_lumi_pb =27.972; // 28.0/pb
+	const Double_t pp_lumi_pb_err = 0.643; // 2.3 %
 	const Double_t pPb_lumi_nb = 34.622; // 34.6/nb
-	const Double_t pPb_lumi_nb_err = 1.2; // 3.5 %
+	const Double_t pPb_lumi_nb_err = 1.211; // 3.5 %
 	Double_t lumi_mub;
 	Double_t lumi_mub_err;
   if (isPA==0) {
@@ -369,7 +369,7 @@ void draw_cross_rap(bool sysByHand=false, bool noPtWeight=false, bool isScale=fa
 	
 	g_cross_sys_lowpt->GetXaxis()->SetTitle("y_{CM}");	
 	g_cross_sys_lowpt->GetXaxis()->CenterTitle();	
-	g_cross_sys_lowpt->GetYaxis()->SetTitle("B x d#sigma/dy [#mub]");	
+	g_cross_sys_lowpt->GetYaxis()->SetTitle("B d#sigma/dy (#mub)");	
 	g_cross_sys_lowpt->GetYaxis()->CenterTitle();	
   //if (isPA==0) { g_cross_sys_lowpt->GetXaxis()->SetLimits(-2.4,2.4);}
   //else { g_cross_sys_lowpt->GetXaxis()->SetLimits(-2.87,1.93);}	
@@ -402,10 +402,10 @@ void draw_cross_rap(bool sysByHand=false, bool noPtWeight=false, bool isScale=fa
 	if (isScale && scaleF_high != 1.0) legUL -> AddEntry(g_cross_highpt,Form("10 < p_{T} < 30 GeV/c [x%.1f]",scaleF_high),"lp");
 	else legUL -> AddEntry(g_cross_highpt,"10 < p_{T} < 30 GeV/c","lp");
 	legUL->Draw();
-	globtex->SetTextSize(0.050);
+	globtex->SetTextSize(0.048);
 	globtex->SetTextFont(42);
-	if (isPrompt) globtex->DrawLatex(0.92, 0.76, "Prompt J/#psi");
-  else globtex->DrawLatex(0.92, 0.76, "Nonprompt J/#psi");
+	if (isPrompt) globtex->DrawLatex(0.92, 0.77, "Prompt J/#psi");
+  else globtex->DrawLatex(0.92, 0.77, "Nonprompt J/#psi");
 	//globtex->SetTextSize(0.035);
 	//globtex->SetTextFont(42);
   //if (isPA==0) globtex->DrawLatex(0.93, 0.79, "Global uncertainty : 4 \%");

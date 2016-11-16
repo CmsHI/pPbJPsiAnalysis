@@ -20,10 +20,10 @@ void draw_RpPb_pt(bool sysByHand=false, bool noPtWeight=false, bool isPrompt=tru
   //// BR and lumi info.
   const Double_t br = 0.0593 ;
   const Double_t brErr = 0.0006;
-	const Double_t pp_lumi_pb =28.538; // 28.5/pb
-	const Double_t pp_lumi_pb_err = 1.1; // 4 %
+	const Double_t pp_lumi_pb =27.972; // 28.0/pb
+	const Double_t pp_lumi_pb_err = 0.643; // 2.3 %
 	const Double_t pPb_lumi_nb = 34.622; // 34.6/nb
-	const Double_t pPb_lumi_nb_err = 1.2; // 3.5 %
+	const Double_t pPb_lumi_nb_err = 1.211; // 3.5 %
   const Double_t pp_lumi_mub = pp_lumi_pb *1000*1000;
   const Double_t pPb_lumi_mub_err = pp_lumi_pb_err *1000*1000;
  
@@ -54,7 +54,7 @@ void draw_RpPb_pt(bool sysByHand=false, bool noPtWeight=false, bool isPrompt=tru
   Double_t pytmp_pp[nRap][nPt]; //y point to fill remporarily
   Double_t eytmp_pp[nRap][nPt]; //y point error to fill remporarily
   Double_t eysys_pp[nRap][nPt]; //absolute y sys error
-  
+ /* 
   Double_t px_pA[nRap][nPt] = { //x point (mean pT)
     {2.525, 3.51255, 4.4772, 5.70327, 6.96635, 7.96061, 9.17243, 11.5938, 18.0681},
     {0, 0, 4.52793, 5.74033, 6.97622, 7.98335, 9.19458, 11.4927, 17.6693},
@@ -65,6 +65,17 @@ void draw_RpPb_pt(bool sysByHand=false, bool noPtWeight=false, bool isPrompt=tru
     {0, 0, 4.52204, 5.72881, 6.97074, 7.95284, 9.14157, 11.4976, 17.3058},
     {2.51699, 3.4959, 4.47636, 5.68624, 6.97338, 7.97824, 9.1805, 11.4841, 16.8762}
   };
+  */
+	Double_t px_pA[nRap][nPt] = {	
+		{2.5, 3.5, 4.5, 5.75, 7, 8, 9.25, 12., 22}, 
+		{0., 0., 4.5, 5.75, 7, 8, 9.25, 12., 22},
+		{0., 0., 0., 0., 7, 8, 9.25, 12., 22},
+		{0., 0., 0., 0., 7, 8, 9.25, 12., 22}, 
+		{0., 0., 0., 0., 7, 8, 9.25, 12., 22}, 
+		{0., 0., 0., 5.75, 7, 8, 9.25, 12., 22},
+		{0., 0., 4.5, 5.75, 7, 8, 9.25, 12., 22}, 
+		{2.5, 3.5, 4.5, 5.75, 7, 8, 9.25, 12., 22}
+	};
 	Double_t ex[nPt] = {0,0,0,0,0,0,0,0,0}; // x stat error
 	Double_t exlow[nRap][nPt];
 	Double_t exhigh[nRap][nPt];
@@ -201,7 +212,7 @@ void draw_RpPb_pt(bool sysByHand=false, bool noPtWeight=false, bool isPrompt=tru
     g_RpPb[iy] = new TGraphAsymmErrors(nPt, px_pA[iy], pytmp[iy], ex, ex, eytmp[iy], eytmp[iy]);
 		g_RpPb_sys[iy] -> SetName(Form("g_RpPb_sys_%d",iy));
 		g_RpPb[iy] -> SetName(Form("g_RpPb_%d",iy));
-    g_RpPb_sys[iy]->GetXaxis()->SetTitle("p_{T} [GeV/c]");
+    g_RpPb_sys[iy]->GetXaxis()->SetTitle("p_{T} (GeV/c)");
     g_RpPb_sys[iy]->GetXaxis()->SetTitleOffset(0.9);
     g_RpPb_sys[iy]->GetXaxis()->SetTitleSize(0.075);
     g_RpPb_sys[iy]->GetXaxis()->SetLabelSize(0.06);
@@ -219,7 +230,7 @@ void draw_RpPb_pt(bool sysByHand=false, bool noPtWeight=false, bool isPrompt=tru
     }
     g_RpPb_sys[iy]->GetXaxis()->SetLimits(0.,32.0);
     g_RpPb_sys[iy]->SetMinimum(0.0);
-    g_RpPb_sys[iy]->SetMaximum(1.8);
+    g_RpPb_sys[iy]->SetMaximum(1.6);
     g_RpPb_sys[iy]->SetFillColorAlpha(kRed-10,0.5);
     g_RpPb_sys[iy]->SetLineColor(kPink-6);
     SetGraphStyleFinal(g_RpPb[iy], 1,0);
@@ -368,11 +379,11 @@ void draw_RpPb_pt(bool sysByHand=false, bool noPtWeight=false, bool isPrompt=tru
   pad_all[4]->cd();
   emptybox->Draw("l");
 
-  globtex->SetTextSize(0.1);
+  globtex->SetTextSize(0.09);
 	globtex->SetTextFont(42);
 	globtex->SetTextAlign(32); //1:left, 2:vertical center
-	if (isPrompt) globtex->DrawLatex(0.90, 0.54, "Prompt J/#psi");
-	else globtex->DrawLatex(0.90, 0.51, "Nonprompt J/#psi");
+	if (isPrompt) globtex->DrawLatex(0.90, 0.55, "Prompt J/#psi");
+	else globtex->DrawLatex(0.90, 0.55, "Nonprompt J/#psi");
 
 
   //////////////////// y axis
@@ -385,7 +396,7 @@ void draw_RpPb_pt(bool sysByHand=false, bool noPtWeight=false, bool isPrompt=tru
   cout << pad_all[1]->GetUxmax() << endl;
   pad_all[0]->cd();
   //cout << g_RpPb_sys[2]->GetYaxis()->GetXmin() << endl;
-  TGaxis *yaxis01 = new TGaxis(1.0,0.0,1.0,1.0-topmargin,0.0,1.8,510,"");
+  TGaxis *yaxis01 = new TGaxis(1.0,0.0,1.0,1.0-topmargin,0.0,1.6,510,"");
   yaxis01->SetTitleFont(42);
   yaxis01->SetLabelFont(42);
   yaxis01->SetTitle("R_{pPb}");
@@ -396,7 +407,7 @@ void draw_RpPb_pt(bool sysByHand=false, bool noPtWeight=false, bool isPrompt=tru
   yaxis01->SetLabelSize(0.055*(0.29/0.07));
   yaxis01->Draw();  
   
-  TGaxis *yaxis02 = new TGaxis(1.0,0.0+bottommargin,1.0,1.0,0.0,1.8,510,"");
+  TGaxis *yaxis02 = new TGaxis(1.0,0.0+bottommargin,1.0,1.0,0.0,1.6,510,"");
   yaxis02->SetTitleFont(42);
   yaxis02->SetLabelFont(42);
   yaxis02->SetTitle("R_{pPb}");
@@ -550,13 +561,13 @@ void formPtArr(Double_t binmin, Double_t binmax, TString* arr) {
   Double_t fracMin = modf(binmin, &intMin);
   Double_t fracMax = modf(binmax, &intMax);
   if ( fracMin == 0 && fracMax == 0 ) {
-    *arr = Form("%.0f < p_{T} < %.0f [GeV/c]", binmin, binmax);
+    *arr = Form("%.0f < p_{T} < %.0f (GeV/c)", binmin, binmax);
   } else if ( fracMin != 0 && fracMax == 0 ) {
-    *arr = Form("%.1f < p_{T} < %.0f [GeV/c]", binmin, binmax);
+    *arr = Form("%.1f < p_{T} < %.0f (GeV/c)", binmin, binmax);
   } else if ( fracMin == 0 && fracMax != 0 ) {
-    *arr = Form("%.0f < p_{T} < %.1f [GeV/c]", binmin, binmax);
+    *arr = Form("%.0f < p_{T} < %.1f (GeV/c)", binmin, binmax);
   } else {
-    *arr = Form("%.1f < p_{T} < %.1f [GeV/c]", binmin, binmax);
+    *arr = Form("%.1f < p_{T} < %.1f (GeV/c)", binmin, binmax);
   }
 }
 

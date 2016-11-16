@@ -23,7 +23,7 @@ void draw_RFB_ethf(bool sysByHand=true, bool noPtWeight = false, bool isPrompt=f
 	const Double_t br = 0.0593 ;
 	const Double_t brErr = 0.0006;
 	Double_t pPb_lumi_nb = 34.622;
-	Double_t pPb_lumi_nb_err = 1.2;
+	const Double_t pPb_lumi_nb_err = 1.211; // 3.5 %
 	const Double_t pPb_lumi_mub = pPb_lumi_nb * 1000; // (nb)^{-1} -> {#mub}^{-1}
 	const Double_t pPb_lumi_mub_err = pPb_lumi_nb_err * 1000; // (nb)^{-1} -> {#mub}^{-1}
 
@@ -251,7 +251,7 @@ void draw_RFB_ethf(bool sysByHand=true, bool noPtWeight = false, bool isPrompt=f
   TH1D* hdummy = new TH1D("hdummy","",nEt,0,nEt);
 	for (int iet=0; iet<nEt;iet++){
     hdummy->GetXaxis()->SetBinLabel(iet+1,xlabel[iet]);
-  	hdummy->GetXaxis()->SetTitle("E_{T}^{HF |#eta|>4} [GeV]");
+  	hdummy->GetXaxis()->SetTitle("E_{T}^{HF |#eta|>4} (GeV)");
   	hdummy->GetXaxis()->CenterTitle();
   	hdummy->GetYaxis()->SetTitle("R_{FB}");
   	hdummy->GetYaxis()->CenterTitle();
@@ -264,7 +264,7 @@ void draw_RFB_ethf(bool sysByHand=true, bool noPtWeight = false, bool isPrompt=f
   	//hdummy->SetMinimum(0.5);
   	//hdummy->SetMaximum(1.15);
   	hdummy->SetMinimum(0.0);
-  	hdummy->SetMaximum(1.8);
+  	hdummy->SetMaximum(1.6);
   }
   hdummy->Draw();
 
@@ -315,7 +315,7 @@ void draw_RFB_ethf(bool sysByHand=true, bool noPtWeight = false, bool isPrompt=f
   	//gRFB_sys[inh]->SetMinimum(0.5);
   	//gRFB_sys[inh]->SetMaximum(1.15);
   	gRFB_sys[inh]->SetMinimum(0.0);
-  	gRFB_sys[inh]->SetMaximum(1.8);
+  	gRFB_sys[inh]->SetMaximum(1.6);
   }
 */
 	gRFB_sys[0]->SetFillColorAlpha(kMagenta-10,0.5);
@@ -385,10 +385,10 @@ void draw_RFB_ethf(bool sysByHand=true, bool noPtWeight = false, bool isPrompt=f
 	CMS_lumi( c1, isPA, iPos );
 	c1->Update();
 	globtex->SetTextAlign(32); //1:left, 2:vertical center
-	globtex->SetTextSize(0.055);
+	globtex->SetTextSize(0.048);
 	globtex->SetTextFont(42);
-	if (isPrompt) globtex->DrawLatex(0.92, 0.76, "Prompt J/#psi");
-	else globtex->DrawLatex(0.92, 0.76, "Nonprompt J/#psi");
+	if (isPrompt) globtex->DrawLatex(0.92, 0.77, "Prompt J/#psi");
+	else globtex->DrawLatex(0.92, 0.77, "Nonprompt J/#psi");
 	legBL->Draw();
 	legUL->Draw();
 

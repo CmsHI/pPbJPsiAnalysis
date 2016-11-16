@@ -28,10 +28,10 @@ void draw_cross_pt_middle(bool sysByHand=false, bool noPtWeight=false, bool isSc
 	//// BR and lumi info.
 	const Double_t br = 0.0593 ;
 	const Double_t brErr = 0.0006;
-	const Double_t pp_lumi_pb =28.538; // 28.5/pb
-	const Double_t pp_lumi_pb_err = 1.1; // 4 %
+	const Double_t pp_lumi_pb =27.972; // 28.0/pb
+	const Double_t pp_lumi_pb_err = 0.643; // 2.3 %
 	const Double_t pPb_lumi_nb = 34.622; // 34.6/nb
-	const Double_t pPb_lumi_nb_err = 1.2; // 3.5 %
+	const Double_t pPb_lumi_nb_err = 1.211; // 3.5 %
 	Double_t lumi_mub;
 	Double_t lumi_mub_err;
   if (isPA==0) {
@@ -328,9 +328,9 @@ void draw_cross_pt_middle(bool sysByHand=false, bool noPtWeight=false, bool isSc
   else { fw_init=fw_init_pA; bw_init=bw_init_pA; }
 
   for (Int_t iy = 0; iy < nRap; iy++) {
-	  g_cross_sys[iy]->GetXaxis()->SetTitle("p_{T} [GeV/c]");
+	  g_cross_sys[iy]->GetXaxis()->SetTitle("p_{T} (GeV/c)");
 	  g_cross_sys[iy]->GetXaxis()->CenterTitle("");
-	  g_cross_sys[iy]->GetYaxis()->SetTitle("B x d^{2}#sigma/dp_{T}dy [#mub/(GeV/c)]");
+	  g_cross_sys[iy]->GetYaxis()->SetTitle("B d^{2}#sigma/dp_{T}dy (#mub/ GeV/c)");
 	  g_cross_sys[iy]->GetYaxis()->CenterTitle("");
 	  if (isLog) {
 		  if (isPA==0) {
@@ -581,13 +581,13 @@ void formPtArr(Double_t binmin, Double_t binmax, TString* arr) {
 	Double_t fracMin = modf(binmin, &intMin);
 	Double_t fracMax = modf(binmax, &intMax);
 	if ( fracMin == 0 && fracMax == 0 ) {
-		*arr = Form("%.0f < p_{T} < %.0f [GeV/c]", binmin, binmax);
+		*arr = Form("%.0f < p_{T} < %.0f (GeV/c)", binmin, binmax);
 	} else if ( fracMin != 0 && fracMax == 0 ) {
-		*arr = Form("%.1f < p_{T} < %.0f [GeV/c]", binmin, binmax);
+		*arr = Form("%.1f < p_{T} < %.0f (GeV/c)", binmin, binmax);
 	} else if ( fracMin == 0 && fracMax != 0 ) {
-		*arr = Form("%.0f < p_{T} < %.1f [GeV/c]", binmin, binmax);
+		*arr = Form("%.0f < p_{T} < %.1f (GeV/c)", binmin, binmax);
 	} else {
-		*arr = Form("%.1f < p_{T} < %.1f [GeV/c]", binmin, binmax);
+		*arr = Form("%.1f < p_{T} < %.1f (GeV/c)", binmin, binmax);
 	}
 }
 

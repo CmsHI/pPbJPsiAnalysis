@@ -20,7 +20,7 @@ void draw_RFB_pt(bool sysByHand=false, bool noPtWeight=false, bool isPrompt=fals
 	const Double_t br = 0.0593 ;
 	const Double_t brErr = 0.0006;
 	const Double_t pPb_lumi_nb = 34.622; // 34.6/nb
-	const Double_t pPb_lumi_nb_err = 1.2; // 3.5 %
+	const Double_t pPb_lumi_nb_err = 1.211; // 3.5 %
 	const Double_t pPb_lumi_mub = pPb_lumi_nb * 1000; // (nb)^{-1} -> {#mub}^{-1}
 	const Double_t pPb_lumi_mub_err = pPb_lumi_nb_err * 1000; // (nb)^{-1} -> {#mub}^{-1}
 	
@@ -46,12 +46,18 @@ void draw_RFB_pt(bool sysByHand=false, bool noPtWeight=false, bool isPrompt=fals
     {-531, 8.25131, 13.61970} //0.0-0.9
 	};
 */
+/*
   Double_t px[nRapRFB][nPtRFB] = { // x point (mean pT)
     {5.75945, 6.97631, 7.97141, 9.17437, 11.5568, 17.6222},
     {-531, 6.99143, 7.99206, 9.19889, 11.5059, 17.568},
     {-531, 7.04045, 8.00936, 9.21792, 11.5815, 17.7492}
 	};
-
+*/
+  Double_t px[nRapRFB][nPtRFB] = { // x point (middle)
+    {5.75, 7., 8., 9.25, 12, 22},
+    {-531, 7., 8., 9.25, 12, 22},
+    {-531, 7.,  8., 9.25, 12, 22}
+	};
   //Double_t ex[nPtRFB] = {0.,0.,0.}; // x stat error (0)
   Double_t ex[nPtRFB] = {0.,0.,0.,0.,0.}; // x stat error (0)
   Double_t exlow[nRapRFB][nPtRFB];
@@ -261,13 +267,13 @@ void draw_RFB_pt(bool sysByHand=false, bool noPtWeight=false, bool isPrompt=fals
 			//gRFB_sys[iy]->SetPointError(ipt, exsys[ipt], exsys[ipt], eysys[iy][ipt], eysys[iy][ipt]);
 			gRFB_sys[iy]->SetPointError(ipt, exlow[iy][ipt], exhigh[iy][ipt], eysys[iy][ipt], eysys[iy][ipt]);
 		}
-	  gRFB_sys[iy]->GetXaxis()->SetTitle("p_{T} [GeV/c]");
+	  gRFB_sys[iy]->GetXaxis()->SetTitle("p_{T} (GeV/c)");
 	  gRFB_sys[iy]->GetXaxis()->CenterTitle();
 	  gRFB_sys[iy]->GetYaxis()->SetTitle("R_{FB}");
 	  gRFB_sys[iy]->GetYaxis()->CenterTitle();
 	  gRFB_sys[iy]->GetXaxis()->SetLimits(0.,32.0);
 	  gRFB_sys[iy]->SetMinimum(0.0);
-	  gRFB_sys[iy]->SetMaximum(1.8);
+	  gRFB_sys[iy]->SetMaximum(1.6);
 	  gRFB_sys[iy]->SetFillColorAlpha(kRed-10,0.5);
 	  gRFB_sys[iy]->SetLineColor(kPink-6);
 	}
@@ -344,10 +350,10 @@ void draw_RFB_pt(bool sysByHand=false, bool noPtWeight=false, bool isPrompt=fals
   //globtex->DrawLatex(0.21, 0.84, rapAbsArr[0].Data());
 	
 	globtex->SetTextAlign(32); 
-	globtex->SetTextSize(0.050);
+	globtex->SetTextSize(0.048);
 	globtex->SetTextFont(42);
-	if (isPrompt) globtex->DrawLatex(0.92, 0.76, "Prompt J/#psi");
-	else globtex->DrawLatex(0.92, 0.76, "Nonprompt J/#psi");
+	if (isPrompt) globtex->DrawLatex(0.92, 0.77, "Prompt J/#psi");
+	else globtex->DrawLatex(0.92, 0.77, "Nonprompt J/#psi");
 
 	CMS_lumi( c1, isPA, iPos );
 	c1->Update();
@@ -375,10 +381,10 @@ void draw_RFB_pt(bool sysByHand=false, bool noPtWeight=false, bool isPrompt=fals
   globtex->DrawLatex(0.57, 0.30, rapAbsArr[1].Data());
   
   globtex->SetTextAlign(32); //3:right 2:vertical center
-  globtex->SetTextSize(0.050);
+  globtex->SetTextSize(0.048);
 	globtex->SetTextFont(42);
-	if (isPrompt) globtex->DrawLatex(0.92, 0.76, "Prompt J/#psi");
-	else globtex->DrawLatex(0.92, 0.76, "Nonprompt J/#psi");
+	if (isPrompt) globtex->DrawLatex(0.92, 0.77, "Prompt J/#psi");
+	else globtex->DrawLatex(0.92, 0.77, "Nonprompt J/#psi");
 	
   CMS_lumi( c2, isPA, iPos );
 	c2->Update();
@@ -406,10 +412,10 @@ void draw_RFB_pt(bool sysByHand=false, bool noPtWeight=false, bool isPrompt=fals
   globtex->DrawLatex(0.57, 0.30, rapAbsArr[2].Data());
 
   globtex->SetTextAlign(32); //3:right 2:vertical center
-  globtex->SetTextSize(0.050);
+  globtex->SetTextSize(0.048);
 	globtex->SetTextFont(42);
-	if (isPrompt) globtex->DrawLatex(0.92, 0.76, "Prompt J/#psi");
-	else globtex->DrawLatex(0.92, 0.76, "Nonprompt J/#psi");
+	if (isPrompt) globtex->DrawLatex(0.92, 0.77, "Prompt J/#psi");
+	else globtex->DrawLatex(0.92, 0.77, "Nonprompt J/#psi");
 
   CMS_lumi( c3, isPA, iPos );
 	c3->Update();
@@ -485,13 +491,13 @@ void formPtArr(Double_t binmin, Double_t binmax, TString* arr) {
 	Double_t fracMin = modf(binmin, &intMin);
 	Double_t fracMax = modf(binmax, &intMax);
 	if ( fracMin == 0 && fracMax == 0 ) {
-		*arr = Form("%.0f < p_{T} < %.0f [GeV/c]", binmin, binmax);
+		*arr = Form("%.0f < p_{T} < %.0f (GeV/c)", binmin, binmax);
 	} else if ( fracMin != 0 && fracMax == 0 ) {
-		*arr = Form("%.1f < p_{T} < %.0f [GeV/c]", binmin, binmax);
+		*arr = Form("%.1f < p_{T} < %.0f (GeV/c)", binmin, binmax);
 	} else if ( fracMin == 0 && fracMax != 0 ) {
-		*arr = Form("%.0f < p_{T} < %.1f [GeV/c]", binmin, binmax);
+		*arr = Form("%.0f < p_{T} < %.1f (GeV/c)", binmin, binmax);
 	} else {
-		*arr = Form("%.1f < p_{T} < %.1f [GeV/c]", binmin, binmax);
+		*arr = Form("%.1f < p_{T} < %.1f (GeV/c)", binmin, binmax);
 	}
 }
 

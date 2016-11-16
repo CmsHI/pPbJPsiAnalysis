@@ -23,10 +23,10 @@ void draw_RpPb_rap(bool sysByHand=false, bool noPtWeight=false, bool isPrompt=fa
   //// BR and lumi info.
   const Double_t br = 0.0593 ;
   const Double_t brErr = 0.0006;
-	const Double_t pp_lumi_pb =28.538; // 28.5/pb
-	const Double_t pp_lumi_pb_err = 1.1; // 4 %
+	const Double_t pp_lumi_pb =27.972; // 28.0/pb
+	const Double_t pp_lumi_pb_err = 0.643; // 2.3 %
 	const Double_t pPb_lumi_nb = 34.622; // 34.6/nb
-	const Double_t pPb_lumi_nb_err = 1.2; // 3.5 %
+	const Double_t pPb_lumi_nb_err = 1.211; // 3.5 %
   const Double_t pp_lumi_mub = pp_lumi_pb *1000*1000;
   const Double_t pPb_lumi_mub_err = pp_lumi_pb_err *1000*1000;
  
@@ -224,14 +224,14 @@ void draw_RpPb_rap(bool sysByHand=false, bool noPtWeight=false, bool isPrompt=fa
 //  g_RpPb_sys_lowpt->GetXaxis()->SetLimits(-2.5,2.1);
   g_RpPb_sys_lowpt->GetXaxis()->SetLimits(-2.7,2.1);
   g_RpPb_sys_lowpt->SetMinimum(0.0);
-  g_RpPb_sys_lowpt->SetMaximum(1.8);
+  g_RpPb_sys_lowpt->SetMaximum(1.6);
   g_RpPb_sys_highpt->GetXaxis()->SetTitle("y_{CM}");
   g_RpPb_sys_highpt->GetXaxis()->CenterTitle();
   g_RpPb_sys_highpt->GetYaxis()->SetTitle("R_{pPb}");
   g_RpPb_sys_highpt->GetYaxis()->CenterTitle();
   g_RpPb_sys_highpt->GetXaxis()->SetLimits(-2.7,2.1);
   g_RpPb_sys_highpt->SetMinimum(0.0);
-  g_RpPb_sys_highpt->SetMaximum(1.8);
+  g_RpPb_sys_highpt->SetMaximum(1.6);
 
   g_RpPb_sys_lowpt->SetFillColorAlpha(kRed-10,0.5);
   g_RpPb_sys_lowpt_line->SetFillColorAlpha(kRed-10,0.);
@@ -287,10 +287,10 @@ void draw_RpPb_rap(bool sysByHand=false, bool noPtWeight=false, bool isPrompt=fa
   globtex->DrawLatex(0.57, 0.30, "6.5 < p_{T} < 10 GeV/c");
 
   globtex->SetTextAlign(32); //3:right 2:vertical center
-  globtex->SetTextSize(0.050);
+  globtex->SetTextSize(0.048);
 	globtex->SetTextFont(42);
-	if (isPrompt) globtex->DrawLatex(0.92, 0.78, "Prompt J/#psi");
-	else globtex->DrawLatex(0.92, 0.78, "Nonprompt J/#psi");
+	if (isPrompt) globtex->DrawLatex(0.92, 0.77, "Prompt J/#psi");
+	else globtex->DrawLatex(0.92, 0.77, "Nonprompt J/#psi");
 	
   CMS_lumi( c1, isPA, iPos );
 
@@ -319,10 +319,10 @@ void draw_RpPb_rap(bool sysByHand=false, bool noPtWeight=false, bool isPrompt=fa
   globtex->DrawLatex(0.57, 0.30, "10 < p_{T} < 30 GeV/c");
 
   globtex->SetTextAlign(32); //3:right 2:vertical center
-  globtex->SetTextSize(0.050);
+  globtex->SetTextSize(0.048);
 	globtex->SetTextFont(42);
-	if (isPrompt) globtex->DrawLatex(0.92, 0.78, "Prompt J/#psi");
-	else globtex->DrawLatex(0.92, 0.78, "Nonprompt J/#psi");
+	if (isPrompt) globtex->DrawLatex(0.92, 0.77, "Prompt J/#psi");
+	else globtex->DrawLatex(0.92, 0.77, "Nonprompt J/#psi");
 	
   CMS_lumi( c2, isPA, iPos );
 
@@ -403,13 +403,13 @@ void formPtArr(Double_t binmin, Double_t binmax, TString* arr) {
   Double_t fracMin = modf(binmin, &intMin);
   Double_t fracMax = modf(binmax, &intMax);
   if ( fracMin == 0 && fracMax == 0 ) {
-    *arr = Form("%.0f < p_{T} < %.0f [GeV/c]", binmin, binmax);
+    *arr = Form("%.0f < p_{T} < %.0f (GeV/c)", binmin, binmax);
   } else if ( fracMin != 0 && fracMax == 0 ) {
-    *arr = Form("%.1f < p_{T} < %.0f [GeV/c]", binmin, binmax);
+    *arr = Form("%.1f < p_{T} < %.0f (GeV/c)", binmin, binmax);
   } else if ( fracMin == 0 && fracMax != 0 ) {
-    *arr = Form("%.0f < p_{T} < %.1f [GeV/c]", binmin, binmax);
+    *arr = Form("%.0f < p_{T} < %.1f (GeV/c)", binmin, binmax);
   } else {
-    *arr = Form("%.1f < p_{T} < %.1f [GeV/c]", binmin, binmax);
+    *arr = Form("%.1f < p_{T} < %.1f (GeV/c)", binmin, binmax);
   }
 }
 
