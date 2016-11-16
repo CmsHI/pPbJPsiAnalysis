@@ -213,7 +213,7 @@ void comp_RpPb_pt_Overlay(double ptmax=32, bool isPoint=true, bool isSmoothened=
     for (int ith = 0 ; ith < nTheory; ith ++ ) {
       if (ith==0){ g_RpPb_theory[ith][iy]->Draw("3"); }  
     }
-    if (isPoint) { g_RpPb_sys[iy]->Draw("5"); }
+    //if (isPoint) { g_RpPb_sys[iy]->Draw("5"); }
     for (int ith = 0 ; ith < nTheory; ith ++ ) {
       if (ith!=0){
         g_RpPb_theory[ith][iy]->Draw("5");

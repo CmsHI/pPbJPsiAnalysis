@@ -162,7 +162,7 @@ void comp_RpPb_rap_Overlay(bool isPoint=true, bool isSmoothened=false)
       g_RpPb_theory_line[ith][0]->Draw("5");
     }
   }
-  if (isPoint) { g_RpPb_sys[0]->Draw("5"); }
+//  if (isPoint) { g_RpPb_sys[0]->Draw("5"); }
   globbox_all->Draw("lf");
   solidLine(-2.7,1.,2.1,1.,1,1);
   for (int ith = 0 ; ith < nTheory; ith ++ ) {
@@ -229,7 +229,7 @@ void comp_RpPb_rap_Overlay(bool isPoint=true, bool isSmoothened=false)
       g_RpPb_theory_line[ith][1]->Draw("5");
     }
   }
-  if (isPoint) { g_RpPb_sys[1]->Draw("5"); }
+//  if (isPoint) { g_RpPb_sys[1]->Draw("5"); }
   globbox_all->Draw("lf");
   solidLine(-2.7,1.,2.1,1.,1,1);
   for (int ith = 0 ; ith < nTheory; ith ++ ) {
