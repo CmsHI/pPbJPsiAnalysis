@@ -13,6 +13,11 @@ void comp_RpPb_rap_Overlay(bool isPoint=true, bool isSmoothened=false)
 
   bool isPrompt=true;
 	
+  const Double_t pp_lumi_relerr = 0.023; // 2.3 %
+  const Double_t pPb_lumi_relerr = 0.035; // 3.5 %
+  const Double_t glb_err = TMath::Sqrt(pp_lumi_relerr*pp_lumi_relerr+pPb_lumi_relerr*pPb_lumi_relerr);
+  //cout << "glb_err = " << glb_err << endl;
+  
   ///////////////////////////////////////////////////
   const int nRap = 8; 
   const int nRapTmp = nRap + 1;
@@ -140,17 +145,16 @@ void comp_RpPb_rap_Overlay(bool isPoint=true, bool isSmoothened=false)
   globtex->SetTextFont(42);
 	globtex->SetTextSize(0.075);
  
-  //// global uncertainty from lumi 
-  TBox * globbox_pp = new TBox(-3.0, 0.96, -2.8, 1.04);
-  globbox_pp->SetFillColorAlpha(kGray+2,0.5);
-  globbox_pp->SetLineColor(kBlack);
-  TBox * globbox_pa = new TBox(-2.8, 0.965, -2.6, 1.035);
-  globbox_pa->SetFillColorAlpha(kWhite,0.5);
-  globbox_pa->SetLineColor(kBlack);
-  TBox * globbox_all = new TBox(-2.7, 0.9468493, -2.5, 1.053151);
-  globbox_all->SetFillColorAlpha(kGray+2,0.5);
-  globbox_all->SetLineColor(kBlack);
-
+  //// global uncertainty from lumi
+	TBox * globbox_pp = new TBox(-3.0, 1-pp_lumi_relerr, -2.8, 1+pp_lumi_relerr);
+	globbox_pp->SetFillColorAlpha(kGray+2,0.5);
+	globbox_pp->SetLineColor(kBlack);
+	TBox * globbox_pa = new TBox(-2.8, 1-pPb_lumi_relerr, -2.6, 1+pPb_lumi_relerr);
+	globbox_pa->SetFillColorAlpha(kWhite,0.5);
+	globbox_pa->SetLineColor(kBlack);
+	TBox * globbox_all = new TBox(-2.7, 1-glb_err, -2.5, 1+glb_err);
+	globbox_all->SetFillColorAlpha(kGray+2,0.5);
+	globbox_all->SetLineColor(kBlack);
 
   TCanvas* c1 = new TCanvas("c1","c1",600,600);
   c1->cd();
