@@ -123,15 +123,9 @@ void comp_RpPb_pt_Bmeson(bool isPrompt = false)
   globtex->SetTextFont(42);
 	globtex->SetTextSize(0.04);
   
-  // global box
-  TBox * globbox_all = new TBox(0, 0.9468493, 2, 1.053151);
-  globbox_all->SetFillColorAlpha(kGray+2,0.5);
-  globbox_all->SetLineColor(kBlack);
-  
   TBox * globbox_br = new TBox(2, 0.969, 4, 1.031); //for B+ branching ratio
   globbox_br->SetFillColorAlpha(kWhite,0.5);
   globbox_br->SetLineColor(kBlack);
-
 
   //// our results
   TGraphAsymmErrors* g_RpPb_sys = new TGraphAsymmErrors(nPt, pxtmp, rppb, exlow, exhigh, eysys_rppb, eysys_rppb);	
@@ -147,8 +141,6 @@ void comp_RpPb_pt_Bmeson(bool isPrompt = false)
   g_RpPb_Bmeson_sysFONLL->Draw("A5");
   g_RpPb_Bmeson_sys->Draw("2");
   g_RpPb_sys->Draw("5");
-  //globbox_all->Draw("lf");
-  //globbox_br->Draw("lf");
   solidLine(0.,1.,62.,1.,1,1);
   g_RpPb_Bmeson->Draw("p");
   g_RpPb->Draw("p");

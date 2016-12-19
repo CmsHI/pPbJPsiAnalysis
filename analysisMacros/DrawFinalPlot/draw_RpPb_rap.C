@@ -25,10 +25,14 @@ void draw_RpPb_rap(bool sysByHand=false, bool noPtWeight=false, bool isPrompt=fa
   const Double_t brErr = 0.0006;
 	const Double_t pp_lumi_pb =27.972; // 28.0/pb
 	const Double_t pp_lumi_pb_err = 0.643; // 2.3 %
+  const Double_t pp_lumi_relerr = 0.023; // 2.3 %
 	const Double_t pPb_lumi_nb = 34.622; // 34.6/nb
 	const Double_t pPb_lumi_nb_err = 1.211; // 3.5 %
+  const Double_t pPb_lumi_relerr = 0.035; // 3.5 %
   const Double_t pp_lumi_mub = pp_lumi_pb *1000*1000;
   const Double_t pPb_lumi_mub_err = pp_lumi_pb_err *1000*1000;
+  const Double_t glb_err = TMath::Sqrt(pp_lumi_relerr*pp_lumi_relerr+pPb_lumi_relerr*pPb_lumi_relerr);
+  //cout << "glb_err = " << glb_err << endl;
  
   double A_pb =208;
 
@@ -260,13 +264,13 @@ void draw_RpPb_rap(bool sysByHand=false, bool noPtWeight=false, bool isPrompt=fa
 	globtex->SetTextSize(0.04);
   
   //// global uncertainty from lumi
-	TBox * globbox_pp = new TBox(-3.0, 0.96, -2.8, 1.04);
+	TBox * globbox_pp = new TBox(-3.0, 1-pp_lumi_relerr, -2.8, 1+pp_lumi_relerr);
 	globbox_pp->SetFillColorAlpha(kGray+2,0.5);
 	globbox_pp->SetLineColor(kBlack);
-	TBox * globbox_pa = new TBox(-2.8, 0.965, -2.6, 1.035);
+	TBox * globbox_pa = new TBox(-2.8, 1-pPb_lumi_relerr, -2.6, 1+pPb_lumi_relerr);
 	globbox_pa->SetFillColorAlpha(kWhite,0.5);
 	globbox_pa->SetLineColor(kBlack);
-	TBox * globbox_all = new TBox(-2.7, 0.9468493, -2.5, 1.053151);
+	TBox * globbox_all = new TBox(-2.7, 1-glb_err, -2.5, 1+glb_err);
 	globbox_all->SetFillColorAlpha(kGray+2,0.5);
 	globbox_all->SetLineColor(kBlack);
 

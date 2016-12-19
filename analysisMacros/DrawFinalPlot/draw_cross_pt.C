@@ -28,8 +28,6 @@ void draw_cross_pt(bool sysByHand=false, bool noPtWeight=false, bool isScale=tru
 	//// BR and lumi info.
 	const Double_t br = 0.0593 ;
 	const Double_t brErr = 0.0006;
-//	const Double_t pp_lumi_pb =28.538; // 28.5/pb
-//	const Double_t pp_lumi_pb_err = 1.1; // 4 %
 	const Double_t pp_lumi_pb =27.972; // 28.0/pb
 	const Double_t pp_lumi_pb_err = 0.643; // 2.3 %
 	const Double_t pPb_lumi_nb = 34.622; // 34.6/nb
@@ -296,10 +294,6 @@ void draw_cross_pt(bool sysByHand=false, bool noPtWeight=false, bool isScale=tru
   globtex->SetTextFont(42);
 	globtex->SetTextSize(0.04);
 
-	//// global uncertainty from lumi
-	//TBox * globalbox = new TBox(0.5, 6.4, 1.5, 13.6);
-	//globalbox->SetFillColor(kYellow);
-	
 	//////////////////////////////////////////////////////////////////////////////////////
 	//// convert to TGraphAsymErrors
 	TGraphAsymmErrors* g_cross_sys[nRap];	

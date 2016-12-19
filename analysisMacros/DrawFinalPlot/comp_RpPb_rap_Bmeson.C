@@ -108,11 +108,6 @@ void comp_RpPb_rap_Bmeson(bool isPrompt = false)
   globtex->SetTextFont(42);
 	globtex->SetTextSize(0.04);
 
-  // global box
-  TBox * globbox_all = new TBox(-3.4, 0.9468493, -3.2, 1.053151);
-  globbox_all->SetFillColorAlpha(kGray+2,0.5);
-  globbox_all->SetLineColor(kBlack);
-  
   TBox * globbox_br = new TBox(-3.2, 0.969, -3.0, 1.031); //for B+ branching ratio
   globbox_br->SetFillColorAlpha(kWhite,0.5);
   globbox_br->SetLineColor(kBlack);
@@ -121,8 +116,6 @@ void comp_RpPb_rap_Bmeson(bool isPrompt = false)
   g_RpPb_Bmeson_sysFONLL->Draw("A5");
   g_RpPb_Bmeson_sys->Draw("2");
   g_RpPb_sys_highpt->Draw("5");
-  //globbox_all->Draw("lf");
-  //globbox_br->Draw("lf");
   solidLine(-3.0,1.,2.1,1.,1,1);
   g_RpPb_Bmeson->Draw("p");
   g_RpPb_highpt->Draw("p");

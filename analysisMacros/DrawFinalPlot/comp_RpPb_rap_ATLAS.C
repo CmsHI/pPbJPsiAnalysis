@@ -120,14 +120,9 @@ void comp_RpPb_rap_ATLAS(bool isPrompt = false)
   globtex->SetTextFont(42);
 	globtex->SetTextSize(0.04);
 	
-  TBox * globbox_all = new TBox(-2.7, 0.9468493, -2.5, 1.053151);
-	globbox_all->SetFillColorAlpha(kGray+2,0.5);
-	globbox_all->SetLineColor(kBlack);
-
   ////// actual draw
   g_RpPb_ATLAS_sys->Draw("A5");
   g_RpPb_sys_highpt->Draw("5");
-  //globbox_all->Draw("lf");
   solidLine(-2.5,1.,2.1,1.,1,1);
   g_RpPb_ATLAS->Draw("p");
   g_RpPb_highpt->Draw("p");

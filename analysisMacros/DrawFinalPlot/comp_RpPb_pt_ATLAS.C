@@ -106,11 +106,6 @@ void comp_RpPb_pt_ATLAS(bool isPrompt = true)
   globtex->SetTextFont(42);
 	globtex->SetTextSize(0.04);
   
-  //// global uncertainty from lumi
-	TBox * globbox_all = new TBox(0.0, 0.9468493, 1.5, 1.053151);
-	globbox_all->SetFillColorAlpha(kGray+2,0.5);
-	globbox_all->SetLineColor(kBlack);
-
   TCanvas *c1 = new TCanvas("c1","c1",600,600);
   
   g_RpPb_ATLAS_sys->GetXaxis()->SetTitle("p_{T} (GeV/c)");
@@ -152,7 +147,6 @@ void comp_RpPb_pt_ATLAS(bool isPrompt = true)
   ////// actual draw
   g_RpPb_ATLAS_sys->Draw("A5");
   g_RpPb_sys->Draw("5");
-  //globbox_all->Draw("lf");
   solidLine(0.,1.,32.,1.,1,1);
   g_RpPb_ATLAS->Draw("p");
   g_RpPb->Draw("p");
