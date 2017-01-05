@@ -322,7 +322,7 @@ void draw_dNdPt(int isPA=1, bool isPrompt=false, bool noPtWeight=true, bool isLo
 		gRatio[iy]->SetMinimum(ratiomin);
 		gRatio[iy]->SetMaximum(ratiomax);
 		gRatio[iy]->GetYaxis()->CenterTitle();
-		gRatio[iy]->GetXaxis()->SetTitle("p_{T} [GeV/c]");
+		gRatio[iy]->GetXaxis()->SetTitle("p_{T} (GeV/c)");
 		gRatio[iy]->GetYaxis()->SetTitle("Data/MC");
 		gRatio[iy]->Draw("AP");
 		if (iy==0){
