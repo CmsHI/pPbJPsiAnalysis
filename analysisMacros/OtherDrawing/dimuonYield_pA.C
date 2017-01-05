@@ -1,10 +1,13 @@
-#include "SONGKYO.h"
+#include "../SONGKYO.h"
 
 void dimuonYield_pA(bool is1st=true){
  
-  gROOT->Macro("./Style2D.C");
+  gROOT->Macro("../Style2D.C");
   gStyle->SetTitleXOffset(1.10);
-  gStyle->SetTitleYOffset(1.15);
+  gStyle->SetTitleYOffset(1.00);
+  gStyle->SetPadBottomMargin(0.125);
+  gStyle->SetPadRightMargin(0.125);
+  gStyle->SetPadLeftMargin(0.11);
   //gStyle->SetPadTickX(1);
   //gStyle->SetPadTickY(1);
 
@@ -43,8 +46,8 @@ void dimuonYield_pA(bool is1st=true){
 
   cout << "nbin = " << nbin << endl;
   TH2D* h2D_01;
-  if (is1st) h2D_01 = new TH2D("h2D_01","J/#psi p_{T} vs y_{lab}^{1st};J/#psi y_{lab}^{1st};J/#psi p_{T} [GeV];",nbin,-2.4,2.4,nbin,0,9.);
-  else h2D_01 = new TH2D("h2D_01","J/#psi p_{T} vs y_{lab}^{2nd};J/#psi y_{lab}^{2nd};J/#psi p_{T} [GeV];",nbin,-2.4,2.4,nbin,0,9.);
+  if (is1st) h2D_01 = new TH2D("h2D_01","J/#psi p_{T} vs y_{lab}^{1st};J/#psi y_{lab}^{1st};J/#psi p_{T} (GeV/c);",nbin,-2.4,2.4,nbin,0,9.);
+  else h2D_01 = new TH2D("h2D_01","J/#psi p_{T} vs y_{lab}^{2nd};J/#psi y_{lab}^{2nd};J/#psi p_{T} (GeV/c);",nbin,-2.4,2.4,nbin,0,9.);
   h2D_01->Sumw2();
   
   TCut trigCut = "((Reco_QQ_trig&1)==1 && (HLTriggers&1)==1 )";
@@ -85,6 +88,13 @@ TCut accOldRecoMinus = "(TMath::Abs(Reco_QQ_mumi_4mom.Eta()) < 2.4 && ((TMath::A
   h2D_01->GetYaxis()->CenterTitle(1);
   h2D_01->Draw("colz");
   cout << "entries = " << h2D_01->GetEntries() << endl;
+  
+  c01->Update();
+  TPaletteAxis* pal; 
+  pal = (TPaletteAxis*)h2D_01->GetListOfFunctions()->FindObject("palette"); 
+  pal->SetX2NDC(0.915);
+  c01->Modified();
+  c01->Update();
 
   ////////////////////////////////////////////////////////////////////////////////////////////////////
   //// 1) y binning
@@ -188,6 +198,6 @@ TCut accOldRecoMinus = "(TMath::Abs(Reco_QQ_mumi_4mom.Eta()) < 2.4 && ((TMath::A
     tPA10->SetLineWidth(6); tPA10->SetLineColor(kRed); tPA10->Draw();
     tPA11->SetLineWidth(6); tPA11->SetLineColor(kRed); tPA11->Draw();
   }  
-  c01->SaveAs(Form("plot_dimuonYield_coarse/%s.pdf",dirName.Data()));
+  c01->SaveAs(Form("plot_dimuonYield/%s.pdf",dirName.Data()));
 }
  

@@ -1,10 +1,13 @@
-#include "SONGKYO.h"
+#include "../SONGKYO.h"
 
 void dimuonYield_pp(){
  
-  gROOT->Macro("./Style2D.C");
+  gROOT->Macro("../Style2D.C");
   gStyle->SetTitleXOffset(1.10);
-  gStyle->SetTitleYOffset(1.15);
+  gStyle->SetTitleYOffset(1.00);
+  gStyle->SetPadBottomMargin(0.125);
+  gStyle->SetPadRightMargin(0.125);
+  gStyle->SetPadLeftMargin(0.11);
   //gStyle->SetPadTickX(1);
   //gStyle->SetPadTickY(1);
 
@@ -22,15 +25,16 @@ void dimuonYield_pp(){
   //double nbin = 40;
   
   TChain* t01 = new TChain("hionia/myTree");
-  t01->Add("/storage/OniaTree/Onia5TeV/ppOfficialMC/OniaTree_JpsiMM_5p02TeV_TuneCUETP8M1_Trk_HINppWinter16DR-75X_mcRun2_asymptotic_ppAt5TeV_v3-v1.root");
-  //t01->Add("/storage/OniaTree/Onia5TeV/ppOfficialMC/OniaTree_BJpsiMM_5p02TeV_TuneCUETP8M1_Trk_HINppWinter16DR-75X_mcRun2_asymptotic_ppAt5TeV_v3-v1.root");
-  //t01->Add("/storage/OniaTree/Onia5TeV/ppData/OniaTree_DoubleMu_Run2015E-PromptReco-v1_Run_262157_262328_noCUT_TRKMU.root");
+  t01->Add("/home/samba/OniaTree/Onia5TeV/ppOfficialMC/OniaTree_JpsiMM_5p02TeV_TuneCUETP8M1_Trk_HINppWinter16DR-75X_mcRun2_asymptotic_ppAt5TeV_v3-v1_Extended.root");
+//  t01->Add("/home/samba/OniaTree/Onia5TeV/ppOfficialMC/OniaTree_JpsiMM_5p02TeV_TuneCUETP8M1_Trk_HINppWinter16DR-75X_mcRun2_asymptotic_ppAt5TeV_v3-v1.root");
+  ////t01->Add("/home/samba/OniaTree/Onia5TeV/ppOfficialMC/OniaTree_BJpsiMM_5p02TeV_TuneCUETP8M1_Trk_HINppWinter16DR-75X_mcRun2_asymptotic_ppAt5TeV_v3-v1.root");
+  ////t01->Add("/home/samba/OniaTree/Onia5TeV/ppData/OniaTree_DoubleMu_Run2015E-PromptReco-v1_Run_262157_262328_noCUT_TRKMU.root");
   
   TCanvas* c_tmp = new TCanvas("c_tmp","",300,300); //c_tmp->SetGridx(); c_tmp->SetGridy();
   TCanvas* c01 = new TCanvas("c01","",600,600); //c01->SetGridx(); c01->SetGridy();
 
   cout << "nbin = " << nbin << endl;
-  TH2D* h2D_01 = new TH2D("h2D_01","J/#psi p_{T} vs y_{lab};J/#psi y_{lab};J/#psi p_{T} [GeV];",nbin,-2.4,2.4,nbin,0,9.);
+  TH2D* h2D_01 = new TH2D("h2D_01","J/#psi p_{T} vs y_{lab};J/#psi y_{lab};J/#psi p_{T} (GeV/c);",nbin,-2.4,2.4,nbin,0,9.);
   h2D_01->Sumw2();
   
   TCut trigCut = "((Reco_QQ_trig&1)==1 && (HLTriggers&1)==1 )";
@@ -66,13 +70,19 @@ TCut accOldRecoMinus = "(TMath::Abs(Reco_QQ_mumi_4mom.Eta()) < 2.4 && ((TMath::A
 
   c_tmp->cd();  
   t01->Draw("Reco_QQ_4mom.Pt():Reco_QQ_4mom.Rapidity()>>h2D_01",totalCut,"colz");
-
+  
   c01->cd();
   h2D_01->GetXaxis()->CenterTitle(1);
   h2D_01->GetYaxis()->CenterTitle(1);
   h2D_01->Draw("colz");
   cout << "entries = " << h2D_01->GetEntries() << endl;
 
+  c01->Update();
+  TPaletteAxis* pal; 
+  pal = (TPaletteAxis*)h2D_01->GetListOfFunctions()->FindObject("palette"); 
+  pal->SetX2NDC(0.915);
+  c01->Modified();
+  c01->Update();
 
   ////////////////////////////////////////////////////////////////////////////////////////////////////
   //// 1) y binning
@@ -120,6 +130,6 @@ TCut accOldRecoMinus = "(TMath::Abs(Reco_QQ_mumi_4mom.Eta()) < 2.4 && ((TMath::A
 
 
 
-  c01->SaveAs(Form("plot_dimuonYield_coarse/%s.pdf",dirName.Data()));
+  c01->SaveAs(Form("plot_dimuonYield/%s.pdf",dirName.Data()));
 
 }
