@@ -1,46 +1,14 @@
-#include <iostream>
-#include <iomanip>
-#include <fstream>
-#include <sstream>
-#include <TString.h>
-#include <string>
+#include "../SONGKYO.h"
 
-#include <TROOT.h>
-#include "TSystem.h"
-#include <TFile.h>
-#include <TTree.h>
-#include <TChain.h>
-#include <TDirectory.h>
-#include <TNtuple.h>
-#include <TMath.h>
-#include <math.h>
-#include <cmath>
-#include <TH1.h>
-#include <TH2.h>
-#include <TH3.h>
-#include <TStyle.h>
-#include <TCanvas.h>
-#include <TPaveStats.h>
-#include <TVector3.h>
-#include <TLorentzVector.h>
-#include "TRandom3.h"
-#include "TClonesArray.h"
-#include <TAxis.h>
-#include <TLorentzRotation.h>
-#include <TCut.h>
-
-#include "KYOcommonOpt.h"
-
-
-int rootAna_ethf_minBias_selfnorm(char *stringA = "40120"){
+int rootAna_ethf_minBias_selfnorm(){
 
 	// # of event range
 	const int nEntry = 8000;
 		
-	gROOT->Macro("./JpsiStyle.C");
+	gROOT->Macro("./Style.C");
 
 	TFile *fDataMB;
-	fDataMB = new TFile("/home/songkyo/kyo/pPbDataSample/MinBiasTree_pPb_211313-211631.root");
+	fDataMB = new TFile("/home/songkyo/kyo/pPbDataSample/DataMinBias/MinBiasTree_pPb_211313-211631.root");
 	TTree* treeDataMB = new TTree();
 	treeDataMB->AddFriend("skimanalysis/HltTree",fDataMB);
 	treeDataMB->AddFriend("hiEvtAnalyzer/HiTree",fDataMB);
@@ -79,16 +47,15 @@ int rootAna_ethf_minBias_selfnorm(char *stringA = "40120"){
 		std::cout << i<<"th hEt integral = " << hEt[i]->Integral() << std::endl;
 	}
 		
-	// Save data as a root file
-	TFile *outFile = new TFile(Form("ethf_MB_selfnorm_%s.root",stringA),"RECREATE");
-	std::cout << "stringA : " << stringA << std::endl;
+	/// Save data as a root file
+	TFile *outFile = new TFile("ethf_MB_selfnorm.root","RECREATE");
 	outFile->cd();
 	for (Int_t i=0; i<nEtBin; i++){	
 		hEt[i]->Write();
 	}
 	outFile->Close();
 	
-	// Draw normalized distributions to compare 1st & 2nd run
+	//// Draw normalized distributions to compare 1st & 2nd run
 	c1->cd();
 	for (Int_t i=0; i<nEtBin; i++){	
 		hEt[i]->Scale(1/hEt[i]->Integral());	
@@ -103,28 +70,4 @@ int rootAna_ethf_minBias_selfnorm(char *stringA = "40120"){
 	return 0;	
 
 }
-
-/*
-	using namespace std;
-
-	// Definition of binning
-	// --- pt Bin
-	Double_t ptBinsArr1[] = {6.5, 30.0}; //1bin
-	Double_t ptBinsArr2[] = {6.5, 7.5, 8.5, 9.5, 11.0, 14.0, 30.0}; //6bin
-	const Int_t nPtBins1 = sizeof(ptBinsArr1)/sizeof(double)-1;
-	const Int_t nPtBins2 = sizeof(ptBinsArr2)/sizeof(double)-1;
-	cout << "nPtBins1=" << nPtBins1 << endl;
-	cout << "nPtBins2=" << nPtBins2 << endl;
-
-	// --- y Bin
-	Double_t yBinsArr1[] = {-2.4, -1.97, -1.72, -1.47, -1.22, -0.97, -0.72, -0.47, -0.22, 0.03, 0.28, 0.53, 0.78, 1.03, 1.46}; //14bin
-	Double_t yBinsArr2[] = {-2.4, -0.47, 1.46}; //2bin
-	Double_t yBinsArr3[] = {-2.4, 1.46}; //rap integ
-	const Int_t nYBins1 = sizeof(yBinsArr1)/sizeof(double)-1;
-	const Int_t nYBins2 = sizeof(yBinsArr2)/sizeof(double)-1;
-	const Int_t nYBins3 = sizeof(yBinsArr3)/sizeof(double)-1;
-	cout << "nYBins1=" << nYBins1 << endl;
-	cout << "nYBins2=" << nYBins2 << endl;
-	cout << "nYBins3=" << nYBins2 << endl;
-*/
 
