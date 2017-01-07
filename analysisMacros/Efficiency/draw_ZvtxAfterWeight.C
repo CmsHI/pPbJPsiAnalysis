@@ -8,7 +8,7 @@ void draw_ZvtxAfterWeight(){
   //TFile* f2 = TFile::Open("EffAna_8rap9pt_pp_PR_newcut_Zvtx1_SF0.root"); // MC
   //TString sz01 = "pp Data";
   //TString sz02 = "pp PRMC reweighted";
-  TFile* f1 = TFile::Open("zVtx201603/zVtx_G1_Pbp_isPrompt1_isNewAccCut1_isOfficial1.root"); //Data
+  TFile* f1 = TFile::Open("zVtx201604/zVtx_G1_Pbp_isPrompt1_isNewAccCut1_isOfficial1.root"); //Data
   TFile* f2 = TFile::Open("EffAna_8rap9pt_Pbp_PR_newcut_Zvtx1_SF0.root"); // MC
   TString sz01 = "Pbp Data";
   TString sz02 = "Pbp PRMC reweighted";
@@ -28,7 +28,7 @@ void draw_ZvtxAfterWeight(){
   h2->SetLineWidth(2);
   h2->SetFillColor(kBlue+1);
   h2->SetFillStyle(3005);
-  h2->GetXaxis()->SetTitle("Z_{vtx} [cm]");
+  h2->GetXaxis()->SetTitle("Z_{vtx} (cm)");
   h2->GetXaxis()->CenterTitle();
   h2->GetXaxis()->SetRangeUser(-30, 30);
   h2->GetYaxis()->SetRangeUser(0, 0.1);
@@ -49,6 +49,7 @@ void draw_ZvtxAfterWeight(){
   c2->cd();
   TH1D* hRatio = (TH1D*)h1->Clone("hRatio");
   hRatio->Divide(h2);
+  hRatio->GetXaxis()->SetTitle("Z_{vtx} (cm)");
   hRatio->SetMinimum(0.0);
   hRatio->SetMaximum(2.0);
   hRatio->Draw("pe");
