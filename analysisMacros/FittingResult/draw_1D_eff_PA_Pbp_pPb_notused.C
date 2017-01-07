@@ -4,7 +4,7 @@ void formRapArr(Double_t binmin, Double_t binmax, TString* arr);
 void formAbsRapArr(Double_t binmin, Double_t binmax, TString* arr);
 void formPtArr(Double_t binmin, Double_t binmax, TString* arr);
 
-void draw_1D_eff_Zvtx1_Zvtx0(char* szBinning="8rap9pt", bool isLog=false)
+void draw_1D_eff_Zvtx1_Zvtx0(TString szBinning="8rap9pt", bool isLog=false)
 {
 	gROOT->Macro("../Style.C");
 	
@@ -39,9 +39,9 @@ void draw_1D_eff_Zvtx1_Zvtx0(char* szBinning="8rap9pt", bool isLog=false)
 	}
 	
 	// --- read-in file
-	TFile * f2D_PAZvtx1 = new TFile(Form("../fittingResult/totalHist_PAMerged_%s_newcut_nominal_Zvtx0_SF0_noPtWeight.root",szBinning));
-	TFile * f2D_PAZvtx0 = new TFile(Form("../fittingResult/totalHist_PA_%s_newcut_nominal_Zvtx0_SF0_noPtWeight.root",szBinning));
-	TFile * f2D_PP = new TFile(Form("../fittingResult/totalHist_PP_%s_newcut_nominal_Zvtx0_SF0_noPtWeight.root",szBinning));
+	TFile * f2D_PAZvtx1 = new TFile(Form("../fittingResult/totalHist_PAMerged_%s_newcut_nominal_Zvtx0_SF0_noPtWeight.root",szBinning.Data()));
+	TFile * f2D_PAZvtx0 = new TFile(Form("../fittingResult/totalHist_PA_%s_newcut_nominal_Zvtx0_SF0_noPtWeight.root",szBinning.Data()));
+	TFile * f2D_PP = new TFile(Form("../fittingResult/totalHist_PP_%s_newcut_nominal_Zvtx0_SF0_noPtWeight.root",szBinning.Data()));
 
 	// --- read-in 2D hist for data reco dist
 	TH2D* h2D_pA = (TH2D*)f2D_PAMerged->Get("h2D_Eff_PR_pA");
@@ -200,12 +200,12 @@ void draw_1D_eff_Zvtx1_Zvtx0(char* szBinning="8rap9pt", bool isLog=false)
 	}
 	c_multi->Modified();
 	c_multi->Update();
-	//c_multi->SaveAs(Form("dir_1D_%s/eff_isLog%d.pdf",szBinning,(int)isLog));
-	//c_multi->SaveAs(Form("dir_1D_%s/eff_isLog%d_wPA_noPP.pdf",szBinning,(int)isLog));
-	c_multi->SaveAs(Form("dir_1D_%s/eff_isLog%d_wPA_wPP.pdf",szBinning,(int)isLog));
+	//c_multi->SaveAs(Form("dir_1D_%s/eff_isLog%d.pdf",szBinning.Data(),(int)isLog));
+	//c_multi->SaveAs(Form("dir_1D_%s/eff_isLog%d_wPA_noPP.pdf",szBinning.Data(),(int)isLog));
+	c_multi->SaveAs(Form("dir_1D_%s/eff_isLog%d_wPA_wPP.pdf",szBinning.Data(),(int)isLog));
 
 	// root file
-	TFile *fOut = new TFile(Form("dir_1D_%s/eff_isLog%d.root",szBinning,(int)isLog),"RECREATE");
+	TFile *fOut = new TFile(Form("dir_1D_%s/eff_isLog%d.root",szBinning.Data(),(int)isLog),"RECREATE");
 	fOut->cd();
 	for (Int_t iy = 0; iy < nbinsX; iy++) {
 		h1D_Pbp[iy]->Write();

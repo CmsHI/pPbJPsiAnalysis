@@ -163,7 +163,7 @@ void draw_1D_eff_Zvtx1_Zvtx0_pA(TString szBinning="8rap9pt", bool isPrompt=false
 			legBR -> AddEntry(g_pA02[iy],"no weight","lp");
 			legBR->Draw();
 			if (isPrompt) latex->DrawLatex(0.19,0.23,"pA Prompt J/#psi");
-			else latex->DrawLatex(0.19, 0.23,"pA Non-prompt J/#psi");
+			else latex->DrawLatex(0.19, 0.23,"pA Nonprompt J/#psi");
 		}
 		latex->DrawLatex(0.55,0.23,Form("%s",rapArr[iy].Data()));
 	}
@@ -196,12 +196,12 @@ void draw_1D_eff_Zvtx1_Zvtx0_pA(TString szBinning="8rap9pt", bool isPrompt=false
 		gRatio_pA[iy]->SetMinimum(ratiomin);
 		gRatio_pA[iy]->SetMaximum(ratiomax);
 		gRatio_pA[iy]->GetYaxis()->CenterTitle();
-		gRatio_pA[iy]->GetXaxis()->SetTitle("p_{T} [GeV/c]");
+		gRatio_pA[iy]->GetXaxis()->SetTitle("p_{T} (GeV/c)");
 		gRatio_pA[iy]->GetYaxis()->SetTitle("[Weight] / [No weight]");
 		gRatio_pA[iy]->Draw("AP");
 		if (iy==0){
 			if (isPrompt) latex->DrawLatex(0.19,0.23,"pA Prompt J/#psi");
-			else latex->DrawLatex(0.19, 0.23,"pA Non-prompt J/#psi");
+			else latex->DrawLatex(0.19, 0.23,"pA Nonprompt J/#psi");
 		}
 		latex->DrawLatex(0.55,0.23,Form("%s",rapArr[iy].Data()));
 		dashedLine(0.,1.,30.,1.,1,1);

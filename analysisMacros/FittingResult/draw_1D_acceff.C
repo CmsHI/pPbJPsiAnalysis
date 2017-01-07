@@ -213,7 +213,7 @@ void draw_1D_acceff(TString szBinning="8rap9pt", int isPA=1, bool isLog=false)
 	c01->SaveAs(Form("dir_1D_%s/acceff_%s_PR.pdf",szBinning.Data(),szPA.Data()));
   
 	//////////////////////////////////////////////////////////////////
-  //// 2) non-prompt only	
+  //// 2) nonprompt only	
   TCanvas* c02 = new TCanvas("c02","c02",200,10,1600,800);
 	c02->Divide(4,2);
 	for (Int_t iy = 0; iy < nbinsX; iy++) {
@@ -221,7 +221,7 @@ void draw_1D_acceff(TString szBinning="8rap9pt", int isPA=1, bool isLog=false)
 		if (isLog) gPad->SetLogy(1);
 		else gPad->SetLogy(0);
 		g_02[iy]->Draw("AP");
-		if (iy==0) { latex->DrawLatex(0.55,0.85,Form("%s Non-prompt J/#psi",szPA.Data())); }
+		if (iy==0) { latex->DrawLatex(0.55,0.85,Form("%s Nonprompt J/#psi",szPA.Data())); }
 		latex->DrawLatex(0.55,0.23,Form("%s",rapArr[iy].Data()));
 	}
 	c02->Modified();
@@ -229,7 +229,7 @@ void draw_1D_acceff(TString szBinning="8rap9pt", int isPA=1, bool isLog=false)
 	c02->SaveAs(Form("dir_1D_%s/acceff_%s_NP.pdf",szBinning.Data(),szPA.Data()));
 
 	//////////////////////////////////////////////////////////////////
-  //// 3) prompt and non-prompt together 
+  //// 3) prompt and nonprompt together 
 	TCanvas* c03 = new TCanvas("c03","c03",200,10,1600,800);
 	c03->Divide(4,2);
 	for (Int_t iy = 0; iy < nbinsX; iy++) {
@@ -239,8 +239,8 @@ void draw_1D_acceff(TString szBinning="8rap9pt", int isPA=1, bool isLog=false)
 		g_01[iy]->Draw("AP");
 		g_02[iy]->Draw("P");
 		if (iy==0) {
-			legBR -> AddEntry(g_01[iy],"prompt J/#psi","lp");
-			legBR -> AddEntry(g_02[iy],"non-prompt J/#psi","lp");
+			legBR -> AddEntry(g_01[iy],"Prompt J/#psi","lp");
+			legBR -> AddEntry(g_02[iy],"Nonprompt J/#psi","lp");
 			legBR->Draw();
 		}
 		latex->DrawLatex(0.55,0.23,Form("%s",rapArr[iy].Data()));

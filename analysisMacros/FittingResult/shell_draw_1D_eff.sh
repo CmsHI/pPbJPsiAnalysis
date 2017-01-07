@@ -8,8 +8,6 @@ root -l -b -q 'draw_1D_eff_SF1_SF0.C+("8rap9pt",1,false,false,true)'
 ##########void draw_1D_eff_Zvtx1_Zvtx0_pA(TString szBinning="8rap9pt", bool isPrompt=false, bool isLog=false, bool isNoErr=true)
 root -l -b -q 'draw_1D_eff_Zvtx1_Zvtx0_pA.C+("8rap9pt",true,false,true)'
 root -l -b -q 'draw_1D_eff_Zvtx1_Zvtx0_pA.C+("8rap9pt",false,false,true)'
-#root -l -b -q 'draw_1D_eff_Zvtx1_Zvtx0_pp.C+("8rap9pt",true,false,true)'
-#root -l -b -q 'draw_1D_eff_Zvtx1_Zvtx0_pp.C+("8rap9pt",false,false,true)'
 
 ##########void draw_1D_acceff(TString szBinning="8rap9pt", int isPA=1, bool isLog=false)
 root -l -b -q 'draw_1D_acceff.C+("8rap9pt",0,false)'

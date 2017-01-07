@@ -172,7 +172,7 @@ void draw_1D_yield(TString szBinning="8rap9pt", int isPA=1, bool isPrompt=true, 
 //			legBR -> AddEntry(g_01[iy],"SF","lp");
 //			legBR->Draw();
 //			if (isPrompt) { latex->DrawLatex(0.19,0.23,Form("%s Prompt J/#psi",szPA.Data())); }
-//			else { latex->DrawLatex(0.19,0.23,Form("%s Non-prompt J/#psi",szPA.Data())); }
+//			else { latex->DrawLatex(0.19,0.23,Form("%s Nonprompt J/#psi",szPA.Data())); }
 //		}
 		//latex->DrawLatex(0.55,0.23,Form("%s",rapArr[iy].Data()));
 		latex->DrawLatex(0.55,0.83,Form("%s",rapArr[iy].Data()));
