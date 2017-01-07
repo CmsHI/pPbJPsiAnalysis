@@ -13,6 +13,9 @@
     - For Pbp and pPb prompt -> ./shell_rootAna_efficiency.sh to run [rootAna_efficiency_ptWeight.C]
     - For Pbp and pPb non-prompt, or pp -> ./shell_rootAna_efficiency_divideEvt.sh -> shell_hadd_STEP2.sh -> shell_makeEffAna_STEP3.sh
     - (Detailed descriptions are in [Efficiency] directory)
+
+# STEP3 : cross check only for APPENDIX on AN, draw dN/dPt ratios (Data/MC) after weight
+  - ./shell_draw_dNdPt_afterWeight.sh : to run [draw_dNdPt.C] and reults are saved in [dir_dNdPt_afterWeight].
   
 # Final Output Files
 - AccAna_8rap9pt_pp_PR_newcut_ptWeight.root
