@@ -4,7 +4,7 @@ void formRapArr(Double_t binmin, Double_t binmax, string* arr);
 void formAbsRapArr(Double_t binmin, Double_t binmax, string* arr);
 void formPtArr(Double_t binmin, Double_t binmax, string* arr);
 
-int draw_closure_all(int isPA=0, bool useZvtxWeight=false, bool useSF = false, bool isLog = false)
+int draw_closure_all(int isPA=1, bool useZvtxWeight=false, bool useSF = false, bool isLog = false)
 {
   gROOT->Macro("../Style.C");
   using namespace std;
@@ -12,7 +12,10 @@ int draw_closure_all(int isPA=0, bool useZvtxWeight=false, bool useSF = false, b
   TString szPA;
   if (isPA==0) szPA="pp";
   else if (isPA==1) szPA="pA";
-  else {cout << "select among isPA = 0, or 1"<< endl; return 0; }
+  
+  TString fcollID;
+  if (isPA==0) fcollID="pp";
+  else if (isPA==1) fcollID="pPb";
 
   ////rap array in yCM (from forward to backward)
   const Int_t nRap = 8; 
@@ -217,6 +220,10 @@ int draw_closure_all(int isPA=0, bool useZvtxWeight=false, bool useSF = false, b
     }
   }
 
+  //////////////////////////////////////////////////////////////////////////////////////
+  //// integrated (by JB)
+  //////////////////////////////////////////////////////////////////////////////////////
+  
   TH1D* hPRRatio_All;
   TH1D* hNPRatio_All;
   TH1D* hPRRatio_All_rap;
@@ -252,8 +259,6 @@ int draw_closure_all(int isPA=0, bool useZvtxWeight=false, bool useSF = false, b
   TList *listAccDenPR_rap = new TList;
   TList *listAccDenNP_rap = new TList;
   
-
-
   for(int i=0;i<nbinsX;i++)
   {
     listMCCorrPR -> Add(h1D_MCCorrY_PR[i]);
@@ -337,7 +342,7 @@ int draw_closure_all(int isPA=0, bool useZvtxWeight=false, bool useSF = false, b
     h1D_Acc_Den_NP[iy]->Scale(1,"width");
   }
   
-  // hRatio
+  //// hRatio
   TH1D* hRatio_PR[nRap];
   TH1D* hRatio_NP[nRap];
   for (Int_t iy = 0; iy < nbinsX; iy++) {
@@ -389,7 +394,7 @@ int draw_closure_all(int isPA=0, bool useZvtxWeight=false, bool useSF = false, b
   }
   c_PR_01->SaveAs(Form("dir_closure/%s_PR_differential_isLog%d.pdf",szPA.Data(),(int)isLog));
   
-  ///// non-prompt
+  ///// nonprompt
   TCanvas* c_NP_01 = new TCanvas("c_NP_01","c_NP_01",1600,800);
   c_NP_01->Divide(4,2);
   
@@ -410,7 +415,7 @@ int draw_closure_all(int isPA=0, bool useZvtxWeight=false, bool useSF = false, b
     g_MCCorrY_NP[iy]->Draw("ap");
     g_Acc_Den_NP[iy]->Draw("p");
     if (iy==0) {
-      legUR -> SetHeader(Form("%s Non-prompt J/#psi",szPA.Data()));
+      legUR -> SetHeader(Form("%s Nonprompt J/#psi",szPA.Data()));
       legUR->Draw();
     }
     latex->DrawLatex(0.46,0.68,Form("%s",rapArr[iy].c_str()));
@@ -432,7 +437,7 @@ int draw_closure_all(int isPA=0, bool useZvtxWeight=false, bool useSF = false, b
     gRatio_PR[iy]=new TGraphAsymmErrors(hRatio_PR[iy]);
     SetGraphStyle(gRatio_PR[iy],1,0);
     gRatio_PR[iy]->GetXaxis()->SetTitle("p_{T} (GeV/c)");
-    gRatio_PR[iy]->GetYaxis()->SetTitle("corrected RECO / GEN");
+    gRatio_PR[iy]->GetYaxis()->SetTitle("[corrected RECO] / [GEN]");
     gRatio_PR[iy]->GetXaxis()->SetLimits(0.,30.);
     gRatio_PR[iy]->GetYaxis()->SetRangeUser(0.5,1.5);
     gRatio_PR[iy]->Draw("ap");
@@ -441,7 +446,7 @@ int draw_closure_all(int isPA=0, bool useZvtxWeight=false, bool useSF = false, b
   }
   c_PR_02->SaveAs(Form("dir_closure/%s_PR_differential_ratio.pdf",szPA.Data()));
   
-  // --- non-prompt pp
+  // --- nonprompt pp
   TCanvas* c_NP_02 = new TCanvas("c_NP_02","c_NP_02",1600,800);
   c_NP_02->Divide(4,2);
   
@@ -452,7 +457,7 @@ int draw_closure_all(int isPA=0, bool useZvtxWeight=false, bool useSF = false, b
     gRatio_NP[iy]=new TGraphAsymmErrors(hRatio_NP[iy]);
     SetGraphStyle(gRatio_NP[iy],1,0);
     gRatio_NP[iy]->GetXaxis()->SetTitle("p_{T} (GeV/c)");
-    gRatio_NP[iy]->GetYaxis()->SetTitle("corrected RECO / GEN");
+    gRatio_NP[iy]->GetYaxis()->SetTitle("[corrected RECO] / [GEN]");
     gRatio_NP[iy]->GetXaxis()->SetLimits(0.,30.);
     gRatio_NP[iy]->GetYaxis()->SetRangeUser(0.5,1.5);
     gRatio_NP[iy]->Draw("ap");
@@ -461,6 +466,12 @@ int draw_closure_all(int isPA=0, bool useZvtxWeight=false, bool useSF = false, b
   }
   c_NP_02->SaveAs(Form("dir_closure/%s_NP_differential_ratio.pdf",szPA.Data()));
   
+  //////////////////////////////////////////////////////////////////
+  //// ratio integrated (by JB)
+  //////////////////////////////////////////////////////////////////
+  
+  //// ratio vs pt
+
   TCanvas* c_ratio_all = new TCanvas("c_ratio_all","c_ratio_all",1600,800);
   c_ratio_all -> Divide(1,2);
   TGraphAsymmErrors* g_ratio_PR_All;
@@ -470,26 +481,49 @@ int draw_closure_all(int isPA=0, bool useZvtxWeight=false, bool useSF = false, b
 
   c_ratio_all->cd(1);
   gPad->SetLogy(0);
+  gPad->SetBottomMargin(0.19);
   SetGraphStyle(g_ratio_PR_All,1,0);
 
   g_ratio_PR_All->GetXaxis()->SetTitle("p_{T} (GeV/c)");
-  g_ratio_PR_All->GetYaxis()->SetTitle("corrected RECO / GEN");
+  g_ratio_PR_All->GetXaxis()->CenterTitle(1);
+  g_ratio_PR_All->GetYaxis()->SetTitle("[corrected RECO] / [GEN]");
+  g_ratio_PR_All->GetYaxis()->CenterTitle(1);
   g_ratio_PR_All->GetXaxis()->SetLimits(0.,30.);
-  g_ratio_PR_All->GetYaxis()->SetRangeUser(0.9,1.1);
+  g_ratio_PR_All->GetYaxis()->SetRangeUser(0.5,1.5);
+  g_ratio_PR_All->GetYaxis()->SetTitleOffset(0.45);
+  //g_ratio_PR_All->GetYaxis()->SetTitleSize(0.075);
+  g_ratio_PR_All->GetXaxis()->SetLabelSize(0.07);
+  g_ratio_PR_All->GetYaxis()->SetLabelSize(0.07);
+  g_ratio_PR_All->GetXaxis()->SetTitleSize(0.075);
+  g_ratio_PR_All->GetYaxis()->SetTitleSize(0.075);
   g_ratio_PR_All->Draw("ap");
-  latex->DrawLatex(0.56,0.88," Prompt J/#psi ");
+  g_ratio_PR_All->SetMarkerSize(2);
+  latex->SetTextSize(0.12);
+  latex->DrawLatex(0.56,0.84," Prompt J/#psi ");
+  latex->DrawLatex(0.26,0.84,Form(" %s ",fcollID.Data()));
   dashedLine(0., 1., 30., 1., 1,1);
   
   c_ratio_all->cd(2);
   gPad->SetLogy(0);
+  gPad->SetBottomMargin(0.19);
   SetGraphStyle(g_ratio_NP_All,1,0);
 
   g_ratio_NP_All->GetXaxis()->SetTitle("p_{T} (GeV/c)");
-  g_ratio_NP_All->GetYaxis()->SetTitle("corrected RECO / GEN");
+  g_ratio_NP_All->GetXaxis()->CenterTitle(1);
+  g_ratio_NP_All->GetYaxis()->SetTitle("[corrected RECO] / [GEN]");
+  g_ratio_NP_All->GetYaxis()->CenterTitle(1);
   g_ratio_NP_All->GetXaxis()->SetLimits(0.,30.);
-  g_ratio_NP_All->GetYaxis()->SetRangeUser(0.9,1.1);
+  g_ratio_NP_All->GetYaxis()->SetRangeUser(0.5,1.5);
+  g_ratio_NP_All->GetYaxis()->SetTitleOffset(0.45);
+  //g_ratio_NP_All->GetYaxis()->SetTitleSize(0.075);
+  g_ratio_NP_All->GetXaxis()->SetLabelSize(0.07);
+  g_ratio_NP_All->GetYaxis()->SetLabelSize(0.07);
+  g_ratio_NP_All->GetXaxis()->SetTitleSize(0.075);
+  g_ratio_NP_All->GetYaxis()->SetTitleSize(0.075);
   g_ratio_NP_All->Draw("ap");
-  latex->DrawLatex(0.56,0.88," Non-prompt J/#psi ");
+  g_ratio_NP_All->SetMarkerSize(2);
+  latex->DrawLatex(0.56,0.84," Nonprompt J/#psi ");
+  latex->DrawLatex(0.26,0.84,Form(" %s ",fcollID.Data()));
   dashedLine(0., 1., 30., 1., 1,1);
 
   TString wString;
@@ -497,6 +531,9 @@ int draw_closure_all(int isPA=0, bool useZvtxWeight=false, bool useSF = false, b
   else if(isPA==1) wString = "pA";
   c_ratio_all->SaveAs(Form("dir_closure/%s_RECOGen_Ratio_all_pT.pdf",wString.Data()));
 
+  //////////////////////////////////////////////////////////////////
+  //// ratio vs rap
+  
   TCanvas* c_ratio_all_rap = new TCanvas("c_ratio_all_rap","c_ratio_all_rap",1600,800);
   c_ratio_all_rap -> Divide(1,2);
   TGraphAsymmErrors* g_ratio_PR_All_rap;
@@ -506,26 +543,49 @@ int draw_closure_all(int isPA=0, bool useZvtxWeight=false, bool useSF = false, b
 
   c_ratio_all_rap->cd(1);
   gPad->SetLogy(0);
+  gPad->SetBottomMargin(0.19);
   SetGraphStyle(g_ratio_PR_All_rap,1,0);
 
-  g_ratio_PR_All_rap->GetXaxis()->SetTitle("y");
-  g_ratio_PR_All_rap->GetYaxis()->SetTitle("corrected RECO / GEN");
+  g_ratio_PR_All_rap -> GetYaxis()->SetLabelOffset(0.002);
+  g_ratio_PR_All_rap->GetXaxis()->SetTitle("y_{lab}");
+  g_ratio_PR_All_rap->GetXaxis()->CenterTitle(1);
+  g_ratio_PR_All_rap->GetYaxis()->SetTitle("[corrected RECO] / [GEN]");
+  g_ratio_PR_All_rap->GetYaxis()->CenterTitle(1);
   g_ratio_PR_All_rap->GetXaxis()->SetLimits(-2.5,2.5);
-  g_ratio_PR_All_rap->GetYaxis()->SetRangeUser(0.9,1.1);
+  g_ratio_PR_All_rap->GetYaxis()->SetRangeUser(0.5,1.5);
+  g_ratio_PR_All_rap->GetYaxis()->SetTitleOffset(0.45);
+  //g_ratio_PR_All_rap->GetYaxis()->SetTitleSize(0.075);
+  g_ratio_PR_All_rap->GetXaxis()->SetLabelSize(0.07);
+  g_ratio_PR_All_rap->GetYaxis()->SetLabelSize(0.07);
+  g_ratio_PR_All_rap->GetXaxis()->SetTitleSize(0.075);
+  g_ratio_PR_All_rap->GetYaxis()->SetTitleSize(0.075);
   g_ratio_PR_All_rap->Draw("ap");
-  latex->DrawLatex(0.56,0.88," Prompt J/#psi ");
+  g_ratio_PR_All_rap->SetMarkerSize(2);
+  latex->DrawLatex(0.56,0.84," Prompt J/#psi ");
+  latex->DrawLatex(0.26,0.84,Form(" %s ",fcollID.Data()));
   dashedLine(-2.5, 1., 2.5, 1., 1,1);
   
   c_ratio_all_rap->cd(2);
   gPad->SetLogy(0);
+  gPad->SetBottomMargin(0.19);
   SetGraphStyle(g_ratio_NP_All_rap,1,0);
 
-  g_ratio_NP_All_rap->GetXaxis()->SetTitle("y");
-  g_ratio_NP_All_rap->GetYaxis()->SetTitle("corrected RECO / GEN");
+  g_ratio_NP_All_rap->GetXaxis()->SetTitle("y_{lab}");
+  g_ratio_NP_All_rap->GetXaxis()->CenterTitle(1);
+  g_ratio_NP_All_rap->GetYaxis()->SetTitle("[corrected RECO] / [GEN]");
+  g_ratio_NP_All_rap->GetYaxis()->CenterTitle(1);
   g_ratio_NP_All_rap->GetXaxis()->SetLimits(-2.5,2.5);
-  g_ratio_NP_All_rap->GetYaxis()->SetRangeUser(0.9,1.1);
+  g_ratio_NP_All_rap->GetYaxis()->SetRangeUser(0.5,1.5);
+  g_ratio_NP_All_rap->GetYaxis()->SetTitleOffset(0.45);
+  //g_ratio_NP_All_rap->GetYaxis()->SetTitleSize(0.075);
+  g_ratio_NP_All_rap->GetXaxis()->SetLabelSize(0.07);
+  g_ratio_NP_All_rap->GetYaxis()->SetLabelSize(0.07);
+  g_ratio_NP_All_rap->GetXaxis()->SetTitleSize(0.075);
+  g_ratio_NP_All_rap->GetYaxis()->SetTitleSize(0.075);
   g_ratio_NP_All_rap->Draw("ap");
-  latex->DrawLatex(0.56,0.88," Non-prompt J/#psi ");
+  g_ratio_NP_All_rap->SetMarkerSize(2);
+  latex->DrawLatex(0.56,0.84," Nonprompt J/#psi ");
+  latex->DrawLatex(0.26,0.84,Form(" %s ",fcollID.Data()));
   dashedLine(-2.5, 1., 2.5, 1., 1,1);
 
   TString wString_rap;
