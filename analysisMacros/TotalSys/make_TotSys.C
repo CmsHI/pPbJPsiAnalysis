@@ -1,4 +1,4 @@
-#include <../SONGKYO.h>
+#include "../SONGKYO.h"
 
 /////// main func. ///////
 int make_TotSys(int MrapNpt = 89, int isPA =0, int etOpt=0){

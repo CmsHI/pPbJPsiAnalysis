@@ -206,7 +206,7 @@ void draw_1D_TotSys(int MrapNpt=89, int isPA=1, bool isPrompt=false, double ymax
 			legUR -> AddEntry(g_maxerr[iy][3],"syst.4","lp");
 			legUR->Draw();
 			if (isPrompt) { latex->DrawLatex(0.19,0.88,Form("%s Prompt J/#psi",szPA.Data())); }
-			else { latex->DrawLatex(0.19,0.88,Form("%s Non-prompt J/#psi",szPA.Data())); }
+			else { latex->DrawLatex(0.19,0.88,Form("%s Nonprompt J/#psi",szPA.Data())); }
 		}
 		latex->DrawLatex(0.55,0.88,Form("%s",rapArr[iy].Data()));
 	}
@@ -248,7 +248,7 @@ void draw_1D_TotSys(int MrapNpt=89, int isPA=1, bool isPrompt=false, double ymax
 		
 		if (iy==0) {
 			if (isPrompt) { latex->DrawLatex(0.19,0.88,Form("%s Prompt J/#psi",szPA.Data())); }
-			else { latex->DrawLatex(0.19,0.88,Form("%s Non-prompt J/#psi",szPA.Data())); }
+			else { latex->DrawLatex(0.19,0.88,Form("%s Nonprompt J/#psi",szPA.Data())); }
 		}
     if ((MrapNpt==89 && iy==3) || (MrapNpt==62 && iy==2) ) {
 			legUR -> AddEntry(h1D_tot[iy],"total","l");
