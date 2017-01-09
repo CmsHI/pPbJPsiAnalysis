@@ -255,7 +255,7 @@ void comp_RpPb_pt_Overlay(double ptmax=32, bool isPoint=true, bool isSmoothened=
 	ent_data->SetFillColorAlpha(kRed-10,0.5);
 	ent_data->SetLineColor(kPink-6);
 	ent_data->SetMarkerColor(kPink-6);
-  ent_data->SetMarkerStyle(kFullSquare);
+  ent_data->SetMarkerStyle(kFullCircle);
   ent_data->SetLineWidth(1);
 //  ent_data->SetMarkerSize(1.9);
   ent_data->SetFillStyle(1001);
