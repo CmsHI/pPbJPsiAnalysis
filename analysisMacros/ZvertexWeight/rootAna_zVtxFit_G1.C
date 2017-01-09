@@ -30,12 +30,14 @@ int rootAna_zVtxFit_G1(TString szFunction = "G1", int isPA = 1, bool isPrompt = 
   else tree02 = new TChain("myTree");
   
   if (isPA==0) { //pp
-    tree01->Add("/storage/OniaTree/Onia5TeV/ppData/OniaTree_DoubleMu_Run2015E-PromptReco-v1_Run_262157_262328_noCUT_TRKMU.root");
+    tree01->Add("/home/samba/OniaTree/Onia5TeV/ppData/OniaTree_DoubleMu_Run2015E-PromptReco-v1_Run_262157_262328_noCUT_TRKMU.root");
     if (isPrompt) {
-      tree02->Add("/storage/OniaTree/Onia5TeV/ppOfficialMC/OniaTree_JpsiMM_5p02TeV_TuneCUETP8M1_Trk_HINppWinter16DR-75X_mcRun2_asymptotic_ppAt5TeV_v3-v1.root");
+      tree02->Add("/home/samba/OniaTree/Onia5TeV/ppOfficialMC/OniaTree_JpsiMM_5p02TeV_TuneCUETP8M1_Trk_HINppWinter16DR-75X_mcRun2_asymptotic_ppAt5TeV_v3-v1.root");
+//      tree02->Add("/home/samba/OniaTree/Onia5TeV/ppOfficialMC/OniaTree_JpsiMM_5p02TeV_TuneCUETP8M1_Trk_HINppWinter16DR-75X_mcRun2_asymptotic_ppAt5TeV_v3-v1_Extended.root");
     }
     else {
-      tree02->Add("/storage/OniaTree/Onia5TeV/ppOfficialMC/OniaTree_BJpsiMM_5p02TeV_TuneCUETP8M1_Trk_HINppWinter16DR-75X_mcRun2_asymptotic_ppAt5TeV_v3-v1.root");
+      tree02->Add("/home/samba/OniaTree/Onia5TeV/ppOfficialMC/OniaTree_BJpsiMM_5p02TeV_TuneCUETP8M1_Trk_HINppWinter16DR-75X_mcRun2_asymptotic_ppAt5TeV_v3-v1.root");
+//      tree02->Add("/home/samba/OniaTree/Onia5TeV/ppOfficialMC/OniaTree_BJpsiMM_5p02TeV_TuneCUETP8M1_Trk_HINppWinter16DR-75X_mcRun2_asymptotic_ppAt5TeV_v3-v1_Extended.root");
     }
   }
   else if (isPA==1) { //Pbp 1st run
@@ -63,8 +65,8 @@ int rootAna_zVtxFit_G1(TString szFunction = "G1", int isPA = 1, bool isPrompt = 
   TCanvas* c02 = new TCanvas("c02","ratios",600,600); c02->SetGridx(); c02->SetGridy();
 
   cout << "nbin = " << nbin << endl;
-  TH1D* h1D_01 = new TH1D("h1D_01","zVtx;Z_{vtx} [cm];events;",nbin,-binmax,binmax);
-  TH1D* h1D_02 = new TH1D("h1D_02","zVtx;Z_{vtx} [cm];events;",nbin,-binmax,binmax);
+  TH1D* h1D_01 = new TH1D("h1D_01","zVtx;Z_{vtx} (cm);events;",nbin,-binmax,binmax);
+  TH1D* h1D_02 = new TH1D("h1D_02","zVtx;Z_{vtx} (cm);events;",nbin,-binmax,binmax);
   h1D_01->Sumw2();
   h1D_02->Sumw2();
   
