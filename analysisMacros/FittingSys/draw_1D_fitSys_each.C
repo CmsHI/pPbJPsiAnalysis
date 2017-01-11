@@ -213,7 +213,7 @@ void draw_1D_fitSys_each(int MrapNpt=89, int isPA=0, bool isPrompt=true, double 
 			}
       //legUR->Draw();
 			if (isPrompt) { latex->DrawLatex(0.19,0.88,Form("%s Prompt J/#psi",szPA.Data())); }
-			else { latex->DrawLatex(0.19,0.88,Form("%s Non-prompt J/#psi",szPA.Data())); }
+			else { latex->DrawLatex(0.19,0.88,Form("%s Nonprompt J/#psi",szPA.Data())); }
 		}
 		latex->DrawLatex(0.55,0.88,Form("%s",rapArr[iy].Data()));
 	}
@@ -261,7 +261,7 @@ void draw_1D_fitSys_each(int MrapNpt=89, int isPA=0, bool isPrompt=true, double 
 			//}
       //legUR->Draw();
 			if (isPrompt) { latex->DrawLatex(0.19,0.88,Form("%s Prompt J/#psi",szPA.Data())); }
-			else { latex->DrawLatex(0.19,0.88,Form("%s Non-prompt J/#psi",szPA.Data())); }
+			else { latex->DrawLatex(0.19,0.88,Form("%s Nonprompt J/#psi",szPA.Data())); }
 		}
 		latex->DrawLatex(0.55,0.88,Form("%s",rapArr[iy].Data()));
   	solidLine(2.,0.,30.,0.,1,1);
