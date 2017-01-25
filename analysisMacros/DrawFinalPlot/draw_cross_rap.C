@@ -7,7 +7,7 @@ void formPtArr(Double_t binmin, Double_t binmax, TString* arr);
 
 void CMS_lumi( TPad* pad, int iPeriod, int iPosX );
 
-void draw_cross_rap(bool sysByHand=false, bool noPtWeight=false, bool isScale=false, int isPA = 0, bool isPrompt=false)
+void draw_cross_rap(bool sysByHand=false, bool noPtWeight=false, bool isScale=false, int isPA = 0, bool isPrompt=true)
 {
 	gROOT->Macro("./tdrstyle_kyo.C");
   gStyle->SetTitleYOffset(1.38); //KYO
@@ -411,7 +411,9 @@ void draw_cross_rap(bool sysByHand=false, bool noPtWeight=false, bool isScale=fa
   //if (isPA==0) globtex->DrawLatex(0.93, 0.79, "Global uncertainty : 4 \%");
 	//else globtex->DrawLatex(0.93, 0.79, "Global uncertainty : 3.5 \%");
 	CMS_lumi( c1, isPA, iPos );
-	c1->Update();
+	
+  dashedLine (0.,0.,0.,g_cross_sys_lowpt->GetMaximum()*0.75,1,1);
+  c1->Update();
   if (isPA==0){
     if (noPtWeight) {
       c1->SaveAs(Form("plot_cross/pp_cross_rap_isPrompt%d_isScale%d_noPtWeight.pdf",(int)isPrompt,(int)isScale));
