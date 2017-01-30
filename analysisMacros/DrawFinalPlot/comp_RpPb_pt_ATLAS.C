@@ -55,16 +55,18 @@ void comp_RpPb_pt_ATLAS(bool isPrompt = true)
     eysystmp_pp[ipt] = g_cross_sys_fwrap_pp->GetErrorY(ipt+4); 
     eysystmp_pA[ipt] = g_cross_sys_fwrap_pA->GetErrorY(ipt+4);
   }
+  cout << "::: for excel ::: " << endl;
   for (int ipt=0; ipt<nPt; ipt++) {
     DivideValue(pytmp_pA[ipt],eytmp_pA[ipt],pytmp_pp[ipt],eytmp_pp[ipt],&rppb[ipt],&ey_rppb[ipt]);  //actual values
     DivideValue(pytmp_pA[ipt],eysystmp_pA[ipt],pytmp_pp[ipt],eysystmp_pp[ipt],&dummy1,&eysys_rppb[ipt]); //syst. 
     rppb[ipt]/=A_pb; 
     ey_rppb[ipt]/=A_pb; 
     eysys_rppb[ipt]/=A_pb; 
-    cout << " "<<endl;
-    cout << "rppb["<<ipt<<"] ="  << rppb[ipt] << endl;
-    cout << "stat.["<<ipt<<"] ="  << ey_rppb[ipt] << endl;
-    cout << "syst.["<<ipt<<"] ="  << eysys_rppb[ipt] << endl;
+//    cout << " "<<endl;
+//    cout << "rppb["<<ipt<<"] ="  << rppb[ipt] << endl;
+//    cout << "stat.["<<ipt<<"] ="  << ey_rppb[ipt] << endl;
+//    cout << "syst.["<<ipt<<"] ="  << eysys_rppb[ipt] << endl;
+    cout << rppb[ipt] <<"\t"<<ey_rppb[ipt] << "\t "<<eysys_rppb[ipt]<<endl;
   }
 	Double_t exsys[nPt] = {0.4,0.4,0.4,0.4,0.4};
 	Double_t exlow[nPt];
@@ -157,8 +159,8 @@ void comp_RpPb_pt_ATLAS(bool isPrompt = true)
 	SetLegendStyle(legBL);
 	legBL->SetTextSize(0.043);
   legBL->SetTextFont(42);
-	legBL -> AddEntry(g_RpPb,"-1.5 < y_{CM} < 1.5","lp");
-	legBL -> AddEntry(g_RpPb_ATLAS,"ATLAS: -1.5 < y_{CM} < 1.5","lp");
+	legBL -> AddEntry(g_RpPb,"|y_{CM}| < 1.5","lp");
+	legBL -> AddEntry(g_RpPb_ATLAS,"ATLAS: |y_{CM}| < 1.5","lp");
 	legBL -> Draw();
   
   globtex->SetTextSize(0.055); 
