@@ -7,7 +7,6 @@ void formPtArr(Double_t binmin, Double_t binmax, TString* arr);
 
 void CMS_lumi( TPad* pad, int iPeriod, int iPosX );
 
-//// maxrap = 193 (0 < y < 1.93) in fwrap, (-1.93 < 0 < 0 ) in bwrap [used for R_FB] 
 /// maxrap = 300 (-1.5 < y < 1.5) in fwrap, (do NOT use bwrap) [used for ATLAS R_pPb]
 /// maxrap = 386 (-1.93 < y < 1.93) in fwrap, (do NOT use bwrap) [used for B R_pPb]
 void draw_cross_pt_integ_middle(bool sysByHand=false, bool noPtWeight=false, bool isScale=false, bool isLog=false, int isPA = 1, bool isPrompt=true, double maxrap=300)
@@ -278,7 +277,7 @@ void draw_cross_pt_integ_middle(bool sysByHand=false, bool noPtWeight=false, boo
     }
   
   } else {
-    cout << " *** ERROR : select maxrap among 150 or 193 " << endl; return;
+    cout << " *** ERROR : select maxrap among 300 or 386 " << endl; return;
   }
   cout << "max rap = " << (maxrap/100.) << endl;
 
