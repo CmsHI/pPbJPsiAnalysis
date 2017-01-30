@@ -47,13 +47,15 @@ EOF
 #root -l -b -q 'draw_cross_pt_integ_middle.C+(0,0,0,0,1,true,193)' 
 #root -l -b -q 'draw_cross_pt_integ_middle.C+(0,0,0,0,1,false,193)' 
 
-### for ATLAS RpPb
+### for ATLAS RpPb (-1.5 < yCM < 1.5)
 root -l -b -q 'draw_cross_pt_integ_middle.C+(0,0,0,0,0,true,300)' 
 root -l -b -q 'draw_cross_pt_integ_middle.C+(0,0,0,0,0,false,300)' 
 root -l -b -q 'draw_cross_pt_integ_middle.C+(0,0,0,0,1,true,300)'  
 root -l -b -q 'draw_cross_pt_integ_middle.C+(0,0,0,0,1,false,300)' 
-#### for B RpPb
+#### for B RpPb (-1.93 < yCM < 1.93)
+root -l -b -q 'draw_cross_pt_integ_middle.C+(0,0,0,0,0,true,386)' 
 root -l -b -q 'draw_cross_pt_integ_middle.C+(0,0,0,0,0,false,386)' 
+root -l -b -q 'draw_cross_pt_integ_middle.C+(0,0,0,0,1,true,386)' 
 root -l -b -q 'draw_cross_pt_integ_middle.C+(0,0,0,0,1,false,386)' 
 
 
