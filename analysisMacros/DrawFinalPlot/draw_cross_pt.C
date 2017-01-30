@@ -410,7 +410,7 @@ void draw_cross_pt(bool sysByHand=false, bool noPtWeight=false, bool isScale=tru
 	  g_cross_sys[4]->SetFillColorAlpha(kBlue-10,0.5);
 	  g_cross_sys[5]->SetFillColorAlpha(kGreen-10,0.5);
 	  g_cross_sys[6]->SetFillColorAlpha(kMagenta-10,0.5);
-	  g_cross_sys[7]->SetFillColorAlpha(kGray,0.5);
+	  g_cross_sys[7]->SetFillColorAlpha(kGray+1,0.5);
 	  
     g_cross_sys[0]->SetLineColor(kGreen+3);
 	  g_cross_sys[1]->SetLineColor(kBlue-2);
