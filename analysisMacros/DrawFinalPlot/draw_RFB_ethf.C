@@ -8,7 +8,7 @@ void formEtArr(Double_t min, Double_t max, TString* arr);
 
 void CMS_lumi( TPad* pad, int iPeriod, int iPosX );
 
-void draw_RFB_ethf(bool sysByHand=true, bool noPtWeight = false, bool isPrompt=false)
+void draw_RFB_ethf(bool sysByHand=true, bool noPtWeight = false, bool isPrompt=true)
 {
 	gROOT->Macro("./tdrstyle_kyo.C");
   //gStyle->SetTitleXOffset(1.13);
@@ -49,7 +49,7 @@ void draw_RFB_ethf(bool sysByHand=true, bool noPtWeight = false, bool isPrompt=f
 	Double_t eytmp[nHist][nEt]; //y point error to fill temporarily
 
   //char* xlabel[nEt] = {"0-20","20-30","30-120"};	
-  TString xlabel[nEt] = {"0-20","20-30","30-120"};	
+  TString xlabel[nEt] = {"0-20","20-30",">30"};	
   //Double_t px[nEt] = {9.4, 24.3, 37.2};  //x point (mean E_T)
   Double_t px[nEt] = {0.35, 1.35, 2.35};  //x point (mean E_T)
 	Double_t ex[nEt] = {0.,0.,0.}; // x stat error (0)
