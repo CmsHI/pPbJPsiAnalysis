@@ -1,6 +1,6 @@
 #include "../SONGKYO.h"
 
-void read_Eff_Pbp_pPb_pt_forExcel(TString szBinning="8rap9pt", int isPbp=2, bool isPrompt=true)
+void read_Eff_Pbp_pPb_pt_forExcel(TString szBinning="8rap9pt", int etOpt=1, int isPbp=2, bool isPrompt=true)
 {
 	gROOT->Macro("../Style.C");
 
@@ -14,7 +14,7 @@ void read_Eff_Pbp_pPb_pt_forExcel(TString szBinning="8rap9pt", int isPbp=2, bool
   
 	// --- read-in file
 	TFile * f2D_01;
-  f2D_01 = new TFile(Form("../FittingResult/totalHist_pA_%s_newcut_nominal_Zvtx1_SF1_etOpt0.root",szBinning.Data()));
+  f2D_01 = new TFile(Form("../FittingResult/totalHist_pA_%s_newcut_nominal_Zvtx1_SF1_etOpt%d.root",szBinning.Data(),etOpt));
 	
 	// --- read-in 2D hist for data reco dist
 	TH2D* h2D_01 = (TH2D*)f2D_01->Get(Form("h2D_Eff_%s_%s",szPrompt.Data(),szPbp.Data()));
@@ -38,23 +38,33 @@ void read_Eff_Pbp_pPb_pt_forExcel(TString szBinning="8rap9pt", int isPbp=2, bool
 	//////////////////////////////////////////////////////////////////////////////////////
 	//////////////////////////////////////////////////////////////////////////////////////
 	//// --- set values as zero for unused bins
-	//// 8rap9pt
-	for (Int_t iy = 0; iy < nRap; iy++) {
-		if (iy>=1 && iy<=6) {
-			h1D_01[iy]->SetBinContent(1,-532);
-			h1D_01[iy]->SetBinError(1,0);
-			h1D_01[iy]->SetBinContent(2,-532);
-			h1D_01[iy]->SetBinError(2,0);
-		}
-		if (iy>=2 && iy<=5) {
-			h1D_01[iy]->SetBinContent(3,-532);
-			h1D_01[iy]->SetBinError(3,0);
-		}
-    if (iy>=2 && iy<=4) { // for_pA
-			h1D_01[iy]->SetBinContent(4,-532);
-			h1D_01[iy]->SetBinError(4,0);
-		}
-	}
+	if (szBinning=="8rap9pt") {
+    for (Int_t iy = 0; iy < nRap; iy++) {
+  		if (iy>=1 && iy<=6) {
+  			h1D_01[iy]->SetBinContent(1,-532);
+  			h1D_01[iy]->SetBinError(1,0);
+  			h1D_01[iy]->SetBinContent(2,-532);
+  			h1D_01[iy]->SetBinError(2,0);
+  		}
+  		if (iy>=2 && iy<=5) {
+  			h1D_01[iy]->SetBinContent(3,-532);
+  			h1D_01[iy]->SetBinError(3,0);
+  		}
+      if (iy>=2 && iy<=4) { // for_pA
+  			h1D_01[iy]->SetBinContent(4,-532);
+  			h1D_01[iy]->SetBinError(4,0);
+  		}
+  	}
+  } else if (szBinning=="6rap2pt") {
+    for (Int_t iy = 0; iy < nRap; iy++) {
+  		if (iy>=1 && iy<=4) {
+  			h1D_01[iy]->SetBinContent(1,-532);
+  			h1D_01[iy]->SetBinError(1,0);
+  		}
+  	}
+  }else {
+    cout << "ERROR, szBinning 8rap9pt or 6rap2pt" << endl; return;
+  }
 
 	//////////////////////////////////////////////////////////////////
 	//// print out
