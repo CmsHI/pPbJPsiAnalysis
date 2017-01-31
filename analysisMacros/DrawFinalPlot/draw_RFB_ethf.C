@@ -8,7 +8,7 @@ void formEtArr(Double_t min, Double_t max, TString* arr);
 
 void CMS_lumi( TPad* pad, int iPeriod, int iPosX );
 
-void draw_RFB_ethf(bool sysByHand=true, bool noPtWeight = false, bool isPrompt=true)
+void draw_RFB_ethf(bool sysByHand=false, bool noPtWeight = false, bool isPrompt=true)
 {
 	gROOT->Macro("./tdrstyle_kyo.C");
   //gStyle->SetTitleXOffset(1.13);
@@ -56,7 +56,9 @@ void draw_RFB_ethf(bool sysByHand=true, bool noPtWeight = false, bool isPrompt=t
 	//Double_t exsys[nEt] = {0.65, 0.65, 0.65}; //x sys err (bot width)
 	Double_t exsys[nEt] = {0.05, 0.05, 0.05}; //x sys err (bot width)
 	Double_t eysys[nHist][nEt]; //absolute y sys error
-	Double_t eysysrel[nHist][nEt]; //relative y sys error
+
+/*	
+  Double_t eysysrel[nHist][nEt]; //relative y sys error
 	Double_t eysysrelPR[nHist][nEt]={
 		{ 6.607602e-02, 6.308565e-02, 6.567717e-02}, //1.5-1.93 low
     { 6.208894e-02, 5.714427e-02, 6.547308e-02}, //1.5-1.93
@@ -75,6 +77,7 @@ void draw_RFB_ethf(bool sysByHand=true, bool noPtWeight = false, bool isPrompt=t
       else eysysrel[inh][iet] = eysysrelNP[inh][iet];
     }
   }
+*/
 	
   //// 1) y_CM array (from forward to backward)
 	Double_t rapArrNumFB[nRapTmp] = {1.93, 1.5, 0.9, 0., -0.9, -1.5, -1.93};// for pt dist.
@@ -112,6 +115,19 @@ void draw_RFB_ethf(bool sysByHand=true, bool noPtWeight = false, bool isPrompt=t
 		cout << iet<< "th etArr = "<< etArr[iet] << endl;
 	}	
 
+  //////////////////////////////////////////////////////////////  
+  //// read-in sys. file 
+  TFile * fSys[nEt]; 
+  for (Int_t iet=0; iet<nEt; iet++){ 
+    fSys[iet] = new TFile(Form("../TotalSys/TotSys_6rap2pt_pA_etOpt%d.root",iet+1));
+    cout << "fSys["<<iet<<"} = " << fSys[iet]<<endl;
+  }
+  TH2D* h2D_SysErr[nEt];
+  for (Int_t iet=0; iet<nEt; iet++){ 
+    if (isPrompt) h2D_SysErr[iet] = (TH2D*)fSys[iet]->Get("hTotalPR");
+    else h2D_SysErr[iet] = (TH2D*)fSys[iet]->Get("hTotalNP");
+  }
+
   /////////////////////////////////////////////////////////////////////////	
 	//// read-in file
 	TFile * f2D[nEt];
@@ -138,13 +154,16 @@ void draw_RFB_ethf(bool sysByHand=true, bool noPtWeight = false, bool isPrompt=t
 
 	//  projection to 1D hist : iy=0 refers to forwards !!! (ordering here)
 	TH1D* h1D_CorrY[nEt][nRap]; 
+	TH1D* h1D_SysErr[nEt][nRap]; 
 	for (Int_t iet=0; iet<nEt; iet++){
 		for (Int_t iy = 0; iy < nRap; iy++) {
 			h1D_CorrY[iet][iy] = h2D_CorrY[iet]->ProjectionY(Form("h1D_CorrY_%d_%d",iet,iy),iy+1,iy+1);
 			h1D_CorrY[iet][iy]->SetName(Form("h1D_CorrY_%d_%d",iet,iy));
+			h1D_SysErr[iet][iy] = h2D_SysErr[iet]->ProjectionY(Form("h1D_SysErr_%d_%d",iet,iy),iy+1,iy+1);
+			h1D_SysErr[iet][iy]->SetName(Form("h1D_SysErr_%d_%d",iet,iy));
 		}
 	}
-	
+  	
   //////////////////////////////////////////////////////////////////
 	/////////// calculate RFB
 	
@@ -205,26 +224,43 @@ void draw_RFB_ethf(bool sysByHand=true, bool noPtWeight = false, bool isPrompt=t
 	double tmpRFBval01, tmpRFBerr01, tmpRFBval02, tmpRFBerr02, tmpRFBval03, tmpRFBerr03;
 	TH1D* h1D_RFB_ETHF[nHist];
 	
-	for (int in=0; in< nHist; in++){
-		h1D_RFB_ETHF[in]= new TH1D(Form("h1D_RFB_ETHF_%d",in),Form("h1D_RFB_ETHF_%d",in),nEt,etArrNum);
-		h1D_RFB_ETHF[in]->Sumw2();
+	for (int inh=0; inh< nHist; inh++){
+		h1D_RFB_ETHF[inh]= new TH1D(Form("h1D_RFB_ETHF_%d",inh),Form("h1D_RFB_ETHF_%d",inh),nEt,etArrNum);
+		h1D_RFB_ETHF[inh]->Sumw2();
 		tmpRFBval01=0;tmpRFBerr01=0;tmpRFBval02=0;tmpRFBerr02=0;tmpRFBval03=0;tmpRFBerr03=0;
 		for (int iet=0; iet<nEt;iet++){
-			if (in==0) {
+			if (inh==0) {
 				tmpRFBval01=h1D_RFB[iet][0]->GetBinContent(1);	
 				tmpRFBerr01=h1D_RFB[iet][0]->GetBinError(1);	
-				h1D_RFB_ETHF[in]->SetBinContent(iet+1,tmpRFBval01);
-				h1D_RFB_ETHF[in]->SetBinError(iet+1,tmpRFBerr01);
+				h1D_RFB_ETHF[inh]->SetBinContent(iet+1,tmpRFBval01);
+				h1D_RFB_ETHF[inh]->SetBinError(iet+1,tmpRFBerr01);
 			}			
 			else {
-				tmpRFBval01=h1D_RFB[iet][in-1]->GetBinContent(2);	
-				tmpRFBerr01=h1D_RFB[iet][in-1]->GetBinError(2);	
-				h1D_RFB_ETHF[in]->SetBinContent(iet+1,tmpRFBval01);
-				h1D_RFB_ETHF[in]->SetBinError(iet+1,tmpRFBerr01);
+				tmpRFBval01=h1D_RFB[iet][inh-1]->GetBinContent(2);	
+				tmpRFBerr01=h1D_RFB[iet][inh-1]->GetBinError(2);	
+				h1D_RFB_ETHF[inh]->SetBinContent(iet+1,tmpRFBval01);
+				h1D_RFB_ETHF[inh]->SetBinError(iet+1,tmpRFBerr01);
 			}
 		}
 	}		
-	
+
+  //// sysrel F/B calculation
+	double tmpSysvalFW, tmpSysvalBW;
+  Double_t eysysrel[nHist][nEt]; //relative y sys error
+	for (int inh=0; inh< nHist; inh++){
+		for (int iet=0; iet<nEt;iet++){
+			if (inh==0) {
+        tmpSysvalFW = h1D_SysErr[iet][0]->GetBinContent(1); 
+        tmpSysvalBW = h1D_SysErr[iet][5]->GetBinContent(1); 
+      }
+			else {
+        tmpSysvalFW = h1D_SysErr[iet][inh-1]->GetBinContent(2); 
+        tmpSysvalBW = h1D_SysErr[iet][nRap-inh]->GetBinContent(2); 
+      }
+      eysysrel[inh][iet] = TMath::Sqrt(tmpSysvalFW*tmpSysvalFW+tmpSysvalBW*tmpSysvalBW);
+    }
+  } 
+  
 	//////////////////////////////////////////////////////////////////
 	
 	//TLegend *legBL = new TLegend(0.20, 0.16, 0.45, 0.36);
@@ -279,7 +315,7 @@ void draw_RFB_ethf(bool sysByHand=true, bool noPtWeight = false, bool isPrompt=t
 			gRFB_sys[inh]->GetPoint(iet, pxtmp[inh][iet], pytmp[inh][iet]);
 			/////absolute error calculation
 			eysys[inh][iet] = eysysrel[inh][iet]*pytmp[inh][iet];
-			//gRFB_sys[in]->SetPoint(iet, px[iet], pytmp[in][iet]);
+			//gRFB_sys[inh]->SetPoint(iet, px[iet], pytmp[inh][iet]);
 			gRFB_sys[inh]->SetPoint(iet, px[iet]+pxshift*(nHist-1-inh), pytmp[inh][iet]);
 			gRFB_sys[inh]->SetPointError(iet, exsys[iet], exsys[iet], eysys[inh][iet], eysys[inh][iet]);
 		}
@@ -290,6 +326,7 @@ void draw_RFB_ethf(bool sysByHand=true, bool noPtWeight = false, bool isPrompt=t
 	for (int inh=0; inh< nHist; inh++){
 		gRFB[inh] = new TGraphAsymmErrors(h1D_RFB_ETHF[inh]);
 		gRFB[inh]->SetName(Form("gRFB_%d",inh));
+    cout << "::: for excel ::: inh= " << inh << endl;
 		for (int iet=0; iet<nEt;iet++){
 			gRFB[inh]->GetPoint(iet, pxtmp[inh][iet], pytmp[inh][iet]);
 			eytmp[inh][iet] = gRFB[inh] -> GetErrorY(iet);
@@ -297,10 +334,11 @@ void draw_RFB_ethf(bool sysByHand=true, bool noPtWeight = false, bool isPrompt=t
 			gRFB[inh]->SetPoint(iet, px[iet]+pxshift*(nHist-1-inh), pytmp[inh][iet]);
 			gRFB[inh]->SetPointEXlow(iet, ex[inh]);
 			gRFB[inh]->SetPointEXhigh(iet, ex[inh]);
-			cout << "" << endl;
-			cout << "RFB["<<inh<<"]["<<iet<<"] = " << pytmp[inh][iet]<<endl;
-			cout << "stat.["<<inh<<"]["<<iet<<"] = " << eytmp[inh][iet]<<endl;
-			cout << "syst.["<<inh<<"]["<<iet<<"] = " << eysys[inh][iet]<<endl;
+//			cout << "" << endl;
+//			cout << "RFB["<<inh<<"]["<<iet<<"] = " << pytmp[inh][iet]<<endl;
+//			cout << "stat.["<<inh<<"]["<<iet<<"] = " << eytmp[inh][iet]<<endl;
+//			cout << "syst.["<<inh<<"]["<<iet<<"] = " << eysys[inh][iet]<<endl;
+      cout << pytmp[inh][iet] <<"\t"<<eytmp[inh][iet] << "\t "<<eysys[inh][iet]<<endl;
 		}
 	}
 
@@ -337,22 +375,22 @@ void draw_RFB_ethf(bool sysByHand=true, bool noPtWeight = false, bool isPrompt=t
 	gRFB[3]->SetMarkerSize(1.4);
 
   legBL->SetHeader("6.5 < p_{T} < 30 GeV/c");	
-  //TLegendEntry *le1=legBL->AddEntry("le1","0 < |y_{CM}| < 0.9, 6.5 < p_{T} < 30 GeV/c","lpf");
-  TLegendEntry *le1=legBL->AddEntry("le1","0 < |y_{CM}| < 0.9","lpf");
+  //TLegendEntry *le1=legBL->AddEntry("le1","0 < |y_{CM}| < 0.9, 6.5 < p_{T} < 30 GeV/c","pf");
+  TLegendEntry *le1=legBL->AddEntry("le1","0 < |y_{CM}| < 0.9","pf");
 	le1->SetFillColorAlpha(kRed-10,0.5);
 	le1->SetFillStyle(1001);
 	le1->SetLineColor(kPink-6);
 	le1->SetMarkerStyle(kFullCircle);
 	le1->SetMarkerColor(kPink-6);
 	le1->SetMarkerSize(1.7);
-	TLegendEntry *le2=legBL->AddEntry("le2","0.9 < |y_{CM}| < 1.5","lpf");
+	TLegendEntry *le2=legBL->AddEntry("le2","0.9 < |y_{CM}| < 1.5","pf");
 	le2->SetFillColorAlpha(kBlue-10,0.5);
 	le2->SetFillStyle(1001);
 	le2->SetLineColor(kBlue-2);
 	le2->SetMarkerStyle(kFullSquare);
 	le2->SetMarkerColor(kBlue-2);
 	le2->SetMarkerSize(1.7);
-	TLegendEntry *le3=legBL->AddEntry("le3","1.5 < |y_{CM}| < 1.93","lpf");
+	TLegendEntry *le3=legBL->AddEntry("le3","1.5 < |y_{CM}| < 1.93","pf");
 	le3->SetFillColorAlpha(kGreen-10,0.5);
 	le3->SetFillStyle(1001);
 	le3->SetLineColor(kGreen+3);
@@ -362,7 +400,7 @@ void draw_RFB_ethf(bool sysByHand=true, bool noPtWeight = false, bool isPrompt=t
 	//legBL->Draw();
   
   legUL->SetHeader("5 < p_{T} < 6.5 GeV/c");	
-  TLegendEntry *le4=legUL->AddEntry("le4","1.5 < |y_{CM}| < 1.93","lpf");
+  TLegendEntry *le4=legUL->AddEntry("le4","1.5 < |y_{CM}| < 1.93","pf");
 	le4->SetFillColorAlpha(kMagenta-10,0.5);
 	le4->SetFillStyle(1001);
 	le4->SetLineColor(kViolet-6);
