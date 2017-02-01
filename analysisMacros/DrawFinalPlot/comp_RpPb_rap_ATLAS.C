@@ -140,8 +140,8 @@ void comp_RpPb_rap_ATLAS(bool isPrompt = false)
   
   globtex->SetTextSize(0.055); 
   globtex->SetTextFont(42);
-  if (isPrompt) globtex->DrawLatex(0.21, 0.84, "Prompt J/#psi");
-  else globtex->DrawLatex(0.21, 0.84, "Nonprompt J/#psi");
+  if (isPrompt) globtex->DrawLatex(0.212, 0.852, "Prompt J/#psi");
+  else globtex->DrawLatex(0.212, 0.852, "Nonprompt J/#psi");
   
   CMS_lumi( c1, isPA, iPos );
   c1->Update();

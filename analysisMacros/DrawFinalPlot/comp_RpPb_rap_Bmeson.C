@@ -131,10 +131,12 @@ void comp_RpPb_rap_Bmeson(bool isPrompt = false)
 	legBL -> AddEntry(g_RpPb_Bmeson,"B^{+}: 10 < p_{T} < 60 GeV/c","lp");
 	legBL -> Draw();
   
-  //globtex->SetTextSize(0.055); 
-  //globtex->SetTextFont(42);
-  //if (isPrompt) globtex->DrawLatex(0.21, 0.84, "Prompt J/#psi");
-  //else globtex->DrawLatex(0.21, 0.84, "Nonprompt J/#psi");
+  globtex->SetTextSize(0.055); 
+  globtex->SetTextFont(42);
+  globtex->DrawLatex(0.212, 0.372, "Open beauty");
+  //globtex->DrawLatex(0.212, 0.852, "Open beauty");
+  //if (isPrompt) globtex->DrawLatex(0.212, 0.852, "Prompt J/#psi");
+  //else globtex->DrawLatex(0.212, 0.852, "Nonprompt J/#psi");
   
   CMS_lumi( c1, isPA, iPos );
   c1->Update();

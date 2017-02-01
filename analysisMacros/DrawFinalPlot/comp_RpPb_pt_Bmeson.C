@@ -158,10 +158,11 @@ void comp_RpPb_pt_Bmeson(bool isPrompt = false)
 	legBL -> AddEntry(g_RpPb_Bmeson,"B^{+}: -2.86 < y_{CM} < 1.93","lp");
 	legBL -> Draw();
   
-  //globtex->SetTextSize(0.055); 
-  //globtex->SetTextFont(42);
-  //if (isPrompt) globtex->DrawLatex(0.21, 0.84, "Prompt J/#psi");
-  //else globtex->DrawLatex(0.21, 0.84, "Nonprompt J/#psi");
+  globtex->SetTextSize(0.055); 
+  globtex->SetTextFont(42);
+  globtex->DrawLatex(0.212, 0.852, "Open beauty");
+  //if (isPrompt) globtex->DrawLatex(0.212, 0.852, "Prompt J/#psi");
+  //else globtex->DrawLatex(0.212, 0.852, "Nonprompt J/#psi");
   
   CMS_lumi( c1, isPA, iPos );
   c1->Update();
@@ -275,7 +276,6 @@ void CMS_lumi( TPad* pad, int iPeriod, int iPosX )
   latex.SetTextAlign(31); 
   latex.SetTextSize(lumiTextSize*t);    
   latex.DrawLatex(1-r,1-t+lumiTextOffset*t,lumiText);
-  //latex.DrawLatex(1-r+0.01,1-t+lumiTextOffset*t+0.01,lumiText);//KYO
   if( outOfFrame ) {
     latex.SetTextFont(cmsTextFont);
     latex.SetTextAlign(11); 
@@ -310,8 +310,6 @@ void CMS_lumi( TPad* pad, int iPeriod, int iPosX )
       latex.SetTextSize(cmsTextSize*t);
       latex.SetTextAlign(align_);
       //cout << "posX_ = " << posX_ << ", posY_ = " << posY_ << endl;
-      //if (iPosX==33) {posX_ -= 0.03; posY_-=0.03; } // KYO
-      //if (iPosX==33) {posX_ += 0.03; posY_-=0.01; } // KYO RpPb_pt
       if (iPosX==33) {
         posX_ -= 0.01; posY_-=0.02; 
         latex.SetTextSize(cmsTextSize*t*1.3);

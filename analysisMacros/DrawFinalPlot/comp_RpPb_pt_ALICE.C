@@ -129,8 +129,8 @@ void comp_RpPb_pt_ALICE(bool isPrompt = true)
 
   globtex->SetTextSize(0.055); 
   globtex->SetTextFont(42);
-  if (isPrompt) globtex->DrawLatex(0.21, 0.84, "Prompt J/#psi");
-  else globtex->DrawLatex(0.21, 0.84, "Nonprompt J/#psi");
+  if (isPrompt) globtex->DrawLatex(0.212, 0.852, "Prompt J/#psi");
+  else globtex->DrawLatex(0.212, 0.852, "Nonprompt J/#psi");
   
   CMS_lumi( c_fw, isPA, iPos );
   c_fw->Update();
@@ -164,8 +164,8 @@ void comp_RpPb_pt_ALICE(bool isPrompt = true)
 
   globtex->SetTextSize(0.055); 
   globtex->SetTextFont(42);
-  if (isPrompt) globtex->DrawLatex(0.21, 0.84, "Prompt J/#psi");
-  else globtex->DrawLatex(0.21, 0.84, "Non-prompt J/#psi");
+  if (isPrompt) globtex->DrawLatex(0.212, 0.852, "Prompt J/#psi");
+  else globtex->DrawLatex(0.212, 0.852, "Nonprompt J/#psi");
   
   CMS_lumi( c_bw, isPA, iPos );
   c_bw->Update();
