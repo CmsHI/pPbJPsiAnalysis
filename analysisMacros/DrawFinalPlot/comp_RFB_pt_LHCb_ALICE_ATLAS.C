@@ -104,8 +104,8 @@ int comp_RFB_pt_LHCb_ALICE_ATLAS()
 	////// Draw Plots
 	////////////////////
 
-	//TLegend *legBR = new TLegend(0.52, 0.195, 0.84, 0.315);
-	TLegend *legBR = new TLegend(0.48, 0.2, 0.84, 0.35);
+	//TLegend *legBR = new TLegend(0.48, 0.2, 0.84, 0.35);
+	TLegend *legBR = new TLegend(0.48, 0.225, 0.84, 0.35);
 	TLegend *legBR2 = new TLegend(0.48, 0.2, 0.84, 0.35);
 	TLegend *legUL = new TLegend(0.20, 0.78, 0.40, 0.90);
 	//TLegend *legUL = new TLegend(0.61, 0.74, 0.89, 0.81);
@@ -159,7 +159,7 @@ int comp_RFB_pt_LHCb_ALICE_ATLAS()
 	//gRFB_lhcb_pr_sys->SetFillStyle(3001);
 
 	gRFB_lhcb_pr = new TGraphAsymmErrors(nBin_lhcb, lhcb_px, lhcb_py_pr, lhcb_ex, lhcb_ex, lhcb_ey_pr, lhcb_ey_pr);	
-	SetGraphStyleFinal(gRFB_lhcb_pr,2,10);
+	SetGraphStyleFinal(gRFB_lhcb_pr,2,13);
 	gRFB_lhcb_pr->SetLineColor(1);
 	gRFB_lhcb_pr->SetMarkerColor(1);
 	gRFB_lhcb_pr->SetMarkerSize(1.5);
@@ -167,10 +167,10 @@ int comp_RFB_pt_LHCb_ALICE_ATLAS()
 
 	//3) ALICE
 	gRFB_alice = new TGraphAsymmErrors(nBin_alice, alice_px, alice_RFB, alice_ex, alice_ex, alice_ey_stat, alice_ey_stat);	
-	gRFB_alice->SetMarkerSize(1.5);
+	gRFB_alice->SetMarkerSize(2.0);
 	gRFB_alice->SetLineColor(1);
 	gRFB_alice->SetMarkerColor(1);
-	gRFB_alice->SetMarkerStyle(kOpenSquare);
+	gRFB_alice->SetMarkerStyle(kOpenDiamond);
 
 	gRFB_alice_sys = new TGraphAsymmErrors(nBin_alice, alice_px, alice_RFB, alice_exsys, alice_exsys, alice_ey_sys, alice_ey_sys);	
 	gRFB_alice_sys->SetFillColor(kGray);
@@ -181,8 +181,8 @@ int comp_RFB_pt_LHCb_ALICE_ATLAS()
 	
 	//4) ATLAS
 	gRFB_atlas_pr = new TGraphAsymmErrors(nBin_atlas, atlas_px, atlas_RFB_pr, atlas_ex, atlas_ex, atlas_ey_stat_pr, atlas_ey_stat_pr);	
-	gRFB_atlas_pr->SetMarkerSize(2.0);
-	gRFB_atlas_pr->SetMarkerStyle(27);
+	gRFB_atlas_pr->SetMarkerSize(1.5);
+	gRFB_atlas_pr->SetMarkerStyle(kOpenSquare);
 	gRFB_atlas_pr->SetMarkerColor(1);
 	gRFB_atlas_pr->SetLineColor(1);
 	//gRFB_atlas_pr->SetMarkerColor(2);
@@ -203,25 +203,26 @@ int comp_RFB_pt_LHCb_ALICE_ATLAS()
   gRFB_pr_sys_0->Draw("5");
 	gRFB_lhcb_pr_sys->Draw("2");
 	gRFB_alice_sys->Draw("2");
-	gRFB_atlas_sys_pr->Draw("2");
+	//gRFB_atlas_sys_pr->Draw("2");
   //gRFB_pr_sys_0->Draw("5");
 	solidLine(0.0,1.0,32.0,1.0,1,1);
+	gRFB_pr_0->Draw("P");
 	gRFB_lhcb_pr->Draw("P");
 	gRFB_alice->Draw("P");
-	gRFB_atlas_pr->Draw("P");
-	gRFB_pr_0->Draw("P");
+	//gRFB_atlas_pr->Draw("P");
 
 	legUL->AddEntry(gRFB_pr_0,"1.5 < |y_{CM}| < 1.93","lp");
 	legUL->Draw("SAME");
-	legBR->AddEntry(gRFB_atlas_pr,"ATLAS: |y_{CM}| < 1.94","lp");
+	//legBR->AddEntry(gRFB_atlas_pr,"ATLAS: |y_{CM}| < 1.94","lp");
 	legBR->AddEntry(gRFB_lhcb_pr,"LHCb: 2.5 < |y_{CM}| < 4 ","lp");
-	legBR->AddEntry(gRFB_alice,"ALICE : 2.96 < |y_{CM}| < 3.53 ","lp");
+	legBR->AddEntry(gRFB_alice,"ALICE: 2.96 < |y_{CM}| < 3.53 ","lp");
 	legBR->Draw("SAME");
 	globtex->SetTextAlign(32); //1:left, 2:vertical center
 	globtex->SetTextSize(0.035);
 	globtex->SetTextFont(42);
 	globtex->SetTextAlign(12); //1:left, 2:vertical center
-	globtex->DrawLatex(0.67, 0.17, "inclusive J/#psi");
+	//globtex->DrawLatex(0.67, 0.17, "inclusive J/#psi");
+	globtex->DrawLatex(0.67, 0.19, "inclusive J/#psi");
 	
 	globtex->SetTextAlign(32); //1:left, 2:vertical center
 	globtex->SetTextSize(0.055);
@@ -256,15 +257,15 @@ int comp_RFB_pt_LHCb_ALICE_ATLAS()
 	gRFB_lhcb_np_sys->SetFillColor(kGray);
 	
 	gRFB_lhcb_np = new TGraphAsymmErrors(nBin_lhcb, lhcb_px, lhcb_py_np, lhcb_ex, lhcb_ex, lhcb_ey_np, lhcb_ey_np);	
-	SetGraphStyleFinal(gRFB_lhcb_np,2,10);
+	SetGraphStyleFinal(gRFB_lhcb_np,2,13);
 	gRFB_lhcb_np->SetMarkerSize(1.5);
 	gRFB_lhcb_np->SetLineColor(1);
 	gRFB_lhcb_np->SetMarkerColor(1);
 
 	// 3) ATLAS
 	gRFB_atlas_np = new TGraphAsymmErrors(nBin_atlas, atlas_px, atlas_RFB_np, atlas_ex, atlas_ex, atlas_ey_stat_np, atlas_ey_stat_np);	
- 	gRFB_atlas_np->SetMarkerSize(2.0);
-	gRFB_atlas_np->SetMarkerStyle(27);
+ 	gRFB_atlas_np->SetMarkerSize(1.5);
+	gRFB_atlas_np->SetMarkerStyle(kOpenSquare);
 	gRFB_atlas_np->SetMarkerColor(1);
 	gRFB_atlas_np->SetLineColor(1);
 	//gRFB_atlas_np->SetMarkerColor(2);
@@ -283,16 +284,16 @@ int comp_RFB_pt_LHCb_ALICE_ATLAS()
   /////////////////////////////////	
   gRFB_np_sys_0->Draw("5");
 	gRFB_lhcb_np_sys->Draw("2");
-	gRFB_atlas_sys_np->Draw("2");
+	//gRFB_atlas_sys_np->Draw("2");
   //gRFB_np_sys_0->Draw("5");
-	gRFB_lhcb_np->Draw("P");
-	gRFB_atlas_np->Draw("P");
 	gRFB_np_0->Draw("P");
+	gRFB_lhcb_np->Draw("P");
+	//gRFB_atlas_np->Draw("P");
 	
   solidLine(0.0,1.0,32.0,1.0,1,1);
 	
 	legUL->Draw("SAME");
-	legBR2 -> AddEntry(gRFB_atlas_np,"ATLAS: |y_{CM}| < 1.94","lp");
+//	legBR2 -> AddEntry(gRFB_atlas_np,"ATLAS: |y_{CM}| < 1.94","lp");
 	legBR2 -> AddEntry(gRFB_lhcb_np,"LHCb: 2.5 < |y_{CM}| < 4 ","lp");
 	legBR2 -> Draw();
 

@@ -113,7 +113,7 @@ void comp_RpPb_pt_Bmeson(bool isPrompt = false)
   g_RpPb_Bmeson_sys->SetFillColor(kGray);
   //g_RpPb_Bmeson_sys->SetFillStyle(3001);
   
-  SetGraphStyleFinal(g_RpPb_Bmeson, 9, 10);
+  SetGraphStyleFinal(g_RpPb_Bmeson, 9, 13);
   g_RpPb_Bmeson->SetMarkerSize(1.2);
    
   //////////////////////////////////////////////////////////////
@@ -144,8 +144,8 @@ void comp_RpPb_pt_Bmeson(bool isPrompt = false)
   g_RpPb_Bmeson_sys->Draw("2");
   g_RpPb_sys->Draw("5");
   solidLine(0.,1.,62.,1.,1,1);
-  g_RpPb_Bmeson->Draw("p");
   g_RpPb->Draw("p");
+  g_RpPb_Bmeson->Draw("p");
   
 	
   //TLegend *legBL = new TLegend(0.50,0.18,0.90,0.25);

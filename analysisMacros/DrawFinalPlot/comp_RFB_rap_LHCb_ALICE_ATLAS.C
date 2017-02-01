@@ -120,8 +120,10 @@ int comp_RFB_rap_LHCb_ALICE_ATLAS()
 
 	//TLegend *legUL = new TLegend(0.435, 0.62, 0.86, 0.855); 
 	TLegend *legUL = new TLegend(0.18,0.79,0.565,0.89); //upper left
-	TLegend *legBL01 = new TLegend(0.18, 0.20, 0.4, 0.32); // for prompt
-	TLegend *legBL02 = new TLegend(0.18, 0.16, 0.4, 0.26); // for prompt
+	//TLegend *legBL01 = new TLegend(0.18, 0.20, 0.4, 0.32); // for prompt
+	TLegend *legBL01 = new TLegend(0.185, 0.20, 0.55, 0.35); // for prompt
+	//TLegend *legBL02 = new TLegend(0.18, 0.16, 0.4, 0.26); // for nonprompt
+	TLegend *legBL02 = new TLegend(0.185, 0.18, 0.55, 0.30); // for nonprompt
 	SetLegendStyle(legUL);
 	SetLegendStyle(legBL01);
 	SetLegendStyle(legBL02);
@@ -221,42 +223,42 @@ int comp_RFB_rap_LHCb_ALICE_ATLAS()
   solidLine(0.0,1.0,4.5,1.0,1,1);
 
 	gRFB_lhcb_pr = new TGraphAsymmErrors(nBin_lhcb, lhcb_px, lhcb_py_pr, lhcb_ex, lhcb_ex, lhcb_ey_pr, lhcb_ey_pr);	
-	SetGraphStyleFinal(gRFB_lhcb_pr,1,10);
+	SetGraphStyleFinal(gRFB_lhcb_pr,1,13);
 	gRFB_lhcb_pr->SetMarkerSize(1.5);
-	gRFB_lhcb_pr->SetMarkerStyle(24);
+	gRFB_lhcb_pr->SetMarkerStyle(kOpenSquare);
 	gRFB_lhcb_pr->SetMarkerColor(1);
 	gRFB_lhcb_pr->SetLineColor(1);
-	gRFB_lhcb_pr->Draw("P");
 	
   gRFB_alice = new TGraphAsymmErrors(nBin_alice, alice_px, alice_RFB, alice_ex, alice_ex, alice_eysys_stat, alice_eysys_stat);	
-	gRFB_alice->SetMarkerSize(1.5);
+	gRFB_alice->SetMarkerSize(2.0);
 	gRFB_alice->SetLineColor(1);
 	gRFB_alice->SetMarkerColor(1);
-	gRFB_alice->SetMarkerStyle(kOpenSquare);
-	gRFB_alice->Draw("P");
+	gRFB_alice->SetMarkerStyle(kOpenDiamond);
 	
   gRFB_atlas_pr = new TGraphAsymmErrors(nBin_atlas, atlas_px, atlas_RFB_pr, atlas_ex, atlas_ex, atlas_eysys_stat_pr, atlas_eysys_stat_pr);	
-	gRFB_atlas_pr->SetMarkerSize(2.0);
-	gRFB_atlas_pr->SetMarkerStyle(27);
+	gRFB_atlas_pr->SetMarkerSize(1.5);
+	gRFB_atlas_pr->SetMarkerStyle(kOpenCross);
 	gRFB_atlas_pr->SetMarkerColor(1);
 	gRFB_atlas_pr->SetLineColor(1);
-	gRFB_atlas_pr->Draw("P");
 	
   SetGraphStyleFinal(gRFB_pr_lowpt,1,0);
-	gRFB_pr_lowpt->SetMarkerSize(1.4);
-  gRFB_pr_lowpt->Draw("P");
+	gRFB_pr_lowpt->SetMarkerSize(1.5);
   
   SetGraphStyleFinal(gRFB_pr_highpt,2,3);
-	gRFB_pr_highpt->SetMarkerSize(1.4);
-	gRFB_pr_highpt->Draw("P");
+	gRFB_pr_highpt->SetMarkerSize(1.5);
 
+  gRFB_pr_lowpt->Draw("P");
+	gRFB_pr_highpt->Draw("P");
+	gRFB_lhcb_pr->Draw("P");
+	gRFB_alice->Draw("P");
+	gRFB_atlas_pr->Draw("P");
 
 
 
 	legUL -> AddEntry(gRFB_pr_lowpt,"6.5 < p_{T} < 10 GeV/c","lp");
 	legUL -> AddEntry(gRFB_pr_highpt,"10 < p_{T} < 30 GeV/c","lp");
 	legBL01 -> AddEntry(gRFB_atlas_pr,"ATLAS: 8 < p_{T} < 30 GeV/c","lp");
-	legBL01 -> AddEntry(gRFB_lhcb_pr,"LHCb : p_{T} < 14 GeV/c","lp");
+	legBL01 -> AddEntry(gRFB_lhcb_pr,"LHCb: p_{T} < 14 GeV/c","lp");
 	legBL01 -> AddEntry(gRFB_alice,"ALICE: p_{T} < 14 GeV/c","lp");
 	legUL -> Draw();
 	legBL01 -> Draw();
@@ -264,7 +266,7 @@ int comp_RFB_rap_LHCb_ALICE_ATLAS()
   globtex->SetTextAlign(12);
 	globtex->SetTextSize(0.037);
 	globtex->SetTextFont(42);
-	globtex->DrawLatex(0.33, 0.176, "inclusive J/#psi");
+	globtex->DrawLatex(0.36, 0.176, "inclusive J/#psi");
   
   globtex->SetTextAlign(32);
 	globtex->SetTextSize(0.055);
@@ -336,33 +338,33 @@ int comp_RFB_rap_LHCb_ALICE_ATLAS()
   solidLine(0.0,1.0,4.5,1.0,1,1);
   
 	gRFB_lhcb_np = new TGraphAsymmErrors(nBin_lhcb, lhcb_px, lhcb_py_np, lhcb_ex, lhcb_ex, lhcb_ey_np, lhcb_ey_np);	
-	SetGraphStyleFinal(gRFB_lhcb_np,1,10);
+	SetGraphStyleFinal(gRFB_lhcb_np,1,13);
 	gRFB_lhcb_np->SetMarkerSize(1.5);
 	gRFB_lhcb_np->SetMarkerColor(1);
 	gRFB_lhcb_np->SetLineColor(1);
-	gRFB_lhcb_np->Draw("P");
 
 	gRFB_atlas_np = new TGraphAsymmErrors(nBin_atlas, atlas_px, atlas_RFB_np, atlas_ex, atlas_ex, atlas_eysys_stat_np, atlas_eysys_stat_np);	
-	gRFB_atlas_np->SetMarkerSize(2.0);
-	gRFB_atlas_np->SetMarkerStyle(27);
+	gRFB_atlas_np->SetMarkerSize(1.5);
+	gRFB_atlas_np->SetMarkerStyle(kOpenCross);
 	gRFB_atlas_np->SetMarkerColor(1);
 	gRFB_atlas_np->SetLineColor(1);
-	gRFB_atlas_np->Draw("P");	
 	
   SetGraphStyleFinal(gRFB_np_lowpt,1,0);
-	gRFB_np_lowpt->SetMarkerSize(1.4);
-	gRFB_np_lowpt->Draw("P");
+	gRFB_np_lowpt->SetMarkerSize(1.5);
   
   SetGraphStyleFinal(gRFB_np_highpt,2,3);
-	gRFB_np_highpt->SetMarkerSize(1.4);
-	gRFB_np_highpt->Draw("P");
+	gRFB_np_highpt->SetMarkerSize(1.5);
 
+	gRFB_np_lowpt->Draw("P");
+	gRFB_np_highpt->Draw("P");
+	gRFB_lhcb_np->Draw("P");
+	gRFB_atlas_np->Draw("P");	
 
 	
   legUL -> AddEntry(gRFB_pr_lowpt,"6.5 < p_{T} < 10 GeV/c","lp");
 	legUL -> AddEntry(gRFB_pr_highpt,"10 < p_{T} < 30 GeV/c","lp");
 	legBL02 -> AddEntry(gRFB_atlas_pr,"ATLAS: 8 < p_{T} < 30 GeV/c","lp");
-	legBL02 -> AddEntry(gRFB_lhcb_pr,"LHCb : p_{T} < 14 GeV/c","lp");
+	legBL02 -> AddEntry(gRFB_lhcb_pr,"LHCb: p_{T} < 14 GeV/c","lp");
 	legUL -> Draw();
 	legBL02 -> Draw();
 

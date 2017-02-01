@@ -108,7 +108,7 @@ void comp_RpPb_rap_ATLAS(bool isPrompt = false)
   
   g_RpPb_ATLAS_sys->SetFillColor(kGray);
   
-  SetGraphStyleFinal(g_RpPb_ATLAS, 9, 10);
+  SetGraphStyleFinal(g_RpPb_ATLAS, 9, 13);
   g_RpPb_ATLAS->SetMarkerSize(1.7);
  
   //////////////////////////////////////////////////////////////
@@ -124,8 +124,8 @@ void comp_RpPb_rap_ATLAS(bool isPrompt = false)
   g_RpPb_ATLAS_sys->Draw("A5");
   g_RpPb_sys_highpt->Draw("5");
   solidLine(-2.5,1.,2.1,1.,1,1);
-  g_RpPb_ATLAS->Draw("p");
   g_RpPb_highpt->Draw("p");
+  g_RpPb_ATLAS->Draw("p");
   
 	
   //TLegend *legBL = new TLegend(0.50,0.18,0.90,0.25);

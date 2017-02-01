@@ -76,7 +76,7 @@ void comp_RpPb_pt_ALICE(bool isPrompt = true)
   g_RpPb_ALICE_fw_sys01->SetLineStyle(7);
   
   g_RpPb_ALICE_fw_sys02->SetFillColor(kGray);
-  SetGraphStyleFinal(g_RpPb_ALICE_fw, 9, 10);
+  SetGraphStyleFinal(g_RpPb_ALICE_fw, 9, 13);
   g_RpPb_ALICE_fw->SetMarkerSize(1.4);
  
   g_RpPb_ALICE_bw_sys01->GetXaxis()->SetTitle("p_{T} (GeV/c)");
@@ -93,7 +93,7 @@ void comp_RpPb_pt_ALICE(bool isPrompt = true)
   g_RpPb_ALICE_bw_sys01->SetLineStyle(7);
   
   g_RpPb_ALICE_bw_sys02->SetFillColor(kGray);
-  SetGraphStyleFinal(g_RpPb_ALICE_bw, 9, 10);
+  SetGraphStyleFinal(g_RpPb_ALICE_bw, 9, 13);
   g_RpPb_ALICE_bw->SetMarkerSize(1.4);
  
   //////////////////////////////////////////////////////////////
@@ -112,8 +112,8 @@ void comp_RpPb_pt_ALICE(bool isPrompt = true)
   g_RpPb_ALICE_fw_sys02->Draw("2");
   g_RpPb_sys_fw->Draw("5");
   solidLine(0.,1.,32.,1.,1,1);
-  g_RpPb_ALICE_fw->Draw("p");
   g_RpPb_fw->Draw("p");
+  g_RpPb_ALICE_fw->Draw("p");
   
 	
   TLegend *legBL_fw = new TLegend(0.47,0.21,0.8,0.32);
@@ -147,8 +147,8 @@ void comp_RpPb_pt_ALICE(bool isPrompt = true)
   g_RpPb_ALICE_bw_sys02->Draw("2");
   g_RpPb_sys_bw->Draw("5");
   solidLine(0.,1.,32.,1.,1,1);
-  g_RpPb_ALICE_bw->Draw("p");
   g_RpPb_bw->Draw("p");
+  g_RpPb_ALICE_bw->Draw("p");
   
 	
   TLegend *legBL_bw = new TLegend(0.47,0.21,0.8,0.32);

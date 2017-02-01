@@ -96,7 +96,7 @@ void comp_RpPb_rap_Bmeson(bool isPrompt = false)
   
   g_RpPb_Bmeson_sys->SetFillColor(kGray);
   
-  SetGraphStyleFinal(g_RpPb_Bmeson, 9, 10);
+  SetGraphStyleFinal(g_RpPb_Bmeson, 9, 13);
   g_RpPb_Bmeson->SetMarkerSize(1.7);
  
   //////////////////////////////////////////////////////////////
@@ -117,8 +117,8 @@ void comp_RpPb_rap_Bmeson(bool isPrompt = false)
   g_RpPb_Bmeson_sys->Draw("2");
   g_RpPb_sys_highpt->Draw("5");
   solidLine(-3.0,1.,2.1,1.,1,1);
-  g_RpPb_Bmeson->Draw("p");
   g_RpPb_highpt->Draw("p");
+  g_RpPb_Bmeson->Draw("p");
   
 	
   //TLegend *legBL = new TLegend(0.50,0.18,0.90,0.25);
@@ -131,12 +131,13 @@ void comp_RpPb_rap_Bmeson(bool isPrompt = false)
 	legBL -> AddEntry(g_RpPb_Bmeson,"B^{+}: 10 < p_{T} < 60 GeV/c","lp");
 	legBL -> Draw();
   
-  globtex->SetTextSize(0.055); 
-  globtex->SetTextFont(42);
-  globtex->DrawLatex(0.212, 0.372, "Open beauty");
-  //globtex->DrawLatex(0.212, 0.852, "Open beauty");
-  //if (isPrompt) globtex->DrawLatex(0.212, 0.852, "Prompt J/#psi");
-  //else globtex->DrawLatex(0.212, 0.852, "Nonprompt J/#psi");
+  //globtex->SetTextSize(0.055); 
+  //globtex->SetTextFont(42);
+  //globtex->DrawLatex(0.212, 0.372, "Open beauty");
+  globtex->SetTextAlign(32); //3:right 2:vertical center
+  globtex->SetTextSize(0.048);
+	globtex->SetTextFont(42);
+  globtex->DrawLatex(0.92, 0.79, "Open beauty");
   
   CMS_lumi( c1, isPA, iPos );
   c1->Update();
