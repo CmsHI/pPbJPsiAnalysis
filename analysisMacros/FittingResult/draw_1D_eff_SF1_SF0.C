@@ -8,10 +8,10 @@ void draw_1D_eff_SF1_SF0(TString szBinning="8rap9pt", int isPA=0, bool isPrompt=
 {
 	gROOT->Macro("../Style.C");
 
-  //double ratiomin = 0.5;
-  //double ratiomax = 2.0;
-  double ratiomin = 0.85;
-  double ratiomax = 1.5;
+  //double ratiomin = 0.85;
+  //double ratiomax = 1.5;
+  double ratiomin = 0.7;
+  double ratiomax = 2.0;
   
   TString szPA;
   if (isPA==0) szPA="pp";
@@ -254,6 +254,16 @@ void draw_1D_eff_SF1_SF0(TString szBinning="8rap9pt", int isPA=0, bool isPrompt=
 		dashedLine(0.,1.,30.,1.,1,1);
 	}	
 	c02->SaveAs(Form("dir_1D_%s/effRatio_isPrompt%d_isLog%d_SF1_SF0_%s.pdf",szBinning.Data(),(int)isPrompt,(int)isLog,szPA.Data()));
+  
+  //// Save as a root file
+  TFile *outFile = new TFile(Form("dir_1D_%s/effRatio_isPrompt%d_isLog%d_SF1_SF0_%s.root",szBinning.Data(), (int)isPrompt, (int)isLog,szPA.Data()),"RECREATE");
+
+  outFile->cd();
+	for (Int_t iy = 0; iy < nbinsX; iy++) {
+		hRatio[iy]->Write();
+		gRatio[iy]->Write();
+  }
+  outFile->Close();
 
 	return;
 
