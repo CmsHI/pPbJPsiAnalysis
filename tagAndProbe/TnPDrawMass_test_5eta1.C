@@ -48,12 +48,12 @@ TString Cat1 = "MC"; // RD or RD
 TString Cat2 = "MuIdtrg"; // Trg, Trk or MuId 
 TString data_set = "pPb"; // ReReco, Prompt Reco or RD weighted
 
-TString outfile_ = "Jpsi_pPb_MC_v27_Mass_Calo_nominal_v6.ps";
+TString outfile_ = "Jpsi_pPb_MC_v24_Mass_Calo_nominal_v9.ps";
 
 void TnPDrawMass_test_5eta1()
 {
     char *infile;
-    char *files = "/home/kisoo/work/pPb_Jpsi/tagAndProbe/DataFile/outputEveryCut_mc_allDirection_v27_nominalCond_5etaBins_cutOLD_all_nominal_v6.root";
+    char *files = "/home/kisoo/work/pPb_Jpsi/tagAndProbe/DataFile/outputEveryCut_mc_allDirection_v24_nominalCond_5etaBins_cutG_all_nominal_v9.root";
 
     TString outname_in, outname_mid, outname_out;
     TString middle_name, middle_name2;
@@ -104,7 +104,7 @@ void TnPDrawMass_test_5eta1()
 
     // eta
     for(int j = 0; j < etaBins; j++){
-        TString tot_dir = dir_eta[j] + "eta_bin0__event_PrimaryVertex_z_bin0__tag_eta_bin0__tag_pt_bin0__Acc_JPsiOLD_pass__Calo_pass__tag_PAMu3_standard_pass_" + dir_suffix[j];//2G,PAMu3,merge
+        TString tot_dir = dir_eta[j] + "eta_bin0__event_PrimaryVertex_z_bin0__tag_eta_bin0__tag_pt_bin0__Acc_JPsiG_pass__Calo_pass__tag_PAMu3_standard_pass_" + dir_suffix[j];//2G,PAMu3,merge
   
         f->cd(tot_dir);
         cout<<" tot_dir : "<<tot_dir<<endl;
